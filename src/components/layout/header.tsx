@@ -9,8 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Added Dropdown components
 import { Menu, Feather, ChevronDown } from 'lucide-react'; // Using Feather as a placeholder logo, Added ChevronDown
@@ -25,20 +23,20 @@ export function Header() {
         label: 'Posts',
         dropdown: [
             { href: '/posts', label: 'All Posts' },
-            { href: '/posts?tag=video', label: 'Videos' },     // Changed href for filtering
-            { href: '/posts?tag=podcast', label: 'Podcasts' }, // Changed href for filtering
-            { href: '/subscribe', label: 'Subscribe!' }, // Updated href to /subscribe
+            { href: '/posts?tag=video', label: 'Videos' },
+            { href: '/posts?tag=podcast', label: 'Podcasts' },
+            { href: '/subscribe', label: 'Subscribe!' },
         ]
     },
-    { href: '/contact', label: 'Contact' },
-    {
+     {
         label: 'Courses',
         dropdown: [
             { href: '/courses/leading-technical-change', label: 'Leading Technical Change' }, // Placeholder URL
         ]
      },
-    { href: '/camerata', label: 'Camerata' },
-    { href: '/about', label: 'About' },
+     { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' },
+    // Removed Camerata
   ];
 
 
