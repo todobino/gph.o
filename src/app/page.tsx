@@ -22,7 +22,12 @@ export default async function Home() {
     <div className="space-y-12">
       <section className="text-center py-16 bg-secondary rounded-lg shadow-sm">
         <h1 className="text-4xl font-bold tracking-tight mb-4">Helping Geeks Produce for Over 40 Years.</h1> {/* Updated title */}
-        <p className="text-xl text-muted-foreground mb-8">Thoughts on software development, agile practices, and more.</p>
+        <p className="text-xl text-muted-foreground mb-4"> {/* Updated text and added margin */}
+            My mission is to help people learn how to embrace change and harvest its value. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
+        </p>
+        <p className="text-xl text-muted-foreground mb-8"> {/* Second paragraph */}
+            If you want to learn how to create lasting change in your workplace, click the button below to book my solo or group Coaching Sessions today!
+        </p>
         {/* Apply button styles directly to the Link */}
         <Link href="/posts" className={buttonVariants({ size: "lg" })}>Read the Posts</Link>
       </section>
