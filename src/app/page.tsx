@@ -1,4 +1,6 @@
 
+import React, { ReactNode } from 'react';
+
 import type { Post } from '@/services/posts'; // Updated import path
 import { Button, buttonVariants } from '@/components/ui/button'; // Import buttonVariants
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
