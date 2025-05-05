@@ -40,7 +40,6 @@ export async function generateStaticParams() {
     slug: post.title.toLowerCase().replace(/s+/g, '-'),
   }));
 }
-}
 
 // Find post by slug
 async function getPostBySlug(slug: string): Promise<Post | undefined> { // Use renamed type
