@@ -1,7 +1,7 @@
 
-import { type Metadata, type ResolvingMetadata, type PageProps } from 'next';
+import { type Metadata, type ResolvingMetadata, type PageProps} from 'next';
 import { getPosts, type Post } from '@/services/github'; // Renamed function and type
-import { notFound } from 'next/navigation'; 
+import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown'; // Requires `npm install react-markdown`
 import remarkGfm from 'remark-gfm'; // Requires `npm install remark-gfm` for GitHub Flavored Markdown
@@ -22,7 +22,7 @@ async function getPostBySlug(slug: string): Promise<Post | undefined> { // Use r
   return posts.find(post => post.title.toLowerCase().replace(/\s+/g, '-') === slug);
 }
 
-
+ 
 interface PostPageProps extends PageProps {
 }
 
@@ -36,7 +36,7 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <article className="prose prose-lg dark:prose-invert max-w-none mx-auto">
        <header className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
+        <h1 className="text-4xl font-bold mb-2">{post.title}</h1> 
         <p className="text-muted-foreground text-sm mb-4">
           Published on {new Date(post.date).toLocaleDateString()}
         </p>
