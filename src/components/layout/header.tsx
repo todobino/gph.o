@@ -111,7 +111,7 @@ export function Header() {
               {searchResults.length > 0 ? (
                   <ul className="space-y-2">
                   {searchResults.map(post => {
-                      const slug = post.title.toLowerCase().replace(/\s+/g, '-');
+                      const slug = post.slug || post.title.toLowerCase().replace(/\s+/g, '-'); // Use pre-generated slug if available
                       return (
                           <li key={post.title}>
                               <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
@@ -240,9 +240,10 @@ export function Header() {
                     </DialogTrigger>
                     {searchDialogContent}
                 </Dialog>
-                <Button size="sm" asChild={false}> {/* Removed asChild */}
-                   <Link href="/booking">Book Now</Link>
-                </Button>
+                 {/* Use Link styled as button */}
+                <Link href="/booking" className={cn(buttonVariants({ size: "sm" }))}>
+                   Book Now
+                </Link>
             </div>
         </div>
 
@@ -257,9 +258,10 @@ export function Header() {
                 </DialogTrigger>
                  {searchDialogContent}
             </Dialog>
-           <Button asChild={false}> {/* Removed asChild */}
-             <Link href="/booking">Book Now</Link>
-           </Button>
+             {/* Use Link styled as button */}
+           <Link href="/booking" className={cn(buttonVariants())}>
+              Book Now
+           </Link>
         </div>
       </div>
     </header>
