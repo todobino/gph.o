@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn, getCurrentUser } from '@/lib/auth';
+import { signIn, getCurrentUser, checkIfAdmin } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { User } from 'firebase/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function LoginPage() {
@@ -18,9 +19,13 @@ export default function LoginPage() {
   useEffect(() => {
     const checkAuth = async () => {
       const user = await getCurrentUser();
-      if (user) {
-        router.push('/admin');
+      if(!user){
+        return
       }
+      const res = await checkIfAdmin(user);
+      if (res) {
+        router.push('/admin');
+      }      
     };
     checkAuth();
   }, [router]);
