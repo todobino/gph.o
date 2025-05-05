@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card'; // Removed CardHeader, CardTitle
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Separator } from '@/components/ui/separator'; // Import Separator
@@ -38,10 +38,8 @@ export function PostsSidebar({ tags, archives }: PostsSidebarProps) { // Renamed
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Filter & Subscribe</CardTitle> {/* Updated title */}
-      </CardHeader>
-      <CardContent className="space-y-6"> {/* Increased spacing */}
+      {/* Removed CardHeader containing the CardTitle */}
+      <CardContent className="space-y-6 pt-6"> {/* Added pt-6 to CardContent since CardHeader is removed */}
         {/* Filters Section */}
         <Accordion type="multiple" collapsible className="w-full" defaultValue={['tags', 'archives']}>
            <AccordionItem value="tags">

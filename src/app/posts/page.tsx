@@ -43,10 +43,12 @@ export default async function PostsPage({ searchParams }: { searchParams?: { tag
   return (
     // Apply negative horizontal margins to counteract layout padding
     <div className="flex flex-col md:flex-row gap-8 -mx-4 md:mx-0">
-       <aside className="w-full md:w-1/4 lg:w-1/5 px-4 md:px-0"> {/* Add padding back for sidebar on mobile */}
+       {/* Updated sidebar width: md:w-1/3 lg:w-1/4 */}
+       <aside className="w-full md:w-1/3 lg:w-1/4 px-4 md:px-0"> {/* Add padding back for sidebar on mobile */}
          <PostsSidebar tags={tags} archives={archives} /> {/* Use renamed component */}
        </aside>
-       <main className="w-full md:w-3/4 lg:w-4/5 px-4 md:px-0"> {/* Add padding back for main content on mobile */}
+       {/* Updated main content width: md:w-2/3 lg:w-3/4 */}
+       <main className="w-full md:w-2/3 lg:w-3/4 px-4 md:px-0"> {/* Add padding back for main content on mobile */}
         <h1 className="text-4xl font-bold mb-8">Posts</h1> {/* Renamed heading */}
         <div className="grid grid-cols-1 gap-6">
           {posts.length > 0 ? (
@@ -71,7 +73,7 @@ export default async function PostsPage({ searchParams }: { searchParams?: { tag
                     </p>
                      <div className="mt-4 flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="border border-border"> {/* Apply title casing and border */}
+                        <Badge key={tag} variant="secondary" className="border border-border py-1.5 px-3 rounded-md"> {/* Apply title casing and border */}
                            {toTitleCase(tag)}
                         </Badge>
                       ))}
