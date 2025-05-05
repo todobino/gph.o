@@ -14,8 +14,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Menu, Feather, ChevronDown, Search } from 'lucide-react';
 import React from 'react';
-import type { Post } from '@/services/github';
-import { getPosts } from '@/services/github';
+import type { Post } from '@/services/posts'; // Updated import path
+import { getPosts } from '@/services/posts'; // Updated import path
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 
@@ -233,7 +233,7 @@ export function Header() {
            {/* Mobile Search & Book Now */}
             <div className="flex items-center gap-1">
                 <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                         <Button variant="ghost" size="icon">
                             <Search className="h-5 w-5" />
                             <span className="sr-only">Search</span>
@@ -251,7 +251,7 @@ export function Header() {
         {/* Desktop Search & Book Now Buttons */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
            <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                <DialogTrigger>
+                <DialogTrigger asChild>
                     <Button variant="ghost" size="icon">
                         <Search className="h-5 w-5" />
                         <span className="sr-only">Search</span>

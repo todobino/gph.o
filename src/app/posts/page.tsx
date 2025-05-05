@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
-import { type PageProps } from 'next';
-import { getPosts, type Post } from '@/services/github'; // Renamed function and type
+// Removed type import for PageProps as it's implicitly available in Next.js 13+ App Router
+import { getPosts, type Post } from '@/services/posts'; // Updated import path
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PostsSidebar } from '@/components/posts/posts-sidebar'; // Renamed component
@@ -14,8 +14,13 @@ function toTitleCase(str: string): string {
   return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
+// Define props type explicitly for clarity and potential future extensions
+interface PostsPageProps {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
 
-export default async function PostsPage({ searchParams }: PageProps) {
+
+export default async function PostsPage({ searchParams }: PostsPageProps) { // Added type annotation
   const tag = searchParams?.tag as string | undefined;
   const archive = searchParams?.archive as string | undefined;
   let posts = await getPosts();
