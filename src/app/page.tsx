@@ -20,16 +20,35 @@ export default async function Home() {
 
   return (
     <div className="space-y-12">
-      <section className="text-center py-16 bg-secondary rounded-lg shadow-sm">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">Helping Geeks Produce for Over 40 Years.</h1> {/* Updated title */}
-        <p className="text-xl text-muted-foreground mb-4"> {/* Updated text and added margin */}
-            My mission is to help people learn how to embrace change and harvest its value. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
-        </p>
-        <p className="text-xl text-muted-foreground mb-8"> {/* Second paragraph */}
-            If you want to learn how to create lasting change in your workplace, click the button below to book my solo or group Coaching Sessions today!
-        </p>
-        {/* Apply button styles directly to the Link */}
-        <Link href="/booking" className={buttonVariants({ size: "lg" })}>Let's Work Together</Link> {/* Updated button text and link */}
+      {/* Updated Hero Section */}
+      <section className="py-16 bg-secondary rounded-lg shadow-sm overflow-hidden"> {/* Added overflow-hidden */}
+        <div className="container mx-auto px-4"> {/* Ensure container padding */}
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12"> {/* Flex container */}
+            {/* Left Column: Image */}
+            <div className="w-full md:w-1/3 flex-shrink-0"> {/* Image column */}
+              <Image
+                src="https://picsum.photos/seed/geepaw-hero/400/400" // Placeholder image
+                alt="Placeholder image for GeePawHill"
+                width={400}
+                height={400}
+                className="rounded-lg object-cover w-full h-auto shadow-md" // Make image responsive and add shadow
+                data-ai-hint="portrait professional technology"
+              />
+            </div>
+             {/* Right Column: Text and Button */}
+            <div className="w-full md:w-2/3 text-center md:text-left"> {/* Text column */}
+              <h1 className="text-4xl font-bold tracking-tight mb-4">Helping Geeks Produce for Over 40 Years.</h1>
+              <p className="text-xl text-muted-foreground mb-4">
+                My mission is to help people learn how to embrace change and harvest its value. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
+              </p>
+              <p className="text-xl text-muted-foreground mb-8">
+                If you want to learn how to create lasting change in your workplace, click the button below to book my solo or group Coaching Sessions today!
+              </p>
+               {/* Apply button styles directly to the Link */}
+               <Link href="/booking" className={buttonVariants({ size: "lg" })}>Let's Work Together</Link>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section>
@@ -85,4 +104,3 @@ export default async function Home() {
     </div>
   );
 }
-
