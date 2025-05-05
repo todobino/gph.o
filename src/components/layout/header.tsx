@@ -95,7 +95,7 @@ export function Header() {
 
    // Shared Dialog Content
    const searchDialogContent = (
-     <DialogContent className="sm:max-w-[425px] bg-background/90 backdrop-blur-sm"> {/* Added background/blur */}
+     <DialogContent className="sm:max-w-[425px] bg-background/50 backdrop-blur-sm"> {/* Updated background/blur */}
         <DialogHeader>
           <DialogTitle>Search</DialogTitle>
         </DialogHeader>
@@ -111,7 +111,8 @@ export function Header() {
               {searchResults.length > 0 ? (
                   <ul className="space-y-2">
                   {searchResults.map(post => {
-                      const slug = post.slug || post.title.toLowerCase().replace(/\s+/g, '-'); // Use pre-generated slug if available
+                      // Use the pre-generated slug from the post object
+                      const slug = post.slug;
                       return (
                           <li key={post.title}>
                               <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
@@ -232,7 +233,6 @@ export function Header() {
            {/* Mobile Search & Book Now */}
             <div className="flex items-center gap-1">
                 <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                    {/* Removed asChild from DialogTrigger */}
                     <DialogTrigger>
                         <Button variant="ghost" size="icon">
                             <Search className="h-5 w-5" />
@@ -251,7 +251,6 @@ export function Header() {
         {/* Desktop Search & Book Now Buttons */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
            <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                {/* Removed asChild from DialogTrigger */}
                 <DialogTrigger>
                     <Button variant="ghost" size="icon">
                         <Search className="h-5 w-5" />
@@ -269,4 +268,3 @@ export function Header() {
     </header>
   );
 }
-
