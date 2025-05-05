@@ -7,6 +7,12 @@ import { PostsSidebar } from '@/components/posts/posts-sidebar'; // Renamed comp
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
+// Helper function to convert string to Title Case (copied from sidebar)
+function toTitleCase(str: string): string {
+  return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
+
 export default async function PostsPage({ searchParams }: { searchParams?: { tag?: string; archive?: string } }) {
   let posts = await getPosts(); // Use renamed function
 
@@ -63,7 +69,9 @@ export default async function PostsPage({ searchParams }: { searchParams?: { tag
                     </p>
                      <div className="mt-4 flex flex-wrap gap-2">
                       {post.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary">{tag}</Badge>
+                        <Badge key={tag} variant="secondary" className="border border-border"> {/* Apply title casing and border */}
+                           {toTitleCase(tag)}
+                        </Badge>
                       ))}
                     </div>
                   </CardContent>
@@ -83,3 +91,4 @@ export default async function PostsPage({ searchParams }: { searchParams?: { tag
     </div>
   );
 }
+
