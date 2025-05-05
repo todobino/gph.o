@@ -1,3 +1,5 @@
+"use client";
+
 import { signOut } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
