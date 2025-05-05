@@ -1,31 +1,32 @@
+
 /**
- * Represents a blog post.
+ * Represents a post.
  */
-export interface BlogPost {
+export interface Post { // Renamed interface
   /**
-   * The title of the blog post.
+   * The title of the post.
    */
   title: string;
   /**
-   * The content of the blog post in Markdown format.
+   * The content of the post in Markdown format.
    */
   content: string;
   /**
-   * The tags associated with the blog post.
+   * The tags associated with the post.
    */
   tags: string[];
   /**
-   * The date the blog post was published. ISO 8601 format recommended (YYYY-MM-DD).
+   * The date the post was published. ISO 8601 format recommended (YYYY-MM-DD).
    */
   date: string;
 }
 
 /**
- * Asynchronously retrieves all blog posts from a GitHub repository.
+ * Asynchronously retrieves all posts from a GitHub repository.
  *
- * @returns A promise that resolves to an array of BlogPost objects.
+ * @returns A promise that resolves to an array of Post objects.
  */
-export async function getBlogPosts(): Promise<BlogPost[]> {
+export async function getPosts(): Promise<Post[]> { // Renamed function and return type
   // TODO: Implement this by calling the GitHub API.
   // Fetch markdown files from a specific directory in the repo.
   // Parse frontmatter (if used) for metadata like title, date, tags.
@@ -68,6 +69,12 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
       content: '# Mob Programming Explained\n\nAn introductory video explaining the concept of mob programming, where the whole team works on the same thing, at the same time, in the same space, and at the same computer.\n\nDiscussing benefits and challenges.',
       tags: ['mob programming', 'video', 'agile', 'teamwork'],
       date: '2023-11-18',
+    },
+     { // Added a mock podcast post
+      title: 'Podcast: The Future of Agile Coaching',
+      content: '# Agile Coaching Podcast\n\nListen to our latest podcast episode discussing the evolving role of agile coaches and future trends.\n\nTopics:\n- Remote coaching challenges\n- AI in agile\n- Measuring coaching impact',
+      tags: ['podcast', 'agile coaching', 'future trends'],
+      date: '2024-06-10',
     },
   ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Sort posts by date descending
 }

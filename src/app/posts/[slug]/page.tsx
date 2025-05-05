@@ -1,4 +1,5 @@
-import { getBlogPosts, type BlogPost } from '@/services/github';
+
+import { getPosts, type Post } from '@/services/github'; // Renamed function and type
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown'; // Requires `npm install react-markdown`
@@ -6,27 +7,27 @@ import remarkGfm from 'remark-gfm'; // Requires `npm install remark-gfm` for Git
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
-// Generate static paths for blog posts
+// Generate static paths for posts
 export async function generateStaticParams() {
-  const posts = await getBlogPosts();
+  const posts = await getPosts(); // Use renamed function
   return posts.map((post) => ({
     slug: post.title.toLowerCase().replace(/\s+/g, '-'),
   }));
 }
 
 // Find post by slug
-async function getPostBySlug(slug: string): Promise<BlogPost | undefined> {
-  const posts = await getBlogPosts();
+async function getPostBySlug(slug: string): Promise<Post | undefined> { // Use renamed type
+  const posts = await getPosts(); // Use renamed function
   return posts.find(post => post.title.toLowerCase().replace(/\s+/g, '-') === slug);
 }
 
-interface BlogPostPageProps {
+interface PostPageProps { // Renamed interface
   params: {
     slug: string;
   };
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function PostPage({ params }: PostPageProps) { // Renamed component and props interface
   const post = await getPostBySlug(params.slug);
 
   if (!post) {

@@ -1,3 +1,4 @@
+
 // This is a placeholder for the admin dashboard.
 // Authentication and actual CMS functionality would be built here.
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,17 +36,17 @@ export default function AdminDashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
                 <Edit className="w-5 h-5 text-primary" />
-                Manage Blog Posts
+                Manage Posts {/* Renamed from Blog Posts */}
             </CardTitle>
-            <CardDescription>Create, edit, or delete blog posts.</CardDescription>
+            <CardDescription>Create, edit, or delete posts.</CardDescription> {/* Renamed from blog posts */}
           </CardHeader>
           <CardContent>
             <div className="flex gap-2">
                 <Button variant="outline" size="sm" asChild>
-                    <Link href="/admin/posts/new"><ListPlus className="w-4 h-4 mr-1" /> New Post</Link>
+                    <Link href="/admin/posts/new"><ListPlus className="w-4 h-4 mr-1" /> New Post</Link> {/* Link might need adjustment depending on admin structure */}
                 </Button>
                  <Button variant="secondary" size="sm" asChild>
-                    <Link href="/admin/posts">View All Posts</Link>
+                    <Link href="/admin/posts">View All Posts</Link> {/* Link might need adjustment depending on admin structure */}
                 </Button>
             </div>
           </CardContent>
