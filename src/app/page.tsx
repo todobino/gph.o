@@ -21,7 +21,7 @@ export default async function Home() {
   return (
     <div className="space-y-12">
       <section className="text-center py-16 bg-secondary rounded-lg shadow-sm">
-        <h1 className="text-4xl font-bold tracking-tight mb-4">Welcome to GeePawHill.Org</h1>
+        <h1 className="text-4xl font-bold tracking-tight mb-4">Helping Geeks Produce for Over 40 Years.</h1> {/* Updated title */}
         <p className="text-xl text-muted-foreground mb-8">Thoughts on software development, agile practices, and more.</p>
         {/* Apply button styles directly to the Link */}
         <Link href="/posts" className={buttonVariants({ size: "lg" })}>Read the Posts</Link>
