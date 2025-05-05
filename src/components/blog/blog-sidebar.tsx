@@ -12,6 +12,12 @@ interface BlogSidebarProps {
   archives: string[]; // Format: "Month Year" e.g., "January 2024"
 }
 
+// Helper function to convert string to Title Case
+function toTitleCase(str: string): string {
+  return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
+
 export function BlogSidebar({ tags, archives }: BlogSidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -50,7 +56,7 @@ export function BlogSidebar({ tags, archives }: BlogSidebarProps) {
                          // Added rounded-md to override default pill shape and py-1 for padding
                          className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1"
                        >
-                         {tag}
+                         {toTitleCase(tag)} {/* Apply Title Case here */}
                        </Badge>
                     </Link>
                   ))}
