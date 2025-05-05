@@ -1,5 +1,6 @@
 
 import Link from 'next/link';
+import { type PageProps } from 'next';
 import { getPosts, type Post } from '@/services/github'; // Renamed function and type
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,8 +15,9 @@ function toTitleCase(str: string): string {
 }
 
 
-export default async function PostsPage({ searchParams }: { searchParams?: { tag?: string; archive?: string } }) {
-  let posts = await getPosts(); // Use renamed function
+export default async function PostsPage({ searchParams }: PageProps) {
+  const {tag, archive} = searchParams
+  let posts = await getPosts();
 
   // Filter by tag
   if (searchParams?.tag) {
@@ -26,7 +28,7 @@ export default async function PostsPage({ searchParams }: { searchParams?: { tag
   if (searchParams?.archive) {
     posts = posts.filter(post => {
       const postDate = new Date(post.date);
-      const archiveDateStr = searchParams.archive!;
+      const archiveDateStr = archive!
       // Basic check assuming "Month Year" format
       const postArchiveStr = postDate.toLocaleString('default', { month: 'long', year: 'numeric' });
       return postArchiveStr === archiveDateStr;
