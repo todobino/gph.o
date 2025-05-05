@@ -24,7 +24,7 @@ export function Header() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<Post[]>([]);
   const [allPosts, setAllPosts] = React.useState<Post[]>([]);
-  const [isSearchPopoverOpen, setIsSearchPopoverOpen] = React.useState(false); // Explicit state for popover
+  // Removed isSearchPopoverOpen state management - rely on ShadCN default
 
   // Fetch posts on component mount for client-side search
   React.useEffect(() => {
@@ -84,8 +84,9 @@ export function Header() {
   };
 
    const handleSearchResultClick = () => {
-     setIsSearchPopoverOpen(false); // Close popover on result click
-     setSearchQuery(''); // Clear search query
+     // Popover should close automatically on focus loss / click outside.
+     // Just clear the search query.
+     setSearchQuery('');
    };
 
 
@@ -192,7 +193,7 @@ export function Header() {
            </Link>
            {/* Mobile Search & Book Now */}
             <div className="flex items-center gap-1"> {/* Reduced gap */}
-                <Popover open={isSearchPopoverOpen} onOpenChange={setIsSearchPopoverOpen}>
+                <Popover> {/* Removed open and onOpenChange */}
                     <PopoverTrigger asChild>
                         <Button variant="ghost" size="icon">
                             <Search className="h-5 w-5" />
@@ -236,6 +237,7 @@ export function Header() {
                     </PopoverContent>
                 </Popover>
                 <Button size="sm" asChild>
+                    {/* TODO: Update link to actual booking page */}
                     <Link href="/booking">Book Now</Link>
                 </Button>
             </div>
@@ -243,7 +245,7 @@ export function Header() {
 
         {/* Desktop Search & Book Now Buttons (Hidden on mobile by parent div) */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
-           <Popover open={isSearchPopoverOpen} onOpenChange={setIsSearchPopoverOpen}>
+           <Popover> {/* Removed open and onOpenChange */}
                 <PopoverTrigger asChild>
                     <Button variant="ghost" size="icon">
                         <Search className="h-5 w-5" />
@@ -287,6 +289,7 @@ export function Header() {
                 </PopoverContent>
             </Popover>
            <Button asChild>
+               {/* TODO: Update link to actual booking page */}
                <Link href="/booking">Book Now</Link>
            </Button>
         </div>
