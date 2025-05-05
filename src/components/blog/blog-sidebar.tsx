@@ -47,8 +47,8 @@ export function BlogSidebar({ tags, archives }: BlogSidebarProps) {
                      >
                        <Badge
                          variant={currentTag === tag ? 'default' : 'secondary'}
-                         // Added rounded-md to override default pill shape
-                         className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md"
+                         // Added rounded-md to override default pill shape and py-1 for padding
+                         className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1"
                        >
                          {tag}
                        </Badge>
