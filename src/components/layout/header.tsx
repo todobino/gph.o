@@ -95,7 +95,7 @@ export function Header() {
 
    // Shared Dialog Content
    const searchDialogContent = (
-     <DialogContent className="sm:max-w-[425px]">
+     <DialogContent className="sm:max-w-[425px] bg-background/90 backdrop-blur-sm"> {/* Added background/blur */}
         <DialogHeader>
           <DialogTitle>Search</DialogTitle>
         </DialogHeader>
@@ -240,8 +240,8 @@ export function Header() {
                     </DialogTrigger>
                     {searchDialogContent}
                 </Dialog>
-                <Button size="sm" asChild>
-                    <Link href="/booking">Book Now</Link>
+                <Button size="sm" asChild={false}> {/* Removed asChild */}
+                   <Link href="/booking">Book Now</Link>
                 </Button>
             </div>
         </div>
@@ -257,11 +257,12 @@ export function Header() {
                 </DialogTrigger>
                  {searchDialogContent}
             </Dialog>
-           <Button asChild>
-               <Link href="/booking">Book Now</Link>
+           <Button asChild={false}> {/* Removed asChild */}
+             <Link href="/booking">Book Now</Link>
            </Button>
         </div>
       </div>
     </header>
   );
 }
+
