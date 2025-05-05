@@ -27,7 +27,7 @@ export function Header() {
             { href: '/posts', label: 'All Posts' },
             { href: '/posts?tag=video', label: 'Videos' },     // Changed href for filtering
             { href: '/posts?tag=podcast', label: 'Podcasts' }, // Changed href for filtering
-            { href: '/contact?subscribe=true', label: 'Subscribe!' }, // Placeholder URL
+            { href: '/subscribe', label: 'Subscribe!' }, // Updated href to /subscribe
         ]
     },
     { href: '/contact', label: 'Contact' },
@@ -162,5 +162,4 @@ export function Header() {
     </header>
   );
 }
-
 
