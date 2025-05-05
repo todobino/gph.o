@@ -24,7 +24,7 @@ export function Header() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<Post[]>([]);
   const [allPosts, setAllPosts] = React.useState<Post[]>([]);
-  const [isSearchPopoverOpen, setIsSearchPopoverOpen] = React.useState(false);
+  const [isSearchPopoverOpen, setIsSearchPopoverOpen] = React.useState(false); // Explicit state for popover
 
   // Fetch posts on component mount for client-side search
   React.useEffect(() => {
@@ -294,4 +294,3 @@ export function Header() {
     </header>
   );
 }
-
