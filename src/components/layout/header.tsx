@@ -1,4 +1,5 @@
 
+
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
@@ -26,9 +27,9 @@ export function Header() {
   ];
 
   const postsDropdownItems = [
-    { href: '/posts/podcasts', label: 'Podcasts' }, // Placeholder URL
-    { href: '/posts/videos', label: 'Videos' },     // Placeholder URL
-    { href: '/posts', label: 'All Posts' },
+    { href: '/posts', label: 'All Posts' }, // Moved up
+    { href: '/posts/videos', label: 'Videos' },     // Moved up
+    { href: '/posts/podcasts', label: 'Podcasts' }, // Moved down
     { href: '/contact?subscribe=true', label: 'Subscribe!' }, // Placeholder URL, links to contact for now
   ];
 
@@ -193,4 +194,5 @@ export function Header() {
     </header>
   );
 }
+
 
