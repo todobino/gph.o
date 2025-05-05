@@ -6,6 +6,8 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Separator } from '@/components/ui/separator'; // Import Separator
+import { EmailSignupForm } from '@/components/email-signup-form'; // Import EmailSignupForm
 
 interface PostsSidebarProps { // Renamed interface
   tags: string[];
@@ -37,9 +39,10 @@ export function PostsSidebar({ tags, archives }: PostsSidebarProps) { // Renamed
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Filter Posts</CardTitle>
+        <CardTitle>Filter & Subscribe</CardTitle> {/* Updated title */}
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6"> {/* Increased spacing */}
+        {/* Filters Section */}
         <Accordion type="multiple" collapsible className="w-full" defaultValue={['tags', 'archives']}>
            <AccordionItem value="tags">
              <AccordionTrigger className="text-lg font-medium">Tags</AccordionTrigger>
@@ -53,7 +56,7 @@ export function PostsSidebar({ tags, archives }: PostsSidebarProps) { // Renamed
                      >
                        <Badge
                          variant={currentTag === tag ? 'default' : 'secondary'}
-                         className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1"
+                         className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1.5 px-3" // Added padding
                        >
                          {toTitleCase(tag)} {/* Apply Title Case here */}
                        </Badge>
@@ -82,6 +85,15 @@ export function PostsSidebar({ tags, archives }: PostsSidebarProps) { // Renamed
              </AccordionContent>
            </AccordionItem>
         </Accordion>
+
+        {/* Separator */}
+        <Separator />
+
+        {/* Email Signup Section */}
+        <div>
+          <h3 className="text-lg font-medium mb-3">Stay Updated</h3>
+          <EmailSignupForm />
+        </div>
       </CardContent>
     </Card>
   );
