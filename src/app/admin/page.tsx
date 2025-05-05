@@ -42,11 +42,11 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="flex gap-2">
-                <Button variant="outline" size="sm" asChild>
-                    <Link href="/admin/posts/new"><ListPlus className="w-4 h-4 mr-1" /> New Post</Link> {/* Link might need adjustment depending on admin structure */}
+                <Button variant="outline" size="sm" asChild>                  
+                    <a href="/admin/posts/new"><ListPlus className="w-4 h-4 mr-1" /> New Post</a> {/* Link might need adjustment depending on admin structure */}
                 </Button>
                  <Button variant="secondary" size="sm" asChild>
-                    <Link href="/admin/posts">View All Posts</Link> {/* Link might need adjustment depending on admin structure */}
+                    <a href="/admin/posts">View All Posts</a> {/* Link might need adjustment depending on admin structure */}
                 </Button>
             </div>
           </CardContent>
