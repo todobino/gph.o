@@ -1,6 +1,7 @@
 
+import { type Metadata, type ResolvingMetadata, type PageProps } from 'next';
 import { getPosts, type Post } from '@/services/github'; // Renamed function and type
-import { notFound } from 'next/navigation';
+import { notFound } from 'next/navigation'; 
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown'; // Requires `npm install react-markdown`
 import remarkGfm from 'remark-gfm'; // Requires `npm install remark-gfm` for GitHub Flavored Markdown
@@ -21,13 +22,11 @@ async function getPostBySlug(slug: string): Promise<Post | undefined> { // Use r
   return posts.find(post => post.title.toLowerCase().replace(/\s+/g, '-') === slug);
 }
 
-interface PostPageProps { // Renamed interface
-  params: {
-    slug: string;
-  };
+
+interface PostPageProps extends PageProps {
 }
 
-export default async function PostPage({ params }: PostPageProps) { // Renamed component and props interface
+export default async function PostPage({ params }: PostPageProps) { 
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
