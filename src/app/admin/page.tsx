@@ -20,7 +20,7 @@ export default function AdminDashboardPage() {
              <p className="text-muted-foreground mb-6">Please log in to access the admin dashboard.</p>
              <Button asChild>
                 {/* Link to your actual login page */}
-                <Link href="/login">Login</Link>
+                <a href="/login">Login</a>
              </Button>
         </div>
     );
