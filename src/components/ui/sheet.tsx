@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -131,10 +132,11 @@ export {
   SheetPortal,
   SheetOverlay,
   SheetTrigger,
-  SheetClose,
+  SheetClose, // Exported SheetClose
   SheetContent,
   SheetHeader,
   SheetFooter,
   SheetTitle,
   SheetDescription,
 }
+
