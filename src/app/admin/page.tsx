@@ -1,35 +1,48 @@
-export const dynamic = 'force-dynamic'
-
-// This is a placeholder for the admin dashboard.
-// Authentication and actual CMS functionality would be built here.
-
+import { checkIfAdmin, getCurrentUser } from "@/lib/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ListPlus, Edit, CalendarDays, Users } from "lucide-react"; // Icons for actions
+import { ListPlus, Edit, CalendarDays, Users } from "lucide-react";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
+
+export const dynamic = 'force-dynamic';
 
 
-export default function AdminDashboardPage() {
-  // Placeholder - In a real app, you'd check authentication status here
-  const isAuthenticated = true; // Assume user is logged in for this example
+async function checkAuth() {
+  const user = await getCurrentUser();
+  const isAdmin = await checkIfAdmin();
 
-  if (!isAuthenticated) {
-    // Redirect to login page or show login component
-    // For now, we'll just show a message
+  if (!user || !isAdmin) {
+    redirect('/login');
+  }
+  return true;
+}
+
+export default async function AdminDashboardPage() {
+  const user = await getCurrentUser();
+  const isAdmin = await checkIfAdmin();
+
+  if (!user || !isAdmin) {
     return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh]">
-             <h1 className="text-3xl font-bold mb-4">Access Denied</h1>
-             <p className="text-muted-foreground mb-6">Please log in to access the admin dashboard.</p>
-             <Button asChild>
-                {/* Link to your actual login page */}
-                <a href="/login">Login</a>
-             </Button>
-        </div>
+      <div className="flex min-h-screen items-center justify-center">
+          Loading...
+      </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center">
+          Loading...
+      </div>
+    }>
+        <AdminDashboard />
+    </Suspense>
+  );
+}
+
+function AdminDashboard() {
+  return (<div className="space-y-8">
       <h1 className="text-4xl font-bold">Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -101,5 +114,5 @@ export default function AdminDashboardPage() {
          <p className="text-muted-foreground">No recent activity to display.</p>
        </section> */}
     </div>
-  );
+  )
 }

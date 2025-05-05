@@ -7,8 +7,8 @@ export function Footer() {
         <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
           &copy; {new Date().getFullYear()} GeePawHill.Org. All rights reserved.
         </p>
-        {/* Add Admin Login link */}
-        <Link href="/admin" className="text-sm text-primary hover:underline">
+        {/* Admin Login link to /login */}
+        <Link href="/login" className="text-sm text-primary hover:underline">
             Admin Login
         </Link>
       </div>
