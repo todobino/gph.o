@@ -1,5 +1,6 @@
 
-import { type Metadata, type ResolvingMetadata, type PageProps} from 'next';
+import { type PageProps } from 'next';
+import { type Metadata, type ResolvingMetadata } from 'next';
 import { getPosts, type Post } from '@/services/github'; // Renamed function and type
 import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
@@ -12,14 +13,14 @@ export const revalidate = 60; // Revalidate every 60 seconds
 export async function generateStaticParams() {
   const posts = await getPosts(); // Use renamed function
   return posts.map((post) => ({
-    slug: post.title.toLowerCase().replace(/\s+/g, '-'),
+    slug: post.title.toLowerCase().replace(/s+/g, '-'),
   }));
 }
 
 // Find post by slug
 async function getPostBySlug(slug: string): Promise<Post | undefined> { // Use renamed type
   const posts = await getPosts(); // Use renamed function
-  return posts.find(post => post.title.toLowerCase().replace(/\s+/g, '-') === slug);
+  return posts.find(post => post.title.toLowerCase().replace(/s+/g, '-') === slug);
 }
 
  
@@ -33,7 +34,7 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  return (
+  return ( 
     <article className="prose prose-lg dark:prose-invert max-w-none mx-auto">
        <header className="mb-8">
         <h1 className="text-4xl font-bold mb-2">{post.title}</h1> 
@@ -63,7 +64,7 @@ export default async function PostPage({ params }: PostPageProps) {
               li: ({node, ...props}) => <li className="my-1" {...props} />,
               blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-primary pl-4 italic my-4 text-muted-foreground" {...props} />,
               code: ({node, inline, className, children, ...props}) => {
-                const match = /language-(\w+)/.exec(className || '')
+                const match = /language-(w+)/.exec(className || '') 
                 return !inline ? (
                    // Basic code block styling, consider using a syntax highlighter library
                    <pre className="bg-muted p-4 rounded-md overflow-x-auto my-4">
