@@ -4,6 +4,7 @@ import { getPosts, type Post } from '@/services/github'; // Renamed function and
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PostsSidebar } from '@/components/posts/posts-sidebar'; // Renamed component
+import { cn } from '@/lib/utils'; // Import cn
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
@@ -40,11 +41,12 @@ export default async function PostsPage({ searchParams }: { searchParams?: { tag
 
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
-       <aside className="w-full md:w-1/4 lg:w-1/5">
+    // Apply negative horizontal margins to counteract layout padding
+    <div className="flex flex-col md:flex-row gap-8 -mx-4 md:mx-0">
+       <aside className="w-full md:w-1/4 lg:w-1/5 px-4 md:px-0"> {/* Add padding back for sidebar on mobile */}
          <PostsSidebar tags={tags} archives={archives} /> {/* Use renamed component */}
        </aside>
-       <main className="w-full md:w-3/4 lg:w-4/5">
+       <main className="w-full md:w-3/4 lg:w-4/5 px-4 md:px-0"> {/* Add padding back for main content on mobile */}
         <h1 className="text-4xl font-bold mb-8">Posts</h1> {/* Renamed heading */}
         <div className="grid grid-cols-1 gap-6">
           {posts.length > 0 ? (
