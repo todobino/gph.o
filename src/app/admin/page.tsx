@@ -1,6 +1,8 @@
+export const dynamic = 'force-dynamic'
 
 // This is a placeholder for the admin dashboard.
 // Authentication and actual CMS functionality would be built here.
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
