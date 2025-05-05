@@ -6,12 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown'; // Requires `npm install react-markdown`
 import remarkGfm from 'remark-gfm'; // Requires `npm install remark-gfm` for GitHub Flavored Markdown
 
-// Define the types for the page component props
-interface PostPageProps {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
 // Function to generate metadata dynamically
 export async function generateMetadata(
   { params, searchParams }: PostPageProps, // Use the new type here
@@ -48,7 +42,7 @@ async function getPostBySlug(slug: string): Promise<Post | undefined> { // Use r
 }
     
 // Your main page component
-export default async function PostPage({ params, searchParams }: PostPageProps) { // Use the new type here
+export default async function PostPage({ params, searchParams }: { params: { slug: string }; searchParams: { [key: string]: string | string[] | undefined } }) { // Use the new type here
   const slug = params.slug;
   const posts = await getPosts(); // Assuming this fetches all posts
 
