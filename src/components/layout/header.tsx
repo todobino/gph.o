@@ -30,8 +30,13 @@ export function Header() {
   React.useEffect(() => {
     async function fetchPosts() {
       // TODO: Debounce or implement more robust search fetching if needed
-      const posts = await getPosts(); // Use renamed function
-      setAllPosts(posts);
+      try {
+        const posts = await getPosts(); // Use renamed function
+        setAllPosts(posts);
+      } catch (error) {
+        console.error("Failed to fetch posts for search:", error);
+        // Handle error appropriately, maybe show a toast
+      }
     }
     fetchPosts();
   }, []);
@@ -106,7 +111,6 @@ export function Header() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
                       {navItem.dropdown.map((item) => (
-                        // Ensure Link has only one child when Button uses asChild
                         <DropdownMenuItem key={item.href} asChild>
                            <Link href={item.href}>{item.label}</Link>
                         </DropdownMenuItem>
@@ -114,7 +118,6 @@ export function Header() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  // Apply button styles directly to Link instead of using Button asChild
                   <Link
                     key={navItem.href}
                     href={navItem.href!}
@@ -154,7 +157,6 @@ export function Header() {
                                 <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div> {/* Adjusted padding */}
                                 <div className="flex flex-col space-y-0 pl-4"> {/* Removed space-y, rely on SheetClose padding */}
                                     {navItem.dropdown.map((item) => (
-                                        // Add asChild to SheetClose when wrapping Link
                                         <SheetClose key={item.href} asChild>
                                            <Link
                                              href={item.href}
@@ -168,7 +170,6 @@ export function Header() {
                                 </div>
                             </>
                         ) : (
-                             // Add asChild to SheetClose when wrapping Link
                              <SheetClose asChild>
                                 <Link
                                 href={navItem.href!}
@@ -207,34 +208,33 @@ export function Header() {
                             </p>
                             </div>
                             <Input
-                            id="search"
+                            id="search-mobile"
                             placeholder="Search..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="col-span-2 h-8"
                             />
                              <ScrollArea className="h-[200px] w-full"> {/* Adjust height as needed */}
-                            {searchResults.length > 0 ? (
-                                <ul className="space-y-2">
-                                {searchResults.map(post => {
-                                    const slug = post.title.toLowerCase().replace(/\s+/g, '-');
-                                    return (
-                                        <li key={post.title}>
-                                            <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="text-sm hover:underline block p-1 rounded hover:bg-accent">
-                                                {post.title}
-                                            </Link>
-                                        </li>
-                                    )
-                                })}
-                                </ul>
-                            ) : searchQuery.trim() !== '' ? (
-                                <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
-                             ) : null}
+                                {searchResults.length > 0 ? (
+                                    <ul className="space-y-2">
+                                    {searchResults.map(post => {
+                                        const slug = post.title.toLowerCase().replace(/\s+/g, '-');
+                                        return (
+                                            <li key={post.title}>
+                                                <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
+                                                    {post.title}
+                                                </Link>
+                                            </li>
+                                        )
+                                    })}
+                                    </ul>
+                                ) : searchQuery.trim() !== '' ? (
+                                    <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
+                                ) : null}
                             </ScrollArea>
                         </div>
                     </PopoverContent>
                 </Popover>
-                {/* Ensure Link has only one child when Button uses asChild */}
                 <Button size="sm" asChild>
                     <Link href="/booking">Book Now</Link>
                 </Button>
@@ -272,7 +272,7 @@ export function Header() {
                                 const slug = post.title.toLowerCase().replace(/\s+/g, '-');
                                 return (
                                     <li key={post.title}>
-                                        <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="text-sm hover:underline block p-1 rounded hover:bg-accent">
+                                        <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
                                             {post.title}
                                         </Link>
                                     </li>
@@ -286,7 +286,6 @@ export function Header() {
                     </div>
                 </PopoverContent>
             </Popover>
-           {/* Ensure Link has only one child when Button uses asChild */}
            <Button asChild>
                <Link href="/booking">Book Now</Link>
            </Button>
