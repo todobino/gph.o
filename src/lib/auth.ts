@@ -5,7 +5,6 @@ import {
   User,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
-import { app, db } from "./firestore";
 
 const auth = getAuth(app);
 
@@ -37,16 +36,25 @@ export const getCurrentUser = (): Promise<User | null> => {
       });
   });
 };
-
+import { app } from "./firestore";
 export const checkIfAdmin = async (): Promise<boolean> => {
   const user = await getCurrentUser();
 
   if (!user) {
     return false;
   }
-
-  const token = await user.getIdTokenResult();
-  return token.claims.admin === true;
+  const db = getFirestore(app);
+  const docRef = doc(db, "users", user.uid);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+      const userData = docSnap.data();
+      if(userData.userType === "admin"){
+        return true;
+      } else {
+        return false;
+      }
+  }
+  return false;
 };
 
 export const makeUserAdmin = async (userUid: string): Promise<void> => {
