@@ -8,6 +8,10 @@ export interface Post { // Renamed interface
    */
   title: string;
   /**
+   * The URL-friendly slug for the post.
+   */
+  slug: string;
+  /**
    * The content of the post in Markdown format.
    */
   content: string;
@@ -21,6 +25,17 @@ export interface Post { // Renamed interface
   date: string;
 }
 
+// Helper function to generate slugs
+function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters except spaces and hyphens
+    .replace(/\s+/g, '-')        // Replace spaces with hyphens
+    .replace(/-+/g, '-')         // Replace multiple hyphens with single hyphen
+    .replace(/^-+|-+$/g, '');    // Trim leading/trailing hyphens
+}
+
+
 /**
  * Asynchronously retrieves all posts from a GitHub repository.
  *
@@ -30,10 +45,11 @@ export async function getPosts(): Promise<Post[]> { // Renamed function and retu
   // TODO: Implement this by calling the GitHub API.
   // Fetch markdown files from a specific directory in the repo.
   // Parse frontmatter (if used) for metadata like title, date, tags.
+  // Generate slugs from titles if not present in frontmatter.
   // Return structured data.
 
-  // For now, returning more detailed mock data:
-  return [
+  // For now, returning more detailed mock data with generated slugs:
+  const mockPostsData = [
     {
       title: 'First Thoughts on Agile',
       content: '# Agile Intro\n\nThis is the first paragraph about agile methodologies. It covers the basics.\n\n## Key Principles\n\n- Individuals and interactions over processes and tools\n- Working software over comprehensive documentation',
@@ -76,5 +92,12 @@ export async function getPosts(): Promise<Post[]> { // Renamed function and retu
       tags: ['podcast', 'agile coaching', 'future trends'],
       date: '2024-06-10',
     },
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Sort posts by date descending
+  ];
+
+   return mockPostsData
+    .map(post => ({
+        ...post,
+        slug: generateSlug(post.title), // Generate slug for each post
+    }))
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // Sort posts by date descending
 }

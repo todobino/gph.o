@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { EmailSignupForm } from '@/components/email-signup-form';
 import { getPosts } from '@/services/github'; // Renamed function
+import { cn } from '@/lib/utils'; // Import cn
 
 // Function to get videos (now filters from all posts)
 async function getLatestVideos(): Promise<Post[]> { // Use renamed Post type
@@ -42,7 +43,7 @@ export default async function Home() {
                 My mission is to help people learn how to embrace change and harvest its value. Here, you'll find hundreds of free articles and videos—from deep technical insights to big-picture philosophy—all designed to help you turn transformation into your greatest advantage. Ready to create lasting change at work? Book a solo or group Coaching Session below and start change-harvesting today.
               </p>
                {/* Apply button styles directly to the Link */}
-               <Link href="/booking" className={buttonVariants({ size: "lg" })}>Let's Work Together</Link>
+               <Link href="/booking" className={cn(buttonVariants({ size: "lg" }))}>Let's Work Together</Link>
             </div>
           </div>
         </div>
@@ -53,8 +54,8 @@ export default async function Home() {
         {latestVideos.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {latestVideos.map((video) => {
-               // Generate slug using only title for simplicity in example
-               const slug = video.title.toLowerCase().replace(/\s+/g, '-');
+               // Use the pre-generated slug from the post object
+               const slug = video.slug;
                return (
                 <Card key={video.title} className="flex flex-col">
                     <CardHeader>
@@ -77,8 +78,8 @@ export default async function Home() {
                     </p>
                     </CardContent>
                     <CardFooter>
-                       {/* Removed Button asChild, applied styles directly to Link */}
-                       <Link href={`/posts/${slug}`} className={buttonVariants({ variant: "link", className: "p-0" })}>
+                       {/* Use Link styled as button variant 'link' */}
+                       <Link href={`/posts/${slug}`} className={cn(buttonVariants({ variant: "link", className: "p-0" }))}>
                          Watch Video
                        </Link>
                     </CardFooter>

@@ -16,22 +16,22 @@ function toTitleCase(str: string): string {
 
 
 export default async function PostsPage({ searchParams }: PageProps) {
-  const {tag, archive} = searchParams
+  const tag = searchParams?.tag as string | undefined;
+  const archive = searchParams?.archive as string | undefined;
   let posts = await getPosts();
 
   // Filter by tag
-  if (searchParams?.tag) {
-    posts = posts.filter(post => post.tags.includes(searchParams.tag!));
+  if (tag) {
+    posts = posts.filter(post => post.tags.includes(tag));
   }
 
   // Filter by archive date
-  if (searchParams?.archive) {
+  if (archive) {
     posts = posts.filter(post => {
       const postDate = new Date(post.date);
-      const archiveDateStr = archive!
-      // Basic check assuming "Month Year" format
+      // Assuming "Month Year" format
       const postArchiveStr = postDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-      return postArchiveStr === archiveDateStr;
+      return postArchiveStr === archive;
     });
   }
 
@@ -55,7 +55,8 @@ export default async function PostsPage({ searchParams }: PageProps) {
         <div className="grid grid-cols-1 gap-6">
           {posts.length > 0 ? (
             posts.map((post) => {
-              const slug = post.title.toLowerCase().replace(/\s+/g, '-'); // Generate slug consistently
+              // Use the pre-generated slug from the post object
+              const slug = post.slug;
               return (
                 <Card key={post.title}>
                   <CardHeader>
@@ -97,4 +98,3 @@ export default async function PostsPage({ searchParams }: PageProps) {
     </div>
   );
 }
-
