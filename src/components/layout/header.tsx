@@ -232,7 +232,8 @@ export function Header() {
            {/* Mobile Search & Book Now */}
             <div className="flex items-center gap-1">
                 <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                    <DialogTrigger asChild>
+                    {/* Removed asChild from DialogTrigger */}
+                    <DialogTrigger>
                         <Button variant="ghost" size="icon">
                             <Search className="h-5 w-5" />
                             <span className="sr-only">Search</span>
@@ -250,7 +251,8 @@ export function Header() {
         {/* Desktop Search & Book Now Buttons */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
            <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                <DialogTrigger asChild>
+                {/* Removed asChild from DialogTrigger */}
+                <DialogTrigger>
                     <Button variant="ghost" size="icon">
                         <Search className="h-5 w-5" />
                         <span className="sr-only">Search</span>
