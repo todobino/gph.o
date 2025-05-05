@@ -29,7 +29,7 @@ export default async function Home() {
             If you want to learn how to create lasting change in your workplace, click the button below to book my solo or group Coaching Sessions today!
         </p>
         {/* Apply button styles directly to the Link */}
-        <Link href="/posts" className={buttonVariants({ size: "lg" })}>Read the Posts</Link>
+        <Link href="/booking" className={buttonVariants({ size: "lg" })}>Let's Work Together</Link> {/* Updated button text and link */}
       </section>
 
       <section>
