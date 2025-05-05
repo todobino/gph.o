@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -46,7 +47,8 @@ export function BlogSidebar({ tags, archives }: BlogSidebarProps) {
                      >
                        <Badge
                          variant={currentTag === tag ? 'default' : 'secondary'}
-                         className="cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                         // Added rounded-md to override default pill shape
+                         className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md"
                        >
                          {tag}
                        </Badge>
@@ -79,3 +81,4 @@ export function BlogSidebar({ tags, archives }: BlogSidebarProps) {
     </Card>
   );
 }
+
