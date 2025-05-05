@@ -1,3 +1,4 @@
+
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
@@ -9,10 +10,13 @@ import React from 'react'; // Import React
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
+  // Updated navigation items
   const navItems = [
-    { href: '/', label: 'Home' },
-    { href: '/blog', label: 'Blog' },
+    { href: '/posts', label: 'Posts' }, // Changed from /blog to /posts
     { href: '/contact', label: 'Contact' },
+    { href: '/courses', label: 'Courses' }, // Added
+    { href: '/camerata', label: 'Camerata' }, // Added
+    { href: '/about', label: 'About' }, // Added
   ];
 
   const handleLinkClick = () => {
@@ -40,13 +44,7 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-             {/* Keep Admin link separate or conditionally render based on auth */}
-            <Link
-                href="/admin"
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-                Admin
-            </Link>
+            {/* Removed explicit Admin link from main desktop nav */}
           </nav>
         </div>
 
@@ -79,9 +77,10 @@ export function Header() {
                     {item.label}
                   </Link>
                 ))}
+                 {/* Keep Admin login link separate at the bottom */}
                  <Link
-                    href="/admin" // Link to admin/CMS login
-                    className="text-lg font-medium text-foreground transition-colors hover:text-primary"
+                    href="/admin"
+                    className="text-lg font-medium text-foreground transition-colors hover:text-primary pt-4 border-t mt-4" // Added styling for separation
                     onClick={handleLinkClick} // Use handler
                   >
                     Admin Login
@@ -107,3 +106,4 @@ export function Header() {
     </header>
   );
 }
+
