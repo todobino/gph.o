@@ -2,7 +2,7 @@
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button'; // Imported buttonVariants
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet'; // Added SheetClose
 import {
   DropdownMenu,
@@ -17,6 +17,7 @@ import React from 'react'; // Import React
 import type { Post } from '@/services/github'; // Import post fetching logic (Use renamed type)
 import { getPosts } from '@/services/github'; // Import post fetching logic (Use renamed function)
 import { ScrollArea } from '@/components/ui/scroll-area'; // Added ScrollArea
+import { cn } from '@/lib/utils'; // Import cn
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
@@ -51,15 +52,15 @@ export function Header() {
   }, [searchQuery, allPosts]);
 
 
-  // Define navigation structure - Order changed, Camerata removed
+  // Define navigation structure - Order changed
   const navItems = [
      {
         label: 'Posts',
         dropdown: [
-            { href: '/posts', label: 'All Posts' }, // Changed from /blog
+            { href: '/posts', label: 'All Posts' },
             { href: '/posts?tag=video', label: 'Videos' },
-            { href: '/posts?tag=podcast', label: 'Podcasts' }, // Added podcast link
-            { href: '/subscribe', label: 'Subscribe!' }, // Added Subscribe link
+            { href: '/posts?tag=podcast', label: 'Podcasts' },
+            { href: '/subscribe', label: 'Subscribe!' },
         ]
     },
      {
@@ -70,7 +71,6 @@ export function Header() {
      },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
-    // { href: '/camerata', label: 'Camerata' }, // Removed Camerata
   ];
 
 
@@ -106,12 +106,22 @@ export function Header() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
                       {navItem.dropdown.map((item) => (
-                        <DropdownMenuItem key={item.href} asChild><Link href={item.href}>{item.label}</Link></DropdownMenuItem>
+                        // Ensure Link has only one child when Button uses asChild
+                        <DropdownMenuItem key={item.href} asChild>
+                           <Link href={item.href}>{item.label}</Link>
+                        </DropdownMenuItem>
                       ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <Button key={navItem.href} variant="ghost" asChild className="text-foreground/60 hover:text-foreground/80 px-3 py-2"><Link href={navItem.href!}>{navItem.label}</Link></Button>
+                  // Apply button styles directly to Link instead of using Button asChild
+                  <Link
+                    key={navItem.href}
+                    href={navItem.href!}
+                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "text-foreground/60 hover:text-foreground/80 px-3 py-2")}
+                  >
+                    {navItem.label}
+                  </Link>
                 )
               )}
           </nav>
@@ -144,8 +154,8 @@ export function Header() {
                                 <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div> {/* Adjusted padding */}
                                 <div className="flex flex-col space-y-0 pl-4"> {/* Removed space-y, rely on SheetClose padding */}
                                     {navItem.dropdown.map((item) => (
-                                        // Removed asChild from SheetClose, Link is now the child
-                                        <SheetClose key={item.href}>
+                                        // Add asChild to SheetClose when wrapping Link
+                                        <SheetClose key={item.href} asChild>
                                            <Link
                                              href={item.href}
                                              className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent" // Adjusted styling for link within button
@@ -158,8 +168,8 @@ export function Header() {
                                 </div>
                             </>
                         ) : (
-                             // Removed asChild from SheetClose, Link is now the child
-                             <SheetClose>
+                             // Add asChild to SheetClose when wrapping Link
+                             <SheetClose asChild>
                                 <Link
                                 href={navItem.href!}
                                 className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent" // Adjusted styling
@@ -171,21 +181,6 @@ export function Header() {
                         )}
                     </React.Fragment>
                 ))}
-
-
-                 {/* Separator before Admin Login - No longer needed */}
-                {/* <div className="pt-4 border-t mt-4" /> */}
-
-                 {/* Admin login removed from mobile menu */}
-                 {/* <SheetClose asChild>
-                    <Link
-                        href="/admin"
-                        className="block w-full text-left text-lg font-medium text-muted-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent" // Adjusted styling
-                        onClick={handleLinkClick} // Use handler
-                    >
-                        Admin Login
-                    </Link>
-                 </SheetClose> */}
               </nav>
             </SheetContent>
           </Sheet>
@@ -239,8 +234,9 @@ export function Header() {
                         </div>
                     </PopoverContent>
                 </Popover>
+                {/* Ensure Link has only one child when Button uses asChild */}
                 <Button size="sm" asChild>
-                    <Link href="/booking">Book Now</Link> {/* Placeholder link */}
+                    <Link href="/booking">Book Now</Link>
                 </Button>
             </div>
         </div>
@@ -290,12 +286,10 @@ export function Header() {
                     </div>
                 </PopoverContent>
             </Popover>
+           {/* Ensure Link has only one child when Button uses asChild */}
            <Button asChild>
-               <Link href="/booking">Book Now</Link> {/* Placeholder link */}
+               <Link href="/booking">Book Now</Link>
            </Button>
-           {/* Admin Login button removed */}
-           {/* <div className="border-l h-6 mx-2" />
-             <Button variant="ghost" asChild><Link href="/admin">Admin Login</Link></Button> */}
         </div>
       </div>
     </header>
