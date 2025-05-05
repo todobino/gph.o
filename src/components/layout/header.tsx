@@ -2,40 +2,38 @@
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '@/components/ui/button'; // Imported buttonVariants
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet'; // Added SheetClose
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"; // Added Dropdown components
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Added Popover
-import { Input } from "@/components/ui/input"; // Added Input
-import { Menu, Feather, ChevronDown, Search } from 'lucide-react'; // Using Feather as a placeholder logo, Added ChevronDown, Search
-import React from 'react'; // Import React
-import type { Post } from '@/services/github'; // Import post fetching logic (Use renamed type)
-import { getPosts } from '@/services/github'; // Import post fetching logic (Use renamed function)
-import { ScrollArea } from '@/components/ui/scroll-area'; // Added ScrollArea
-import { cn } from '@/lib/utils'; // Import cn
+} from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"; // Use Dialog instead of Popover
+import { Input } from "@/components/ui/input";
+import { Menu, Feather, ChevronDown, Search } from 'lucide-react';
+import React from 'react';
+import type { Post } from '@/services/github';
+import { getPosts } from '@/services/github';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<Post[]>([]);
   const [allPosts, setAllPosts] = React.useState<Post[]>([]);
-  // Removed isSearchPopoverOpen state management - rely on ShadCN default
+  const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false); // State for dialog
 
   // Fetch posts on component mount for client-side search
   React.useEffect(() => {
     async function fetchPosts() {
-      // TODO: Debounce or implement more robust search fetching if needed
       try {
-        const posts = await getPosts(); // Use renamed function
+        const posts = await getPosts();
         setAllPosts(posts);
       } catch (error) {
         console.error("Failed to fetch posts for search:", error);
-        // Handle error appropriately, maybe show a toast
       }
     }
     fetchPosts();
@@ -51,13 +49,13 @@ export function Header() {
     const lowerCaseQuery = searchQuery.toLowerCase();
     const results = allPosts.filter(post =>
       post.title.toLowerCase().includes(lowerCaseQuery) ||
-      post.content.toLowerCase().includes(lowerCaseQuery) // Simple content search
+      post.content.toLowerCase().includes(lowerCaseQuery)
     );
-    setSearchResults(results.slice(0, 10)); // Limit results shown
+    setSearchResults(results.slice(0, 10));
   }, [searchQuery, allPosts]);
 
 
-  // Define navigation structure - Order changed
+  // Define navigation structure
    const navItems = [
      {
         label: 'Posts',
@@ -80,14 +78,56 @@ export function Header() {
 
 
   const handleLinkClick = () => {
-    setIsMobileMenuOpen(false); // Close menu on link click
+    setIsMobileMenuOpen(false);
   };
 
    const handleSearchResultClick = () => {
-     // Popover should close automatically on focus loss / click outside.
-     // Just clear the search query.
      setSearchQuery('');
+     setIsSearchDialogOpen(false); // Close dialog on result click
    };
+
+   const handleSearchDialogChange = (open: boolean) => {
+     setIsSearchDialogOpen(open);
+     if (!open) {
+        setSearchQuery(''); // Clear search when dialog closes
+     }
+   }
+
+   // Shared Dialog Content
+   const searchDialogContent = (
+     <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Search</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <Input
+            id="search-dialog"
+            placeholder="Search posts and pages..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="col-span-3"
+          />
+           <ScrollArea className="h-[200px] w-full">
+              {searchResults.length > 0 ? (
+                  <ul className="space-y-2">
+                  {searchResults.map(post => {
+                      const slug = post.title.toLowerCase().replace(/\s+/g, '-');
+                      return (
+                          <li key={post.title}>
+                              <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
+                                  {post.title}
+                              </Link>
+                          </li>
+                      )
+                  })}
+                  </ul>
+              ) : searchQuery.trim() !== '' ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
+              ) : null}
+            </ScrollArea>
+        </div>
+      </DialogContent>
+   );
 
 
   return (
@@ -144,24 +184,23 @@ export function Header() {
               <Link
                 href="/"
                 className="flex items-center space-x-2 mb-6"
-                onClick={handleLinkClick} // Use handler
+                onClick={handleLinkClick}
               >
                 <Feather className="h-6 w-6 text-primary" />
                 <span className="font-bold">GeePawHill.Org</span>
               </Link>
-              <nav className="flex flex-col space-y-1"> {/* Reduced space-y */}
-                {/* Mobile Nav Items */}
+              <nav className="flex flex-col space-y-1">
                 {navItems.map((navItem) => (
                     <React.Fragment key={navItem.label || navItem.href}>
                         {navItem.dropdown ? (
                             <>
-                                <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div> {/* Adjusted padding */}
-                                <div className="flex flex-col space-y-0 pl-4"> {/* Removed space-y, rely on SheetClose padding */}
+                                <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div>
+                                <div className="flex flex-col space-y-0 pl-4">
                                     {navItem.dropdown.map((item) => (
                                         <SheetClose key={item.href} asChild>
                                            <Link
                                              href={item.href}
-                                             className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent" // Adjusted styling for link within button
+                                             className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
                                              onClick={handleLinkClick}
                                            >
                                              {item.label}
@@ -174,7 +213,7 @@ export function Header() {
                              <SheetClose asChild>
                                 <Link
                                 href={navItem.href!}
-                                className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent" // Adjusted styling
+                                className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
                                 onClick={handleLinkClick}
                                 >
                                 {navItem.label}
@@ -186,110 +225,39 @@ export function Header() {
               </nav>
             </SheetContent>
           </Sheet>
-           {/* Mobile Title */}
            <Link href="/" className="flex items-center space-x-2">
              <Feather className="h-6 w-6 text-primary" />
              <span className="font-bold">GeePawHill.Org</span>
            </Link>
            {/* Mobile Search & Book Now */}
-            <div className="flex items-center gap-1"> {/* Reduced gap */}
-                <Popover> {/* Removed open and onOpenChange */}
-                    <PopoverTrigger asChild>
+            <div className="flex items-center gap-1">
+                <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
+                    <DialogTrigger asChild>
                         <Button variant="ghost" size="icon">
                             <Search className="h-5 w-5" />
                             <span className="sr-only">Search</span>
                         </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80">
-                        <div className="grid gap-4">
-                            <div className="space-y-2">
-                            <h4 className="font-medium leading-none">Search</h4>
-                            <p className="text-sm text-muted-foreground">
-                                Find posts and pages.
-                            </p>
-                            </div>
-                            <Input
-                            id="search-mobile"
-                            placeholder="Search..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="col-span-2 h-8"
-                            />
-                             <ScrollArea className="h-[200px] w-full"> {/* Adjust height as needed */}
-                                {searchResults.length > 0 ? (
-                                    <ul className="space-y-2">
-                                    {searchResults.map(post => {
-                                        const slug = post.title.toLowerCase().replace(/\s+/g, '-');
-                                        return (
-                                            <li key={post.title}>
-                                                <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
-                                                    {post.title}
-                                                </Link>
-                                            </li>
-                                        )
-                                    })}
-                                    </ul>
-                                ) : searchQuery.trim() !== '' ? (
-                                    <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
-                                ) : null}
-                            </ScrollArea>
-                        </div>
-                    </PopoverContent>
-                </Popover>
+                    </DialogTrigger>
+                    {searchDialogContent}
+                </Dialog>
                 <Button size="sm" asChild>
-                    {/* TODO: Update link to actual booking page */}
                     <Link href="/booking">Book Now</Link>
                 </Button>
             </div>
         </div>
 
-        {/* Desktop Search & Book Now Buttons (Hidden on mobile by parent div) */}
+        {/* Desktop Search & Book Now Buttons */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
-           <Popover> {/* Removed open and onOpenChange */}
-                <PopoverTrigger asChild>
+           <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
+                <DialogTrigger asChild>
                     <Button variant="ghost" size="icon">
                         <Search className="h-5 w-5" />
                         <span className="sr-only">Search</span>
                     </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80">
-                    <div className="grid gap-4">
-                        <div className="space-y-2">
-                        <h4 className="font-medium leading-none">Search</h4>
-                        <p className="text-sm text-muted-foreground">
-                            Find posts and pages.
-                        </p>
-                        </div>
-                        <Input
-                        id="search-desktop"
-                        placeholder="Search..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="col-span-2 h-8"
-                        />
-                         <ScrollArea className="h-[200px] w-full"> {/* Adjust height as needed */}
-                         {searchResults.length > 0 ? (
-                            <ul className="space-y-2">
-                             {searchResults.map(post => {
-                                const slug = post.title.toLowerCase().replace(/\s+/g, '-');
-                                return (
-                                    <li key={post.title}>
-                                        <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
-                                            {post.title}
-                                        </Link>
-                                    </li>
-                                )
-                             })}
-                            </ul>
-                         ) : searchQuery.trim() !== '' ? (
-                             <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
-                         ) : null}
-                        </ScrollArea>
-                    </div>
-                </PopoverContent>
-            </Popover>
+                </DialogTrigger>
+                 {searchDialogContent}
+            </Dialog>
            <Button asChild>
-               {/* TODO: Update link to actual booking page */}
                <Link href="/booking">Book Now</Link>
            </Button>
         </div>
