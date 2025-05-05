@@ -1,9 +1,8 @@
 
-
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet'; // Added SheetClose
 import {
   DropdownMenu,
@@ -11,21 +10,56 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Added Dropdown components
-import { Menu, Feather, ChevronDown } from 'lucide-react'; // Using Feather as a placeholder logo, Added ChevronDown
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Added Popover
+import { Input } from "@/components/ui/input"; // Added Input
+import { Menu, Feather, ChevronDown, Search } from 'lucide-react'; // Using Feather as a placeholder logo, Added ChevronDown, Search
 import React from 'react'; // Import React
+import type { Post } from '@/services/github'; // Import post fetching logic (Use renamed type)
+import { getPosts } from '@/services/github'; // Import post fetching logic (Use renamed function)
+import { ScrollArea } from '@/components/ui/scroll-area'; // Added ScrollArea
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchResults, setSearchResults] = React.useState<Post[]>([]);
+  const [allPosts, setAllPosts] = React.useState<Post[]>([]);
+  const [isSearchPopoverOpen, setIsSearchPopoverOpen] = React.useState(false);
 
-  // Define navigation structure
+  // Fetch posts on component mount for client-side search
+  React.useEffect(() => {
+    async function fetchPosts() {
+      // TODO: Debounce or implement more robust search fetching if needed
+      const posts = await getPosts(); // Use renamed function
+      setAllPosts(posts);
+    }
+    fetchPosts();
+  }, []);
+
+  // Basic client-side search filtering
+   React.useEffect(() => {
+    if (searchQuery.trim() === '') {
+      setSearchResults([]);
+      return;
+    }
+
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    const results = allPosts.filter(post =>
+      post.title.toLowerCase().includes(lowerCaseQuery) ||
+      post.content.toLowerCase().includes(lowerCaseQuery) // Simple content search
+    );
+    setSearchResults(results.slice(0, 10)); // Limit results shown
+  }, [searchQuery, allPosts]);
+
+
+  // Define navigation structure - Order changed, Camerata removed
   const navItems = [
-    {
+     {
         label: 'Posts',
         dropdown: [
-            { href: '/posts', label: 'All Posts' },
+            { href: '/posts', label: 'All Posts' }, // Changed from /blog
             { href: '/posts?tag=video', label: 'Videos' },
-            { href: '/posts?tag=podcast', label: 'Podcasts' },
-            { href: '/subscribe', label: 'Subscribe!' },
+            { href: '/posts?tag=podcast', label: 'Podcasts' }, // Added podcast link
+            { href: '/subscribe', label: 'Subscribe!' }, // Added Subscribe link
         ]
     },
      {
@@ -34,15 +68,20 @@ export function Header() {
             { href: '/courses/leading-technical-change', label: 'Leading Technical Change' }, // Placeholder URL
         ]
      },
-     { href: '/about', label: 'About' },
+    { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
-    // Removed Camerata
+    // { href: '/camerata', label: 'Camerata' }, // Removed Camerata
   ];
 
 
   const handleLinkClick = () => {
     setIsMobileMenuOpen(false); // Close menu on link click
   };
+
+   const handleSearchResultClick = () => {
+     setIsSearchPopoverOpen(false); // Close popover on result click
+     setSearchQuery(''); // Clear search query
+   };
 
 
   return (
@@ -78,7 +117,7 @@ export function Header() {
           </nav>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu & Title */}
         <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -96,32 +135,34 @@ export function Header() {
                 <Feather className="h-6 w-6 text-primary" />
                 <span className="font-bold">GeePawHill.Org</span>
               </Link>
-              <nav className="flex flex-col space-y-3">
+              <nav className="flex flex-col space-y-1"> {/* Reduced space-y */}
                 {/* Mobile Nav Items */}
                 {navItems.map((navItem) => (
                     <React.Fragment key={navItem.label || navItem.href}>
                         {navItem.dropdown ? (
                             <>
-                                <div className="text-lg font-medium text-muted-foreground px-2 pt-2">{navItem.label}</div>
-                                <div className="flex flex-col space-y-1 pl-4">
+                                <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div> {/* Adjusted padding */}
+                                <div className="flex flex-col space-y-0 pl-4"> {/* Removed space-y, rely on SheetClose padding */}
                                     {navItem.dropdown.map((item) => (
-                                        <SheetClose key={item.href} asChild>
-                                            <Link
-                                            href={item.href}
-                                            className="text-lg text-foreground transition-colors hover:text-primary py-1"
-                                            onClick={handleLinkClick}
-                                            >
-                                            {item.label}
-                                            </Link>
+                                        // Removed asChild from SheetClose, Link is now the child
+                                        <SheetClose key={item.href}>
+                                           <Link
+                                             href={item.href}
+                                             className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent" // Adjusted styling for link within button
+                                             onClick={handleLinkClick}
+                                           >
+                                             {item.label}
+                                           </Link>
                                         </SheetClose>
                                     ))}
                                 </div>
                             </>
                         ) : (
-                             <SheetClose asChild>
+                             // Removed asChild from SheetClose, Link is now the child
+                             <SheetClose>
                                 <Link
                                 href={navItem.href!}
-                                className="text-lg font-medium text-foreground transition-colors hover:text-primary px-2 py-1"
+                                className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent" // Adjusted styling
                                 onClick={handleLinkClick}
                                 >
                                 {navItem.label}
@@ -132,16 +173,19 @@ export function Header() {
                 ))}
 
 
-                 {/* Keep Admin login link separate at the bottom */}
-                 <SheetClose asChild>
+                 {/* Separator before Admin Login - No longer needed */}
+                {/* <div className="pt-4 border-t mt-4" /> */}
+
+                 {/* Admin login removed from mobile menu */}
+                 {/* <SheetClose asChild>
                     <Link
                         href="/admin"
-                        className="text-lg font-medium text-foreground transition-colors hover:text-primary px-2 pt-4 border-t mt-4" // Added styling for separation
+                        className="block w-full text-left text-lg font-medium text-muted-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent" // Adjusted styling
                         onClick={handleLinkClick} // Use handler
                     >
                         Admin Login
                     </Link>
-                 </SheetClose>
+                 </SheetClose> */}
               </nav>
             </SheetContent>
           </Sheet>
@@ -150,11 +194,108 @@ export function Header() {
              <Feather className="h-6 w-6 text-primary" />
              <span className="font-bold">GeePawHill.Org</span>
            </Link>
+           {/* Mobile Search & Book Now */}
+            <div className="flex items-center gap-1"> {/* Reduced gap */}
+                <Popover open={isSearchPopoverOpen} onOpenChange={setIsSearchPopoverOpen}>
+                    <PopoverTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                            <Search className="h-5 w-5" />
+                            <span className="sr-only">Search</span>
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80">
+                        <div className="grid gap-4">
+                            <div className="space-y-2">
+                            <h4 className="font-medium leading-none">Search</h4>
+                            <p className="text-sm text-muted-foreground">
+                                Find posts and pages.
+                            </p>
+                            </div>
+                            <Input
+                            id="search"
+                            placeholder="Search..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="col-span-2 h-8"
+                            />
+                             <ScrollArea className="h-[200px] w-full"> {/* Adjust height as needed */}
+                            {searchResults.length > 0 ? (
+                                <ul className="space-y-2">
+                                {searchResults.map(post => {
+                                    const slug = post.title.toLowerCase().replace(/\s+/g, '-');
+                                    return (
+                                        <li key={post.title}>
+                                            <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="text-sm hover:underline block p-1 rounded hover:bg-accent">
+                                                {post.title}
+                                            </Link>
+                                        </li>
+                                    )
+                                })}
+                                </ul>
+                            ) : searchQuery.trim() !== '' ? (
+                                <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
+                             ) : null}
+                            </ScrollArea>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+                <Button size="sm" asChild>
+                    <Link href="/booking">Book Now</Link> {/* Placeholder link */}
+                </Button>
+            </div>
         </div>
 
-        {/* Desktop Admin Login Button (Hidden on mobile by parent div) */}
+        {/* Desktop Search & Book Now Buttons (Hidden on mobile by parent div) */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
-          <Button variant="ghost" asChild><Link href="/admin">Admin Login</Link></Button>
+           <Popover open={isSearchPopoverOpen} onOpenChange={setIsSearchPopoverOpen}>
+                <PopoverTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                        <Search className="h-5 w-5" />
+                        <span className="sr-only">Search</span>
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                    <div className="grid gap-4">
+                        <div className="space-y-2">
+                        <h4 className="font-medium leading-none">Search</h4>
+                        <p className="text-sm text-muted-foreground">
+                            Find posts and pages.
+                        </p>
+                        </div>
+                        <Input
+                        id="search-desktop"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="col-span-2 h-8"
+                        />
+                         <ScrollArea className="h-[200px] w-full"> {/* Adjust height as needed */}
+                         {searchResults.length > 0 ? (
+                            <ul className="space-y-2">
+                             {searchResults.map(post => {
+                                const slug = post.title.toLowerCase().replace(/\s+/g, '-');
+                                return (
+                                    <li key={post.title}>
+                                        <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="text-sm hover:underline block p-1 rounded hover:bg-accent">
+                                            {post.title}
+                                        </Link>
+                                    </li>
+                                )
+                             })}
+                            </ul>
+                         ) : searchQuery.trim() !== '' ? (
+                             <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
+                         ) : null}
+                        </ScrollArea>
+                    </div>
+                </PopoverContent>
+            </Popover>
+           <Button asChild>
+               <Link href="/booking">Book Now</Link> {/* Placeholder link */}
+           </Button>
+           {/* Admin Login button removed */}
+           {/* <div className="border-l h-6 mx-2" />
+             <Button variant="ghost" asChild><Link href="/admin">Admin Login</Link></Button> */}
         </div>
       </div>
     </header>

@@ -1,6 +1,6 @@
 
 import type { Post } from '@/services/github'; // Renamed type definition
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button'; // Import buttonVariants
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,7 +23,8 @@ export default async function Home() {
       <section className="text-center py-16 bg-secondary rounded-lg shadow-sm">
         <h1 className="text-4xl font-bold tracking-tight mb-4">Welcome to GeePawHill.Org</h1>
         <p className="text-xl text-muted-foreground mb-8">Thoughts on software development, agile practices, and more.</p>
-        <Button asChild size="lg"><Link href="/posts">Read the Posts</Link></Button>
+        {/* Apply button styles directly to the Link */}
+        <Link href="/posts" className={buttonVariants({ size: "lg" })}>Read the Posts</Link>
       </section>
 
       <section>
@@ -31,7 +32,8 @@ export default async function Home() {
         {latestVideos.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {latestVideos.map((video) => {
-               const slug = video.title.toLowerCase().replace(/\s+/g, '-'); // Generate slug
+               // Generate slug using only title for simplicity in example
+               const slug = video.title.toLowerCase().replace(/\s+/g, '-');
                return (
                 <Card key={video.title} className="flex flex-col">
                     <CardHeader>
@@ -54,7 +56,10 @@ export default async function Home() {
                     </p>
                     </CardContent>
                     <CardFooter>
-                    <Button variant="link" asChild className="p-0"><Link href={`/posts/${slug}`}>Watch Video</Link></Button>
+                       {/* Removed Button asChild, applied styles directly to Link */}
+                       <Link href={`/posts/${slug}`} className={buttonVariants({ variant: "link", className: "p-0" })}>
+                         Watch Video
+                       </Link>
                     </CardFooter>
                 </Card>
                );
@@ -75,3 +80,4 @@ export default async function Home() {
     </div>
   );
 }
+
