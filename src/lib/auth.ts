@@ -1,54 +1,59 @@
 import {
   getAuth,
   signInWithEmailAndPassword,
-  signOut as firebaseSignOut,
+  signOut as firebaseSignOut, onAuthStateChanged,
   User,
 } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import { app, db } from "./firestore";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 
-
-import { getFirestore } from "firebase/firestore";
 const auth = getAuth(app);
 
-export const signIn = async (email: string, password: string): Promise<User> => {
-  const userCredential = await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  return userCredential.user;
+export const signIn = async (email: string, password: string): Promise<boolean> => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    return true;
+  } catch (error) {
+    console.error("Error signing in:", error);
+    return false;
+  }
 };
 
-export const signOut = async (): Promise<void> => {
-  await firebaseSignOut(auth);
+export const signOut = async (): Promise<boolean> => {
+  try {
+    await firebaseSignOut(auth);
+    return true;
+  } catch (error) {
+    console.error("Error signing out:", error);
+    return false;
+  }
 };
 
-export const getCurrentUser = (): User | null => {
-  return auth.currentUser;
+export const getCurrentUser = (): Promise<User | null> => {
+  return new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+          unsubscribe(); // Unsubscribe after the first call
+          resolve(user);
+      });
+  });
 };
 
 export const checkIfAdmin = async (): Promise<boolean> => {
-  const user = auth.currentUser;
+  const user = await getCurrentUser();
+
   if (!user) {
     return false;
   }
+
   const token = await user.getIdTokenResult();
   return token.claims.admin === true;
 };
 
-export const makeUserAdmin = async (email: string): Promise<void> => {
+export const makeUserAdmin = async (userUid: string): Promise<void> => {
   const db = getFirestore(app);
-  
-  try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, "password123");
-      const user = userCredential.user;
-      
-      if (!user) {
-          throw new Error("User not found");
-      }
 
-      const userRef = doc(db, "users", user.uid);
+  try {
+      const userRef = doc(db, "users", userUid);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
@@ -59,4 +64,4 @@ export const makeUserAdmin = async (email: string): Promise<void> => {
   } catch (error) {
       console.error("Error making user admin:", error);
   }
-};
+}
