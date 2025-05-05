@@ -58,7 +58,7 @@ export function Header() {
 
 
   // Define navigation structure - Order changed
-  const navItems = [
+   const navItems = [
      {
         label: 'Posts',
         dropdown: [
