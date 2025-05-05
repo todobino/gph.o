@@ -1,5 +1,4 @@
 
-import { type PageProps } from 'next';
 import { type Metadata, type ResolvingMetadata } from 'next';
 import { getPosts, type Post } from '@/services/github'; // Renamed function and type
 import { notFound } from 'next/navigation';
@@ -7,7 +6,32 @@ import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown'; // Requires `npm install react-markdown`
 import remarkGfm from 'remark-gfm'; // Requires `npm install remark-gfm` for GitHub Flavored Markdown
 
-export const revalidate = 60; // Revalidate every 60 seconds
+// Define the types for the page component props
+interface PostPageProps {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+// Function to generate metadata dynamically
+export async function generateMetadata(
+  { params, searchParams }: PostPageProps, // Use the new type here
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const slug = params.slug;
+
+  // fetch data
+  const post = await getPostBySlug(slug); // Assuming you have a function like this
+
+  if (!post) {
+    return {}; // Or return a default metadata for not found
+  }
+
+  return {
+    title: post.title,
+    description: post.content, // Or a relevant description
+    // Add other metadata like og:image etc.
+  };
+}
 
 // Generate static paths for posts
 export async function generateStaticParams() {
@@ -16,18 +40,19 @@ export async function generateStaticParams() {
     slug: post.title.toLowerCase().replace(/s+/g, '-'),
   }));
 }
+}
 
 // Find post by slug
 async function getPostBySlug(slug: string): Promise<Post | undefined> { // Use renamed type
   const posts = await getPosts(); // Use renamed function
   return posts.find(post => post.title.toLowerCase().replace(/s+/g, '-') === slug);
 }
+    
+// Your main page component
+export default async function PostPage({ params, searchParams }: PostPageProps) { // Use the new type here
+  const slug = params.slug;
+  const posts = await getPosts(); // Assuming this fetches all posts
 
- 
-interface PostPageProps extends PageProps {
-}
-
-export default async function PostPage({ params }: PostPageProps) { 
   const post = await getPostBySlug(params.slug);
 
   if (!post) {
