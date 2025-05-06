@@ -6,6 +6,12 @@ import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+// Helper function to convert string to Title Case (copied from posts/page.tsx)
+function toTitleCase(str: string): string {
+  if (!str) return '';
+  return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
 export async function generateMetadata(
   { params, searchParams }: { params: { slug: string }; searchParams: Record<string, string | string[] | undefined> },
   parent: ResolvingMetadata
@@ -47,8 +53,8 @@ export default async function PostPage({ params }: PostPageProps) {
         </p>
         <div className="flex flex-wrap gap-2">
           {post.tags.map((tag) => (
-            <Badge key={tag} variant="secondary">
-              {tag}
+            <Badge key={tag} variant="secondary" className="border border-border py-1.5 px-3 rounded-md"> {/* Added border and Title Case */}
+              {toTitleCase(tag)}
             </Badge>
           ))}
         </div>
