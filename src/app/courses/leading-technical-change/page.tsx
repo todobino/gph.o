@@ -11,12 +11,21 @@ Leading Technical Change (LTC), is a course designed to focus on how to make cha
 
 Download the LTC Overview for your team lead or department head today! 👇`;
 
+const courseLeaderBodyText = `My name is GeePaw Hill, and I have been helping software development teams to find the path to “better” for just over 25 years. I have worked with over a hundred different teams, in every flavor of software development.
+
+I have helped dozens of teams adopt – and adapt – new ideas to their particular custom circumstances. And there are always custom circumstances. Now, I am wanting to share what I have learned, in a short, intimate, live, remote course, called “Leading Technical Change” (LTC).
+
+LTC is composed of 4 2-hour sessions, distributed across a single week. Each offering of the course is limited to just 6 attendees.
+
+In those 8 hours, LTC develops the theory of change, then offers a variety of hardcore techniques, and finally, case-by-case analysis and advice about the real change-problems facing each attendee.`;
+
 const ltcParagraphs = ltcBodyText.split('\n\n');
+const courseLeaderParagraphs = courseLeaderBodyText.split('\n\n');
 
 export default function LeadingTechnicalChangePage() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-16"> {/* Added space-y */}
-      {/* Existing Hero Section */}
+      {/* Hero Section */}
       <div className="bg-secondary p-8 md:p-12 rounded-lg shadow-sm text-center">
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
           Leading Technical Change
@@ -34,7 +43,7 @@ export default function LeadingTechnicalChangePage() {
          </Button>
       </div>
 
-      {/* New Section: What is LTC? */}
+      {/* Section 1: What is LTC? */}
       <section className="flex flex-col md:flex-row gap-12 items-start">
         {/* Left Column: Text Content */}
         <div className="w-full md:w-1/2 space-y-6">
@@ -66,6 +75,34 @@ export default function LeadingTechnicalChangePage() {
         </div>
       </section>
 
+       {/* New Section 2: The Course Leader */}
+       <section className="flex flex-col md:flex-row-reverse gap-12 items-start"> {/* Reversed order for image on left */}
+         {/* Right Column: Text Content */}
+         <div className="w-full md:w-1/2 space-y-6">
+           <h2 className="text-3xl font-semibold mb-4">
+             The Course Leader
+           </h2>
+           {courseLeaderParagraphs.map((paragraph, index) => (
+             <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+               {paragraph}
+             </p>
+           ))}
+         </div>
+
+         {/* Left Column: Image */}
+         <div className="w-full md:w-1/2">
+            <Image
+                src="https://picsum.photos/seed/ltc-section2/800/450" // 16:9 aspect ratio
+                alt="Placeholder image representing the course leader or teaching"
+                width={800}
+                height={450}
+                className="rounded-lg shadow-md object-cover w-full h-auto"
+                data-ai-hint="speaker teaching presentation"
+            />
+         </div>
+       </section>
+
     </div>
   );
 }
+
