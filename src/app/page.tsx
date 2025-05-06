@@ -49,8 +49,12 @@ export default async function Home() {
              {/* Right Column: Text and Button */}
             <div className="w-full md:w-2/3 text-center md:text-left"> {/* Text column */}
               <h1 className="text-4xl font-bold tracking-tight mb-4">Helping Geeks Produce for Over 40 Years.</h1>
+              {/* Updated body text with two paragraphs */}
+              <p className="text-xl text-muted-foreground mb-4">
+                My mission is to help people learn how to embrace change and harvest its value. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
+              </p>
               <p className="text-xl text-muted-foreground mb-8">
-                My mission is to help people learn how to embrace change and harvest its value. Here, you'll find hundreds of free articles and videos—from deep technical insights to big-picture philosophy—all designed to help you turn transformation into your greatest advantage. Ready to create lasting change at work? Book a solo or group Coaching Session below and start change-harvesting today.
+                If you want to learn how to create lasting change in your workplace, click the button below to book my solo or group Coaching Sessions today!
               </p>
                {/* Apply button styles directly to the Link */}
                <Link href="/booking" className={cn(buttonVariants({ size: "lg" }))}>Let's Work Together</Link>
@@ -67,7 +71,7 @@ export default async function Home() {
              {recentPosts.map((post) => {
                const slug = post.slug;
                return (
-                 <Card key={post.title} className="flex flex-col">
+                 <Card key={post.slug} className="flex flex-col"> {/* Use slug for key */}
                    <CardHeader>
                      {/* Placeholder image */}
                      <Image
@@ -109,7 +113,7 @@ export default async function Home() {
                // Use the pre-generated slug from the post object
                const slug = video.slug;
                return (
-                <Card key={video.title} className="flex flex-col">
+                <Card key={video.slug} className="flex flex-col"> {/* Use slug for key */}
                     <CardHeader>
                     {/* Placeholder image */}
                     <Image
