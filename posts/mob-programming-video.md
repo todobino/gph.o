@@ -8,4 +8,4 @@ tags: ['mob programming', 'video', 'agile', 'teamwork']
 
 An introductory video explaining the concept of mob programming, where the whole team works on the same thing, at the same time, in the same space, and at the same computer.
 
-Discussing benefits and challenges.
+Discussing benefits and challenges. And more.
