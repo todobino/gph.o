@@ -19,8 +19,21 @@ LTC is composed of 4 2-hour sessions, distributed across a single week. Each off
 
 In those 8 hours, LTC develops the theory of change, then offers a variety of hardcore techniques, and finally, case-by-case analysis and advice about the real change-problems facing each attendee.`;
 
+const theoryOfChangeBodyText = `Many people, conceiving of some change they want to make, focus all of their attention only on the “what” of that particular change.  But successful change, *any* successful change, depends at least as much on the “how” as on the “what”.
+
+The  theory of change we’ll be working with in the course is based around research on “cognitive frames”, the short-hand pre-assembled bits and pieces that actually underlie most day-to-day action. We can’t eliminate frames (and we wouldn’t want to), we can only change their shape.
+
+Doing that involves three abstract strategies:
+
+Take many more much smaller steps (MMMSS).
+Optimize for the humans (OFTH).
+Make Change Normal (MCN).
+From these three broad strategies, we can develop specific, powerful tactics to increase the likelihood that our changes will really work, and really stick.`;
+
+
 const ltcParagraphs = ltcBodyText.split('\n\n');
 const courseLeaderParagraphs = courseLeaderBodyText.split('\n\n');
+const theoryOfChangeParagraphs = theoryOfChangeBodyText.split('\n\n');
 
 export default function LeadingTechnicalChangePage() {
   return (
@@ -75,7 +88,7 @@ export default function LeadingTechnicalChangePage() {
         </div>
       </section>
 
-       {/* New Section 2: The Course Leader */}
+       {/* Section 2: The Course Leader */}
        <section className="flex flex-col md:flex-row-reverse gap-12 items-start"> {/* Reversed order for image on left */}
          {/* Right Column: Text Content */}
          <div className="w-full md:w-1/2 space-y-6">
@@ -102,7 +115,41 @@ export default function LeadingTechnicalChangePage() {
          </div>
        </section>
 
+       {/* New Section 3: Theory of Change */}
+        <section className="flex flex-col md:flex-row gap-12 items-start">
+          {/* Left Column: Text Content */}
+          <div className="w-full md:w-1/2 space-y-6">
+            <h2 className="text-3xl font-semibold mb-4">
+              Theory of Change
+            </h2>
+            {theoryOfChangeParagraphs.map((paragraph, index) => (
+              <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+
+          {/* Right Column: Two Images */}
+          <div className="w-full md:w-1/2 space-y-4">
+            <Image
+                src="https://picsum.photos/seed/ltc-section3-1/800/450" // 16:9 aspect ratio
+                alt="Placeholder image related to cognitive frames or change strategies"
+                width={800}
+                height={450}
+                className="rounded-lg shadow-md object-cover w-full h-auto"
+                data-ai-hint="abstract mind diagram"
+            />
+            <Image
+                src="https://picsum.photos/seed/ltc-section3-2/800/450" // 16:9 aspect ratio
+                alt="Another placeholder image related to change management concepts"
+                width={800}
+                height={450}
+                className="rounded-lg shadow-md object-cover w-full h-auto"
+                data-ai-hint="steps progress illustration"
+            />
+          </div>
+        </section>
+
     </div>
   );
 }
-
