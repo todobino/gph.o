@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -382,13 +381,11 @@ export default function NewPostPage() {
                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                        <div className="space-y-0.5">
                           {/* Added flex container for icon and label */}
-                         <FormLabel className="flex items-center gap-2">
-                            <MessageSquare className="h-4 w-4 text-muted-foreground" /> {/* Icon */}
+                         <FormLabel className="flex items-center gap-2 text-lg font-medium"> {/* Increased font size */}
+                            <MessageSquare className="h-5 w-5 text-muted-foreground" /> {/* Increased icon size */}
                             Allow Comments
                          </FormLabel>
-                         <FormDescription className="pl-6"> {/* Added padding to align with icon */}
-                           Enable or disable comments on this post.
-                         </FormDescription>
+                         {/* FormDescription removed */}
                        </div>
                        <FormControl>
                          <Switch
@@ -406,13 +403,11 @@ export default function NewPostPage() {
                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                         <div className="space-y-0.5">
                            {/* Added flex container for icon and label */}
-                          <FormLabel className="flex items-center gap-2">
-                            <Star className="h-4 w-4 text-muted-foreground" /> {/* Icon */}
+                          <FormLabel className="flex items-center gap-2 text-lg font-medium"> {/* Increased font size */}
+                            <Star className="h-5 w-5 text-muted-foreground" /> {/* Increased icon size */}
                              Featured Post
                           </FormLabel>
-                          <FormDescription className="pl-6"> {/* Added padding to align with icon */}
-                            Mark this post as featured.
-                          </FormDescription>
+                          {/* FormDescription removed */}
                         </div>
                        <FormControl>
                          <Switch
@@ -431,5 +426,3 @@ export default function NewPostPage() {
     </div>
   );
 }
-
-    
