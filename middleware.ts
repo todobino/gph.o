@@ -1,7 +1,10 @@
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-// Use relative path for middleware imports
-import { authAdmin } from './src/lib/firebaseAdmin'; // Corrected relative path
+// Attempting alias import for firebaseAdmin in middleware
+import { authAdmin } from '@/lib/firebaseAdmin';
+
+export const runtime = 'nodejs'; // Force Node.js runtime for firebase-admin
 
 export async function middleware(req: NextRequest) {
   const session = req.cookies.get('session')?.value;
@@ -28,3 +31,4 @@ export async function middleware(req: NextRequest) {
 
 // Matcher config remains the same
 export const config = { matcher: ['/admin/:path*'] };
+
