@@ -10,6 +10,6 @@ Listen to our latest podcast episode discussing the evolving role of agile coach
 
 Topics:
 - Remote coaching challenges
-- AI in agile
+- AI in agile projects
 - Measuring coaching impact
 - Enabling cross-team functionality
