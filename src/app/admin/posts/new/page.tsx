@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Upload, MessageSquare, Star, ArrowLeft } from 'lucide-react'; // Added MessageSquare, Star, ArrowLeft
+import { CalendarIcon, Upload, MessageSquare, Star } from 'lucide-react'; // Removed ArrowLeft
 
 import { Button } from '@/components/ui/button';
 import {
@@ -39,6 +39,7 @@ import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 // Placeholder: Define potential authors
 const authors = [
@@ -68,6 +69,7 @@ export type NewPostFormData = z.infer<typeof formSchema>;
 
 export default function NewPostPage() {
   const { toast } = useToast();
+  const router = useRouter(); // Initialize router
   const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
   const [isSubmittingPublish, setIsSubmittingPublish] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null); // Placeholder state
@@ -133,20 +135,21 @@ export default function NewPostPage() {
     form.handleSubmit(onPublish)();
   };
 
+  // Handle Cancel click
+  const handleCancelClick = () => {
+     // TODO: Implement logic to delete the current draft if it exists
+     console.log("Deleting draft (Placeholder) and navigating back to admin.");
+     // Navigate back to the admin dashboard
+     router.push('/admin');
+   };
+
+
   return (
     <div className="space-y-8 p-4 md:p-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl md:text-4xl font-bold">Create New Post</h1>
-        <div className="flex gap-2"> {/* Group buttons */}
-            <Button variant="outline" asChild>
-                <Link href="/admin">
-                    <ArrowLeft className="mr-2 h-4 w-4" /> Back to Admin
-                </Link>
-            </Button>
-            <Button variant="outline" asChild>
-                 <Link href="/admin/posts">Cancel</Link>
-            </Button>
-        </div>
+        {/* Removed Back to Admin button, only Cancel remains */}
+        <Button variant="outline" onClick={handleCancelClick}>Cancel</Button>
       </div>
 
       <Form {...form}>
@@ -428,3 +431,5 @@ export default function NewPostPage() {
     </div>
   );
 }
+
+    
