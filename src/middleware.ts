@@ -1,8 +1,8 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-// Use relative path from src directory
-import { authAdmin } from './lib/firebaseAdmin';
+// Use correct relative path from src directory for middleware imports
+import { authAdmin } from '@/lib/firebaseAdmin'; // Reverted to alias
 
 export const runtime = 'nodejs'; // Force Node.js runtime for firebase-admin
 
