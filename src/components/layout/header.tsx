@@ -1,22 +1,21 @@
-
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
+import { Button, buttonVariants } from '../ui/button'; // Corrected relative path
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet'; // Corrected relative path
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"; // Use Dialog instead of Popover
-import { Input } from "@/components/ui/input";
+} from "../ui/dropdown-menu"; // Corrected relative path
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"; // Corrected relative path Use Dialog instead of Popover
+import { Input } from "../ui/input"; // Corrected relative path
 import { Menu, Feather, ChevronDown, Search } from 'lucide-react';
 import React from 'react';
-import type { Post } from '@/services/posts'; // Updated import path
-import { getPosts } from '@/services/posts'; // Updated import path
-import { ScrollArea } from '@/components/ui/scroll-area';
+import type { Post } from '@/services/posts';
+import { getPosts } from '@/services/posts';
+import { ScrollArea } from '../ui/scroll-area'; // Corrected relative path
 import { cn } from '@/lib/utils';
 
 export function Header() {
@@ -66,14 +65,14 @@ export function Header() {
             { href: '/subscribe', label: 'Subscribe!' },
         ]
     },
-     {
-        label: 'Courses',
-        dropdown: [
-            { href: '/courses/leading-technical-change', label: 'Leading Technical Change' }, // Placeholder URL
-        ]
-     },
-    { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
+    {
+       label: 'Courses',
+       dropdown: [
+           { href: '/courses/leading-technical-change', label: 'Leading Technical Change' }, // Placeholder URL
+       ]
+    },
+    { href: '/about', label: 'About' },
   ];
 
 
