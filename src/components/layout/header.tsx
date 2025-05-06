@@ -54,7 +54,7 @@ export function Header() {
   }, [searchQuery, allPosts]);
 
 
-  // Define navigation structure
+  // Define navigation structure in the desired order: Posts, Courses, About, Contact
    const navItems = [
      {
         label: 'Posts',
@@ -65,7 +65,6 @@ export function Header() {
             { href: '/subscribe', label: 'Subscribe!' },
         ]
     },
-    { href: '/contact', label: 'Contact' },
     {
        label: 'Courses',
        dropdown: [
@@ -73,6 +72,7 @@ export function Header() {
        ]
     },
     { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' },
   ];
 
 
