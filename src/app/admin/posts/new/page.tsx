@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Upload } from 'lucide-react';
+import { CalendarIcon, Upload, MessageSquare, Star } from 'lucide-react'; // Added MessageSquare and Star
 
 import { Button } from '@/components/ui/button';
 import {
@@ -371,8 +371,12 @@ export default function NewPostPage() {
                    render={({ field }) => (
                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                        <div className="space-y-0.5">
-                         <FormLabel>Allow Comments</FormLabel>
-                         <FormDescription>
+                          {/* Added flex container for icon and label */}
+                         <FormLabel className="flex items-center gap-2">
+                            <MessageSquare className="h-4 w-4 text-muted-foreground" /> {/* Icon */}
+                            Allow Comments
+                         </FormLabel>
+                         <FormDescription className="pl-6"> {/* Added padding to align with icon */}
                            Enable or disable comments on this post.
                          </FormDescription>
                        </div>
@@ -390,12 +394,16 @@ export default function NewPostPage() {
                    name="isFeatured"
                    render={({ field }) => (
                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                       <div className="space-y-0.5">
-                         <FormLabel>Featured Post</FormLabel>
-                         <FormDescription>
-                           Mark this post as featured.
-                         </FormDescription>
-                       </div>
+                        <div className="space-y-0.5">
+                           {/* Added flex container for icon and label */}
+                          <FormLabel className="flex items-center gap-2">
+                            <Star className="h-4 w-4 text-muted-foreground" /> {/* Icon */}
+                             Featured Post
+                          </FormLabel>
+                          <FormDescription className="pl-6"> {/* Added padding to align with icon */}
+                            Mark this post as featured.
+                          </FormDescription>
+                        </div>
                        <FormControl>
                          <Switch
                            checked={field.value}
