@@ -1,8 +1,8 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-// Use explicit relative path from project root
-import { authAdmin } from './lib/firebaseAdmin';
+// Use relative path from src directory
+import { authAdmin } from '../lib/firebaseAdmin';
 
 export const runtime = 'nodejs'; // Force Node.js runtime for firebase-admin
 
@@ -31,3 +31,4 @@ export async function middleware(req: NextRequest) {
 
 // Matcher config remains the same
 export const config = { matcher: ['/admin/:path*'] };
+
