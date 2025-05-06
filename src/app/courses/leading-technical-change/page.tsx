@@ -30,10 +30,25 @@ Optimize for the humans (OFTH).
 Make Change Normal (MCN).
 From these three broad strategies, we can develop specific, powerful tactics to increase the likelihood that our changes will really work, and really stick.`;
 
+const techniqueOfChangeBodyText = `The course comes with what we call the Techniques Bundle. This is a collection of actual practical tips and tricks. Some of these will be familiar, some new, but all will make more sense when interpreted within the theory above. Each technique is a headline and a one-page description. Here are five of the headlines, chosen at random.
+
+Easiest Nearest Owwie First: There are small problems and there are big ones. Fix the small ones before you approach the big ones.
+
+Create Experiences, Not Arguments: Actual lived experience is the most powerful persuasive force there is.
+
+Use Locally Grounded Lightning Talks: Short high-speed talks, 15 minutes at a time, based in the real day-job situations, stir conversation, spread experience, and build both community & consensus.
+
+Dot Votes Are Data: You can gather and objectify real information for your team using even very simple and lightweight approaches. It’s cheaper, faster, and every bit as objective.
+
+Get A Heavyweight To Bless An Activity: Everyone in the c-suite knows what it is to “bless” an experiment, or a learning session. Ask them to spend 5 minutes telling the team they approve of yours.
+
+There are currently more than 30 techniques in the bundle, and we add new ones all the time, based partly on what comes from the final element of our structure, the advice.`;
+
 
 const ltcParagraphs = ltcBodyText.split('\n\n');
 const courseLeaderParagraphs = courseLeaderBodyText.split('\n\n');
 const theoryOfChangeParagraphs = theoryOfChangeBodyText.split('\n\n');
+const techniqueOfChangeParagraphs = techniqueOfChangeBodyText.split('\n\n');
 
 export default function LeadingTechnicalChangePage() {
   return (
@@ -115,7 +130,7 @@ export default function LeadingTechnicalChangePage() {
          </div>
        </section>
 
-       {/* New Section 3: Theory of Change */}
+       {/* Section 3: Theory of Change */}
         <section className="flex flex-col md:flex-row gap-12 items-start">
           {/* Left Column: Text Content */}
           <div className="w-full md:w-1/2 space-y-6">
@@ -147,6 +162,32 @@ export default function LeadingTechnicalChangePage() {
                 className="rounded-lg shadow-md object-cover w-full h-auto"
                 data-ai-hint="steps progress illustration"
             />
+          </div>
+        </section>
+
+        {/* New Section 4: Technique of Change */}
+        <section className="flex flex-col md:flex-row gap-12 items-start">
+          {/* Left Column: Image (Portrait) */}
+          <div className="w-full md:w-1/2">
+             <Image
+                 src="https://picsum.photos/seed/ltc-section4/450/600" // Portrait aspect ratio
+                 alt="Placeholder image representing technique or practice"
+                 width={450}
+                 height={600}
+                 className="rounded-lg shadow-md object-cover w-full h-auto max-w-md mx-auto" // Center image on smaller screens if needed
+                 data-ai-hint="hands writing code"
+             />
+          </div>
+          {/* Right Column: Text Content */}
+          <div className="w-full md:w-1/2 space-y-6">
+            <h2 className="text-3xl font-semibold mb-4">
+              Technique of Change
+            </h2>
+            {techniqueOfChangeParagraphs.map((paragraph, index) => (
+              <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
           </div>
         </section>
 
