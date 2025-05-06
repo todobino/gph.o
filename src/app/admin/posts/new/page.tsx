@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Upload, MessageSquare, Star } from 'lucide-react'; // Added MessageSquare and Star
+import { CalendarIcon, Upload, MessageSquare, Star, ArrowLeft } from 'lucide-react'; // Added MessageSquare, Star, ArrowLeft
 
 import { Button } from '@/components/ui/button';
 import {
@@ -137,9 +137,16 @@ export default function NewPostPage() {
     <div className="space-y-8 p-4 md:p-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl md:text-4xl font-bold">Create New Post</h1>
-        <Button variant="outline" asChild>
-          <Link href="/admin/posts">Cancel</Link>
-        </Button>
+        <div className="flex gap-2"> {/* Group buttons */}
+            <Button variant="outline" asChild>
+                <Link href="/admin">
+                    <ArrowLeft className="mr-2 h-4 w-4" /> Back to Admin
+                </Link>
+            </Button>
+            <Button variant="outline" asChild>
+                 <Link href="/admin/posts">Cancel</Link>
+            </Button>
+        </div>
       </div>
 
       <Form {...form}>
@@ -421,4 +428,3 @@ export default function NewPostPage() {
     </div>
   );
 }
-

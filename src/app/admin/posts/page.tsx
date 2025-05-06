@@ -2,6 +2,9 @@
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { getPosts, type Post } from '@/services/posts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button'; // Import Button
+import Link from 'next/link'; // Import Link
+import { ArrowLeft } from 'lucide-react'; // Import icon
 
 // Define columns for the data table - simplified for now
 const columns = [
@@ -26,7 +29,14 @@ export default async function AdminPostsPage() {
 
   return (
     <div className="space-y-8 p-4 md:p-8">
-       <h1 className="text-3xl md:text-4xl font-bold">Manage Posts</h1>
+       <div className="flex justify-between items-center mb-6"> {/* Flex container for title and button */}
+          <h1 className="text-3xl md:text-4xl font-bold">Manage Posts</h1>
+          <Button variant="outline" asChild>
+             <Link href="/admin">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Admin
+             </Link>
+          </Button>
+       </div>
 
         <Card>
             <CardHeader>
