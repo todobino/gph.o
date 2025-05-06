@@ -5,17 +5,17 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Rss, Podcast } from 'lucide-react'; // Using generic Podcast icon
 
-// Placeholder URLs - Replace with actual links
+// Updated URLs with provided links
 const podcastLinks = [
-  { name: 'RSS', url: '#', icon: <Rss className="w-5 h-5 mr-2" /> },
-  { name: 'Spotify', url: '#', icon: <Podcast className="w-5 h-5 mr-2" /> }, // Placeholder icon
-  { name: 'Apple Podcasts', url: '#', icon: <Podcast className="w-5 h-5 mr-2" /> }, // Placeholder icon
-  { name: 'Google Podcasts', url: '#', icon: <Podcast className="w-5 h-5 mr-2" /> }, // Placeholder icon
-  { name: 'Breaker', url: '#', icon: <Podcast className="w-5 h-5 mr-2" /> }, // Placeholder icon
-  { name: 'Overcast', url: '#', icon: <Podcast className="w-5 h-5 mr-2" /> }, // Placeholder icon
-  { name: 'Pocket Casts', url: '#', icon: <Podcast className="w-5 h-5 mr-2" /> }, // Placeholder icon
-  { name: 'RadioPublic', url: '#', icon: <Podcast className="w-5 h-5 mr-2" /> }, // Placeholder icon
-  { name: 'Amazon Music', url: '#', icon: <Podcast className="w-5 h-5 mr-2" /> }, // Placeholder icon
+  { name: 'RSS', url: 'https://anchor.fm/s/f6a6558/podcast/rss', icon: <Rss className="w-5 h-5 mr-2" /> },
+  { name: 'Spotify', url: 'https://open.spotify.com/show/6rte6liF1WtEW3Pxrr2E9y', icon: <Podcast className="w-5 h-5 mr-2" /> },
+  { name: 'Apple Podcasts', url: 'https://podcasts.apple.com/us/podcast/geepawhill/id1484418432?uo=4', icon: <Podcast className="w-5 h-5 mr-2" /> },
+  { name: 'Google Podcasts', url: 'https://www.google.com/podcasts?feed=aHR0cHM6Ly9hbmNob3IuZm0vcy9mNmE2NTU4L3BvZGNhc3QvcnNz', icon: <Podcast className="w-5 h-5 mr-2" /> },
+  { name: 'Breaker', url: 'https://www.breaker.audio/geepawhill', icon: <Podcast className="w-5 h-5 mr-2" /> },
+  { name: 'Overcast', url: 'https://overcast.fm/itunes1484418432/geepawhill', icon: <Podcast className="w-5 h-5 mr-2" /> },
+  { name: 'Pocket Casts', url: 'https://pca.st/z1vmeibv', icon: <Podcast className="w-5 h-5 mr-2" /> },
+  { name: 'RadioPublic', url: 'https://radiopublic.com/geepawhill-WkX0Yx', icon: <Podcast className="w-5 h-5 mr-2" /> },
+  { name: 'Amazon Music', url: 'https://music.amazon.com/podcasts/e8acfea9-b9c6-4fa3-84dc-99e75b712afa', icon: <Podcast className="w-5 h-5 mr-2" /> },
 ];
 
 export default function SubscribePage() {
@@ -55,9 +55,7 @@ export default function SubscribePage() {
             </Link>
           ))}
         </div>
-        <p className="text-xs text-center text-muted-foreground mt-4">
-            (Podcast links are placeholders)
-        </p>
+        {/* Removed placeholder text */}
       </section>
     </div>
   );
