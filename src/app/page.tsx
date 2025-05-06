@@ -1,5 +1,4 @@
 
-
 import React, { ReactNode } from 'react';
 
 import type { Post } from '@/services/posts'; // Updated import path
@@ -50,12 +49,9 @@ export default async function Home() {
             <div className="w-full md:w-2/3 text-center md:text-left"> {/* Text column */}
               <h1 className="text-4xl font-bold tracking-tight mb-4">Helping Geeks Produce for Over 40 Years.</h1>
               {/* Updated body text with two paragraphs */}
-              <p className="text-xl text-muted-foreground mb-4">
-                My mission is to help people learn how to embrace change and harvest its value. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
-              </p>
-              <p className="text-xl text-muted-foreground mb-8">
-                If you want to learn how to create lasting change in your workplace, click the button below to book my solo or group Coaching Sessions today!
-              </p>
+               <p className="text-xl text-muted-foreground mb-8">
+                 My mission is to help people learn how to embrace change and harvest its value. Here, you'll find hundreds of free articles and videos—from deep technical insights to big-picture philosophy—all designed to help you turn transformation into your greatest advantage. Ready to create lasting change at work? Book a solo or group Coaching Session below and start change-harvesting today.
+               </p>
                {/* Apply button styles directly to the Link */}
                <Link href="/booking" className={cn(buttonVariants({ size: "lg" }))}>Let's Work Together</Link>
             </div>
@@ -71,31 +67,35 @@ export default async function Home() {
              {recentPosts.map((post) => {
                const slug = post.slug;
                return (
-                 <Card key={post.slug} className="flex flex-col"> {/* Use slug for key */}
-                   <CardHeader>
-                     {/* Placeholder image */}
-                     <Image
-                         src={`https://picsum.photos/seed/${slug}/400/200`} // Use slug for placeholder seed
-                         alt={`Thumbnail for ${post.title}`}
-                         width={400}
-                         height={200}
-                         className="rounded-t-lg object-cover"
-                         data-ai-hint="blog post abstract tech" // More specific hint
-                     />
-                     <CardTitle className="mt-4">{post.title}</CardTitle>
-                     <CardDescription>{new Date(post.date).toLocaleDateString()}</CardDescription>
-                   </CardHeader>
-                   <CardContent className="flex-grow">
-                     <p className="text-muted-foreground line-clamp-3">
-                       {post.content.split('\n').slice(0, 3).join(' ')}...
-                     </p>
-                   </CardContent>
-                   <CardFooter>
-                      <Link href={`/posts/${slug}`} className={cn(buttonVariants({ variant: "link", className: "p-0" }))}>
-                        Read More
-                      </Link>
-                   </CardFooter>
-                 </Card>
+                 <Link key={post.slug} href={`/posts/${slug}`} className="group block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
+                   <Card className="flex flex-col h-full transition-colors duration-200 border border-border group-hover:border-primary"> {/* Use slug for key, add group hover styles */}
+                     <CardHeader>
+                       {/* Placeholder image */}
+                       <div className="aspect-video overflow-hidden rounded-t-lg">
+                           <Image
+                               src={`https://picsum.photos/seed/${slug}/400/200`} // Use slug for placeholder seed
+                               alt={`Thumbnail for ${post.title}`}
+                               width={400}
+                               height={200}
+                               className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105" // Added hover scale effect
+                               data-ai-hint="blog post abstract tech" // More specific hint
+                           />
+                       </div>
+                       <CardTitle className="mt-4">{post.title}</CardTitle>
+                       <CardDescription>{new Date(post.date).toLocaleDateString()}</CardDescription>
+                     </CardHeader>
+                     <CardContent className="flex-grow">
+                       <p className="text-muted-foreground line-clamp-3">
+                         {post.content.split('\n').slice(0, 3).join(' ')}...
+                       </p>
+                     </CardContent>
+                     <CardFooter>
+                       <span className={cn(buttonVariants({ variant: "link", className: "p-0 pointer-events-none" }))}> {/* Keep style but remove interactivity */}
+                          Read More
+                       </span>
+                     </CardFooter>
+                   </Card>
+                  </Link>
                );
              })}
            </div>
@@ -113,33 +113,37 @@ export default async function Home() {
                // Use the pre-generated slug from the post object
                const slug = video.slug;
                return (
-                <Card key={video.slug} className="flex flex-col"> {/* Use slug for key */}
-                    <CardHeader>
-                    {/* Placeholder image */}
-                    <Image
-                        src={`https://picsum.photos/seed/${slug}/400/200`} // Use slug for placeholder seed
-                        alt={`Thumbnail for ${video.title}`}
-                        width={400}
-                        height={200}
-                        className="rounded-t-lg object-cover"
-                        data-ai-hint="video thumbnail abstract tech"
-                    />
-                    <CardTitle className="mt-4">{video.title}</CardTitle>
-                    <CardDescription>{new Date(video.date).toLocaleDateString()}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                    {/* Displaying first few lines as excerpt */}
-                    <p className="text-muted-foreground line-clamp-3">
-                        {video.content.split('\n').slice(0, 3).join(' ')}...
-                    </p>
-                    </CardContent>
-                    <CardFooter>
-                       {/* Use Link styled as button variant 'link' */}
-                       <Link href={`/posts/${slug}`} className={cn(buttonVariants({ variant: "link", className: "p-0" }))}>
-                         Watch Video
-                       </Link>
-                    </CardFooter>
-                </Card>
+                 <Link key={video.slug} href={`/posts/${slug}`} className="group block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
+                  <Card className="flex flex-col h-full transition-colors duration-200 border border-border group-hover:border-primary"> {/* Use slug for key, add group hover styles */}
+                      <CardHeader>
+                      {/* Placeholder image */}
+                      <div className="aspect-video overflow-hidden rounded-t-lg">
+                          <Image
+                              src={`https://picsum.photos/seed/${slug}/400/200`} // Use slug for placeholder seed
+                              alt={`Thumbnail for ${video.title}`}
+                              width={400}
+                              height={200}
+                              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105" // Added hover scale effect
+                              data-ai-hint="video thumbnail abstract tech"
+                          />
+                      </div>
+                      <CardTitle className="mt-4">{video.title}</CardTitle>
+                      <CardDescription>{new Date(video.date).toLocaleDateString()}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex-grow">
+                      {/* Displaying first few lines as excerpt */}
+                      <p className="text-muted-foreground line-clamp-3">
+                          {video.content.split('\n').slice(0, 3).join(' ')}...
+                      </p>
+                      </CardContent>
+                      <CardFooter>
+                         {/* Keep style but remove interactivity */}
+                         <span className={cn(buttonVariants({ variant: "link", className: "p-0 pointer-events-none" }))}>
+                           Watch Video
+                         </span>
+                      </CardFooter>
+                  </Card>
+                  </Link>
                );
             })}
           </div>
@@ -159,3 +163,4 @@ export default async function Home() {
   );
 }
 
+    
