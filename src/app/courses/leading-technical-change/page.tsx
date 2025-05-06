@@ -1,4 +1,5 @@
 
+
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import Image from 'next/image'; // Import Image component
@@ -44,11 +45,20 @@ Get A Heavyweight To Bless An Activity: Everyone in the c-suite knows what it is
 
 There are currently more than 30 techniques in the bundle, and we add new ones all the time, based partly on what comes from the final element of our structure, the advice.`;
 
+const practiceOfChangeBodyText = `Just as all of us are simultaneously alike in some ways and different in others, so, too, with change problems: They’re all alike. And they’re all different.
+
+The course is restricted to just six attendees for each offering, and there’s a reason for that: it gives us the chance to work not just with theory or memorizing a catalog of practices, but with applying what we’ve learned to the actual change situations that are confronting us right now.
+
+Over the four days, each of the six attendees will lay out their change case for us. What they want, what they’ve tried, what they’re thinking of trying. We’ll pitch in, a team of seven, to help add to and elaborate on the next few steps towards that change.
+
+Many of the former students have said this was the most valuable part of the experience: actual interaction with others, to lend ideas, support, and energy to go back to work newly excited and invigorated.`;
+
 
 const ltcParagraphs = ltcBodyText.split('\n\n');
 const courseLeaderParagraphs = courseLeaderBodyText.split('\n\n');
 const theoryOfChangeParagraphs = theoryOfChangeBodyText.split('\n\n');
 const techniqueOfChangeParagraphs = techniqueOfChangeBodyText.split('\n\n');
+const practiceOfChangeParagraphs = practiceOfChangeBodyText.split('\n\n');
 
 export default function LeadingTechnicalChangePage() {
   return (
@@ -165,19 +175,8 @@ export default function LeadingTechnicalChangePage() {
           </div>
         </section>
 
-        {/* New Section 4: Technique of Change */}
-        <section className="flex flex-col md:flex-row gap-12 items-start">
-          {/* Left Column: Image (Portrait) */}
-          <div className="w-full md:w-1/2">
-             <Image
-                 src="https://picsum.photos/seed/ltc-section4/450/600" // Portrait aspect ratio
-                 alt="Placeholder image representing technique or practice"
-                 width={450}
-                 height={600}
-                 className="rounded-lg shadow-md object-cover w-full h-auto max-w-md mx-auto" // Center image on smaller screens if needed
-                 data-ai-hint="hands writing code"
-             />
-          </div>
+        {/* Section 4: Technique of Change */}
+        <section className="flex flex-col md:flex-row-reverse gap-12 items-start"> {/* Reversed order */}
           {/* Right Column: Text Content */}
           <div className="w-full md:w-1/2 space-y-6">
             <h2 className="text-3xl font-semibold mb-4">
@@ -189,8 +188,56 @@ export default function LeadingTechnicalChangePage() {
               </p>
             ))}
           </div>
+            {/* Left Column: Image (Portrait) */}
+          <div className="w-full md:w-1/2">
+             <Image
+                 src="https://picsum.photos/seed/ltc-section4/450/600" // Portrait aspect ratio
+                 alt="Placeholder image representing technique or practice"
+                 width={450}
+                 height={600}
+                 className="rounded-lg shadow-md object-cover w-full h-auto max-w-md mx-auto" // Center image on smaller screens if needed
+                 data-ai-hint="hands writing code"
+             />
+          </div>
+        </section>
+
+        {/* Section 5: Practice of Change */}
+        <section className="flex flex-col md:flex-row gap-12 items-start">
+          {/* Left Column: Text Content */}
+          <div className="w-full md:w-1/2 space-y-6">
+            <h2 className="text-3xl font-semibold mb-4">
+              Practice of Change
+            </h2>
+            {practiceOfChangeParagraphs.map((paragraph, index) => (
+              <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+
+          {/* Right Column: Two Images */}
+          <div className="w-full md:w-1/2 space-y-4">
+            <Image
+                src="https://picsum.photos/seed/ltc-section5-1/800/450" // 16:9 aspect ratio
+                alt="Placeholder image representing practice or group interaction"
+                width={800}
+                height={450}
+                className="rounded-lg shadow-md object-cover w-full h-auto"
+                data-ai-hint="team discussion whiteboard"
+            />
+             <Image
+                src="https://picsum.photos/seed/ltc-section5-2/800/450" // 16:9 aspect ratio
+                alt="Another placeholder image related to applying learning"
+                width={800}
+                height={450}
+                className="rounded-lg shadow-md object-cover w-full h-auto"
+                data-ai-hint="person writing notes"
+            />
+          </div>
         </section>
 
     </div>
   );
 }
+
+    
