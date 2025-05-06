@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Link from 'next/link'; // Import Link
+import { cn } from '@/lib/utils'; // Import cn
 
 // Helper function to convert string to Title Case (copied from posts/page.tsx)
 function toTitleCase(str: string): string {
@@ -53,9 +55,16 @@ export default async function PostPage({ params }: PostPageProps) {
         </p>
         <div className="flex flex-wrap gap-2">
           {post.tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="border border-border py-1.5 px-3 rounded-md"> {/* Added border and Title Case */}
-              {toTitleCase(tag)}
-            </Badge>
+            <Link key={tag} href={`/posts?tag=${tag}`} scroll={false}>
+                <Badge
+                  variant="secondary"
+                  className={cn(
+                    "cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1.5 px-3 border border-border" // Added interactive classes and kept existing styles
+                   )}
+                >
+                  {toTitleCase(tag)}
+                </Badge>
+             </Link>
           ))}
         </div>
       </header>
