@@ -1,3 +1,4 @@
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -381,7 +382,7 @@ export default function NewPostPage() {
                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                        <div className="space-y-0.5">
                           {/* Added flex container for icon and label */}
-                         <FormLabel className="flex items-center gap-2 text-lg font-medium"> {/* Increased font size */}
+                         <FormLabel className="flex items-center gap-2 font-medium"> {/* Removed text-lg */}
                             <MessageSquare className="h-5 w-5 text-muted-foreground" /> {/* Increased icon size */}
                             Allow Comments
                          </FormLabel>
@@ -403,7 +404,7 @@ export default function NewPostPage() {
                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                         <div className="space-y-0.5">
                            {/* Added flex container for icon and label */}
-                          <FormLabel className="flex items-center gap-2 text-lg font-medium"> {/* Increased font size */}
+                          <FormLabel className="flex items-center gap-2 font-medium"> {/* Removed text-lg */}
                             <Star className="h-5 w-5 text-muted-foreground" /> {/* Increased icon size */}
                              Featured Post
                           </FormLabel>
