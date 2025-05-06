@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -16,6 +15,7 @@ interface PostsSidebarProps { // Renamed interface
 
 // Helper function to convert string to Title Case
 function toTitleCase(str: string): string {
+  if (!str) return ''; // Handle empty strings
   return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
@@ -54,7 +54,7 @@ export function PostsSidebar({ tags, archives }: PostsSidebarProps) { // Renamed
                      >
                        <Badge
                          variant={currentTag === tag ? 'default' : 'secondary'}
-                         className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1.5 px-3" // Added padding
+                         className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1.5 px-3 border border-border" // Added border border-border
                        >
                          {toTitleCase(tag)} {/* Apply Title Case here */}
                        </Badge>
@@ -96,4 +96,3 @@ export function PostsSidebar({ tags, archives }: PostsSidebarProps) { // Renamed
     </Card>
   );
 }
-
