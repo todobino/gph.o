@@ -1,8 +1,9 @@
 
 
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
+import { Download, UserPlus } from 'lucide-react'; // Added UserPlus
 import Image from 'next/image'; // Import Image component
+import Link from 'next/link'; // Import Link for the button
 
 const ltcBodyText = `How can we help our software teams get stronger? Faster? Smarter? Happier? More positive and more productive?
 
@@ -236,8 +237,31 @@ export default function LeadingTechnicalChangePage() {
           </div>
         </section>
 
+         {/* New CTA Section */}
+         <section className="bg-accent p-8 md:p-12 rounded-lg shadow-sm text-accent-foreground">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-center md:text-left">
+                {/* CTA 1: Join Cohort */}
+                <div className="space-y-3">
+                    <h3 className="text-2xl font-semibold text-accent-foreground">Join the Next LTC Cohort</h3>
+                    <Button size="lg" disabled> {/* Disabled until booking is ready */}
+                        <UserPlus className="mr-2 h-5 w-5" />
+                        Get Your Seat (Coming Soon)
+                    </Button>
+                     <p className="text-xs text-accent-foreground/80">Be the first to know when the next cohort opens.</p>
+                </div>
+
+                 {/* CTA 2: Download Overview */}
+                 <div className="space-y-3">
+                    <h3 className="text-2xl font-semibold text-accent-foreground">Download the LTC Overview</h3>
+                     <Button size="lg" disabled> {/* Disabled until PDF is available */}
+                         <Download className="mr-2 h-5 w-5" />
+                         Download the PDF (Coming Soon)
+                     </Button>
+                     <p className="text-xs text-accent-foreground/80">Get the detailed course outline.</p>
+                 </div>
+            </div>
+         </section>
+
     </div>
   );
 }
-
-    
