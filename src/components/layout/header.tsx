@@ -1,3 +1,4 @@
+
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
@@ -11,22 +12,26 @@ import {
 } from "../ui/dropdown-menu"; // Corrected relative path
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"; // Corrected relative path Use Dialog instead of Popover
 import { Input } from "../ui/input"; // Corrected relative path
-import { Menu, Feather, ChevronDown, Search } from 'lucide-react';
-import React from 'react';
+import { Menu, Feather, ChevronDown, Search, UserCircle } from 'lucide-react'; // Added UserCircle
+import React, { useEffect, useState } from 'react'; // Import useEffect and useState
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
 import { ScrollArea } from '../ui/scroll-area'; // Corrected relative path
 import { cn } from '@/lib/utils';
+import { getCurrentUser, checkIfAdmin } from '@/lib/auth'; // Import auth functions
+import type { User } from 'firebase/auth'; // Import User type
 
 export function Header() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [searchResults, setSearchResults] = React.useState<Post[]>([]);
-  const [allPosts, setAllPosts] = React.useState<Post[]>([]);
-  const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false); // State for dialog
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Post[]>([]);
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false); // State for dialog
+  const [isAdmin, setIsAdmin] = useState(false); // State for admin status
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true); // State for auth loading
 
   // Fetch posts on component mount for client-side search
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchPosts() {
       try {
         const posts = await getPosts();
@@ -38,8 +43,30 @@ export function Header() {
     fetchPosts();
   }, []);
 
+   // Check user auth and admin status
+   useEffect(() => {
+    const checkAuthStatus = async () => {
+      setIsLoadingAuth(true);
+      const user = await getCurrentUser();
+      if (user) {
+        const isAdminUser = await checkIfAdmin(user);
+        setIsAdmin(isAdminUser);
+      } else {
+        setIsAdmin(false);
+      }
+      setIsLoadingAuth(false);
+    };
+    checkAuthStatus();
+     // Optionally, listen for auth state changes if needed for real-time updates
+     // This requires importing onAuthStateChanged from firebase/auth
+     // const auth = getAuth();
+     // const unsubscribe = onAuthStateChanged(auth, async (user) => { ... });
+     // return () => unsubscribe();
+  }, []);
+
+
   // Basic client-side search filtering
-   React.useEffect(() => {
+   useEffect(() => {
     if (searchQuery.trim() === '') {
       setSearchResults([]);
       return;
@@ -113,7 +140,7 @@ export function Header() {
                       // Use the pre-generated slug from the post object
                       const slug = post.slug;
                       return (
-                          <li key={post.title}>
+                          <li key={post.slug}>
                               <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
                                   {post.title}
                               </Link>
@@ -167,6 +194,16 @@ export function Header() {
                     {navItem.label}
                   </Link>
                 )
+              )}
+              {/* Conditionally render Admin link */}
+              {!isLoadingAuth && isAdmin && (
+                  <Link
+                    href="/admin"
+                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "font-bold text-primary hover:text-primary/80 px-3 py-2")}
+                  >
+                     <UserCircle className="mr-1 h-4 w-4" /> {/* Optional Admin Icon */}
+                    Admin
+                  </Link>
               )}
           </nav>
         </div>
@@ -222,6 +259,19 @@ export function Header() {
                         )}
                     </React.Fragment>
                 ))}
+                 {/* Conditionally render Admin link in mobile menu */}
+                {!isLoadingAuth && isAdmin && (
+                  <SheetClose asChild>
+                    <Link
+                      href="/admin"
+                      className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-4" // Added margin-top
+                      onClick={handleLinkClick}
+                    >
+                      <UserCircle className="mr-1 h-5 w-5 inline-block align-text-bottom" /> {/* Optional Admin Icon */}
+                      Admin
+                    </Link>
+                  </SheetClose>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
@@ -267,3 +317,4 @@ export function Header() {
     </header>
   );
 }
+
