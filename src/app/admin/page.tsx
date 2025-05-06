@@ -1,7 +1,9 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ListPlus, Edit, CalendarDays, Users } from "lucide-react";
 import { redirect } from "next/navigation";
+import Link from "next/link"; // Import Link
 
 // This forces SSR and disables static generation
 export const dynamic = 'force-dynamic';
@@ -23,11 +25,13 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="flex gap-2">
+              {/* Updated Button to use Link */}
               <Button variant="outline" size="sm" asChild>
-                <a href="/admin/posts/new"><ListPlus className="w-4 h-4 mr-1" /> New Post</a>
+                <Link href="/admin/posts/new"><ListPlus className="w-4 h-4 mr-1" /> New Post</Link>
               </Button>
               <Button variant="secondary" size="sm" asChild>
-                <a href="/admin/posts">View All Posts</a>
+                 {/* Ensure this link also uses the correct component if needed */}
+                <Link href="/admin/posts">View All Posts</Link>
               </Button>
             </div>
           </CardContent>
@@ -75,3 +79,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
