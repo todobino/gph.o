@@ -12,3 +12,4 @@ Topics:
 - Remote coaching challenges
 - AI in agile
 - Measuring coaching impact
+- Enabling cross-team function
