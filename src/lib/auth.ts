@@ -1,55 +1,56 @@
 import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signOut as firebaseSignOut,
-  onAuthStateChanged,
-  User,
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut as firebaseSignOut,
+    onAuthStateChanged,
+    User,
 } from "firebase/auth";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 import { db, app } from "./firestore";
 
 const auth = getAuth(app);
 
-export const signIn = async (
-  email: string,
-  password: string
-): Promise<boolean> => {
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+export const signIn = async (email: string, password: string): Promise<boolean> => {   
+    try {
+        const { user } = await signInWithEmailAndPassword(auth, email, password);
+        const idToken = await user.getIdToken();
+        const resp = await fetch('/api/login', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken }),
+        });
 
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (!userDoc.exists()) {
-      throw new Error("No user profile found in Firestore.");
+        return resp.ok;
+    } catch (error) {
+        console.error("Error signing in:", error);
+        return false;
     }
-
-    const userData = userDoc.data();
-    localStorage.setItem("userProfile", JSON.stringify(userData));
-    return true;
-  } catch (error) {
-    console.error("Error signing in:", error);
-    return false;
-  }
 };
 
 export const signOut = async (): Promise<boolean> => {
-  try {
-    await firebaseSignOut(auth);
-    return true;
-  } catch (error) {
-    console.error("Error signing out:", error);
-    return false;
-  }
+    try {
+        await firebaseSignOut(auth);
+        const resp = await fetch("/api/logout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        return resp.ok;
+    } catch (error) {
+        console.error("Error signing out:", error);
+        return false;
+    }
 };
 
 export const getCurrentUser = (): Promise<User | null> => {
-  return new Promise((resolve) => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      unsubscribe();
-      resolve(user);
+    return new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            unsubscribe();
+            resolve(user);
+        });
     });
-  });
-};
+}
 
 export const checkIfAdmin = async (user: User): Promise<boolean> => {
   if (!user) return false;
@@ -84,3 +85,4 @@ export const makeUserAdmin = async (userUid: string): Promise<void> => {
     console.error("Error making user admin:", error);
   }
 };
+

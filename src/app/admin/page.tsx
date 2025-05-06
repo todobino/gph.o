@@ -1,4 +1,3 @@
-import { checkIfAdmin, getCurrentUser } from "@/lib/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ListPlus, Edit, CalendarDays, Users } from "lucide-react";
@@ -7,19 +6,7 @@ import { redirect } from "next/navigation";
 // This forces SSR and disables static generation
 export const dynamic = 'force-dynamic';
 
-export default async function AdminDashboardPage() {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    redirect('/login');
-  }
-
-  const isAdmin = await checkIfAdmin(user);
-
-  if (!isAdmin) {
-    redirect('/login');
-  }
-
+export default function AdminDashboardPage() {
   return (
     <div className="space-y-8 p-4">
       <h1 className="text-4xl font-bold">Admin Dashboard</h1>
