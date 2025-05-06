@@ -31,4 +31,3 @@ export async function middleware(req: NextRequest) {
 
 // Matcher config remains the same
 export const config = { matcher: ['/admin/:path*'] };
-
