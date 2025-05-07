@@ -55,6 +55,10 @@ export function Header() {
       setIsLoadingAuth(false);
     };
     checkAuthStatus();
+    // Re-check on window focus in case of logout/login in another tab
+    const handleFocus = () => checkAuthStatus();
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
 
@@ -67,13 +71,13 @@ export function Header() {
     const lowerCaseQuery = searchQuery.toLowerCase();
     const results = allPosts.filter(post =>
       post.title.toLowerCase().includes(lowerCaseQuery) ||
-      post.content.toLowerCase().includes(lowerCaseQuery)
+      (post.content && post.content.toLowerCase().includes(lowerCaseQuery))
     );
     setSearchResults(results.slice(0, 10));
   }, [searchQuery, allPosts]);
 
    const navItems = [
-     {
+    {
         label: 'Posts',
         dropdown: [
             { href: '/posts', label: 'All Posts' },
@@ -99,18 +103,18 @@ export function Header() {
 
    const handleSearchResultClick = () => {
      setSearchQuery('');
-     setIsSearchDialogOpen(false);
+     setIsSearchDialogOpen(false); // Close dialog on result click
    };
 
    const handleSearchDialogChange = (open: boolean) => {
      setIsSearchDialogOpen(open);
-     if (!open) {
-        setSearchQuery('');
+     if (!open) { // If dialog is closing
+        setSearchQuery(''); // Clear search query
      }
    }
 
    const searchDialogContent = (
-     <DialogContent className="sm:max-w-xl bg-background/80 backdrop-blur-sm p-6 rounded-lg shadow-lg"> {/* Updated background for dim/blur effect */}
+     <DialogContent className="sm:max-w-xl bg-background/80 backdrop-blur-sm p-6 rounded-lg shadow-lg">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">Search</DialogTitle>
         </DialogHeader>
@@ -124,7 +128,7 @@ export function Header() {
           />
            <ScrollArea className="h-[200px] w-full mt-2 border rounded-md">
               {searchResults.length > 0 ? (
-                  <ul className="space-y-1 p-2">
+                  <ul className="space-y-1"> {/* Removed p-2 to make list items full width */}
                   {searchResults.map(post => {
                       const slug = post.slug;
                       return (
@@ -151,7 +155,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center px-4"> {/* Added mx-auto */}
+      <div className="container mx-auto flex h-14 items-center px-4">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Feather className="h-6 w-6 text-primary" />
@@ -207,14 +211,16 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="pr-0">
-              <Link
-                href="/"
-                className="flex items-center space-x-2 mb-6"
-                onClick={handleLinkClick}
-              >
-                <Feather className="h-6 w-6 text-primary" />
-                <span className="font-bold">GeePawHill.Org</span>
-              </Link>
+              <SheetClose asChild>
+                <Link
+                  href="/"
+                  className="flex items-center space-x-2 mb-6"
+                  onClick={handleLinkClick}
+                >
+                  <Feather className="h-6 w-6 text-primary" />
+                  <span className="font-bold">GeePawHill.Org</span>
+                </Link>
+              </SheetClose>
               <nav className="flex flex-col space-y-1">
                 {navItems.map((navItem) => (
                     <React.Fragment key={navItem.label || navItem.href}>
@@ -270,7 +276,7 @@ export function Header() {
             <div className="flex items-center gap-1">
                 <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                     <DialogTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" aria-label="Open search dialog">
                             <Search className="h-5 w-5" />
                             <span className="sr-only">Search</span>
                         </Button>
@@ -286,7 +292,7 @@ export function Header() {
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
            <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                 <DialogTrigger asChild>
-                    <Button variant="ghost" size="icon">
+                     <Button variant="ghost" size="icon" aria-label="Open search dialog">
                         <Search className="h-5 w-5" />
                         <span className="sr-only">Search</span>
                     </Button>
