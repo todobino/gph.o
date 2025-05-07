@@ -250,7 +250,7 @@ export default function NewPostPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Featured Image</FormLabel>
-                       <div className="border border-dashed border-muted-foreground rounded-md p-6 text-center">
+                       <div className="border border-dashed border-border rounded-md p-6 text-center"> {/* Changed border-muted-foreground to border-border */}
                           <Upload className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
                           <p className="text-sm text-muted-foreground">Image upload coming soon.</p>
                           <Button variant="outline" size="sm" className="mt-4" disabled>
@@ -391,7 +391,7 @@ export default function NewPostPage() {
                       <FormLabel>Series</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value === null ? NO_SERIES_VALUE : field.value}
+                        value={field.value === null || field.value === undefined ? NO_SERIES_VALUE : field.value}
                         defaultValue={NO_SERIES_VALUE}
                       >
                         <FormControl>
