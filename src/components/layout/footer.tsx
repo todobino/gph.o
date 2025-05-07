@@ -13,7 +13,7 @@ export async function Footer() {
 
   return (
     <footer className="border-t pt-12 pb-6">
-      <div className="container px-4 space-y-8"> {/* Added px-4 for consistent padding */}
+      <div className="container mx-auto px-4 space-y-8"> {/* Added mx-auto */}
         {/* New 3-column section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Column 1: Featured Video */}

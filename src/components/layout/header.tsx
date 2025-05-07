@@ -2,35 +2,34 @@
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '../ui/button'; // Corrected relative path
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet'; // Corrected relative path
+import { Button, buttonVariants } from '../ui/button';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu"; // Corrected relative path
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"; // Corrected relative path Use Dialog instead of Popover
-import { Input } from "../ui/input"; // Corrected relative path
-import { Menu, Feather, ChevronDown, Search, UserCircle } from 'lucide-react'; // Added UserCircle
-import React, { useEffect, useState } from 'react'; // Import useEffect and useState
+} from "../ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Menu, Feather, ChevronDown, Search, UserCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
-import { ScrollArea } from '../ui/scroll-area'; // Corrected relative path
+import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { getCurrentUser, checkIfAdmin } from '@/lib/auth'; // Import auth functions
-import type { User } from 'firebase/auth'; // Import User type
+import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
+import type { User } from 'firebase/auth';
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Post[]>([]);
   const [allPosts, setAllPosts] = useState<Post[]>([]);
-  const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false); // State for dialog
-  const [isAdmin, setIsAdmin] = useState(false); // State for admin status
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true); // State for auth loading
+  const [isSearchDialogOpen, setIsSearchDialogOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
 
-  // Fetch posts on component mount for client-side search
   useEffect(() => {
     async function fetchPosts() {
       try {
@@ -43,7 +42,6 @@ export function Header() {
     fetchPosts();
   }, []);
 
-   // Check user auth and admin status
    useEffect(() => {
     const checkAuthStatus = async () => {
       setIsLoadingAuth(true);
@@ -57,15 +55,9 @@ export function Header() {
       setIsLoadingAuth(false);
     };
     checkAuthStatus();
-     // Optionally, listen for auth state changes if needed for real-time updates
-     // This requires importing onAuthStateChanged from firebase/auth
-     // const auth = getAuth();
-     // const unsubscribe = onAuthStateChanged(auth, async (user) => { ... });
-     // return () => unsubscribe();
   }, []);
 
 
-  // Basic client-side search filtering
    useEffect(() => {
     if (searchQuery.trim() === '') {
       setSearchResults([]);
@@ -77,11 +69,9 @@ export function Header() {
       post.title.toLowerCase().includes(lowerCaseQuery) ||
       post.content.toLowerCase().includes(lowerCaseQuery)
     );
-    setSearchResults(results.slice(0, 10)); // Limit to 10 results for performance
+    setSearchResults(results.slice(0, 10));
   }, [searchQuery, allPosts]);
 
-
-  // Define navigation structure in the desired order: Posts, Courses, About, Contact
    const navItems = [
      {
         label: 'Posts',
@@ -109,19 +99,18 @@ export function Header() {
 
    const handleSearchResultClick = () => {
      setSearchQuery('');
-     setIsSearchDialogOpen(false); // Close dialog on result click
+     setIsSearchDialogOpen(false);
    };
 
    const handleSearchDialogChange = (open: boolean) => {
      setIsSearchDialogOpen(open);
      if (!open) {
-        setSearchQuery(''); // Clear search when dialog closes
+        setSearchQuery('');
      }
    }
 
-   // Shared Dialog Content
    const searchDialogContent = (
-     <DialogContent className="sm:max-w-xl bg-background/50 backdrop-blur-sm p-6 rounded-lg shadow-lg">
+     <DialogContent className="sm:max-w-xl bg-background/80 backdrop-blur-sm p-6 rounded-lg shadow-lg"> {/* Updated background for dim/blur effect */}
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">Search</DialogTitle>
         </DialogHeader>
@@ -137,7 +126,6 @@ export function Header() {
               {searchResults.length > 0 ? (
                   <ul className="space-y-1 p-2">
                   {searchResults.map(post => {
-                      // Use the pre-generated slug from the post object
                       const slug = post.slug;
                       return (
                           <li key={post.slug}>
@@ -163,7 +151,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center px-4">
+      <div className="container mx-auto flex h-14 items-center px-4"> {/* Added mx-auto */}
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Feather className="h-6 w-6 text-primary" />
@@ -172,7 +160,6 @@ export function Header() {
             </span>
           </Link>
           <nav className="flex items-center space-x-1 text-sm font-medium">
-             {/* Dynamic Nav Items */}
              {navItems.map((navItem) =>
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
@@ -199,20 +186,18 @@ export function Header() {
                   </Link>
                 )
               )}
-              {/* Conditionally render Admin link */}
               {!isLoadingAuth && isAdmin && (
                   <Link
                     href="/admin"
                     className={cn(buttonVariants({ variant: "ghost", size: "default" }), "font-bold text-primary hover:text-primary/80 px-3 py-2")}
                   >
-                     <UserCircle className="mr-1 h-4 w-4" /> {/* Optional Admin Icon */}
+                     <UserCircle className="mr-1 h-4 w-4" />
                     Admin
                   </Link>
               )}
           </nav>
         </div>
 
-        {/* Mobile Menu & Title */}
         <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -263,15 +248,14 @@ export function Header() {
                         )}
                     </React.Fragment>
                 ))}
-                 {/* Conditionally render Admin link in mobile menu */}
                 {!isLoadingAuth && isAdmin && (
                   <SheetClose asChild>
                     <Link
                       href="/admin"
-                      className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-4" // Added margin-top
+                      className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-4"
                       onClick={handleLinkClick}
                     >
-                      <UserCircle className="mr-1 h-5 w-5 inline-block align-text-bottom" /> {/* Optional Admin Icon */}
+                      <UserCircle className="mr-1 h-5 w-5 inline-block align-text-bottom" />
                       Admin
                     </Link>
                   </SheetClose>
@@ -283,7 +267,6 @@ export function Header() {
              <Feather className="h-6 w-6 text-primary" />
              <span className="font-bold">GeePawHill.Org</span>
            </Link>
-           {/* Mobile Search & Book Now */}
             <div className="flex items-center gap-1">
                 <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                     <DialogTrigger asChild>
@@ -294,14 +277,12 @@ export function Header() {
                     </DialogTrigger>
                     {searchDialogContent}
                 </Dialog>
-                 {/* Use Link styled as button */}
                 <Link href="/booking" className={cn(buttonVariants({ size: "sm" }))}>
                    Book Now
                 </Link>
             </div>
         </div>
 
-        {/* Desktop Search & Book Now Buttons */}
         <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
            <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                 <DialogTrigger asChild>
@@ -312,7 +293,6 @@ export function Header() {
                 </DialogTrigger>
                  {searchDialogContent}
             </Dialog>
-             {/* Use Link styled as button */}
            <Link href="/booking" className={cn(buttonVariants())}>
               Book Now
            </Link>
