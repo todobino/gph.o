@@ -11,3 +11,4 @@ This video identifies common code smells and demonstrates refactoring techniques
 Covered smells:
 - Long Method
 - Duplicated Code
+
