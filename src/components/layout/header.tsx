@@ -12,7 +12,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "../ui/dialog";
 import { Input } from "../ui/input";
-import { Menu, Feather, ChevronDown, Search, UserCircle } from 'lucide-react';
+import { Menu, Cpu, ChevronDown, Search, UserCircle } from 'lucide-react'; // Changed Feather to Cpu
 import React, { useEffect, useState } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -158,8 +158,8 @@ export function Header() {
       <div className="container mx-auto flex h-14 items-center px-4">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Feather className="h-6 w-6 text-primary" />
-            <span className="hidden font-bold sm:inline-block">
+            <Cpu className="h-6 w-6 text-primary" /> {/* Changed Feather to Cpu */}
+            <span className="hidden font-bold sm:inline-block text-foreground"> {/* Added text-foreground */}
               GeePawHill.Org
             </span>
           </Link>
@@ -217,8 +217,8 @@ export function Header() {
                   className="flex items-center space-x-2 mb-6"
                   onClick={handleLinkClick}
                 >
-                  <Feather className="h-6 w-6 text-primary" />
-                  <span className="font-bold">GeePawHill.Org</span>
+                  <Cpu className="h-6 w-6 text-primary" /> {/* Changed Feather to Cpu */}
+                  <span className="font-bold text-foreground">GeePawHill.Org</span> {/* Added text-foreground */}
                 </Link>
               </SheetClose>
               <nav className="flex flex-col space-y-1">
@@ -270,22 +270,21 @@ export function Header() {
             </SheetContent>
           </Sheet>
            <Link href="/" className="flex items-center space-x-2">
-             <Feather className="h-6 w-6 text-primary" />
-             <span className="font-bold">GeePawHill.Org</span>
+             <Cpu className="h-6 w-6 text-primary" /> {/* Changed Feather to Cpu */}
+             <span className="font-bold text-foreground">GeePawHill.Org</span> {/* Added text-foreground */}
            </Link>
             <div className="flex items-center gap-1">
                 <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                     <DialogTrigger asChild>
                         <Button variant="ghost" size="icon" aria-label="Open search dialog">
                             <Search className="h-5 w-5" />
-                            <span className="sr-only">Search</span>
                         </Button>
                     </DialogTrigger>
                     {searchDialogContent}
                 </Dialog>
-                <Link href="/booking" className={cn(buttonVariants({ size: "sm" }))}>
-                   Book Now
-                </Link>
+                <Button asChild size="sm">
+                   <Link href="/booking">Book Now</Link>
+                </Button>
             </div>
         </div>
 
@@ -294,14 +293,13 @@ export function Header() {
                 <DialogTrigger asChild>
                      <Button variant="ghost" size="icon" aria-label="Open search dialog">
                         <Search className="h-5 w-5" />
-                        <span className="sr-only">Search</span>
                     </Button>
                 </DialogTrigger>
                  {searchDialogContent}
             </Dialog>
-           <Link href="/booking" className={cn(buttonVariants())}>
-              Book Now
-           </Link>
+            <Button asChild>
+                <Link href="/booking">Book Now</Link>
+            </Button>
         </div>
       </div>
     </header>
