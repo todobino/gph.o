@@ -118,17 +118,17 @@ export function Header() {
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">Search</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-4 py-4"> {/* Changed from grid to flex flex-col */}
+        <div className="flex flex-col gap-4 py-4">
           <Input
             id="search-dialog"
             placeholder="Search posts and pages..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="text-base" // Removed col-span-3
+            className="text-base w-full"
           />
            <ScrollArea className="h-[200px] w-full mt-2 border rounded-md">
               {searchResults.length > 0 ? (
-                  <ul className="space-y-1">
+                  <ul className="space-y-1 p-2">
                   {searchResults.map(post => {
                       const slug = post.slug;
                       return (
@@ -168,7 +168,7 @@ export function Header() {
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="text-foreground/60 hover:text-foreground/80 px-3 py-2">
+                      <Button variant="ghost" className="text-foreground hover:text-foreground/80 px-3 py-2">
                         {navItem.label} <ChevronDown className="ml-1 h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -184,7 +184,7 @@ export function Header() {
                   <Link
                     key={navItem.href}
                     href={navItem.href!}
-                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "text-foreground/60 hover:text-foreground/80 px-3 py-2")}
+                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "text-foreground hover:text-foreground/80 px-3 py-2")}
                   >
                     {navItem.label}
                   </Link>
