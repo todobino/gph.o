@@ -63,9 +63,9 @@ export default async function PostPage({ params }: PostPageProps) {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto"> {/* Add a container for overall page layout */}
-      <Breadcrumbs items={breadcrumbItems} /> {/* Add Breadcrumbs component */}
-      <article className="prose prose-lg dark:prose-invert max-w-none"> {/* Removed mx-auto from article to use parent div */}
+    <div>
+      <Breadcrumbs items={breadcrumbItems} />
+      <article className="prose prose-lg dark:prose-invert max-w-none">
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-2">{currentPost.title}</h1>
           <p className="text-muted-foreground text-sm mb-4">
