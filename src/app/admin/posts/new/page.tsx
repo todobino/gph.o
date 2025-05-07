@@ -425,15 +425,14 @@ export default function NewPostPage() {
                     </FormItem>
                   )}
                 />
-                <Separator />
                 <FormField
                   control={form.control}
                   name="allowComments"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5 flex items-center gap-2">
-                        <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                        <FormLabel className="text-xs font-normal"> {/* Adjusted size */}
+                      <div className="flex items-center gap-2">
+                        <MessageSquare className="h-5 w-5 text-muted-foreground" />
+                        <FormLabel className="text-sm font-normal">
                           Allow Comments
                         </FormLabel>
                       </div>
@@ -451,9 +450,9 @@ export default function NewPostPage() {
                   name="isFeatured"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                       <div className="space-y-0.5 flex items-center gap-2">
-                         <Star className="h-4 w-4 text-muted-foreground" /> {/* Adjusted size */}
-                         <FormLabel className="text-xs font-normal"> {/* Adjusted size */}
+                       <div className="flex items-center gap-2">
+                         <Star className="h-5 w-5 text-muted-foreground" />
+                         <FormLabel className="text-sm font-normal">
                           Featured Post
                          </FormLabel>
                        </div>
