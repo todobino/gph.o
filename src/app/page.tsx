@@ -71,7 +71,7 @@ export default async function Home() {
                const slug = post.slug;
                return (
                  <Link key={post.slug} href={`/posts/${slug}`} className="group block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
-                   <Card className="flex flex-col h-full transition-colors duration-200 border border-border group-hover:border-primary"> {/* Use slug for key, add group hover styles */}
+                   <Card className="flex flex-col h-full transition-all duration-200 border border-border group-hover:border-primary group-hover:shadow-lg"> {/* Use slug for key, add group hover styles */}
                      <CardHeader>
                        {/* Placeholder image */}
                        <div className="aspect-video overflow-hidden rounded-t-lg">
@@ -117,7 +117,7 @@ export default async function Home() {
                const slug = video.slug;
                return (
                  <Link key={video.slug} href={`/posts/${slug}`} className="group block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
-                  <Card className="flex flex-col h-full transition-colors duration-200 border border-border group-hover:border-primary"> {/* Use slug for key, add group hover styles */}
+                  <Card className="flex flex-col h-full transition-all duration-200 border border-border group-hover:border-primary group-hover:shadow-lg"> {/* Use slug for key, add group hover styles */}
                       <CardHeader>
                       {/* Placeholder image */}
                       <div className="aspect-video overflow-hidden rounded-t-lg">
@@ -165,3 +165,4 @@ export default async function Home() {
     </div>
   );
 }
+
