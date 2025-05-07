@@ -247,6 +247,21 @@ export default function NewPostPage() {
                 />
               </CardContent>
             </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Featured Image</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="border border-dashed border-muted-foreground rounded-md p-6 text-center">
+                  <Upload className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
+                  <p className="text-sm text-muted-foreground">Image upload coming soon.</p>
+                  <Button variant="outline" size="sm" className="mt-4" disabled>
+                    Upload Image
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           <div className="lg:col-span-1 space-y-6">
@@ -423,21 +438,6 @@ export default function NewPostPage() {
                   )}
                 />
 
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Featured Image</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="border border-dashed border-muted-foreground rounded-md p-6 text-center">
-                  <Upload className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">Image upload coming soon.</p>
-                  <Button variant="outline" size="sm" className="mt-4" disabled>
-                    Upload Image
-                  </Button>
-                </div>
               </CardContent>
             </Card>
 
