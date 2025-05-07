@@ -9,7 +9,6 @@ import { CalendarIcon, Upload, MessageSquare, Star } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
-  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -47,10 +46,10 @@ const authors = [
 ];
 
 const formSchema = z.object({
-  title: z.string().min(2),
+  title: z.string().min(2, { message: 'Title must be at least 2 characters.' }),
   slug: z.string().optional(),
-  body: z.string().min(10),
-  authorId: z.string().min(1),
+  body: z.string().min(10, { message: 'Post body must be at least 10 characters.' }),
+  authorId: z.string().min(1, { message: 'Please select an author.' }),
   publishDate: z.date().optional(),
   publishTime: z.string().optional(),
   excerpt: z.string().optional(),
@@ -73,78 +72,185 @@ export default function NewPostPage() {
   useEffect(() => {
     getAllSeries()
       .then(setExistingSeries)
-      .catch(() => toast({ title: 'Error', description: 'Could not load series.', variant: 'destructive' }));
+      .catch(() =>
+        toast({
+          title: 'Error',
+          description: 'Could not load existing series.',
+          variant: 'destructive',
+        })
+      );
   }, [toast]);
 
   const form = useForm<NewPostFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '', slug: '', body: '', authorId: '',
-      publishDate: new Date(), publishTime: '', excerpt: '',
-      featuredImage: null, allowComments: true, isFeatured: false,
-      series: NO_SERIES_VALUE, newSeriesTitle: '',
+      title: '',
+      slug: '',
+      body: '',
+      authorId: '',
+      publishDate: new Date(),
+      publishTime: '',
+      excerpt: '',
+      featuredImage: null,
+      allowComments: true,
+      isFeatured: false,
+      series: NO_SERIES_VALUE,
+      newSeriesTitle: '',
     },
   });
 
-  function process(values: NewPostFormData) {
-    const data = { ...values } as any;
-    if (values.newSeriesTitle?.trim()) data.series = values.newSeriesTitle.trim();
-    else if (values.series === NO_SERIES_VALUE) data.series = undefined;
+  function processFormValues(values: NewPostFormData) {
+    const data: any = { ...values };
+    if (values.newSeriesTitle?.trim()) {
+      data.series = values.newSeriesTitle.trim();
+    } else if (values.series === NO_SERIES_VALUE) {
+      data.series = undefined;
+    }
     delete data.newSeriesTitle;
     return data as Omit<NewPostFormData, 'newSeriesTitle'>;
   }
 
-  async function saveDraft(values: NewPostFormData) {
+  async function onSaveDraft(values: NewPostFormData) {
     setIsSubmittingDraft(true);
-    await new Promise(r => setTimeout(r, 1000));
+    const payload = processFormValues(values);
+    console.log('Saving Draft:', payload);
+    await new Promise((r) => setTimeout(r, 1000));
     setLastUpdated(new Date());
-    toast({ title: 'Draft Saved' });
+    toast({ title: 'Draft Saved', description: 'Your draft has been saved.' });
     setIsSubmittingDraft(false);
   }
 
-  async function publish(values: NewPostFormData) {
+  async function onPublish(values: NewPostFormData) {
     setIsSubmittingPublish(true);
-    await new Promise(r => setTimeout(r, 1000));
+    const payload = processFormValues(values);
+    console.log('Publishing Post:', payload);
+    await new Promise((r) => setTimeout(r, 1000));
     setLastUpdated(new Date());
-    toast({ title: 'Published' });
+    toast({ title: 'Post Published', description: 'Your post is live!' });
     setIsSubmittingPublish(false);
   }
 
+  const handleCancel = () => router.push('/admin/posts');
+
   return (
     <div className="space-y-8 p-4 md:p-8">
-      <header className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Create New Post</h1>
-        <Button variant="outline" onClick={() => router.push('/admin/posts')}>Cancel</Button>
-      </header>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl md:text-4xl font-bold">Create New Post</h1>
+        <Button variant="outline" onClick={handleCancel}>Cancel</Button>
+      </div>
 
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(publish)} className="grid lg:grid-cols-3 gap-8">
-          <section className="lg:col-span-2 space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onPublish)}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+        >
+          {/* Content Column */}
+          <div className="lg:col-span-2 space-y-6">
             <Card>
-              <CardHeader><CardTitle>Content</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle>Post Content</CardTitle>
+              </CardHeader>
               <CardContent className="space-y-4">
-                <FormField control={form.control} name="title" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-                {/* body, excerpt, image fields... same pattern */}
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter post title" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="body"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Body</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          className="min-h-[300px] resize-y"
+                          placeholder="Write your post content here..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="excerpt"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Excerpt</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={3}
+                          className="resize-y"
+                          placeholder="Optional summary..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        A brief summary shown in listings.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="featuredImage"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Featured Image</FormLabel>
+                      <div className="border border-dashed border-input rounded-md p-6 text-center">
+                        <Upload className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
+                        <p className="text-sm text-muted-foreground">
+                          Image upload coming soon.
+                        </p>
+                        <Button variant="outline" size="sm" disabled>
+                          Upload Image
+                        </Button>
+                      </div>
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
-          </section>
+          </div>
 
-          <aside className="space-y-6">
+          {/* Sidebar Column */}
+          <div className="lg:col-span-1 space-y-6">
             <Card>
-              <CardHeader><CardTitle>Publish</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle>Publish</CardTitle>
+              </CardHeader>
               <CardContent className="space-y-4">
-                {lastUpdated && <p>Last updated: {format(lastUpdated, 'PPP p')}</p>}
-                <div className="flex space-x-2">
-                  <Button type="button" onClick={form.handleSubmit(saveDraft)} disabled={isSubmittingDraft}> 
+                {lastUpdated && (
+                  <p className="text-sm text-muted-foreground">
+                    Last Updated: {format(lastUpdated, 'PPP p')}
+                  </p>
+                )}
+                <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={form.handleSubmit(onSaveDraft)}
+                    disabled={isSubmittingDraft || isSubmittingPublish}
+                    className="flex-1"
+                  >
                     {isSubmittingDraft ? 'Saving...' : 'Save Draft'}
                   </Button>
-                  <Button type="submit" disabled={isSubmittingPublish}>
+                  <Button
+                    type="submit"
+                    disabled={isSubmittingDraft || isSubmittingPublish}
+                    className="flex-1"
+                  >
                     {isSubmittingPublish ? 'Publishing...' : 'Publish'}
                   </Button>
                 </div>
@@ -152,12 +258,181 @@ export default function NewPostPage() {
             </Card>
 
             <Card>
-              <CardHeader><CardTitle>Details</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle>Details</CardTitle>
+              </CardHeader>
               <CardContent className="space-y-4">
-                {/* slug, author, date, time, series, switches... same pattern */}
+                <FormField
+                  control={form.control}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Slug</FormLabel>
+                      <FormControl>
+                        <Input placeholder="post-title-slug" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="authorId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Author</FormLabel>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select an author" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {authors.map((a) => (
+                              <SelectItem key={a.id} value={a.id}>
+                                {a.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="publishDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Publish Date</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              'w-full text-left font-normal',
+                              !field.value && 'text-muted-foreground'
+                            )}
+                          >
+                            {field.value ? format(field.value, 'PPP') : 'Pick a date'}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="publishTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Publish Time (Optional)</FormLabel>
+                      <FormControl>
+                        <Input type="time" placeholder="HH:MM" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <Separator />
+                <FormField
+                  control={form.control}
+                  name="series"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Series</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={
+                            field.value ?? NO_SERIES_VALUE
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a series" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={NO_SERIES_VALUE}>
+                              No Series
+                            </SelectItem>
+                            {existingSeries.map((name) => (
+                              <SelectItem key={name} value={name}>
+                                {name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="newSeriesTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Or Create New Series</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter series title" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Separator />
+                <FormField
+                  control={form.control}
+                  name="allowComments"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between p-3 border rounded-lg shadow-sm">
+                      <div className="flex items-center space-x-3">
+                        <MessageSquare className="h-5 w-5 text-muted-foreground" />
+                        <FormLabel className="m-0 text-sm font-normal">
+                          Allow Comments
+                        </FormLabel>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="isFeatured"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center justify-between p-3 border rounded-lg shadow-sm">
+                      <div className="flex items-center space-x-3">
+                        <Star className="h-5 w-5 text-muted-foreground" />
+                        <FormLabel className="m-0 text-sm font-normal">
+                          Featured Post
+                        </FormLabel>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
-          </aside>
+          </div>
         </form>
       </FormProvider>
     </div>
