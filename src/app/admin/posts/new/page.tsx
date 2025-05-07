@@ -381,10 +381,7 @@ export default function NewPostPage() {
                   <FormControl>
                     <Input type="time" placeholder="HH:MM" disabled />
                   </FormControl>
-                  <FormDescription>Time picker coming soon.</FormDescription>
                 </FormItem>
-
-                <Separator />
 
                 <FormField
                   control={form.control}
