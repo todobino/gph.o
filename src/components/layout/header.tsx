@@ -77,7 +77,7 @@ export function Header() {
       post.title.toLowerCase().includes(lowerCaseQuery) ||
       post.content.toLowerCase().includes(lowerCaseQuery)
     );
-    setSearchResults(results.slice(0, 10));
+    setSearchResults(results.slice(0, 10)); // Limit to 10 results for performance
   }, [searchQuery, allPosts]);
 
 
@@ -95,7 +95,7 @@ export function Header() {
     {
        label: 'Courses',
        dropdown: [
-           { href: '/courses/leading-technical-change', label: 'Leading Technical Change' }, // Placeholder URL
+           { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
        ]
     },
     { href: '/about', label: 'About' },
@@ -121,9 +121,9 @@ export function Header() {
 
    // Shared Dialog Content
    const searchDialogContent = (
-     <DialogContent className="sm:max-w-[425px] bg-background/50 backdrop-blur-sm"> {/* Updated background/blur */}
+     <DialogContent className="sm:max-w-xl bg-background/50 backdrop-blur-sm p-6 rounded-lg shadow-lg">
         <DialogHeader>
-          <DialogTitle>Search</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold">Search</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Input
@@ -131,26 +131,30 @@ export function Header() {
             placeholder="Search posts and pages..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="col-span-3"
+            className="col-span-3 text-base"
           />
-           <ScrollArea className="h-[200px] w-full">
+           <ScrollArea className="h-[200px] w-full mt-2 border rounded-md">
               {searchResults.length > 0 ? (
-                  <ul className="space-y-2">
+                  <ul className="space-y-1 p-2">
                   {searchResults.map(post => {
                       // Use the pre-generated slug from the post object
                       const slug = post.slug;
                       return (
                           <li key={post.slug}>
-                              <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm">
+                            <DialogClose asChild>
+                              <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-3 rounded-md hover:bg-accent text-sm transition-colors">
                                   {post.title}
                               </Link>
+                            </DialogClose>
                           </li>
                       )
                   })}
                   </ul>
               ) : searchQuery.trim() !== '' ? (
                   <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
-              ) : null}
+              ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">Start typing to see results.</p>
+              )}
             </ScrollArea>
         </div>
       </DialogContent>
@@ -159,7 +163,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="container flex h-14 items-center px-4">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Feather className="h-6 w-6 text-primary" />

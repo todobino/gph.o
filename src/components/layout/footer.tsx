@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { getPosts } from '@/services/posts';
@@ -12,7 +13,7 @@ export async function Footer() {
 
   return (
     <footer className="border-t pt-12 pb-6">
-      <div className="container space-y-8">
+      <div className="container px-4 space-y-8"> {/* Added px-4 for consistent padding */}
         {/* New 3-column section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Column 1: Featured Video */}
@@ -65,7 +66,7 @@ export async function Footer() {
           </div>
         </div>
 
-        <Separator />
+        <Separator /> {/* This will now span the width of the content area within the padded container */}
 
         {/* Existing Copyright/Admin Login row */}
         <div className="flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row"> {/* Adjusted height */}
@@ -80,3 +81,4 @@ export async function Footer() {
     </footer>
   );
 }
+
