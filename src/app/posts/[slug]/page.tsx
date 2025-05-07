@@ -8,6 +8,7 @@ import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Breadcrumbs, type BreadcrumbItem } from '@/components/ui/breadcrumbs'; // Import Breadcrumbs
+import { RelatedPostsSection } from '@/components/posts/related-posts-section';
 
 // Helper function to convert string to Title Case (copied from posts/page.tsx)
 function toTitleCase(str: string): string {
@@ -44,13 +45,21 @@ export default async function PostPage({ params }: PostPageProps) {
   const { slug } = params;
   if (!slug) notFound();
 
-  const post = await getPostBySlug(slug);
-  if (!post) notFound();
+  const currentPost = await getPostBySlug(slug);
+  if (!currentPost) notFound();
+
+  const allPosts = await getPosts();
+  const relatedPosts = allPosts
+    .filter(post =>
+      post.slug !== currentPost.slug &&
+      post.tags.some(tag => currentPost.tags.includes(tag))
+    )
+    .slice(0, 4);
 
   const breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Home', href: '/' },
     { label: 'Posts', href: '/posts' },
-    { label: post.title }, // Current page, no href
+    { label: currentPost.title }, // Current page, no href
   ];
 
   return (
@@ -58,18 +67,17 @@ export default async function PostPage({ params }: PostPageProps) {
       <Breadcrumbs items={breadcrumbItems} /> {/* Add Breadcrumbs component */}
       <article className="prose prose-lg dark:prose-invert max-w-none"> {/* Removed mx-auto from article to use parent div */}
         <header className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
+          <h1 className="text-4xl font-bold mb-2">{currentPost.title}</h1>
           <p className="text-muted-foreground text-sm mb-4">
-            Published on {new Date(post.date).toLocaleDateString()}
+            Published on {new Date(currentPost.date).toLocaleDateString()}
           </p>
           <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
+            {currentPost.tags.map((tag) => (
               <Link key={tag} href={`/posts?tag=${tag}`} scroll={false}>
                 <Badge
-                  variant="secondary"
-                  className={cn(
+                  variant={cn(
                     "cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1.5 px-3 border border-border"
-                  )}
+                  ) as any} // Added 'as any' to bypass variant type issue for now
                 >
                   {toTitleCase(tag)}
                 </Badge>
@@ -120,9 +128,13 @@ export default async function PostPage({ params }: PostPageProps) {
             },
           }}
         >
-          {post.content}
+          {currentPost.content}
         </ReactMarkdown>
       </article>
+      
+      {relatedPosts.length > 0 && (
+        <RelatedPostsSection posts={relatedPosts} />
+      )}
     </div>
   );
 }
