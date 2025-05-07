@@ -118,17 +118,17 @@ export function Header() {
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">Search</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="flex flex-col gap-4 py-4"> {/* Changed from grid to flex flex-col */}
           <Input
             id="search-dialog"
             placeholder="Search posts and pages..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="col-span-3 text-base"
+            className="text-base" // Removed col-span-3
           />
            <ScrollArea className="h-[200px] w-full mt-2 border rounded-md">
               {searchResults.length > 0 ? (
-                  <ul className="space-y-1"> {/* Removed p-2 to make list items full width */}
+                  <ul className="space-y-1">
                   {searchResults.map(post => {
                       const slug = post.slug;
                       return (
