@@ -429,30 +429,29 @@ export default function NewPostPage() {
                    control={form.control}
                    name="allowComments"
                    render={({ field }) => (
-                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                       <div className="flex items-center space-x-3">
-                         <MessageSquare className="h-5 w-5 text-muted-foreground" />
-                         <FormLabel className="text-sm font-normal m-0"> {/* Removed m-0 */}
-                           Allow Comments
-                         </FormLabel>
-                       </div>
-                       <FormControl className="m-0"> {/* Removed margin */}
-                         <Switch
-                           checked={field.value}
-                           onCheckedChange={field.onChange}
-                         />
-                       </FormControl>
+                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">                      
+                        <FormControl>
+                          <div className="flex items-center space-x-3">
+                            <MessageSquare className="h-5 w-5 text-muted-foreground" />
+                            <FormLabel className="text-sm font-normal">
+                              Allow Comments
+                            </FormLabel>
+                          </div>
+                        </FormControl>
+                        <FormControl>
+                          <Switch checked={field.value} onCheckedChange={field.onChange} />
+                        </FormControl>
                      </FormItem>
                    )}
                  />
                  <FormField
                    control={form.control}
                    name="isFeatured"
-                   render={({ field }) => (
+                   render={({ field }) => (                      
                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                        <div className="flex items-center space-x-3">
-                         <Star className="h-5 w-5 text-muted-foreground" />
-                         <FormLabel className="text-sm font-normal m-0"> {/* Removed m-0 */}
+                         <Star className="h-5 w-5 text-muted-foreground" />                        
+                         <FormLabel className="text-sm font-normal">
                           Featured Post
                          </FormLabel>
                        </div>
@@ -462,6 +461,7 @@ export default function NewPostPage() {
                            onCheckedChange={field.onChange}
                          />
                        </FormControl>
+                       
                      </FormItem>
                    )}
                  />
