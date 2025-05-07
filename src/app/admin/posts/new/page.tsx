@@ -175,7 +175,7 @@ export default function NewPostPage() {
 
   const handleCancelClick = () => {
     // TODO: Implement logic to potentially delete the draft if it exists
-    console.log("Deleting draft (Placeholder) and navigating back to admin.");
+    console.log("Deleting draft (Placeholder) and navigating back to admin posts.");
     router.push('/admin/posts'); // Navigate back to the posts list
   };
 
@@ -245,21 +245,23 @@ export default function NewPostPage() {
                     </FormItem>
                   )}
                 />
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Featured Image</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="border border-dashed border-muted-foreground rounded-md p-6 text-center">
-                  <Upload className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">Image upload coming soon.</p>
-                  <Button variant="outline" size="sm" className="mt-4" disabled>
-                    Upload Image
-                  </Button>
-                </div>
+                 <FormField
+                  control={form.control}
+                  name="featuredImage"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Featured Image</FormLabel>
+                       <div className="border border-dashed border-muted-foreground rounded-md p-6 text-center">
+                          <Upload className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
+                          <p className="text-sm text-muted-foreground">Image upload coming soon.</p>
+                          <Button variant="outline" size="sm" className="mt-4" disabled>
+                            Upload Image
+                          </Button>
+                        </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </CardContent>
             </Card>
           </div>
@@ -310,7 +312,7 @@ export default function NewPostPage() {
                         <Input placeholder="post-title-slug" {...field} />
                       </FormControl>
                       <FormDescription>
-                        URL-friendly version of the title. Leave blank to auto-generate.
+                        Defaults to post title.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -396,8 +398,8 @@ export default function NewPostPage() {
                       <FormLabel>Series</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value} // Use value for controlled component
-                        defaultValue={NO_SERIES_VALUE} // Set default value
+                        value={field.value === null ? NO_SERIES_VALUE : field.value}
+                        defaultValue={NO_SERIES_VALUE}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -405,7 +407,6 @@ export default function NewPostPage() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {/* Use NO_SERIES_VALUE for the "No Series" option */}
                           <SelectItem value={NO_SERIES_VALUE}>No Series</SelectItem>
                           {existingSeries.map((seriesName) => (
                             <SelectItem key={seriesName} value={seriesName}>
@@ -494,5 +495,3 @@ export default function NewPostPage() {
     </div>
   );
 }
-
-    
