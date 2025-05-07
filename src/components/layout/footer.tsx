@@ -69,9 +69,10 @@ export async function Footer() {
       </div>
 
       {/* Full-width bottom row with light gray background and top border */}
-      <div className="bg-secondary py-6 border-t"> {/* Added border-t here */}
+      <div className="bg-secondary py-4 border-t"> {/* Changed py-6 to py-4 */}
         <div className="container mx-auto px-4">
-          <div className="flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
+          {/* Removed md:h-16 to make height content-driven */}
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
               &copy; {new Date().getFullYear()} GeePawHill.Org. All rights reserved.
             </p>
