@@ -310,9 +310,6 @@ export default function NewPostPage() {
                       <FormControl>
                         <Input placeholder="post-title-slug" {...field} />
                       </FormControl>
-                      <FormDescription>
-                        Defaults to post title.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -414,9 +411,6 @@ export default function NewPostPage() {
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormDescription>
-                        Assign this post to an existing series.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -430,9 +424,6 @@ export default function NewPostPage() {
                       <FormControl>
                         <Input placeholder="Enter title for a new series" {...field} />
                       </FormControl>
-                       <FormDescription>
-                        If filled, this will create a new series and assign this post to it, overriding selection above.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -480,21 +471,10 @@ export default function NewPostPage() {
                 />
               </CardContent>
             </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Options</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Options Card is now empty, fields moved to Details. 
-                    You can remove this card or add other options here in the future.
-                    For now, it will render an empty content section.
-                */}
-              </CardContent>
-            </Card>
           </div>
         </form>
       </Form>
     </div>
   );
 }
+
