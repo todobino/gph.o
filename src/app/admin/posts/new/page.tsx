@@ -42,6 +42,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getAllSeries } from '@/services/posts'; // Import getAllSeries
 
+// Define a constant for the "No Series" value
+const NO_SERIES_VALUE = "__NO_SERIES__";
+
 // Placeholder: Define potential authors
 const authors = [
   { id: '1', name: 'GeePaw Hill' },
@@ -64,7 +67,7 @@ const formSchema = z.object({
   featuredImage: z.any().optional(), // Placeholder for file upload
   allowComments: z.boolean().default(true),
   isFeatured: z.boolean().default(false),
-  series: z.string().optional(), // Existing series selection
+  series: z.string().optional(), // Existing series selection (can be NO_SERIES_VALUE)
   newSeriesTitle: z.string().optional(), // For creating a new series
 });
 
@@ -107,24 +110,33 @@ export default function NewPostPage() {
       excerpt: '',
       allowComments: true,
       isFeatured: false,
-      series: '',
+      series: NO_SERIES_VALUE, // Default to "No Series" value
       newSeriesTitle: '',
     },
   });
 
-  function processFormValues(values: NewPostFormData) {
-    const finalValues = { ...values };
+  function processFormValues(values: NewPostFormData): Omit<NewPostFormData, 'newSeriesTitle'> {
+    const finalValues: any = { ...values }; // Use any temporarily
+
+    // If a new series title is provided, it takes precedence
     if (values.newSeriesTitle && values.newSeriesTitle.trim() !== '') {
       finalValues.series = values.newSeriesTitle.trim();
+    } else if (values.series === NO_SERIES_VALUE) {
+       // If the selected value is the placeholder for "No Series", set series to undefined
+       finalValues.series = undefined;
     }
-    // delete finalValues.newSeriesTitle; // Don't send newSeriesTitle to backend if it's just for UI control
-    return finalValues;
+
+    delete finalValues.newSeriesTitle; // Don't send newSeriesTitle to backend
+
+    // Explicitly type the return value
+    return finalValues as Omit<NewPostFormData, 'newSeriesTitle'>;
   }
 
   async function onSaveDraft(values: NewPostFormData) {
     setIsSubmittingDraft(true);
     const processedValues = processFormValues(values);
     console.log('Saving Draft (Placeholder):', processedValues);
+    // TODO: Implement actual save draft logic with Firestore using processedValues
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setLastUpdated(new Date());
     toast({
@@ -138,6 +150,7 @@ export default function NewPostPage() {
     setIsSubmittingPublish(true);
     const processedValues = processFormValues(values);
     console.log('Publishing Post (Placeholder):', processedValues);
+     // TODO: Implement actual publish logic with Firestore using processedValues
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setLastUpdated(new Date());
     toast({
@@ -148,7 +161,8 @@ export default function NewPostPage() {
   }
 
   const onSubmit = (values: NewPostFormData) => {
-    console.log('Form submitted with values:', values);
+    // This function might not be strictly needed if using separate save/publish handlers
+    console.log('Form submitted with values (should trigger save/publish):', values);
   };
 
   const handleSaveDraftClick = () => {
@@ -160,8 +174,9 @@ export default function NewPostPage() {
   };
 
   const handleCancelClick = () => {
+    // TODO: Implement logic to potentially delete the draft if it exists
     console.log("Deleting draft (Placeholder) and navigating back to admin.");
-    router.push('/admin');
+    router.push('/admin/posts'); // Navigate back to the posts list
   };
 
   return (
@@ -357,21 +372,26 @@ export default function NewPostPage() {
                 </FormItem>
 
                 <Separator />
-                
+
                 <FormField
                   control={form.control}
                   name="series"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Series</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value} // Use value for controlled component
+                        defaultValue={NO_SERIES_VALUE} // Set default value
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select an existing series" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="">No Series</SelectItem>
+                          {/* Use NO_SERIES_VALUE for the "No Series" option */}
+                          <SelectItem value={NO_SERIES_VALUE}>No Series</SelectItem>
                           {existingSeries.map((seriesName) => (
                             <SelectItem key={seriesName} value={seriesName}>
                               {seriesName}
@@ -431,9 +451,9 @@ export default function NewPostPage() {
                   name="allowComments"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel className="flex items-center gap-2 font-medium">
-                          <MessageSquare className="h-5 w-5 text-muted-foreground" />
+                      <div className="space-y-0.5 flex items-center gap-2">
+                        <MessageSquare className="h-5 w-5 text-muted-foreground" />
+                        <FormLabel className="text-sm font-medium">
                           Allow Comments
                         </FormLabel>
                       </div>
@@ -451,12 +471,12 @@ export default function NewPostPage() {
                   name="isFeatured"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="space-y-0.5">
-                        <FormLabel className="flex items-center gap-2 font-medium">
-                          <Star className="h-5 w-5 text-muted-foreground" />
+                       <div className="space-y-0.5 flex items-center gap-2">
+                         <Star className="h-5 w-5 text-muted-foreground" />
+                         <FormLabel className="text-sm font-medium">
                           Featured Post
-                        </FormLabel>
-                      </div>
+                         </FormLabel>
+                       </div>
                       <FormControl>
                         <Switch
                           checked={field.value}
@@ -474,3 +494,5 @@ export default function NewPostPage() {
     </div>
   );
 }
+
+    
