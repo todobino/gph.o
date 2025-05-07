@@ -3,17 +3,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getPosts } from '@/services/posts';
 import { EmailSignupForm } from '@/components/email-signup-form';
-import { Separator } from '@/components/ui/separator'; // Import Separator
-import { buttonVariants } from '@/components/ui/button'; // Import buttonVariants
-import { cn } from '@/lib/utils'; // Import cn
+import { Separator } from '@/components/ui/separator';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export async function Footer() {
   // Fetch the 5 most recent posts
   const recentPosts = await getPosts().then(posts => posts.slice(0, 5));
 
   return (
-    <footer className="border-t pt-12 pb-6">
-      <div className="container mx-auto px-4 space-y-8"> {/* Added mx-auto */}
+    <footer className="border-t">
+      {/* Constrained width section for 3-column grid and separator */}
+      <div className="container mx-auto px-4 pt-12 pb-8 space-y-8">
         {/* New 3-column section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Column 1: Featured Video */}
@@ -66,16 +67,20 @@ export async function Footer() {
           </div>
         </div>
 
-        <Separator /> {/* This will now span the width of the content area within the padded container */}
+        <Separator /> {/* This will span the width of the content area within the padded container */}
+      </div>
 
-        {/* Existing Copyright/Admin Login row */}
-        <div className="flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row"> {/* Adjusted height */}
-          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} GeePawHill.Org. All rights reserved.
-          </p>
-          <Link href="/login" className="text-sm text-primary hover:underline">
-            Admin Login
-          </Link>
+      {/* Full-width bottom row with light gray background */}
+      <div className="bg-secondary py-6">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
+            <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+              &copy; {new Date().getFullYear()} GeePawHill.Org. All rights reserved.
+            </p>
+            <Link href="/login" className="text-sm text-primary hover:underline">
+              Admin Login
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
