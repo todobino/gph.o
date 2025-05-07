@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Upload, MessageSquare, Star, BookOpen } from 'lucide-react';
+import { CalendarIcon, Upload, MessageSquare, Star } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -34,11 +34,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getAllSeries } from '@/services/posts'; // Import getAllSeries
 
@@ -438,23 +437,15 @@ export default function NewPostPage() {
                     </FormItem>
                   )}
                 />
-
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Options</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+                <Separator />
                 <FormField
                   control={form.control}
                   name="allowComments"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                       <div className="space-y-0.5 flex items-center gap-2">
-                        <MessageSquare className="h-5 w-5 text-muted-foreground" />
-                        <FormLabel className="text-sm font-medium">
+                        <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                        <FormLabel className="text-xs font-normal"> {/* Adjusted size */}
                           Allow Comments
                         </FormLabel>
                       </div>
@@ -473,8 +464,8 @@ export default function NewPostPage() {
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                        <div className="space-y-0.5 flex items-center gap-2">
-                         <Star className="h-5 w-5 text-muted-foreground" />
-                         <FormLabel className="text-sm font-medium">
+                         <Star className="h-4 w-4 text-muted-foreground" /> {/* Adjusted size */}
+                         <FormLabel className="text-xs font-normal"> {/* Adjusted size */}
                           Featured Post
                          </FormLabel>
                        </div>
@@ -487,6 +478,18 @@ export default function NewPostPage() {
                     </FormItem>
                   )}
                 />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Options</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Options Card is now empty, fields moved to Details. 
+                    You can remove this card or add other options here in the future.
+                    For now, it will render an empty content section.
+                */}
               </CardContent>
             </Card>
           </div>
