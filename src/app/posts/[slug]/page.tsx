@@ -7,8 +7,9 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Breadcrumbs, type BreadcrumbItem } from '@/components/ui/breadcrumbs'; // Import Breadcrumbs
+import { Breadcrumbs, type BreadcrumbItem } from '@/components/ui/breadcrumbs';
 import { RelatedPostsSection } from '@/components/posts/related-posts-section';
+import { BookOpen } from 'lucide-react'; // Import BookOpen for series icon
 
 // Helper function to convert string to Title Case (copied from posts/page.tsx)
 function toTitleCase(str: string): string {
@@ -68,16 +69,22 @@ export default async function PostPage({ params }: PostPageProps) {
       <article className="prose prose-lg dark:prose-invert max-w-none">
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-2">{currentPost.title}</h1>
-          <p className="text-muted-foreground text-sm mb-4">
+          <p className="text-muted-foreground text-sm mb-2"> {/* Reduced mb from 4 to 2 */}
             Published on {new Date(currentPost.date).toLocaleDateString()}
           </p>
+          {currentPost.series && (
+            <p className="text-muted-foreground text-sm mb-4 flex items-center">
+              <BookOpen className="h-4 w-4 mr-1.5 text-primary" />
+              Part of the series: <Link href={`/posts?series=${encodeURIComponent(currentPost.series)}`} className="ml-1 text-primary hover:underline">{currentPost.series}</Link>
+            </p>
+          )}
           <div className="flex flex-wrap gap-2">
             {currentPost.tags.map((tag) => (
               <Link key={tag} href={`/posts?tag=${tag}`} scroll={false}>
                 <Badge
                   variant={cn(
                     "cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1.5 px-3 border border-border"
-                  ) as any} // Added 'as any' to bypass variant type issue for now
+                  ) as any}
                 >
                   {toTitleCase(tag)}
                 </Badge>

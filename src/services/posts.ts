@@ -28,6 +28,10 @@ export interface Post {
    * The date the post was published. ISO 8601 format recommended (YYYY-MM-DD).
    */
   date: string;
+  /**
+   * The series the post belongs to, if any.
+   */
+  series?: string;
 }
 
 const postsDirectory = path.join(process.cwd(), 'posts');
@@ -59,6 +63,7 @@ export async function getPosts(): Promise<Post[]> {
           title: matterResult.data.title || 'Untitled Post', // Provide default title
           date: matterResult.data.date || new Date().toISOString().split('T')[0], // Provide default date
           tags: matterResult.data.tags || [], // Provide default tags
+          series: matterResult.data.series || undefined, // Add series
           content: matterResult.content,
         };
       });
@@ -83,4 +88,19 @@ export async function getPosts(): Promise<Post[]> {
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   const posts = await getPosts();
   return posts.find(post => post.slug === slug);
+}
+
+/**
+ * Asynchronously retrieves all unique series names.
+ * @returns A promise that resolves to an array of unique series names, sorted alphabetically.
+ */
+export async function getAllSeries(): Promise<string[]> {
+  const posts = await getPosts();
+  const allSeries = posts.reduce((acc, post) => {
+    if (post.series && !acc.includes(post.series)) {
+      acc.push(post.series);
+    }
+    return acc;
+  }, [] as string[]);
+  return allSeries.sort((a, b) => a.localeCompare(b));
 }

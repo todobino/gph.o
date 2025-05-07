@@ -2,6 +2,7 @@
 title: 'Deep Dive into TDD'
 date: '2024-04-22'
 tags: ['tdd', 'testing', 'software development']
+series: 'Testing Techniques'
 ---
 
 # Test-Driven Development
