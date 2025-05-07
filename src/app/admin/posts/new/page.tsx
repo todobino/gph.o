@@ -250,7 +250,7 @@ export default function NewPostPage() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Featured Image</FormLabel>
-                       <div className="border border-dashed border-border rounded-md p-6 text-center"> {/* Changed border-muted-foreground to border-border */}
+                       <div className="border border-dashed border-input rounded-md p-6 text-center"> {/* Changed border-border to border-input */}
                           <Upload className="mx-auto h-10 w-10 text-muted-foreground mb-2" />
                           <p className="text-sm text-muted-foreground">Image upload coming soon.</p>
                           <Button variant="outline" size="sm" className="mt-4" disabled>
@@ -425,46 +425,46 @@ export default function NewPostPage() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="allowComments"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                      <div className="flex items-center gap-2">
-                        <MessageSquare className="h-5 w-5 text-muted-foreground" />
-                        <FormLabel className="text-sm font-normal">
-                          Allow Comments
-                        </FormLabel>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="isFeatured"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                       <div className="flex items-center gap-2">
+                 <FormField
+                   control={form.control}
+                   name="allowComments"
+                   render={({ field }) => (
+                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                       <div className="flex items-center space-x-3">
+                         <MessageSquare className="h-5 w-5 text-muted-foreground" />
+                         <FormLabel className="text-sm font-normal m-0"> {/* Removed m-0 */}
+                           Allow Comments
+                         </FormLabel>
+                       </div>
+                       <FormControl className="m-0"> {/* Removed margin */}
+                         <Switch
+                           checked={field.value}
+                           onCheckedChange={field.onChange}
+                         />
+                       </FormControl>
+                     </FormItem>
+                   )}
+                 />
+                 <FormField
+                   control={form.control}
+                   name="isFeatured"
+                   render={({ field }) => (
+                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                       <div className="flex items-center space-x-3">
                          <Star className="h-5 w-5 text-muted-foreground" />
-                         <FormLabel className="text-sm font-normal">
+                         <FormLabel className="text-sm font-normal m-0"> {/* Removed m-0 */}
                           Featured Post
                          </FormLabel>
                        </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
+                       <FormControl className="m-0"> {/* Removed margin */}
+                         <Switch
+                           checked={field.value}
+                           onCheckedChange={field.onChange}
+                         />
+                       </FormControl>
+                     </FormItem>
+                   )}
+                 />
               </CardContent>
             </Card>
           </div>
@@ -473,4 +473,5 @@ export default function NewPostPage() {
     </div>
   );
 }
+
 
