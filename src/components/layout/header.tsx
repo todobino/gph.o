@@ -9,9 +9,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator, // Keep for potential use if needed elsewhere
 } from "../ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog"; // Renamed DialogClose
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
 import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react';
@@ -25,32 +24,11 @@ import type { User } from 'firebase/auth';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 
-// Define a more flexible nav item structure
-interface NavItemLink {
-  href: string;
+interface NavItem {
+  href?: string;
   label: string;
-  isSubMenu?: false; // Explicitly not a submenu
+  dropdown?: NavItem[];
 }
-
-interface NavSubMenuItem {
-  href: string;
-  label: string;
-}
-
-interface NavItemSubMenu {
-  label: string; // Label for the SubMenuTrigger, e.g., "All Courses Catalog"
-  href: string;  // HREF for the main link represented by this sub-menu (e.g., /courses)
-  isSubMenu: true;
-  subItems: NavSubMenuItem[];
-}
-
-interface NavItemGroup {
-  label: string; // Label for the main DropdownMenuTrigger, e.g., "Courses"
-  items?: (NavItemLink | NavItemSubMenu)[]; // For complex dropdowns with potential submenus
-  dropdown?: NavItemLink[]; // For simple dropdowns
-  href?: string; // For top-level links
-}
-
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -65,11 +43,6 @@ export function Header() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const isMobile = useIsMobile();
-
-  const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
 
   useEffect(() => {
@@ -105,9 +78,10 @@ export function Header() {
    useEffect(() => {
     if (searchQuery.trim() === '') {
       setSearchResults([]);
-       if (isDesktopSearchPopoverOpen && (!desktopSearchInputRef.current || document.activeElement !== desktopSearchInputRef.current)) {
-         // Popover will close itself if not focused based on onOpenChange
-       }
+      // Only close popover if it's already open and input loses focus or query is cleared
+      if (isDesktopSearchPopoverOpen && searchQuery.trim() === '') {
+        setIsDesktopSearchPopoverOpen(false);
+      }
       return;
     }
 
@@ -120,14 +94,14 @@ export function Header() {
     if (results.length > 0 && searchQuery.trim() !== '') {
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
     } else {
-        // No results, or query cleared, ensure popover state is managed
-        if (isDesktopSearchPopoverOpen && searchQuery.trim() === '') setIsDesktopSearchPopoverOpen(false);
+        // No results, ensure popover is closed
+        if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
     }
 
-  }, [searchQuery, allPosts, isDesktopSearchPopoverOpen]);
+  }, [searchQuery, allPosts, isDesktopSearchPopoverOpen ]);
 
 
-  const navItems: NavItemGroup[] = [
+  const navItems: NavItem[] = [
     {
       label: 'Posts',
       dropdown: [
@@ -139,7 +113,7 @@ export function Header() {
     },
     {
       label: 'Courses',
-      dropdown: [ // Changed from 'items' to 'dropdown' for a flat list
+      dropdown: [
         { href: '/courses', label: 'All Courses Catalog' },
         { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
         { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns' },
@@ -164,6 +138,31 @@ export function Header() {
      setIsMobileSearchDialogOpen(false);
      setIsDesktopSearchPopoverOpen(false);
    };
+
+   const handleSearchDialogChange = (openState: boolean) => {
+    setIsMobileSearchDialogOpen(openState);
+    if (!openState) {
+        setSearchQuery('');
+        setSearchResults([]);
+    }
+   };
+
+   const handleDesktopSearchPopoverChange = (openState: boolean) => {
+    setIsDesktopSearchPopoverOpen(openState);
+    if (!openState) {
+        // If closing due to interaction outside, clear query.
+        // Check if the input is focused to prevent clearing if popover closes due to no results.
+        if(document.activeElement !== desktopSearchInputRef.current){
+            setSearchQuery('');
+            setSearchResults([]);
+        } else if (searchQuery.trim() !== '' && searchResults.length === 0) {
+            // If input still has text but no results, popover might be managed by searchResults.length
+        } else if (searchQuery.trim() === '') {
+            setSearchResults([]); // Ensure results are cleared if query is empty
+        }
+    }
+   }
+
 
    const searchResultsContent = (
     <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", searchResults.length > 0 ? "border-0" : "")}>
@@ -191,7 +190,7 @@ export function Header() {
         ) : searchQuery.trim() !== '' ? (
              <p className="text-sm text-muted-foreground text-center py-4 px-2">No results found.</p>
         ) : (
-           null
+           <p className="text-sm text-muted-foreground text-center py-4 px-2">Start typing to see results.</p>
         )}
       </ScrollArea>
    );
@@ -200,14 +199,10 @@ export function Header() {
      <DialogContent
         className="bg-background/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg border border-border sm:max-w-md"
         onPointerDownOutside={() => {
-            if (isMobileSearchDialogOpen) {
-                setSearchQuery('');
-            }
+            // Already handled by onOpenChange for Dialog
         }}
         onEscapeKeyDown={() => {
-             if (isMobileSearchDialogOpen) {
-                setSearchQuery('');
-            }
+            // Already handled by onOpenChange for Dialog
         }}
     >
         <DialogHeader>
@@ -222,36 +217,15 @@ export function Header() {
             className="text-base w-full"
             autoFocus
           />
-          {(searchQuery.trim() !== '' || searchResults.length > 0) && searchResultsContent}
+          {searchResultsContent}
         </div>
       </DialogContent>
    );
 
-  if (!hasMounted) {
-    return (
-        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container mx-auto flex h-14 items-center px-4">
-                <Link href="/" className="mr-6 flex items-center space-x-2">
-                    <Cpu className="h-6 w-6 text-primary" />
-                    <span className="hidden font-bold sm:inline-block text-foreground">
-                    GeePawHill.Org
-                    </span>
-                </Link>
-                 <div className="flex-1"></div>
-                 <div className="hidden md:flex items-center space-x-2">
-                 </div>
-                 <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
-                    <span className="font-bold text-foreground">GeePawHill.Org</span>
-                 </div>
-            </div>
-        </header>
-    );
-  }
-
-
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-14 items-center px-4">
+        {/* Desktop View (md and up) */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Cpu className="h-6 w-6 text-primary" />
@@ -271,26 +245,9 @@ export function Header() {
                     <DropdownMenuContent align="start">
                       {navItem.dropdown.map((item) => (
                         <DropdownMenuItem key={item.href} asChild>
-                           <Link href={item.href}>{item.label}</Link>
+                           <Link href={item.href!}>{item.label}</Link>
                         </DropdownMenuItem>
                       ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : navItem.items ? ( // Handles complex dropdowns (though Courses no longer uses this)
-                  <DropdownMenu key={navItem.label}>
-                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="text-foreground hover:text-foreground/80 px-3 py-2">
-                        {navItem.label} <ChevronDown className="ml-1 h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                      {/* This part would need adjustment if submenus were still in use */}
-                      {navItem.items.map((item) => (
-                          <DropdownMenuItem key={item.href} asChild>
-                            <Link href={item.href!}>{item.label}</Link>
-                          </DropdownMenuItem>
-                        )
-                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
@@ -309,13 +266,8 @@ export function Header() {
         <div className="hidden md:flex flex-1 items-center justify-center px-4">
             <div className="relative w-full">
                 <Popover
-                    open={isDesktopSearchPopoverOpen && searchQuery.trim() !== ''}
-                    onOpenChange={(openState) => {
-                        setIsDesktopSearchPopoverOpen(openState);
-                        if (!openState) {
-                           setSearchQuery('');
-                        }
-                    }}
+                    open={isDesktopSearchPopoverOpen}
+                    onOpenChange={handleDesktopSearchPopoverChange}
                 >
                     <PopoverTrigger asChild>
                         <div className="relative w-full">
@@ -333,14 +285,13 @@ export function Header() {
                             />
                         </div>
                     </PopoverTrigger>
-                    {searchQuery.trim() !== '' && (
+                    {isDesktopSearchPopoverOpen && ( // Only render content if popover is meant to be open
                         <PopoverContent
                             sideOffset={5}
                             className="w-[var(--radix-popover-trigger-width)] shadow-md border-0 p-0"
-                            onOpenAutoFocus={(e) => e.preventDefault()}
+                            onOpenAutoFocus={(e) => e.preventDefault()} // Prevent auto-focus stealing from input
                             onInteractOutside={() => {
-                                setSearchQuery('');
-                                setIsDesktopSearchPopoverOpen(false);
+                                // Already handled by onOpenChange for Popover
                             }}
                         >
                             {searchResultsContent}
@@ -361,7 +312,7 @@ export function Header() {
                     <CalendarCheck2 className="mr-2 h-4 w-4" /> Book Now
                 </Link>
             </Button>
-            {!isLoadingAuth && isAdmin && (
+            {isLoadingAuth ? null : isAdmin ? (
               <Link
                 href="/admin"
                 className={cn(buttonVariants({ variant: "ghost", size: "default" }), "font-bold text-primary hover:text-primary/80 px-3 py-2")}
@@ -369,9 +320,10 @@ export function Header() {
                  <UserCircle className="mr-1 h-4 w-4" />
                 Admin
               </Link>
-            )}
+            ) : null}
         </div>
 
+        {/* Mobile View (up to md) */}
         <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -400,14 +352,14 @@ export function Header() {
               <nav className="flex flex-col space-y-1">
                 {navItems.map((navItem) => (
                     <React.Fragment key={navItem.label || navItem.href}>
-                        {navItem.dropdown ? ( // Simple dropdowns
+                        {navItem.dropdown ? (
                             <>
                                 <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div>
                                 <div className="flex flex-col space-y-0 pl-4">
                                     {navItem.dropdown.map((item) => (
                                         <SheetClose key={item.href} asChild>
                                            <Link
-                                             href={item.href}
+                                             href={item.href!}
                                              className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
                                              onClick={handleMobileSheetLinkClick}
                                            >
@@ -417,7 +369,7 @@ export function Header() {
                                     ))}
                                 </div>
                             </>
-                        ) : ( // Top-level link
+                        ) : (
                              <SheetClose asChild>
                                 <Link
                                 href={navItem.href!}
@@ -440,7 +392,7 @@ export function Header() {
                       Course Login
                     </Link>
                   </SheetClose>
-                {!isLoadingAuth && isAdmin && (
+                  {isLoadingAuth ? null : isAdmin ? (
                   <SheetClose asChild>
                     <Link
                       href="/admin"
@@ -451,7 +403,7 @@ export function Header() {
                       Admin
                     </Link>
                   </SheetClose>
-                )}
+                ) : null }
               </nav>
             </SheetContent>
           </Sheet>
@@ -460,7 +412,7 @@ export function Header() {
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
             <div className="flex items-center gap-1">
-                 <Dialog open={isMobileSearchDialogOpen} onOpenChange={(openState) => { setIsMobileSearchDialogOpen(openState); if(!openState) { setSearchQuery(''); setSearchResults([]);} }}>
+                 <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                     <DialogTrigger asChild>
                        <span
                         role="button"
@@ -492,4 +444,3 @@ export function Header() {
     </header>
   );
 }
-
