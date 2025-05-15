@@ -2,25 +2,27 @@
 'use client';
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '../../components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../../components/ui/sheet';
+import { Button, buttonVariants } from '../ui/button';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "../../components/ui/dialog";
+} from "../ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Input } from "../../components/ui/input";
+import { Input } from "../ui/input";
 import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
-import { ScrollArea } from '../../components/ui/scroll-area';
+import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
 import type { User } from 'firebase/auth';
+import { useIsMobile } from '@/hooks/use-mobile';
+
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -34,6 +36,13 @@ export function Header() {
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
+  const isMobile = useIsMobile(); // For responsive logic not handled by Tailwind
+
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
 
   useEffect(() => {
     async function fetchPosts() {
@@ -68,9 +77,10 @@ export function Header() {
    useEffect(() => {
     if (searchQuery.trim() === '') {
       setSearchResults([]);
-      // Keep popover open if input is focused and empty, to show "Start typing..."
-      // but close it if query is empty and input is not focused (handled by onOpenChange)
-      // setIsDesktopSearchPopoverOpen(document.activeElement === desktopSearchInputRef.current);
+      // Only close popover if it's currently open and not triggered by input focus
+       if (isDesktopSearchPopoverOpen && (!desktopSearchInputRef.current || document.activeElement !== desktopSearchInputRef.current)) {
+         setIsDesktopSearchPopoverOpen(false);
+       }
       return;
     }
 
@@ -80,7 +90,12 @@ export function Header() {
       (post.content && post.content.toLowerCase().includes(lowerCaseQuery))
     );
     setSearchResults(results.slice(0, 10));
-  }, [searchQuery, allPosts]);
+    if (results.length > 0 && searchQuery.trim() !== '') {
+        setIsDesktopSearchPopoverOpen(true);
+    }
+
+  }, [searchQuery, allPosts, isDesktopSearchPopoverOpen]);
+
 
   const navItems = [
     {
@@ -115,19 +130,19 @@ export function Header() {
    };
 
    const searchResultsContent = (
-      <ScrollArea className="h-fit max-h-[200px] sm:max-h-[300px] w-full mt-2 border rounded-md">
+      <ScrollArea className="h-fit max-h-[200px] sm:max-h-[300px] w-full">
         {searchResults.length > 0 ? (
-            <ul className="space-y-1 p-2">
+            <ul className="space-y-1">
             {searchResults.map(post => {
                 const slug = post.slug;
                 return (
                     <li key={post.slug}>
                       {isMobileSearchDialogOpen ? (
-                        <DialogClose asChild>
+                        <DialogCloseComponent asChild>
                           <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-3 rounded-md hover:bg-accent text-sm transition-colors">
                               {post.title}
                           </Link>
-                        </DialogClose>
+                        </DialogCloseComponent>
                       ) : (
                         <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm transition-colors">
                             {post.title}
@@ -138,15 +153,29 @@ export function Header() {
             })}
             </ul>
         ) : searchQuery.trim() !== '' ? (
-            <p className="text-sm text-muted-foreground text-center py-4">No results found.</p>
+            <p className="text-sm text-muted-foreground text-center py-4 px-2">No results found.</p>
         ) : (
-          <p className="text-sm text-muted-foreground text-center py-4">Start typing to see results.</p>
+           null
         )}
       </ScrollArea>
    );
 
    const mobileSearchDialogContent = (
-     <DialogContent className="sm:max-w-md bg-background/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg border border-border">
+     <DialogContent
+        className="sm:max-w-md bg-background/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg border border-border"
+        onPointerDownOutside={() => {
+            if (isMobileSearchDialogOpen) {
+                setSearchQuery('');
+                setSearchResults([]);
+            }
+        }}
+        onEscapeKeyDown={() => {
+             if (isMobileSearchDialogOpen) {
+                setSearchQuery('');
+                setSearchResults([]);
+            }
+        }}
+    >
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-semibold">Search</DialogTitle>
         </DialogHeader>
@@ -159,15 +188,42 @@ export function Header() {
             className="text-base w-full"
             autoFocus
           />
-          {searchQuery.trim() !== '' && searchResultsContent}
+          {(searchQuery.trim() !== '' || searchResults.length > 0) && searchResultsContent}
         </div>
       </DialogContent>
    );
 
+  if (!hasMounted) {
+    // Render a minimal header or null during SSR and initial client render to avoid hydration mismatch
+    // For example, just the logo or a very basic structure.
+    // Or, if the desktop version is the default for SSR, ensure it's rendered without client-only logic.
+    return (
+        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="container mx-auto flex h-14 items-center px-4">
+                <Link href="/" className="mr-6 flex items-center space-x-2">
+                    <Cpu className="h-6 w-6 text-primary" />
+                    <span className="hidden font-bold sm:inline-block text-foreground">
+                    GeePawHill.Org
+                    </span>
+                </Link>
+                {/* Placeholder for nav items or leave empty */}
+                 <div className="flex-1"></div> {/* Occupy space */}
+                 <div className="hidden md:flex items-center space-x-2">
+                     {/* Render simplified buttons or placeholders */}
+                 </div>
+                 <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
+                    <span className="font-bold text-foreground">GeePawHill.Org</span> {/* Mobile logo placeholder */}
+                     {/* Mobile buttons placeholder */}
+                 </div>
+            </div>
+        </header>
+    );
+  }
+
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-14 items-center px-4">
-        {/* Desktop Left: Logo + Nav */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Cpu className="h-6 w-6 text-primary" />
@@ -205,15 +261,15 @@ export function Header() {
           </nav>
         </div>
 
-        {/* Desktop Search - Occupies flexible space */}
         <div className="hidden md:flex flex-1 items-center justify-center px-4">
             <div className="relative w-full">
                 <Popover
-                    open={isDesktopSearchPopoverOpen}
+                    open={isDesktopSearchPopoverOpen && searchQuery.trim() !== ''}
                     onOpenChange={(openState) => {
                         setIsDesktopSearchPopoverOpen(openState);
-                        if (!openState) { // If the popover is closing (e.g. by clicking outside)
-                            setSearchQuery(''); // Clear the search query
+                        if (!openState) {
+                           setSearchQuery('');
+                           setSearchResults([]);
                         }
                     }}
                 >
@@ -226,21 +282,20 @@ export function Header() {
                                 placeholder="Search posts and pages..."
                                 className="h-9 w-full pl-10 pr-3 focus-visible:ring-primary"
                                 value={searchQuery}
-                                onChange={(e) => {
-                                    const newQuery = e.target.value;
-                                    setSearchQuery(newQuery);
-                                    setIsDesktopSearchPopoverOpen(newQuery.trim() !== ''); // Open if query is not empty, close if empty
-                                }}
-                                // onFocus removed to prevent opening popover without text
-                                // onBlur removed, Radix onOpenChange handles outside clicks
+                                onChange={(e) => setSearchQuery(e.target.value)}
                             />
                         </div>
                     </PopoverTrigger>
-                    {isDesktopSearchPopoverOpen && ( // Only render content if popover is meant to be open
+                    {searchQuery.trim() !== '' && (
                         <PopoverContent
                             sideOffset={5}
-                            className="w-[var(--radix-popover-trigger-width)] p-0"
-                            onOpenAutoFocus={(e) => e.preventDefault()} // Prevent focus shift to popover content
+                            className="w-[var(--radix-popover-trigger-width)] p-0 shadow-md border-0"
+                            onOpenAutoFocus={(e) => e.preventDefault()}
+                            onInteractOutside={() => {
+                                setSearchQuery('');
+                                setSearchResults([]);
+                                setIsDesktopSearchPopoverOpen(false);
+                            }}
                         >
                             {searchResultsContent}
                         </PopoverContent>
@@ -249,7 +304,6 @@ export function Header() {
             </div>
         </div>
 
-        {/* Desktop Right Buttons */}
         <div className="hidden md:flex items-center space-x-2">
             <Button className="bg-accent text-accent-foreground hover:bg-accent/80" asChild>
                 <Link href="/course-login">
@@ -272,7 +326,6 @@ export function Header() {
             )}
         </div>
 
-        {/* Mobile Header */}
         <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -355,13 +408,21 @@ export function Header() {
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
             <div className="flex items-center gap-1">
-                <Dialog open={isMobileSearchDialogOpen} onOpenChange={(openState) => { setIsMobileSearchDialogOpen(openState); if(!openState) setSearchQuery(''); }}>
+                <Dialog open={isMobileSearchDialogOpen} onOpenChange={(openState) => { setIsMobileSearchDialogOpen(openState); if(!openState) { setSearchQuery(''); setSearchResults([]);} }}>
                     <DialogTrigger asChild>
-                        <Button variant="ghost" size="icon" aria-label="Open search dialog">
-                            <Search className="h-5 w-5" />
-                        </Button>
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        className={cn(
+                          buttonVariants({ variant: 'ghost', size: 'icon' }),
+                          'cursor-pointer'
+                        )}
+                        aria-label="Open search dialog"
+                      >
+                        <Search className="h-5 w-5" />
+                      </span>
                     </DialogTrigger>
-                    {mobileSearchDialogContent}
+                    {isMobileSearchDialogOpen && mobileSearchDialogContent}
                 </Dialog>
                 <Button className="bg-accent text-accent-foreground hover:bg-accent/80" size="sm" asChild>
                   <Link href="/course-login">
