@@ -68,6 +68,9 @@ export function Header() {
    useEffect(() => {
     if (searchQuery.trim() === '') {
       setSearchResults([]);
+      // Keep popover open if input is focused and empty, to show "Start typing..."
+      // but close it if query is empty and input is not focused (handled by onOpenChange)
+      // setIsDesktopSearchPopoverOpen(document.activeElement === desktopSearchInputRef.current);
       return;
     }
 
@@ -205,12 +208,12 @@ export function Header() {
         {/* Desktop Search - Occupies flexible space */}
         <div className="hidden md:flex flex-1 items-center justify-center px-4">
             <div className="relative w-full">
-                <Popover 
+                <Popover
                     open={isDesktopSearchPopoverOpen}
-                    onOpenChange={(open) => {
-                        setIsDesktopSearchPopoverOpen(open);
-                        if (!open && document.activeElement !== desktopSearchInputRef.current) {
-                            // setSearchQuery(''); // Optionally clear query on click outside if input is not focused
+                    onOpenChange={(openState) => {
+                        setIsDesktopSearchPopoverOpen(openState);
+                        if (!openState) { // If the popover is closing (e.g. by clicking outside)
+                            setSearchQuery(''); // Clear the search query
                         }
                     }}
                 >
@@ -224,25 +227,20 @@ export function Header() {
                                 className="h-9 w-full pl-10 pr-3 focus-visible:ring-primary"
                                 value={searchQuery}
                                 onChange={(e) => {
-                                    setSearchQuery(e.target.value);
-                                    setIsDesktopSearchPopoverOpen(e.target.value.trim() !== '' || document.activeElement === desktopSearchInputRef.current);
+                                    const newQuery = e.target.value;
+                                    setSearchQuery(newQuery);
+                                    setIsDesktopSearchPopoverOpen(newQuery.trim() !== ''); // Open if query is not empty, close if empty
                                 }}
-                                onFocus={() => setIsDesktopSearchPopoverOpen(true)}
-                                onBlur={() => {
-                                    setTimeout(() => {
-                                      if (!isDesktopSearchPopoverOpen) { // Check if popover is not kept open by a click inside it
-                                        // setIsDesktopSearchPopoverOpen(false); // Already handled by onOpenChange if click is outside
-                                      }
-                                    }, 150);
-                                }}
+                                // onFocus removed to prevent opening popover without text
+                                // onBlur removed, Radix onOpenChange handles outside clicks
                             />
                         </div>
                     </PopoverTrigger>
-                    {isDesktopSearchPopoverOpen && (
-                        <PopoverContent 
-                            sideOffset={5} 
-                            className="w-[var(--radix-popover-trigger-width)] p-0" 
-                            onOpenAutoFocus={(e) => e.preventDefault()}
+                    {isDesktopSearchPopoverOpen && ( // Only render content if popover is meant to be open
+                        <PopoverContent
+                            sideOffset={5}
+                            className="w-[var(--radix-popover-trigger-width)] p-0"
+                            onOpenAutoFocus={(e) => e.preventDefault()} // Prevent focus shift to popover content
                         >
                             {searchResultsContent}
                         </PopoverContent>
@@ -357,7 +355,7 @@ export function Header() {
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
             <div className="flex items-center gap-1">
-                <Dialog open={isMobileSearchDialogOpen} onOpenChange={(open) => { setIsMobileSearchDialogOpen(open); if(!open) setSearchQuery(''); }}>
+                <Dialog open={isMobileSearchDialogOpen} onOpenChange={(openState) => { setIsMobileSearchDialogOpen(openState); if(!openState) setSearchQuery(''); }}>
                     <DialogTrigger asChild>
                         <Button variant="ghost" size="icon" aria-label="Open search dialog">
                             <Search className="h-5 w-5" />
@@ -381,3 +379,4 @@ export function Header() {
     </header>
   );
 }
+
