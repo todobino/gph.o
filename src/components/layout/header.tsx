@@ -12,7 +12,7 @@ import {
 } from "../../components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "../../components/ui/dialog";
 import { Input } from "../../components/ui/input";
-import { Menu, Cpu, ChevronDown, Search, UserCircle } from 'lucide-react';
+import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap } from 'lucide-react'; // Added GraduationCap
 import React, { useEffect, useState } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -76,22 +76,22 @@ export function Header() {
     setSearchResults(results.slice(0, 10));
   }, [searchQuery, allPosts]);
 
-   const navItems = [
+  const navItems = [
     {
-        label: 'Posts',
-        dropdown: [
-            { href: '/posts', label: 'All Posts' },
-            { href: '/posts?tag=video', label: 'Videos' },
-            { href: '/posts?tag=podcast', label: 'Podcasts' },
-            { href: '/subscribe', label: 'Subscribe!' },
-        ]
+      label: 'Posts',
+      dropdown: [
+        { href: '/posts', label: 'All Posts' },
+        { href: '/posts?tag=video', label: 'Videos' },
+        { href: '/posts?tag=podcast', label: 'Podcasts' },
+        { href: '/subscribe', label: 'Subscribe!' },
+      ],
     },
     {
-       label: 'Courses',
-       dropdown: [
-           { href: '/courses', label: 'All Courses' },
-           { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
-       ]
+      label: 'Courses',
+      dropdown: [
+        { href: '/courses', label: 'All Courses' },
+        { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
+      ],
     },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
@@ -255,6 +255,16 @@ export function Header() {
                         )}
                     </React.Fragment>
                 ))}
+                 <SheetClose asChild>
+                    <Link
+                      href="/course-login"
+                      className="block w-full text-left text-lg font-medium text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-2"
+                      onClick={handleLinkClick}
+                    >
+                      <GraduationCap className="mr-2 h-5 w-5 inline-block align-text-bottom" />
+                      Course Login
+                    </Link>
+                  </SheetClose>
                 {!isLoadingAuth && isAdmin && (
                   <SheetClose asChild>
                     <Link
@@ -283,6 +293,11 @@ export function Header() {
                     </DialogTrigger>
                     {searchDialogContent}
                 </Dialog>
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/80" size="sm" asChild>
+                  <Link href="/course-login">
+                      <GraduationCap className="mr-1 h-4 w-4" /> Course Login
+                  </Link>
+                </Button>
                 <Button asChild size="sm">
                    <Link href="/booking">Book Now</Link>
                 </Button>
@@ -298,6 +313,11 @@ export function Header() {
                 </DialogTrigger>
                  {searchDialogContent}
             </Dialog>
+            <Button className="bg-accent text-accent-foreground hover:bg-accent/80" asChild>
+                <Link href="/course-login">
+                    <GraduationCap className="mr-2 h-4 w-4" /> Course Login
+                </Link>
+            </Button>
             <Button asChild>
                 <Link href="/booking">Book Now</Link>
             </Button>
@@ -306,3 +326,4 @@ export function Header() {
     </header>
   );
 }
+
