@@ -2,21 +2,21 @@
 'use client'; // Add 'use client' directive
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '../ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
+import { Button, buttonVariants } from '../../components/ui/button';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../../components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Menu, Cpu, ChevronDown, Search, UserCircle } from 'lucide-react'; // Changed Feather to Cpu
+} from "../../components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "../../components/ui/dialog";
+import { Input } from "../../components/ui/input";
+import { Menu, Cpu, ChevronDown, Search, UserCircle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
-import { ScrollArea } from '../ui/scroll-area';
+import { ScrollArea } from '../../components/ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
 import type { User } from 'firebase/auth';
@@ -89,6 +89,7 @@ export function Header() {
     {
        label: 'Courses',
        dropdown: [
+           { href: '/courses', label: 'All Courses' },
            { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
        ]
     },
@@ -114,7 +115,7 @@ export function Header() {
    }
 
    const searchDialogContent = (
-     <DialogContent className="sm:max-w-xl bg-background/80 backdrop-blur-sm p-6 rounded-lg shadow-lg">
+     <DialogContent className="sm:max-w-xl bg-background/80 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-border">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">Search</DialogTitle>
         </DialogHeader>
@@ -158,8 +159,8 @@ export function Header() {
       <div className="container mx-auto flex h-14 items-center px-4">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Cpu className="h-6 w-6 text-primary" /> {/* Changed Feather to Cpu */}
-            <span className="hidden font-bold sm:inline-block text-foreground"> {/* Added text-foreground */}
+            <Cpu className="h-6 w-6 text-primary" />
+            <span className="hidden font-bold sm:inline-block text-foreground">
               GeePawHill.Org
             </span>
           </Link>
@@ -217,8 +218,8 @@ export function Header() {
                   className="flex items-center space-x-2 mb-6"
                   onClick={handleLinkClick}
                 >
-                  <Cpu className="h-6 w-6 text-primary" /> {/* Changed Feather to Cpu */}
-                  <span className="font-bold text-foreground">GeePawHill.Org</span> {/* Added text-foreground */}
+                  <Cpu className="h-6 w-6 text-primary" />
+                  <span className="font-bold text-foreground">GeePawHill.Org</span>
                 </Link>
               </SheetClose>
               <nav className="flex flex-col space-y-1">
@@ -270,8 +271,8 @@ export function Header() {
             </SheetContent>
           </Sheet>
            <Link href="/" className="flex items-center space-x-2">
-             <Cpu className="h-6 w-6 text-primary" /> {/* Changed Feather to Cpu */}
-             <span className="font-bold text-foreground">GeePawHill.Org</span> {/* Added text-foreground */}
+             <Cpu className="h-6 w-6 text-primary" />
+             <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
             <div className="flex items-center gap-1">
                 <Dialog open={isSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
@@ -305,4 +306,3 @@ export function Header() {
     </header>
   );
 }
-
