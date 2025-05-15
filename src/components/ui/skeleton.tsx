@@ -1,4 +1,6 @@
 
+'use client'; // Add this directive
+
 import { cn } from "@/lib/utils"
 
 function Skeleton({
