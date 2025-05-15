@@ -103,16 +103,22 @@ export function Header() {
     if (results.length > 0 && searchQuery.trim() !== '') {
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
     } else {
-        if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
+        // Keep popover open if there's a query but no results to show "No results found"
+        if (isDesktopSearchPopoverOpen && results.length === 0) {
+            // no-op, keep it open
+        } else {
+             if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
+        }
     }
 
   }, [searchQuery, allPosts, isDesktopSearchPopoverOpen, hasMounted ]);
 
 
   const navItems: NavItem[] = [
-    {
+     {
       label: 'Posts',
       dropdown: [
+        { href: '/posts', label: 'All Posts' },
         { href: '/posts?tag=video', label: 'Videos' },
         { href: '/posts?tag=podcast', label: 'Podcasts' },
         { href: '/subscribe', label: 'Subscribe!' },
@@ -121,6 +127,7 @@ export function Header() {
     {
       label: 'Courses',
       dropdown: [
+        { href: '/courses', label: 'All Courses' },
         { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
         { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns' },
         { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js' },
@@ -152,6 +159,14 @@ export function Header() {
         setSearchResults([]);
     }
    };
+
+   const handleDesktopPopoverOpenChange = (openState: boolean) => {
+    setIsDesktopSearchPopoverOpen(openState);
+    if (!openState && document.activeElement !== desktopSearchInputRef.current) {
+        setSearchQuery(''); // Clear search if clicking outside and popover closes
+        setSearchResults([]);
+    }
+   }
 
 
    const searchResultsContent = (
@@ -224,7 +239,6 @@ export function Header() {
           <div className="hidden md:flex items-center space-x-2">
             <Skeleton className="h-9 w-32" />
             <Skeleton className="h-9 w-36" />
-            <Skeleton className="h-9 w-28" />
             <Skeleton className="h-9 w-20" />
           </div>
           <div className="flex md:hidden items-center space-x-2 ml-auto">
@@ -283,15 +297,7 @@ export function Header() {
             <div className="relative w-full">
                 <Popover
                     open={isDesktopSearchPopoverOpen && searchQuery.trim() !== ''}
-                     onOpenChange={(openState) => {
-                        setIsDesktopSearchPopoverOpen(openState);
-                        if (!openState && document.activeElement !== desktopSearchInputRef.current && searchQuery.trim() !== '') {
-                            setSearchQuery('');
-                        }
-                        if (!openState && searchQuery.trim() === '') {
-                           setSearchResults([]);
-                        }
-                    }}
+                    onOpenChange={handleDesktopPopoverOpenChange}
                 >
                     <PopoverTrigger asChild>
                         <div className="relative w-full">
@@ -311,6 +317,7 @@ export function Header() {
                             sideOffset={5}
                             className="w-[var(--radix-popover-trigger-width)] shadow-md border-0 p-0"
                             onOpenAutoFocus={(e) => e.preventDefault()}
+                            onCloseAutoFocus={() => desktopSearchInputRef.current?.focus()}
                         >
                             {searchResultsContent}
                         </PopoverContent>
