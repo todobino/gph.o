@@ -2,22 +2,22 @@
 'use client';
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '../ui/button'; // Adjusted path
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet'; // Adjusted path
+import { Button, buttonVariants } from '../ui/button';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu"; // Adjusted path
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog"; // Adjusted path, renamed DialogTrigger
+} from "../ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Input } from "../ui/input"; // Adjusted path
+import { Input } from "../ui/input";
 import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
-import { ScrollArea } from '../ui/scroll-area'; // Adjusted path
+import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
 import type { User } from 'firebase/auth';
@@ -60,7 +60,7 @@ export function Header() {
         console.error("Failed to fetch posts for search:", error);
       }
     }
-    if (hasMounted) { // Only fetch posts on client after mount
+    if (hasMounted) {
         fetchPosts();
     }
   }, [hasMounted]);
@@ -77,7 +77,7 @@ export function Header() {
       }
       setIsLoadingAuth(false);
     };
-    if (hasMounted) { // Only check auth status on client after mount
+    if (hasMounted) {
         checkAuthStatus();
         const handleFocus = () => checkAuthStatus();
         window.addEventListener('focus', handleFocus);
@@ -113,7 +113,6 @@ export function Header() {
     {
       label: 'Posts',
       dropdown: [
-        { href: '/posts', label: 'All Posts' },
         { href: '/posts?tag=video', label: 'Videos' },
         { href: '/posts?tag=podcast', label: 'Podcasts' },
         { href: '/subscribe', label: 'Subscribe!' },
@@ -122,7 +121,6 @@ export function Header() {
     {
       label: 'Courses',
       dropdown: [
-        { href: '/courses', label: 'All Courses Catalog' },
         { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
         { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns' },
         { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js' },
@@ -213,8 +211,8 @@ export function Header() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 items-center px-4">
           <div className="flex items-center">
-            <Skeleton className="h-6 w-6 mr-2" /> {/* Icon placeholder */}
-            <Skeleton className="h-6 w-32" /> {/* Title placeholder */}
+            <Skeleton className="h-6 w-6 mr-2" />
+            <Skeleton className="h-6 w-32" />
           </div>
            <div className="hidden md:flex items-center space-x-1 ml-6">
             <Skeleton className="h-8 w-20" />
@@ -222,17 +220,17 @@ export function Header() {
             <Skeleton className="h-8 w-20" />
             <Skeleton className="h-8 w-20" />
           </div>
-          <div className="flex-1"></div> {/* Spacer */}
+          <div className="flex-1"></div>
           <div className="hidden md:flex items-center space-x-2">
-            <Skeleton className="h-9 w-32" /> {/* Search placeholder */}
-            <Skeleton className="h-9 w-36" /> {/* Course Login Button placeholder */}
-            <Skeleton className="h-9 w-28" /> {/* Book Now Button placeholder */}
-            <Skeleton className="h-9 w-20" /> {/* Admin Button placeholder */}
+            <Skeleton className="h-9 w-32" />
+            <Skeleton className="h-9 w-36" />
+            <Skeleton className="h-9 w-28" />
+            <Skeleton className="h-9 w-20" />
           </div>
-          <div className="flex md:hidden items-center space-x-2 ml-auto"> {/* Ensure mobile controls are on right */}
-             <Skeleton className="h-8 w-8" /> {/* Mobile Search Icon placeholder */}
-             <Skeleton className="h-8 w-24" /> {/* Mobile Course Login placeholder */}
-             <Skeleton className="h-8 w-24" /> {/* Mobile Book Now placeholder */}
+          <div className="flex md:hidden items-center space-x-2 ml-auto">
+             <Skeleton className="h-8 w-8" />
+             <Skeleton className="h-8 w-24" />
+             <Skeleton className="h-8 w-24" />
           </div>
         </div>
       </header>
@@ -261,9 +259,6 @@ export function Header() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                       <DropdownMenuItem asChild>
-                          <Link href="/courses">All Courses Catalog</Link>
-                        </DropdownMenuItem>
                       {navItem.dropdown.map((item) => (
                         <DropdownMenuItem key={item.href} asChild>
                            <Link href={item.href!}>{item.label}</Link>
@@ -290,10 +285,9 @@ export function Header() {
                     open={isDesktopSearchPopoverOpen && searchQuery.trim() !== ''}
                      onOpenChange={(openState) => {
                         setIsDesktopSearchPopoverOpen(openState);
-                        if (!openState && document.activeElement !== desktopSearchInputRef.current) {
-                            setSearchQuery(''); // Clear search if popover closed by clicking outside
+                        if (!openState && document.activeElement !== desktopSearchInputRef.current && searchQuery.trim() !== '') {
+                            setSearchQuery('');
                         }
-                        // If closing because query is now empty, searchResults useEffect will handle clearing results
                         if (!openState && searchQuery.trim() === '') {
                            setSearchResults([]);
                         }
@@ -309,13 +303,11 @@ export function Header() {
                                 className="h-9 w-full pl-10 pr-3 focus-visible:ring-primary"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                // Removed onFocus to prevent opening popover with "Start typing..."
                             />
                         </div>
                     </PopoverTrigger>
-                    {/* Conditionally render PopoverContent only if there's a query and it should be open */}
                     {isDesktopSearchPopoverOpen && searchQuery.trim() !== '' && (
-                        <PopoverContent
+                         <PopoverContent
                             sideOffset={5}
                             className="w-[var(--radix-popover-trigger-width)] shadow-md border-0 p-0"
                             onOpenAutoFocus={(e) => e.preventDefault()}
