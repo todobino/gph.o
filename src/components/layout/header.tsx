@@ -11,9 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "../../components/ui/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Added Popover
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../../components/ui/input";
-import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react'; // Added CalendarCheck2
+import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -28,12 +28,9 @@ export function Header() {
   const [searchResults, setSearchResults] = useState<Post[]>([]);
   const [allPosts, setAllPosts] = useState<Post[]>([]);
 
-  // Mobile search dialog state
   const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false);
-  // Desktop search popover state
   const [isDesktopSearchPopoverOpen, setIsDesktopSearchPopoverOpen] = useState(false);
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
-
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
@@ -68,12 +65,9 @@ export function Header() {
     return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
-
    useEffect(() => {
     if (searchQuery.trim() === '') {
       setSearchResults([]);
-      // For desktop, if query is empty, ensure popover is closed unless input is focused and we want to show "start typing"
-      // This is now handled by Popover's open prop logic based on searchQuery
       return;
     }
 
@@ -106,7 +100,6 @@ export function Header() {
     { href: '/contact', label: 'Contact' },
   ];
 
-
   const handleMobileSheetLinkClick = () => {
     setIsMobileMenuOpen(false);
   };
@@ -114,11 +107,10 @@ export function Header() {
    const handleSearchResultClick = () => {
      setSearchQuery('');
      setSearchResults([]);
-     setIsMobileSearchDialogOpen(false); // Close mobile dialog
-     setIsDesktopSearchPopoverOpen(false); // Close desktop popover
+     setIsMobileSearchDialogOpen(false);
+     setIsDesktopSearchPopoverOpen(false);
    };
 
-   // Shared content for search results display (Dialog for mobile, Popover for desktop)
    const searchResultsContent = (
       <ScrollArea className="h-fit max-h-[200px] sm:max-h-[300px] w-full mt-2 border rounded-md">
         {searchResults.length > 0 ? (
@@ -127,7 +119,6 @@ export function Header() {
                 const slug = post.slug;
                 return (
                     <li key={post.slug}>
-                      {/* For mobile Dialog, DialogClose is needed. For Popover, click will close it. */}
                       {isMobileSearchDialogOpen ? (
                         <DialogClose asChild>
                           <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-3 rounded-md hover:bg-accent text-sm transition-colors">
@@ -151,7 +142,6 @@ export function Header() {
       </ScrollArea>
    );
 
-   // Mobile Search Dialog specific content
    const mobileSearchDialogContent = (
      <DialogContent className="sm:max-w-md bg-background/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg border border-border">
         <DialogHeader>
@@ -166,16 +156,16 @@ export function Header() {
             className="text-base w-full"
             autoFocus
           />
-          {searchResultsContent}
+          {searchQuery.trim() !== '' && searchResultsContent}
         </div>
       </DialogContent>
    );
 
-
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-14 items-center px-4">
-        <div className="mr-4 hidden md:flex">
+        {/* Desktop Left: Logo + Nav */}
+        <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Cpu className="h-6 w-6 text-primary" />
             <span className="hidden font-bold sm:inline-block text-foreground">
@@ -209,16 +199,79 @@ export function Header() {
                   </Link>
                 )
               )}
-              {!isLoadingAuth && isAdmin && (
-                  <Link
-                    href="/admin"
-                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "font-bold text-primary hover:text-primary/80 px-3 py-2")}
-                  >
-                     <UserCircle className="mr-1 h-4 w-4" />
-                    Admin
-                  </Link>
-              )}
           </nav>
+        </div>
+
+        {/* Desktop Search - Occupies flexible space */}
+        <div className="hidden md:flex flex-1 items-center justify-center px-4">
+            <div className="relative w-full">
+                <Popover 
+                    open={isDesktopSearchPopoverOpen}
+                    onOpenChange={(open) => {
+                        setIsDesktopSearchPopoverOpen(open);
+                        if (!open && document.activeElement !== desktopSearchInputRef.current) {
+                            // setSearchQuery(''); // Optionally clear query on click outside if input is not focused
+                        }
+                    }}
+                >
+                    <PopoverTrigger asChild>
+                        <div className="relative w-full">
+                            <Search className="absolute left-3 top-1/2 z-10 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                            <Input
+                                ref={desktopSearchInputRef}
+                                type="search"
+                                placeholder="Search posts and pages..."
+                                className="h-9 w-full pl-10 pr-3 focus-visible:ring-primary"
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    setSearchQuery(e.target.value);
+                                    setIsDesktopSearchPopoverOpen(e.target.value.trim() !== '' || document.activeElement === desktopSearchInputRef.current);
+                                }}
+                                onFocus={() => setIsDesktopSearchPopoverOpen(true)}
+                                onBlur={() => {
+                                    setTimeout(() => {
+                                      if (!isDesktopSearchPopoverOpen) { // Check if popover is not kept open by a click inside it
+                                        // setIsDesktopSearchPopoverOpen(false); // Already handled by onOpenChange if click is outside
+                                      }
+                                    }, 150);
+                                }}
+                            />
+                        </div>
+                    </PopoverTrigger>
+                    {isDesktopSearchPopoverOpen && (
+                        <PopoverContent 
+                            sideOffset={5} 
+                            className="w-[var(--radix-popover-trigger-width)] p-0" 
+                            onOpenAutoFocus={(e) => e.preventDefault()}
+                        >
+                            {searchResultsContent}
+                        </PopoverContent>
+                    )}
+                </Popover>
+            </div>
+        </div>
+
+        {/* Desktop Right Buttons */}
+        <div className="hidden md:flex items-center space-x-2">
+            <Button className="bg-accent text-accent-foreground hover:bg-accent/80" asChild>
+                <Link href="/course-login">
+                    <GraduationCap className="mr-2 h-4 w-4" /> Course Login
+                </Link>
+            </Button>
+            <Button asChild>
+                <Link href="/booking">
+                    <CalendarCheck2 className="mr-2 h-4 w-4" /> Book Now
+                </Link>
+            </Button>
+            {!isLoadingAuth && isAdmin && (
+              <Link
+                href="/admin"
+                className={cn(buttonVariants({ variant: "ghost", size: "default" }), "font-bold text-primary hover:text-primary/80 px-3 py-2")}
+              >
+                 <UserCircle className="mr-1 h-4 w-4" />
+                Admin
+              </Link>
+            )}
         </div>
 
         {/* Mobile Header */}
@@ -276,7 +329,7 @@ export function Header() {
                 ))}
                  <SheetClose asChild>
                     <Link
-                      href="/course-login" // Assuming this is the correct link
+                      href="/course-login"
                       className="block w-full text-left text-lg font-medium text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-2"
                       onClick={handleMobileSheetLinkClick}
                     >
@@ -323,63 +376,6 @@ export function Header() {
                    </Link>
                 </Button>
             </div>
-        </div>
-
-        {/* Desktop Header Right Side */}
-        <div className="hidden flex-1 items-center justify-end space-x-2 md:flex">
-           <Popover
-              open={isDesktopSearchPopoverOpen && searchQuery.trim() !== '' && searchResults.length > 0}
-              onOpenChange={(open) => {
-                setIsDesktopSearchPopoverOpen(open);
-                // If popover is closed by clicking outside, and input is not focused, clear query
-                if (!open && document.activeElement !== desktopSearchInputRef.current) {
-                   // setSearchQuery(''); // Optional: clear query
-                }
-              }}
-            >
-              <PopoverTrigger asChild>
-                <Input
-                  ref={desktopSearchInputRef}
-                  type="search"
-                  placeholder="Search..."
-                  className="h-9 w-48 lg:w-64 focus-visible:ring-primary"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setIsDesktopSearchPopoverOpen(e.target.value.trim() !== '');
-                  }}
-                  onFocus={() => {
-                     if(searchQuery.trim() !== '') setIsDesktopSearchPopoverOpen(true);
-                  }}
-                   onBlur={() => {
-                    // Delay hiding to allow click on popover content
-                    setTimeout(() => {
-                      if (!isDesktopSearchPopoverOpen) { // Check if it wasn't kept open by a click
-                        // setIsDesktopSearchPopoverOpen(false); // Already handled by onOpenChange
-                      }
-                    }, 150);
-                  }}
-                />
-              </PopoverTrigger>
-              <PopoverContent 
-                sideOffset={5} 
-                className="w-[var(--radix-popover-trigger-width)] p-0"
-                onOpenAutoFocus={(e) => e.preventDefault()} // Keep focus on input
-              >
-                {searchResultsContent}
-              </PopoverContent>
-            </Popover>
-
-            <Button className="bg-accent text-accent-foreground hover:bg-accent/80" asChild>
-                <Link href="/course-login">
-                    <GraduationCap className="mr-2 h-4 w-4" /> Course Login
-                </Link>
-            </Button>
-            <Button asChild>
-                <Link href="/booking">
-                    <CalendarCheck2 className="mr-2 h-4 w-4" /> Book Now
-                </Link>
-            </Button>
         </div>
       </div>
     </header>
