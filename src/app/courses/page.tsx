@@ -106,7 +106,7 @@ export default function CoursesPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button asChild variant="outline" className="w-full" disabled>
+                <Button asChild variant="outline" className="w-full">
                   <Link href={`/courses/${course.slug}`}>
                     Learn More <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -145,7 +145,7 @@ export default function CoursesPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button asChild variant="outline" className="w-full" disabled>
+                <Button asChild variant="outline" className="w-full">
                   <Link href={`/courses/${course.slug}`}>
                     Learn More <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
