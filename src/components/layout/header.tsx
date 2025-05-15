@@ -2,26 +2,27 @@
 'use client';
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '../ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
+import { Button, buttonVariants } from '../ui/button'; // Adjusted path
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet'; // Adjusted path
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog"; // Renamed DialogClose
+} from "../ui/dropdown-menu"; // Adjusted path
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog"; // Adjusted path, renamed DialogTrigger
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Input } from "../ui/input";
+import { Input } from "../ui/input"; // Adjusted path
 import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
-import { ScrollArea } from '../ui/scroll-area';
+import { ScrollArea } from '../ui/scroll-area'; // Adjusted path
 import { cn } from '@/lib/utils';
 import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
 import type { User } from 'firebase/auth';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 interface NavItem {
@@ -31,6 +32,7 @@ interface NavItem {
 }
 
 export function Header() {
+  const [hasMounted, setHasMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Post[]>([]);
@@ -44,6 +46,10 @@ export function Header() {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const isMobile = useIsMobile();
 
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
 
   useEffect(() => {
     async function fetchPosts() {
@@ -54,8 +60,10 @@ export function Header() {
         console.error("Failed to fetch posts for search:", error);
       }
     }
-    fetchPosts();
-  }, []);
+    if (hasMounted) { // Only fetch posts on client after mount
+        fetchPosts();
+    }
+  }, [hasMounted]);
 
    useEffect(() => {
     const checkAuthStatus = async () => {
@@ -69,16 +77,17 @@ export function Header() {
       }
       setIsLoadingAuth(false);
     };
-    checkAuthStatus();
-    const handleFocus = () => checkAuthStatus();
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
-  }, []);
+    if (hasMounted) { // Only check auth status on client after mount
+        checkAuthStatus();
+        const handleFocus = () => checkAuthStatus();
+        window.addEventListener('focus', handleFocus);
+        return () => window.removeEventListener('focus', handleFocus);
+    }
+  }, [hasMounted]);
 
    useEffect(() => {
-    if (searchQuery.trim() === '') {
+    if (!hasMounted || searchQuery.trim() === '') {
       setSearchResults([]);
-      // Only close popover if it's already open and input loses focus or query is cleared
       if (isDesktopSearchPopoverOpen && searchQuery.trim() === '') {
         setIsDesktopSearchPopoverOpen(false);
       }
@@ -94,11 +103,10 @@ export function Header() {
     if (results.length > 0 && searchQuery.trim() !== '') {
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
     } else {
-        // No results, ensure popover is closed
         if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
     }
 
-  }, [searchQuery, allPosts, isDesktopSearchPopoverOpen ]);
+  }, [searchQuery, allPosts, isDesktopSearchPopoverOpen, hasMounted ]);
 
 
   const navItems: NavItem[] = [
@@ -147,25 +155,9 @@ export function Header() {
     }
    };
 
-   const handleDesktopSearchPopoverChange = (openState: boolean) => {
-    setIsDesktopSearchPopoverOpen(openState);
-    if (!openState) {
-        // If closing due to interaction outside, clear query.
-        // Check if the input is focused to prevent clearing if popover closes due to no results.
-        if(document.activeElement !== desktopSearchInputRef.current){
-            setSearchQuery('');
-            setSearchResults([]);
-        } else if (searchQuery.trim() !== '' && searchResults.length === 0) {
-            // If input still has text but no results, popover might be managed by searchResults.length
-        } else if (searchQuery.trim() === '') {
-            setSearchResults([]); // Ensure results are cleared if query is empty
-        }
-    }
-   }
-
 
    const searchResultsContent = (
-    <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", searchResults.length > 0 ? "border-0" : "")}>
+    <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", searchResults.length > 0 ? "" : "border-0")}>
         {searchResults.length > 0 ? (
             <ul className="space-y-1">
             {searchResults.map(post => {
@@ -198,12 +190,6 @@ export function Header() {
    const mobileSearchDialogContent = (
      <DialogContent
         className="bg-background/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg border border-border sm:max-w-md"
-        onPointerDownOutside={() => {
-            // Already handled by onOpenChange for Dialog
-        }}
-        onEscapeKeyDown={() => {
-            // Already handled by onOpenChange for Dialog
-        }}
     >
         <DialogHeader>
           <DialogTitle className="text-xl sm:text-2xl font-semibold">Search</DialogTitle>
@@ -221,6 +207,38 @@ export function Header() {
         </div>
       </DialogContent>
    );
+
+  if (!hasMounted) {
+    return (
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto flex h-14 items-center px-4">
+          <div className="flex items-center">
+            <Skeleton className="h-6 w-6 mr-2" /> {/* Icon placeholder */}
+            <Skeleton className="h-6 w-32" /> {/* Title placeholder */}
+          </div>
+           <div className="hidden md:flex items-center space-x-1 ml-6">
+            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-8 w-20" />
+            <Skeleton className="h-8 w-20" />
+          </div>
+          <div className="flex-1"></div> {/* Spacer */}
+          <div className="hidden md:flex items-center space-x-2">
+            <Skeleton className="h-9 w-32" /> {/* Search placeholder */}
+            <Skeleton className="h-9 w-36" /> {/* Course Login Button placeholder */}
+            <Skeleton className="h-9 w-28" /> {/* Book Now Button placeholder */}
+            <Skeleton className="h-9 w-20" /> {/* Admin Button placeholder */}
+          </div>
+          <div className="flex md:hidden items-center space-x-2 ml-auto"> {/* Ensure mobile controls are on right */}
+             <Skeleton className="h-8 w-8" /> {/* Mobile Search Icon placeholder */}
+             <Skeleton className="h-8 w-24" /> {/* Mobile Course Login placeholder */}
+             <Skeleton className="h-8 w-24" /> {/* Mobile Book Now placeholder */}
+          </div>
+        </div>
+      </header>
+    );
+  }
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -243,6 +261,9 @@ export function Header() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
+                       <DropdownMenuItem asChild>
+                          <Link href="/courses">All Courses Catalog</Link>
+                        </DropdownMenuItem>
                       {navItem.dropdown.map((item) => (
                         <DropdownMenuItem key={item.href} asChild>
                            <Link href={item.href!}>{item.label}</Link>
@@ -266,8 +287,17 @@ export function Header() {
         <div className="hidden md:flex flex-1 items-center justify-center px-4">
             <div className="relative w-full">
                 <Popover
-                    open={isDesktopSearchPopoverOpen}
-                    onOpenChange={handleDesktopSearchPopoverChange}
+                    open={isDesktopSearchPopoverOpen && searchQuery.trim() !== ''}
+                     onOpenChange={(openState) => {
+                        setIsDesktopSearchPopoverOpen(openState);
+                        if (!openState && document.activeElement !== desktopSearchInputRef.current) {
+                            setSearchQuery(''); // Clear search if popover closed by clicking outside
+                        }
+                        // If closing because query is now empty, searchResults useEffect will handle clearing results
+                        if (!openState && searchQuery.trim() === '') {
+                           setSearchResults([]);
+                        }
+                    }}
                 >
                     <PopoverTrigger asChild>
                         <div className="relative w-full">
@@ -279,20 +309,16 @@ export function Header() {
                                 className="h-9 w-full pl-10 pr-3 focus-visible:ring-primary"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                onFocus={() => {
-                                  if(searchQuery.trim() !== '') setIsDesktopSearchPopoverOpen(true);
-                                }}
+                                // Removed onFocus to prevent opening popover with "Start typing..."
                             />
                         </div>
                     </PopoverTrigger>
-                    {isDesktopSearchPopoverOpen && ( // Only render content if popover is meant to be open
+                    {/* Conditionally render PopoverContent only if there's a query and it should be open */}
+                    {isDesktopSearchPopoverOpen && searchQuery.trim() !== '' && (
                         <PopoverContent
                             sideOffset={5}
                             className="w-[var(--radix-popover-trigger-width)] shadow-md border-0 p-0"
-                            onOpenAutoFocus={(e) => e.preventDefault()} // Prevent auto-focus stealing from input
-                            onInteractOutside={() => {
-                                // Already handled by onOpenChange for Popover
-                            }}
+                            onOpenAutoFocus={(e) => e.preventDefault()}
                         >
                             {searchResultsContent}
                         </PopoverContent>
@@ -312,7 +338,9 @@ export function Header() {
                     <CalendarCheck2 className="mr-2 h-4 w-4" /> Book Now
                 </Link>
             </Button>
-            {isLoadingAuth ? null : isAdmin ? (
+            {isLoadingAuth ? (
+              <Skeleton className="h-9 w-20" />
+            ) : isAdmin ? (
               <Link
                 href="/admin"
                 className={cn(buttonVariants({ variant: "ghost", size: "default" }), "font-bold text-primary hover:text-primary/80 px-3 py-2")}
@@ -413,7 +441,7 @@ export function Header() {
            </Link>
             <div className="flex items-center gap-1">
                  <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                    <DialogTrigger asChild>
+                    <RadixDialogTrigger asChild>
                        <span
                         role="button"
                         tabIndex={0}
@@ -425,7 +453,7 @@ export function Header() {
                       >
                         <Search className="h-5 w-5" />
                       </span>
-                    </DialogTrigger>
+                    </RadixDialogTrigger>
                     {isMobileSearchDialogOpen && mobileSearchDialogContent}
                 </Dialog>
                 <Button className="bg-accent text-accent-foreground hover:bg-accent/80" size="sm" asChild>
@@ -444,3 +472,4 @@ export function Header() {
     </header>
   );
 }
+
