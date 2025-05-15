@@ -9,6 +9,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
 } from "../ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -24,6 +29,33 @@ import type { User } from 'firebase/auth';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 
+// Define a more flexible nav item structure
+interface NavItemLink {
+  href: string;
+  label: string;
+  isSubMenu?: false; // Explicitly not a submenu
+}
+
+interface NavSubMenuItem {
+  href: string;
+  label: string;
+}
+
+interface NavItemSubMenu {
+  label: string; // Label for the SubMenuTrigger, e.g., "All Courses Catalog"
+  href: string;  // HREF for the main link represented by this sub-menu (e.g., /courses)
+  isSubMenu: true;
+  subItems: NavSubMenuItem[];
+}
+
+interface NavItemGroup {
+  label: string; // Label for the main DropdownMenuTrigger, e.g., "Courses"
+  items?: (NavItemLink | NavItemSubMenu)[]; // For complex dropdowns with potential submenus
+  dropdown?: NavItemLink[]; // For simple dropdowns (legacy, can be merged into items)
+  href?: string; // For top-level links
+}
+
+
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -36,7 +68,7 @@ export function Header() {
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
-  const isMobile = useIsMobile(); // For responsive logic not handled by Tailwind
+  const isMobile = useIsMobile();
 
   const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
@@ -47,8 +79,8 @@ export function Header() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const posts = await getPosts();
-        setAllPosts(posts);
+        const postsData = await getPosts();
+        setAllPosts(postsData);
       } catch (error) {
         console.error("Failed to fetch posts for search:", error);
       }
@@ -77,9 +109,9 @@ export function Header() {
    useEffect(() => {
     if (searchQuery.trim() === '') {
       setSearchResults([]);
-      // Only close popover if it's currently open and not triggered by input focus
        if (isDesktopSearchPopoverOpen && (!desktopSearchInputRef.current || document.activeElement !== desktopSearchInputRef.current)) {
-         setIsDesktopSearchPopoverOpen(false);
+         // Only close if not focused, otherwise let Popover's onOpenChange handle it
+         // setIsDesktopSearchPopoverOpen(false);
        }
       return;
     }
@@ -91,13 +123,15 @@ export function Header() {
     );
     setSearchResults(results.slice(0, 10));
     if (results.length > 0 && searchQuery.trim() !== '') {
-        setIsDesktopSearchPopoverOpen(true);
+        if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
+    } else {
+        if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
     }
 
   }, [searchQuery, allPosts, isDesktopSearchPopoverOpen]);
 
 
-  const navItems = [
+  const navItems: NavItemGroup[] = [
     {
       label: 'Posts',
       dropdown: [
@@ -109,10 +143,23 @@ export function Header() {
     },
     {
       label: 'Courses',
-      dropdown: [
-        { href: '/courses', label: 'All Courses' },
-        { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
-      ],
+      items: [
+        {
+          label: 'All Courses Catalog', // Label for the DropdownMenuSubTrigger
+          href: '/courses',          // Link for the first item in the sub-menu
+          isSubMenu: true,
+          subItems: [
+            { href: '/courses', label: 'Browse All Courses' }, // The link to the main /courses page
+            { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
+            { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns' },
+            { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js' },
+            { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript' },
+            { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership' },
+            { href: '/courses/agile-project-management', label: 'Agile Project Management' },
+            { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.' },
+          ]
+        }
+      ]
     },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
@@ -130,7 +177,7 @@ export function Header() {
    };
 
    const searchResultsContent = (
-      <ScrollArea className="h-fit max-h-[200px] sm:max-h-[300px] w-full">
+    <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", searchResults.length > 0 ? "border-0" : "")}>
         {searchResults.length > 0 ? (
             <ul className="space-y-1">
             {searchResults.map(post => {
@@ -153,26 +200,24 @@ export function Header() {
             })}
             </ul>
         ) : searchQuery.trim() !== '' ? (
-            <p className="text-sm text-muted-foreground text-center py-4 px-2">No results found.</p>
+             <p className="text-sm text-muted-foreground text-center py-4 px-2">No results found.</p>
         ) : (
-           null
+           null // Don't show "Start typing..." here, handle initial state in Popover/Dialog open logic
         )}
       </ScrollArea>
    );
 
    const mobileSearchDialogContent = (
      <DialogContent
-        className="sm:max-w-md bg-background/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg border border-border"
+        className="bg-background/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg border border-border sm:max-w-md"
         onPointerDownOutside={() => {
             if (isMobileSearchDialogOpen) {
                 setSearchQuery('');
-                setSearchResults([]);
             }
         }}
         onEscapeKeyDown={() => {
              if (isMobileSearchDialogOpen) {
                 setSearchQuery('');
-                setSearchResults([]);
             }
         }}
     >
@@ -194,9 +239,6 @@ export function Header() {
    );
 
   if (!hasMounted) {
-    // Render a minimal header or null during SSR and initial client render to avoid hydration mismatch
-    // For example, just the logo or a very basic structure.
-    // Or, if the desktop version is the default for SSR, ensure it's rendered without client-only logic.
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container mx-auto flex h-14 items-center px-4">
@@ -206,14 +248,11 @@ export function Header() {
                     GeePawHill.Org
                     </span>
                 </Link>
-                {/* Placeholder for nav items or leave empty */}
-                 <div className="flex-1"></div> {/* Occupy space */}
+                 <div className="flex-1"></div>
                  <div className="hidden md:flex items-center space-x-2">
-                     {/* Render simplified buttons or placeholders */}
                  </div>
                  <div className="flex flex-1 items-center justify-between space-x-2 md:hidden">
-                    <span className="font-bold text-foreground">GeePawHill.Org</span> {/* Mobile logo placeholder */}
-                     {/* Mobile buttons placeholder */}
+                    <span className="font-bold text-foreground">GeePawHill.Org</span>
                  </div>
             </div>
         </header>
@@ -233,7 +272,7 @@ export function Header() {
           </Link>
           <nav className="flex items-center space-x-1 text-sm font-medium">
              {navItems.map((navItem) =>
-                navItem.dropdown ? (
+                navItem.dropdown ? ( // Handles simple dropdowns like "Posts"
                   <DropdownMenu key={navItem.label}>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="text-foreground hover:text-foreground/80 px-3 py-2">
@@ -246,6 +285,64 @@ export function Header() {
                            <Link href={item.href}>{item.label}</Link>
                         </DropdownMenuItem>
                       ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : navItem.items ? ( // Handles complex dropdowns like "Courses" which can have submenus
+                  <DropdownMenu key={navItem.label}>
+                     <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="text-foreground hover:text-foreground/80 px-3 py-2">
+                        {navItem.label} <ChevronDown className="ml-1 h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      {navItem.items.map((item) =>
+                        item.isSubMenu ? (
+                          <DropdownMenuSub key={item.label}>
+                            <DropdownMenuSubTrigger>
+                              <span>{item.label}</span> {/* e.g., "All Courses Catalog" */}
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                              <DropdownMenuSubContent>
+                                {item.subItems.map((subItem, index) => (
+                                  <React.Fragment key={subItem.href}>
+                                    {index === 0 && ( // Link to the main sub-menu page, e.g., /courses
+                                      <DropdownMenuItem asChild>
+                                        <Link href={item.href}>{subItem.label}</Link>
+                                      </DropdownMenuItem>
+                                    )}
+                                    {index === 0 && item.subItems.length > 1 && <DropdownMenuSeparator />}
+                                    {index > 0 && ( // Render other sub-items
+                                       <DropdownMenuItem asChild>
+                                        <Link href={subItem.href}>{subItem.label}</Link>
+                                      </DropdownMenuItem>
+                                    )}
+                                  </React.Fragment>
+                                ))}
+                                 {/* If the first subItem IS NOT the main catalog link, this ensures the main link always appears first */}
+                                 {!item.subItems.find(si => si.href === item.href) && (
+                                    <>
+                                    <DropdownMenuItem asChild>
+                                        <Link href={item.href}>{item.label}</Link>
+                                    </DropdownMenuItem>
+                                    {item.subItems.length > 0 && <DropdownMenuSeparator />}
+                                    </>
+                                )}
+                                {item.subItems.filter(si => si.href !== item.href).map((subItem) => (
+                                    <DropdownMenuItem key={subItem.href} asChild>
+                                    <Link href={subItem.href}>{subItem.label}</Link>
+                                    </DropdownMenuItem>
+                                ))}
+
+
+                              </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                          </DropdownMenuSub>
+                        ) : (
+                          <DropdownMenuItem key={item.href} asChild>
+                            <Link href={item.href!}>{item.label}</Link>
+                          </DropdownMenuItem>
+                        )
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
@@ -267,9 +364,9 @@ export function Header() {
                     open={isDesktopSearchPopoverOpen && searchQuery.trim() !== ''}
                     onOpenChange={(openState) => {
                         setIsDesktopSearchPopoverOpen(openState);
-                        if (!openState) {
-                           setSearchQuery('');
-                           setSearchResults([]);
+                        if (!openState) { // When popover closes
+                           setSearchQuery(''); // Clear search query
+                           // searchResults will be cleared by useEffect on searchQuery change
                         }
                     }}
                 >
@@ -283,17 +380,20 @@ export function Header() {
                                 className="h-9 w-full pl-10 pr-3 focus-visible:ring-primary"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
+                                onFocus={() => {
+                                  // No need to open popover on focus if search query is empty
+                                  if(searchQuery.trim() !== '') setIsDesktopSearchPopoverOpen(true);
+                                }}
                             />
                         </div>
                     </PopoverTrigger>
-                    {searchQuery.trim() !== '' && (
+                    {searchQuery.trim() !== '' && ( // Only render content if there is a query (results or no results message)
                         <PopoverContent
                             sideOffset={5}
                             className="w-[var(--radix-popover-trigger-width)] p-0 shadow-md border-0"
-                            onOpenAutoFocus={(e) => e.preventDefault()}
-                            onInteractOutside={() => {
+                            onOpenAutoFocus={(e) => e.preventDefault()} // Prevent re-focusing input
+                            onInteractOutside={() => { // Clicking outside the popover
                                 setSearchQuery('');
-                                setSearchResults([]);
                                 setIsDesktopSearchPopoverOpen(false);
                             }}
                         >
@@ -348,7 +448,7 @@ export function Header() {
               <nav className="flex flex-col space-y-1">
                 {navItems.map((navItem) => (
                     <React.Fragment key={navItem.label || navItem.href}>
-                        {navItem.dropdown ? (
+                        {navItem.dropdown ? ( // Simple dropdowns
                             <>
                                 <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div>
                                 <div className="flex flex-col space-y-0 pl-4">
@@ -365,7 +465,38 @@ export function Header() {
                                     ))}
                                 </div>
                             </>
-                        ) : (
+                        ) : navItem.items ? ( // Complex dropdowns with potential submenus (like Courses)
+                             navItem.items.map(item => (
+                               item.isSubMenu ? (
+                                <React.Fragment key={item.label}>
+                                  <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{item.label}</div>
+                                  <div className="flex flex-col space-y-0 pl-4">
+                                    {item.subItems.map(subItem => (
+                                      <SheetClose key={subItem.href} asChild>
+                                        <Link
+                                          href={subItem.href}
+                                          className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
+                                          onClick={handleMobileSheetLinkClick}
+                                        >
+                                          {subItem.label}
+                                        </Link>
+                                      </SheetClose>
+                                    ))}
+                                  </div>
+                                </React.Fragment>
+                               ) : ( // Regular item within a group that isn't a submenu itself
+                                <SheetClose key={item.href} asChild>
+                                  <Link
+                                    href={item.href!}
+                                    className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
+                                    onClick={handleMobileSheetLinkClick}
+                                  >
+                                    {item.label}
+                                  </Link>
+                                </SheetClose>
+                               )
+                             ))
+                        ) : ( // Top-level link
                              <SheetClose asChild>
                                 <Link
                                 href={navItem.href!}
@@ -408,7 +539,7 @@ export function Header() {
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
             <div className="flex items-center gap-1">
-                <Dialog open={isMobileSearchDialogOpen} onOpenChange={(openState) => { setIsMobileSearchDialogOpen(openState); if(!openState) { setSearchQuery(''); setSearchResults([]);} }}>
+                 <Dialog open={isMobileSearchDialogOpen} onOpenChange={(openState) => { setIsMobileSearchDialogOpen(openState); if(!openState) { setSearchQuery(''); setSearchResults([]);} }}>
                     <DialogTrigger asChild>
                       <span
                         role="button"
