@@ -2,27 +2,27 @@
 'use client';
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '../ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
+import { Button, buttonVariants } from '../ui/button'; // Adjusted path
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet'; // Adjusted path
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger } from "../ui/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Input } from "../ui/input";
+} from "../ui/dropdown-menu"; // Adjusted path
+import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger } from "../ui/dialog"; // Adjusted path
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Kept alias as it seems to work elsewhere
+import { Input } from "../ui/input"; // Adjusted path
 import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
-import type { Post } from '@/services/posts';
-import { getPosts } from '@/services/posts';
-import { ScrollArea } from '../ui/scroll-area';
-import { cn } from '@/lib/utils';
-import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
+import type { Post } from '@/services/posts'; // Kept alias
+import { getPosts } from '@/services/posts'; // Kept alias
+import { ScrollArea } from '../ui/scroll-area'; // Adjusted path
+import { cn } from '@/lib/utils'; // Kept alias
+import { getCurrentUser, checkIfAdmin } from '@/lib/auth'; // Kept alias
 import type { User } from 'firebase/auth';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useIsMobile } from '@/hooks/use-mobile'; // Kept alias
+import { Skeleton } from '../ui/skeleton'; // Adjusted path
 
 
 interface NavItem {
@@ -100,14 +100,17 @@ export function Header() {
       (post.content && post.content.toLowerCase().includes(lowerCaseQuery))
     );
     setSearchResults(results.slice(0, 10));
+
+    // Control popover visibility based on search results and query presence
     if (results.length > 0 && searchQuery.trim() !== '') {
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
-    } else {
-        if (isDesktopSearchPopoverOpen && results.length === 0 && searchQuery.trim() !== '') {
-            // Keep open to show "No results"
-        } else {
-             if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
-        }
+    } else if (searchQuery.trim() !== '' && results.length === 0) {
+        // Keep open to show "No results" if query is not empty
+        if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
+    }
+     else {
+        // Close if query is empty or if results are empty AND query was just cleared
+        if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
     }
 
   }, [searchQuery, allPosts, isDesktopSearchPopoverOpen, hasMounted ]);
@@ -148,7 +151,7 @@ export function Header() {
      setSearchQuery('');
      setSearchResults([]);
      setIsMobileSearchDialogOpen(false);
-     setIsDesktopSearchPopoverOpen(false); // Also close desktop popover if somehow open
+     setIsDesktopSearchPopoverOpen(false);
    };
 
    const handleSearchDialogChange = (openState: boolean) => {
@@ -160,39 +163,42 @@ export function Header() {
    };
 
    const handleDesktopPopoverOpenChange = (openState: boolean) => {
-    setIsDesktopSearchPopoverOpen(openState);
     if (!openState && document.activeElement !== desktopSearchInputRef.current) {
+        // Only clear search if popover is closed by clicking outside AND input is not focused
         setSearchQuery('');
         setSearchResults([]);
     }
-   }
+    setIsDesktopSearchPopoverOpen(openState);
+   };
 
 
    const searchResultsContent = (
-    <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", searchResults.length > 0 || searchQuery.trim() !== '' ? "" : "border-0")}>
-        {searchResults.length > 0 ? (
-            <ul className="space-y-1">
-            {searchResults.map(post => {
-                const slug = post.slug;
-                return (
-                    <li key={post.slug}>
-                      {isMobileSearchDialogOpen ? ( // Check if it's the mobile dialog
-                        <DialogCloseComponent asChild>
-                          <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-3 rounded-md hover:bg-accent text-sm transition-colors">
-                              {post.title}
-                          </Link>
-                        </DialogCloseComponent>
-                      ) : ( // Desktop popover
-                        <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm transition-colors">
-                            {post.title}
-                        </Link>
-                      )}
-                    </li>
-                )
-            })}
-            </ul>
-        ) : searchQuery.trim() !== '' ? (
-             <p className="text-sm text-muted-foreground text-center py-4 px-2">No results found.</p>
+    <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", (searchResults.length > 0 || searchQuery.trim() !== '') ? "" : "border-0 p-0")}>
+        {(searchResults.length > 0 || searchQuery.trim() !== '') ? (
+             searchResults.length > 0 ? (
+                <ul className="space-y-1">
+                {searchResults.map(post => {
+                    const slug = post.slug;
+                    return (
+                        <li key={post.slug}>
+                          {isMobileSearchDialogOpen ? (
+                            <DialogCloseComponent asChild>
+                              <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-3 rounded-md hover:bg-accent text-sm transition-colors">
+                                  {post.title}
+                              </Link>
+                            </DialogCloseComponent>
+                          ) : (
+                            <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                                {post.title}
+                            </Link>
+                          )}
+                        </li>
+                    )
+                })}
+                </ul>
+            ) : (
+                 <p className="text-sm text-muted-foreground text-center py-4 px-2">No results found.</p>
+            )
         ) : (
            <p className="text-sm text-muted-foreground text-center py-4 px-2">Start typing to see results.</p>
         )}
@@ -221,29 +227,27 @@ export function Header() {
    );
 
   if (!hasMounted) {
+    // Simplified skeleton for SSR and initial client render to minimize hydration mismatches
     return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-14 items-center px-4">
+        <div className="container mx-auto flex h-14 items-center px-4 justify-between">
+          {/* Left side: Logo and some nav placeholders */}
           <div className="flex items-center">
             <Skeleton className="h-6 w-6 mr-2" />
             <Skeleton className="h-6 w-32" />
+            <div className="hidden md:flex items-center space-x-1 ml-6">
+              <Skeleton className="h-8 w-20" />
+              <Skeleton className="h-8 w-20" />
+            </div>
           </div>
-           <div className="hidden md:flex items-center space-x-1 ml-6">
-            <Skeleton className="h-8 w-20" />
-            <Skeleton className="h-8 w-20" />
-            <Skeleton className="h-8 w-20" />
-            <Skeleton className="h-8 w-20" />
-          </div>
-          <div className="flex-1"></div> {/* This is for the search bar area */}
-          <div className="hidden md:flex items-center space-x-2">
-            <Skeleton className="h-9 w-32" /> {/* Course Login */}
-            <Skeleton className="h-9 w-36" /> {/* Book Now */}
-            <Skeleton className="h-9 w-28" /> {/* Admin Button placeholder - Adjusted to w-28 to match implied server render */}
-          </div>
-          <div className="flex md:hidden items-center space-x-2 ml-auto">
-             <Skeleton className="h-8 w-8" /> {/* Mobile Search */}
-             <Skeleton className="h-8 w-24" /> {/* Mobile Course Login */}
-             <Skeleton className="h-8 w-24" /> {/* Mobile Book Now */}
+          {/* Right side: Action placeholders */}
+          <div className="flex items-center space-x-2">
+            <div className="hidden md:block"> {/* Desktop search placeholder */}
+                 <Skeleton className="h-9 w-48" />
+            </div>
+            <Skeleton className="h-9 w-32" /> {/* Course Login placeholder */}
+            <Skeleton className="h-9 w-36" /> {/* Book Now placeholder */}
+            <Skeleton className="h-9 w-20 md:w-28" /> {/* Admin / Mobile menu placeholder */}
           </div>
         </div>
       </header>
@@ -316,7 +320,12 @@ export function Header() {
                             sideOffset={5}
                             className="w-[var(--radix-popover-trigger-width)] shadow-md border-0 p-0"
                             onOpenAutoFocus={(e) => e.preventDefault()}
-                            onCloseAutoFocus={() => desktopSearchInputRef.current?.focus()}
+                            onCloseAutoFocus={() => {
+                                // Only refocus if the popover wasn't closed by clicking on the input itself
+                                if (document.activeElement !== desktopSearchInputRef.current) {
+                                   // desktopSearchInputRef.current?.focus(); // Removed to prevent re-opening on external click
+                                }
+                            }}
                         >
                             {searchResultsContent}
                         </PopoverContent>
@@ -337,7 +346,7 @@ export function Header() {
                 </Link>
             </Button>
             {isLoadingAuth ? (
-              <Skeleton className="h-9 w-20" />
+              <Skeleton className="h-9 w-28" />
             ) : isAdmin ? (
               <Link
                 href="/admin"
@@ -375,62 +384,66 @@ export function Header() {
                   <span className="font-bold text-foreground">GeePawHill.Org</span>
                 </Link>
               </SheetClose>
-              <nav className="flex flex-col space-y-1">
-                {navItems.map((navItem) => (
-                    <React.Fragment key={navItem.label || navItem.href}>
-                        {navItem.dropdown ? (
-                            <>
-                                <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div>
-                                <div className="flex flex-col space-y-0 pl-4">
-                                    {navItem.dropdown.map((item) => (
-                                        <SheetClose key={item.href} asChild>
-                                           <Link
-                                             href={item.href!}
-                                             className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
-                                             onClick={handleMobileSheetLinkClick}
-                                           >
-                                             {item.label}
-                                           </Link>
-                                        </SheetClose>
-                                    ))}
-                                </div>
-                            </>
-                        ) : (
-                             <SheetClose asChild>
-                                <Link
-                                href={navItem.href!}
-                                className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
-                                onClick={handleMobileSheetLinkClick}
-                                >
-                                {navItem.label}
-                                </Link>
-                             </SheetClose>
-                        )}
-                    </React.Fragment>
-                ))}
-                 <SheetClose asChild>
-                    <Link
-                      href="/course-login"
-                      className="block w-full text-left text-lg font-medium text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-2"
-                      onClick={handleMobileSheetLinkClick}
-                    >
-                      <GraduationCap className="mr-2 h-5 w-5 inline-block align-text-bottom" />
-                      Course Login
-                    </Link>
-                  </SheetClose>
-                  {isLoadingAuth ? null : isAdmin ? (
+              <ScrollArea className="h-[calc(100vh-8rem)]"> {/* Adjust height as needed */}
+                <nav className="flex flex-col space-y-1 pr-4"> {/* Added pr-4 for scrollbar */}
+                  {navItems.map((navItem) => (
+                      <React.Fragment key={navItem.label || navItem.href}>
+                          {navItem.dropdown ? (
+                              <>
+                                  <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div>
+                                  <div className="flex flex-col space-y-0 pl-4">
+                                      {navItem.dropdown.map((item) => (
+                                          <SheetClose key={item.href} asChild>
+                                            <Link
+                                              href={item.href!}
+                                              className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
+                                              onClick={handleMobileSheetLinkClick}
+                                            >
+                                              {item.label}
+                                            </Link>
+                                          </SheetClose>
+                                      ))}
+                                  </div>
+                              </>
+                          ) : (
+                              <SheetClose asChild>
+                                  <Link
+                                  href={navItem.href!}
+                                  className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
+                                  onClick={handleMobileSheetLinkClick}
+                                  >
+                                  {navItem.label}
+                                  </Link>
+                              </SheetClose>
+                          )}
+                      </React.Fragment>
+                  ))}
                   <SheetClose asChild>
-                    <Link
-                      href="/admin"
-                      className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-4"
-                      onClick={handleMobileSheetLinkClick}
-                    >
-                      <UserCircle className="mr-1 h-5 w-5 inline-block align-text-bottom" />
-                      Admin
-                    </Link>
-                  </SheetClose>
-                ) : null }
-              </nav>
+                      <Link
+                        href="/course-login"
+                        className="block w-full text-left text-lg font-medium text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-2"
+                        onClick={handleMobileSheetLinkClick}
+                      >
+                        <GraduationCap className="mr-2 h-5 w-5 inline-block align-text-bottom" />
+                        Course Login
+                      </Link>
+                    </SheetClose>
+                    {isLoadingAuth ? (
+                        <div className="px-4 py-2 mt-4"> <Skeleton className="h-8 w-28" /> </div>
+                    ) : isAdmin ? (
+                    <SheetClose asChild>
+                      <Link
+                        href="/admin"
+                        className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-4"
+                        onClick={handleMobileSheetLinkClick}
+                      >
+                        <UserCircle className="mr-1 h-5 w-5 inline-block align-text-bottom" />
+                        Admin
+                      </Link>
+                    </SheetClose>
+                  ) : null }
+                </nav>
+              </ScrollArea>
             </SheetContent>
           </Sheet>
            <Link href="/" className="flex items-center space-x-2">
@@ -470,4 +483,5 @@ export function Header() {
     </header>
   );
 }
+
 
