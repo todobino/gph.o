@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger, DialogClose as DialogCloseComponent } from "../ui/dialog";
+import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
 import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react';
@@ -103,9 +103,8 @@ export function Header() {
     if (results.length > 0 && searchQuery.trim() !== '') {
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
     } else {
-        // Keep popover open if there's a query but no results to show "No results found"
-        if (isDesktopSearchPopoverOpen && results.length === 0) {
-            // no-op, keep it open
+        if (isDesktopSearchPopoverOpen && results.length === 0 && searchQuery.trim() !== '') {
+            // Keep open to show "No results"
         } else {
              if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
         }
@@ -149,7 +148,7 @@ export function Header() {
      setSearchQuery('');
      setSearchResults([]);
      setIsMobileSearchDialogOpen(false);
-     setIsDesktopSearchPopoverOpen(false);
+     setIsDesktopSearchPopoverOpen(false); // Also close desktop popover if somehow open
    };
 
    const handleSearchDialogChange = (openState: boolean) => {
@@ -163,27 +162,27 @@ export function Header() {
    const handleDesktopPopoverOpenChange = (openState: boolean) => {
     setIsDesktopSearchPopoverOpen(openState);
     if (!openState && document.activeElement !== desktopSearchInputRef.current) {
-        setSearchQuery(''); // Clear search if clicking outside and popover closes
+        setSearchQuery('');
         setSearchResults([]);
     }
    }
 
 
    const searchResultsContent = (
-    <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", searchResults.length > 0 ? "" : "border-0")}>
+    <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", searchResults.length > 0 || searchQuery.trim() !== '' ? "" : "border-0")}>
         {searchResults.length > 0 ? (
             <ul className="space-y-1">
             {searchResults.map(post => {
                 const slug = post.slug;
                 return (
                     <li key={post.slug}>
-                      {isMobileSearchDialogOpen ? (
+                      {isMobileSearchDialogOpen ? ( // Check if it's the mobile dialog
                         <DialogCloseComponent asChild>
                           <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-3 rounded-md hover:bg-accent text-sm transition-colors">
                               {post.title}
                           </Link>
                         </DialogCloseComponent>
-                      ) : (
+                      ) : ( // Desktop popover
                         <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm transition-colors">
                             {post.title}
                         </Link>
@@ -235,16 +234,16 @@ export function Header() {
             <Skeleton className="h-8 w-20" />
             <Skeleton className="h-8 w-20" />
           </div>
-          <div className="flex-1"></div>
+          <div className="flex-1"></div> {/* This is for the search bar area */}
           <div className="hidden md:flex items-center space-x-2">
-            <Skeleton className="h-9 w-32" />
-            <Skeleton className="h-9 w-36" />
-            <Skeleton className="h-9 w-20" />
+            <Skeleton className="h-9 w-32" /> {/* Course Login */}
+            <Skeleton className="h-9 w-36" /> {/* Book Now */}
+            <Skeleton className="h-9 w-28" /> {/* Admin Button placeholder - Adjusted to w-28 to match implied server render */}
           </div>
           <div className="flex md:hidden items-center space-x-2 ml-auto">
-             <Skeleton className="h-8 w-8" />
-             <Skeleton className="h-8 w-24" />
-             <Skeleton className="h-8 w-24" />
+             <Skeleton className="h-8 w-8" /> {/* Mobile Search */}
+             <Skeleton className="h-8 w-24" /> {/* Mobile Course Login */}
+             <Skeleton className="h-8 w-24" /> {/* Mobile Book Now */}
           </div>
         </div>
       </header>
