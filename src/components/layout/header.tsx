@@ -3,30 +3,27 @@
 'use client';
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '../ui/button'; // Adjusted path
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet'; // Adjusted path
+import { Button, buttonVariants } from '../ui/button';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent
-} from "../ui/dropdown-menu"; // Adjusted path
-import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger } from "../ui/dialog"; // Adjusted path
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Kept alias as it seems to work elsewhere
-import { Input } from "../ui/input"; // Adjusted path
-import { Menu, Cpu, ChevronDown, Search, UserCircle, GraduationCap, CalendarCheck2 } from 'lucide-react';
+} from "../ui/dropdown-menu";
+import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger } from "../ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Input } from "../ui/input";
+import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
-import type { Post } from '@/services/posts'; // Kept alias
-import { getPosts } from '@/services/posts'; // Kept alias
-import { ScrollArea } from '../ui/scroll-area'; // Adjusted path
-import { cn } from '@/lib/utils'; // Kept alias
-import { getCurrentUser, checkIfAdmin } from '@/lib/auth'; // Kept alias
+import type { Post } from '@/services/posts';
+import { getPosts } from '@/services/posts';
+import { ScrollArea } from '../ui/scroll-area';
+import { cn } from '@/lib/utils';
+import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
 import type { User } from 'firebase/auth';
-import { useIsMobile } from '@/hooks/use-mobile'; // Kept alias
-import { Skeleton } from '../ui/skeleton'; // Adjusted path
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Skeleton } from '../ui/skeleton';
 
 
 interface NavItem {
@@ -105,15 +102,12 @@ export function Header() {
     );
     setSearchResults(results.slice(0, 10));
 
-    // Control popover visibility based on search results and query presence
     if (results.length > 0 && searchQuery.trim() !== '') {
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
     } else if (searchQuery.trim() !== '' && results.length === 0) {
-        // Keep open to show "No results" if query is not empty
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
     }
      else {
-        // Close if query is empty or if results are empty AND query was just cleared
         if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
     }
 
@@ -133,7 +127,7 @@ export function Header() {
     {
       label: 'Courses',
       dropdown: [
-        { href: '/courses', label: 'All Courses' },
+         { href: '/courses', label: 'All Courses' },
         { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
         { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns' },
         { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js' },
@@ -168,7 +162,6 @@ export function Header() {
 
    const handleDesktopPopoverOpenChange = (openState: boolean) => {
     if (!openState && document.activeElement !== desktopSearchInputRef.current) {
-        // Only clear search if popover is closed by clicking outside AND input is not focused
         setSearchQuery('');
         setSearchResults([]);
     }
@@ -231,7 +224,6 @@ export function Header() {
    );
 
   if (!hasMounted) {
-    // Simplified skeleton for SSR and initial client render to minimize hydration mismatches
     return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 items-center px-4 justify-between">
@@ -339,12 +331,14 @@ export function Header() {
          <div className="hidden md:flex items-center space-x-2">
             <Button asChild variant="secondary">
                 <Link href="/courses">
+                    <GraduationCap className="mr-2 h-4 w-4" />
                     Course Login
                 </Link>
             </Button>
             <Button asChild>
                 <Link href="/booking">
-                     Book Now
+                    <CalendarPlus className="mr-2 h-4 w-4" />
+                    Book Now
                 </Link>
             </Button>
             {isLoadingAuth ? (
@@ -352,7 +346,7 @@ export function Header() {
             ) : isAdmin ? (
               <Button asChild variant="default" className="bg-foreground text-background hover:bg-foreground/80">
                 <Link href="/admin">
-                    Admin
+                   Admin
                 </Link>
               </Button>
             ) : null}
@@ -384,8 +378,8 @@ export function Header() {
                   <span className="font-bold text-foreground">GeePawHill.Org</span>
                 </Link>
               </SheetClose>
-              <ScrollArea className="h-[calc(100vh-8rem)]"> {/* Adjust height as needed */}
-                <nav className="flex flex-col space-y-1 pr-4"> {/* Added pr-4 for scrollbar */}
+              <ScrollArea className="h-[calc(100vh-8rem)]">
+                <nav className="flex flex-col space-y-1 pr-4">
                   {navItems.map((navItem) => (
                       <React.Fragment key={navItem.label || navItem.href}>
                           {navItem.dropdown ? (
@@ -421,9 +415,10 @@ export function Header() {
                   <SheetClose asChild>
                       <Link
                         href="/courses"
-                        className="block w-full text-left text-lg font-medium text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-2"
+                        className={cn(buttonVariants({ variant: "secondary", className: "w-full justify-start mt-4" }))}
                         onClick={handleMobileSheetLinkClick}
                       >
+                        <GraduationCap className="mr-2 h-4 w-4" />
                         Course Login
                       </Link>
                     </SheetClose>
@@ -467,6 +462,7 @@ export function Header() {
                 </Dialog>
                 <Button asChild size="sm">
                    <Link href="/booking">
+                     <CalendarPlus className="mr-2 h-4 w-4" />
                      Book Now
                    </Link>
                 </Button>
@@ -476,9 +472,3 @@ export function Header() {
     </header>
   );
 }
-
-
-
-
-
-    
