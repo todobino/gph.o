@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Link from 'next/link';
@@ -9,6 +10,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent
 } from "../ui/dropdown-menu"; // Adjusted path
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger } from "../ui/dialog"; // Adjusted path
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"; // Kept alias as it seems to work elsewhere
@@ -305,7 +309,7 @@ export function Header() {
         <div className="hidden md:flex flex-1 items-center justify-center px-4">
             <div className="relative w-full">
                 <Popover
-                    open={isDesktopSearchPopoverOpen && searchQuery.trim() !== ''}
+                    open={isDesktopSearchPopoverOpen}
                     onOpenChange={handleDesktopPopoverOpenChange}
                 >
                     <PopoverTrigger asChild>
@@ -321,17 +325,11 @@ export function Header() {
                             />
                         </div>
                     </PopoverTrigger>
-                    {isDesktopSearchPopoverOpen && searchQuery.trim() !== '' && (
+                    {isDesktopSearchPopoverOpen && (
                          <PopoverContent
                             sideOffset={5}
-                            className="w-[var(--radix-popover-trigger-width)] shadow-md border-0 p-0"
+                            className="w-[var(--radix-popover-trigger-width)] shadow-md p-0 border-0"
                             onOpenAutoFocus={(e) => e.preventDefault()}
-                            onCloseAutoFocus={() => {
-                                // Only refocus if the popover wasn't closed by clicking on the input itself
-                                if (document.activeElement !== desktopSearchInputRef.current) {
-                                   // desktopSearchInputRef.current?.focus(); // Removed to prevent re-opening on external click
-                                }
-                            }}
                         >
                             {searchResultsContent}
                         </PopoverContent>
@@ -341,7 +339,7 @@ export function Header() {
         </div>
          <div className="flex-1 md:hidden"></div>
          <div className="hidden md:flex items-center space-x-2">
-            <Button className="bg-accent text-accent-foreground hover:bg-accent/80" asChild>
+            <Button asChild>
                 <Link href="/courses">
                     Course Login
                 </Link>
@@ -428,7 +426,6 @@ export function Header() {
                         className="block w-full text-left text-lg font-medium text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-2"
                         onClick={handleMobileSheetLinkClick}
                       >
-                        <GraduationCap className="mr-2 h-5 w-5 inline-block align-text-bottom" />
                         Course Login
                       </Link>
                     </SheetClose>
@@ -441,7 +438,6 @@ export function Header() {
                         className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-4"
                         onClick={handleMobileSheetLinkClick}
                       >
-                        <UserCircle className="mr-1 h-5 w-5 inline-block align-text-bottom" />
                         Admin
                       </Link>
                     </SheetClose>
@@ -455,24 +451,22 @@ export function Header() {
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
             <div className="flex items-center gap-1">
-                 <RadixDialogTrigger asChild>
-                    <span
-                      role="button"
-                      tabIndex={0}
-                      className={cn(
-                        buttonVariants({ variant: 'ghost', size: 'icon' }),
-                        'cursor-pointer'
-                      )}
-                      aria-label="Open search dialog"
-                    >
-                      <Search className="h-5 w-5" />
-                    </span>
-                  </RadixDialogTrigger>
-                <Button className="bg-accent text-accent-foreground hover:bg-accent/80" size="sm" asChild>
-                  <Link href="/courses">
-                      Course Login
-                  </Link>
-                </Button>
+                <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
+                  <RadixDialogTrigger asChild>
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        className={cn(
+                          buttonVariants({ variant: 'ghost', size: 'icon' }),
+                          'cursor-pointer'
+                        )}
+                        aria-label="Open search dialog"
+                      >
+                        <Search className="h-5 w-5" />
+                      </span>
+                    </RadixDialogTrigger>
+                    {mobileSearchDialogContent}
+                </Dialog>
                 <Button asChild size="sm">
                    <Link href="/booking">
                      Book Now
@@ -487,3 +481,6 @@ export function Header() {
 
 
 
+
+
+    
