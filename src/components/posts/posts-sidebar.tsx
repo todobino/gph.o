@@ -59,7 +59,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
   return (
     <Card>
       <CardContent className="space-y-6 pt-6">
-        <Accordion type="multiple" collapsible className="w-full" defaultValue={['tags', 'archives', 'series']}>
+        <Accordion type="multiple" className="w-full" defaultValue={['tags', 'archives', 'series']}>
           <AccordionItem value="tags">
             <AccordionTrigger className="text-lg font-medium">Tags</AccordionTrigger>
             <AccordionContent>
