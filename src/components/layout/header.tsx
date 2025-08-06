@@ -177,10 +177,10 @@ export function Header() {
 
 
    const searchResultsContent = (
-    <ScrollArea className={cn("h-fit max-h-[200px] sm:max-h-[300px] w-full", (searchResults.length > 0 || searchQuery.trim() !== '') ? "" : "border-0 p-0")}>
+    <ScrollArea className={cn("mt-2 h-fit max-h-[200px] rounded-md border sm:max-h-[300px]", (searchResults.length > 0 || searchQuery.trim() !== '') ? "" : "border-0 p-0")}>
         {(searchResults.length > 0 || searchQuery.trim() !== '') ? (
              searchResults.length > 0 ? (
-                <ul className="space-y-1">
+                <ul className="space-y-1 p-2">
                 {searchResults.map(post => {
                     const slug = post.slug;
                     return (
@@ -235,7 +235,6 @@ export function Header() {
     return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 items-center px-4 justify-between">
-          {/* Left side: Logo and some nav placeholders */}
           <div className="flex items-center">
             <Skeleton className="h-6 w-6 mr-2" />
             <Skeleton className="h-6 w-32" />
@@ -244,9 +243,8 @@ export function Header() {
               <Skeleton className="h-8 w-20" />
             </div>
           </div>
-          {/* Right side: Action placeholders */}
           <div className="flex items-center space-x-2">
-            <div className="hidden md:block"> {/* Desktop search placeholder */}
+            <div className="hidden md:block">
                  <Skeleton className="h-9 w-48" />
             </div>
              <div className="flex-1"></div>
@@ -328,7 +326,7 @@ export function Header() {
                     {isDesktopSearchPopoverOpen && (
                          <PopoverContent
                             sideOffset={5}
-                            className="w-[var(--radix-popover-trigger-width)] shadow-md p-0 border-0"
+                            className="w-[var(--radix-popover-trigger-width)] p-0 shadow-md border-0"
                             onOpenAutoFocus={(e) => e.preventDefault()}
                         >
                             {searchResultsContent}
@@ -339,7 +337,7 @@ export function Header() {
         </div>
          <div className="flex-1 md:hidden"></div>
          <div className="hidden md:flex items-center space-x-2">
-            <Button asChild>
+            <Button asChild variant="secondary">
                 <Link href="/courses">
                     Course Login
                 </Link>

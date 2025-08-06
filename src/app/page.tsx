@@ -1,4 +1,5 @@
 
+
 import React, { ReactNode } from 'react';
 
 import type { Post } from '@/services/posts'; // Updated import path
@@ -93,7 +94,7 @@ export default async function Home() {
                        </p>
                      </CardContent>
                      <CardFooter>
-                       <span className={cn(buttonVariants({ variant: "link", className: "p-0 pointer-events-none" }))}> {/* Keep style but remove interactivity */}
+                       <span className={cn(buttonVariants({ variant: "secondary", className: "pointer-events-none" }))}>
                           Read More
                        </span>
                      </CardFooter>
@@ -141,7 +142,7 @@ export default async function Home() {
                       </CardContent>
                       <CardFooter>
                          {/* Keep style but remove interactivity */}
-                         <span className={cn(buttonVariants({ variant: "link", className: "p-0 pointer-events-none" }))}>
+                         <span className={cn(buttonVariants({ variant: "secondary", className: "pointer-events-none" }))}>
                            Watch Video
                          </span>
                       </CardFooter>
@@ -165,4 +166,5 @@ export default async function Home() {
     </div>
   );
 }
+
 
