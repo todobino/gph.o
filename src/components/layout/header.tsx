@@ -245,9 +245,15 @@ export function Header() {
             <div className="hidden md:block"> {/* Desktop search placeholder */}
                  <Skeleton className="h-9 w-48" />
             </div>
-            <Skeleton className="h-9 w-32" /> {/* Course Login placeholder */}
-            <Skeleton className="h-9 w-36" /> {/* Book Now placeholder */}
-            <Skeleton className="h-9 w-20 md:w-28" /> {/* Admin / Mobile menu placeholder */}
+             <div className="flex-1"></div>
+             <div className="hidden md:flex items-center space-x-2">
+               <Skeleton className="h-9 w-32" />
+               <Skeleton className="h-9 w-36" />
+               <Skeleton className="h-9 w-28" />
+             </div>
+             <div className="md:hidden">
+                <Skeleton className="h-9 w-9" />
+             </div>
           </div>
         </div>
       </header>
@@ -333,28 +339,26 @@ export function Header() {
                 </Popover>
             </div>
         </div>
-
-        <div className="hidden md:flex items-center space-x-2">
+         <div className="flex-1 md:hidden"></div>
+         <div className="hidden md:flex items-center space-x-2">
             <Button className="bg-accent text-accent-foreground hover:bg-accent/80" asChild>
-                <Link href="/course-login">
-                    <GraduationCap className="mr-2 h-4 w-4" /> Course Login
+                <Link href="/courses">
+                    Course Login
                 </Link>
             </Button>
             <Button asChild>
                 <Link href="/booking">
-                    <CalendarCheck2 className="mr-2 h-4 w-4" /> Book Now
+                     Book Now
                 </Link>
             </Button>
             {isLoadingAuth ? (
               <Skeleton className="h-9 w-28" />
             ) : isAdmin ? (
-              <Link
-                href="/admin"
-                className={cn(buttonVariants({ variant: "ghost", size: "default" }), "font-bold text-primary hover:text-primary/80 px-3 py-2")}
-              >
-                 <UserCircle className="mr-1 h-4 w-4" />
-                Admin
-              </Link>
+              <Button asChild variant="default" className="bg-foreground text-background hover:bg-foreground/80">
+                <Link href="/admin">
+                    Admin
+                </Link>
+              </Button>
             ) : null}
         </div>
 
@@ -420,7 +424,7 @@ export function Header() {
                   ))}
                   <SheetClose asChild>
                       <Link
-                        href="/course-login"
+                        href="/courses"
                         className="block w-full text-left text-lg font-medium text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-2"
                         onClick={handleMobileSheetLinkClick}
                       >
@@ -451,30 +455,27 @@ export function Header() {
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
             <div className="flex items-center gap-1">
-                 <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                    <RadixDialogTrigger asChild>
-                       <span
-                        role="button"
-                        tabIndex={0}
-                        className={cn(
-                          buttonVariants({ variant: 'ghost', size: 'icon' }),
-                          'cursor-pointer'
-                        )}
-                        aria-label="Open search dialog"
-                      >
-                        <Search className="h-5 w-5" />
-                      </span>
-                    </RadixDialogTrigger>
-                    {isMobileSearchDialogOpen && mobileSearchDialogContent}
-                </Dialog>
+                 <RadixDialogTrigger asChild>
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className={cn(
+                        buttonVariants({ variant: 'ghost', size: 'icon' }),
+                        'cursor-pointer'
+                      )}
+                      aria-label="Open search dialog"
+                    >
+                      <Search className="h-5 w-5" />
+                    </span>
+                  </RadixDialogTrigger>
                 <Button className="bg-accent text-accent-foreground hover:bg-accent/80" size="sm" asChild>
-                  <Link href="/course-login">
-                      <GraduationCap className="mr-1 h-4 w-4" /> Course Login
+                  <Link href="/courses">
+                      Course Login
                   </Link>
                 </Button>
                 <Button asChild size="sm">
                    <Link href="/booking">
-                     <CalendarCheck2 className="mr-1 h-4 w-4" /> Book Now
+                     Book Now
                    </Link>
                 </Button>
             </div>
@@ -483,5 +484,6 @@ export function Header() {
     </header>
   );
 }
+
 
 
