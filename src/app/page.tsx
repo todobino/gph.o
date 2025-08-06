@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { EmailSignupForm } from '@/components/email-signup-form';
 import { getPosts } from '@/services/posts'; // Updated import path
 import { cn } from '@/lib/utils'; // Import cn
+import { GraduationCap, CalendarPlus } from 'lucide-react';
 
 // Function to get videos (filters from all posts)
 async function getLatestVideos(): Promise<Post[]> { // Use renamed Post type
@@ -21,7 +22,7 @@ async function getLatestVideos(): Promise<Post[]> { // Use renamed Post type
 // Function to get the most recent posts
 async function getRecentPosts(): Promise<Post[]> {
   const allPosts = await getPosts();
-  return allPosts.slice(0, 9); // Get the latest 9 posts
+  return allPosts.slice(0, 8); // Get the latest 8 posts for a 4-column grid
 }
 
 
@@ -57,7 +58,10 @@ export default async function Home() {
                     If you want to learn how to create lasting change in your workplace, click the button below to book my solo or group Coaching Sessions today!
                </p>
                {/* Apply button styles directly to the Link */}
-               <Link href="/booking" className={cn(buttonVariants({ size: "lg" }))}>Let's Work Together</Link>
+               <Link href="/booking" className={cn(buttonVariants({ size: "lg" }))}>
+                  <CalendarPlus />
+                  Book Now
+                </Link>
             </div>
           </div>
         </div>
@@ -67,7 +71,7 @@ export default async function Home() {
        <section>
          <h2 className="text-3xl font-semibold mb-6">Recent Posts</h2>
          {recentPosts.length > 0 ? (
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
              {recentPosts.map((post) => {
                const slug = post.slug;
                return (
@@ -166,5 +170,3 @@ export default async function Home() {
     </div>
   );
 }
-
-
