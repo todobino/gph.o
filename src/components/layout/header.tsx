@@ -125,22 +125,22 @@ export function Header() {
     {
       label: 'Posts',
       dropdown: [
-        { href: '/posts?tag=video', label: 'Videos', icon: <Video /> },
-        { href: '/posts?tag=audio', label: 'Audio', icon: <Podcast /> },
-        { href: '/subscribe', label: 'Subscribe!', icon: <Mail /> },
+        { href: '/posts?tag=video', label: 'Videos', icon: <Video className="h-4 w-4" /> },
+        { href: '/posts?tag=audio', label: 'Audio', icon: <Podcast className="h-4 w-4" /> },
+        { href: '/subscribe', label: 'Subscribe!', icon: <Mail className="h-4 w-4" /> },
         { href: '/posts', label: 'All Posts' },
       ],
     },
     {
       label: 'Courses',
       dropdown: [
-        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <BookOpen /> },
-        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <BookOpen /> },
-        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <BookOpen /> },
-        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <BookOpen /> },
-        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <BookOpen /> },
-        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <BookOpen /> },
-        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <BookOpen /> },
+        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <BookOpen className="h-4 w-4" /> },
         { href: '/courses', label: 'All Courses' },
       ],
     },
@@ -359,7 +359,7 @@ export function Header() {
             <Button asChild variant="secondary">
                 <Link href="/courses">
                     <GraduationCap />
-                    Course Login
+                    My Courses
                 </Link>
             </Button>
             <Button asChild>
@@ -446,7 +446,7 @@ export function Header() {
                         onClick={handleMobileSheetLinkClick}
                       >
                         <GraduationCap />
-                        Course Login
+                        My Courses
                       </Link>
                     </SheetClose>
                     {isLoadingAuth ? (
