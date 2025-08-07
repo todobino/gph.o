@@ -14,7 +14,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, Book } from 'lucide-react';
+import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -55,7 +55,7 @@ export function Header() {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const isMobile = useIsMobile();
 
-  const allCourses = [
+  const allCourses = React.useMemo(() => [
       { title: 'Leading Technical Change', slug: '/courses/leading-technical-change' },
       { title: 'Advanced React Patterns', slug: '/courses/advanced-react-patterns' },
       { title: 'Modern Backend Node.js', slug: '/courses/modern-backend-nodejs' },
@@ -64,13 +64,13 @@ export function Header() {
       { title: 'Agile Project Management', slug: '/courses/agile-project-management' },
       { title: 'Strategic Thinking for Eng.', slug: '/courses/strategic-thinking-engineering' },
       { title: 'All Courses', slug: '/courses' },
-  ];
-  const allPages = [
+  ], []);
+  const allPages = React.useMemo(() => [
       { title: 'About', slug: '/about' },
       { title: 'Contact', slug: '/contact' },
       { title: 'Booking', slug: '/booking' },
       { title: 'Subscribe', slug: '/subscribe' },
-  ];
+  ], []);
 
   const [courseResults, setCourseResults] = useState<{title: string, slug: string}[]>([]);
   const [pageResults, setPageResults] = useState<{title: string, slug: string}[]>([]);
@@ -115,17 +115,18 @@ export function Header() {
   }, [hasMounted]);
 
    useEffect(() => {
-    if (!hasMounted || searchQuery.trim() === '') {
-      setPostResults([]);
-      setCourseResults([]);
-      setPageResults([]);
-      if (isDesktopSearchPopoverOpen && searchQuery.trim() === '') {
-        // setIsDesktopSearchPopoverOpen(false);
-      }
-      return;
-    }
+    if (!hasMounted) return;
 
-    const lowerCaseQuery = searchQuery.toLowerCase();
+    const lowerCaseQuery = searchQuery.trim().toLowerCase();
+
+    if (lowerCaseQuery === '') {
+        if (postResults.length > 0 || courseResults.length > 0 || pageResults.length > 0) {
+            setPostResults([]);
+            setCourseResults([]);
+            setPageResults([]);
+        }
+        return;
+    }
     
     const posts = allPosts.filter(post =>
       post.title.toLowerCase().includes(lowerCaseQuery) ||
@@ -143,18 +144,7 @@ export function Header() {
     ).slice(0, 5);
     setPageResults(pages);
 
-    const totalResults = posts.length + courses.length + pages.length;
-
-    if (totalResults > 0 && searchQuery.trim() !== '') {
-        if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
-    } else if (searchQuery.trim() !== '' && totalResults === 0) {
-        if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
-    }
-     else {
-        // if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
-     }
-
-  }, [searchQuery, allPosts, allCourses, allPages, hasMounted ]);
+  }, [searchQuery, allPosts, allCourses, allPages, hasMounted, postResults.length, courseResults.length, pageResults.length]);
 
 
   const navItems: NavItem[] = [
@@ -169,13 +159,13 @@ export function Header() {
     {
       label: 'Courses',
       dropdown: [
-        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <BookOpen className="h-4 w-4" /> },
       ],
     },
     { href: '/about', label: 'About' },
@@ -562,3 +552,5 @@ export function Header() {
     </header>
   );
 }
+
+    
