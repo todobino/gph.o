@@ -114,7 +114,7 @@ export function Header() {
     }
   }, [hasMounted]);
 
-   useEffect(() => {
+  useEffect(() => {
     if (!hasMounted) return;
 
     const lowerCaseQuery = searchQuery.trim().toLowerCase();
@@ -218,13 +218,13 @@ export function Header() {
                 <div className="space-y-1 p-2">
                   {postResults.length > 0 && (
                     <div>
-                      <div className="text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1">Posts</div>
+                      <div className="inline-block text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1">Posts</div>
                       <ul className="space-y-1 mt-1">
                         {postResults.map(post => (
                           <li key={`post-${post.slug}`}>
-                            <Link href={`/posts/${post.slug}`} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                            <Link href={`/posts/${post.slug}`} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
                               {getPostIcon(post)}
-                              <span className="truncate">{post.title}</span>
+                              <span className="flex-1 min-w-0 truncate">{post.title}</span>
                             </Link>
                           </li>
                         ))}
@@ -233,13 +233,13 @@ export function Header() {
                   )}
                   {courseResults.length > 0 && (
                     <div>
-                      <div className="text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1 mt-1">Courses</div>
+                      <div className="inline-block text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1 mt-1">Courses</div>
                       <ul className="space-y-1 mt-1">
                         {courseResults.map(course => (
                           <li key={`course-${course.slug}`}>
-                            <Link href={course.slug} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                            <Link href={course.slug} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
                                 <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                                <span className="truncate">{course.title}</span>
+                                <span className="flex-1 min-w-0 truncate">{course.title}</span>
                             </Link>
                           </li>
                         ))}
@@ -248,13 +248,13 @@ export function Header() {
                   )}
                   {pageResults.length > 0 && (
                     <div>
-                      <div className="text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1 mt-1">Pages</div>
+                      <div className="inline-block text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1 mt-1">Pages</div>
                       <ul className="space-y-1 mt-1">
                         {pageResults.map(page => (
                           <li key={`page-${page.slug}`}>
-                            <Link href={page.slug} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                            <Link href={page.slug} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
                                <Book className="h-4 w-4 text-muted-foreground" />
-                               <span className="truncate">{page.title}</span>
+                               <span className="flex-1 min-w-0 truncate">{page.title}</span>
                             </Link>
                           </li>
                         ))}
