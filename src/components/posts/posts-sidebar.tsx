@@ -5,7 +5,6 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Separator } from '@/components/ui/separator';
 import { EmailSignupForm } from '@/components/email-signup-form';
 import { BookOpen } from 'lucide-react'; // Icon for series
 
@@ -118,8 +117,6 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-
-        <Separator />
 
         <div>
           <h3 className="text-lg font-medium mb-3">Stay Updated</h3>
