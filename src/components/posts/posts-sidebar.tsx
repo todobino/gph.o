@@ -56,7 +56,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
         <Accordion type="multiple" className="w-full" defaultValue={['series', 'tags', 'archives']}>
           {series && series.length > 0 && ( // Conditionally render Series section
             <AccordionItem value="series">
-              <AccordionTrigger className="text-lg font-medium">Series</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-medium font-heading">Series</AccordionTrigger>
               <AccordionContent>
                 <ul className="space-y-2 pt-2">
                   {series.map((seriesName) => (
@@ -77,7 +77,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
           )}
 
           <AccordionItem value="tags">
-            <AccordionTrigger className="text-lg font-medium">Tags</AccordionTrigger>
+            <AccordionTrigger className="text-lg font-medium font-heading">Tags</AccordionTrigger>
             <AccordionContent>
               <div className="flex flex-wrap gap-2 pt-2">
                 {tags.map((tag) => (
@@ -99,7 +99,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
           </AccordionItem>
 
           <AccordionItem value="archives">
-            <AccordionTrigger className="text-lg font-medium">Archives</AccordionTrigger>
+            <AccordionTrigger className="text-lg font-medium font-heading">Archives</AccordionTrigger>
             <AccordionContent>
               <ul className="space-y-2 pt-2">
                 {archives.map((archive) => (
@@ -119,7 +119,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
         </Accordion>
 
         <div>
-          <h3 className="text-lg font-medium mb-3">Stay Updated</h3>
+          <h3 className="text-lg font-medium mb-3 font-heading">Stay Updated</h3>
           <EmailSignupForm />
         </div>
       </CardContent>

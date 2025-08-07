@@ -68,7 +68,7 @@ export default async function PostPage({ params }: PostPageProps) {
       <Breadcrumbs items={breadcrumbItems} />
       <article className="prose prose-lg dark:prose-invert max-w-none">
         <header className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">{currentPost.title}</h1>
+          <h1 className="text-4xl font-bold mb-2 font-heading">{currentPost.title}</h1>
           <p className="text-muted-foreground text-sm mb-2"> {/* Reduced mb from 4 to 2 */}
             Published on {new Date(currentPost.date).toLocaleDateString()}
           </p>
@@ -96,9 +96,9 @@ export default async function PostPage({ params }: PostPageProps) {
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
-            h1: (props) => <h1 className="text-3xl font-semibold mt-8 mb-4" {...props} />,
-            h2: (props) => <h2 className="text-2xl font-semibold mt-6 mb-3" {...props} />,
-            h3: (props) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+            h1: (props) => <h1 className="text-3xl font-semibold mt-8 mb-4 font-heading" {...props} />,
+            h2: (props) => <h2 className="text-2xl font-semibold mt-6 mb-3 font-heading" {...props} />,
+            h3: (props) => <h3 className="text-xl font-semibold mt-4 mb-2 font-heading" {...props} />,
             p: (props) => <p className="my-4 leading-relaxed" {...props} />,
             a: (props) => <a className="text-primary hover:underline" {...props} />,
             ul: (props) => <ul className="list-disc list-inside my-4 pl-4 space-y-1" {...props} />,

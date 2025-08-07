@@ -21,11 +21,11 @@ const podcastLinks = [
 export default function SubscribePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-12">
-      <h1 className="text-4xl font-bold text-center mb-8">Subscribe</h1>
+      <h1 className="text-4xl font-bold text-center mb-8 font-heading">Subscribe</h1>
 
       {/* Email Signup Section */}
       <section className="bg-muted p-8 rounded-lg shadow-sm">
-        <h2 className="text-3xl font-semibold text-center mb-6">Sign Up for Email Updates</h2>
+        <h2 className="text-3xl font-semibold text-center mb-6 font-heading">Sign Up for Email Updates</h2>
         <p className="text-center text-muted-foreground mb-8">
           Get notified about new posts, videos, and upcoming events.
         </p>
@@ -36,7 +36,7 @@ export default function SubscribePage() {
 
       {/* Podcast Subscription Section */}
       <section>
-        <h2 className="text-3xl font-semibold text-center mb-8">Subscribe to the Podcast</h2>
+        <h2 className="text-3xl font-semibold text-center mb-8 font-heading">Subscribe to the Podcast</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {podcastLinks.map((link) => (
             <Link key={link.name} href={link.url} passHref legacyBehavior>

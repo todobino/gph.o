@@ -25,7 +25,7 @@ export default function AboutPage() {
       <div className="flex flex-col lg:flex-row gap-12">
         {/* Left Column: Text Content */}
         <div className="w-full lg:w-2/3 space-y-6">
-          <h1 className="text-4xl font-bold tracking-tight">Hi! I’m GeePaw<sup>1</sup> Hill.</h1>
+          <h1 className="text-4xl font-bold tracking-tight font-heading">Hi! I’m GeePaw<sup>1</sup> Hill.</h1>
           {paragraphs.map((paragraph, index) => (
             <p key={index} className="text-lg text-foreground/80 leading-relaxed">
               {/* Handle the superscript in the last paragraph */}

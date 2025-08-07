@@ -7,7 +7,7 @@ import Link from 'next/link'; // Import Link for the button
 
 const ltcBodyText = `How can we help our software teams get stronger? Faster? Smarter? Happier? More positive and more productive?
 
-There are lots of ideas about what changes we might desire to make, ranging from process to policy to procedure to skillset. There’s no problem in finding proposed changes. No, the problem is in helping your team to actually make any given change.
+There are lots of ideas about what changes we might desire to make, ranging from process to policy to procedure to skillset. There’s no problem in findin_g proposed changes. No, the problem is in helping your team to actually make any given change.
 
 Leading Technical Change (LTC), is a course designed to focus on how to make change, not which change to make.
 
@@ -66,7 +66,7 @@ export default function LeadingTechnicalChangePage() {
     <div className="container mx-auto px-4 py-12 space-y-16"> {/* Added space-y */}
       {/* Hero Section */}
       <div className="bg-accent text-accent-foreground p-8 md:p-12 rounded-lg shadow-sm text-center"> {/* Changed bg-secondary to bg-accent and added text-accent-foreground */}
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 font-heading">
           Leading Technical Change
         </h1>
         <p className="text-lg md:text-xl text-accent-foreground/80 mb-4"> {/* Changed text-muted-foreground to text-accent-foreground/80 */}
@@ -86,7 +86,7 @@ export default function LeadingTechnicalChangePage() {
       <section className="flex flex-col md:flex-row gap-12 items-start">
         {/* Left Column: Text Content */}
         <div className="w-full md:w-1/2 space-y-6">
-          <h2 className="text-3xl font-semibold mb-4">
+          <h2 className="text-3xl font-semibold mb-4 font-heading">
             What is LTC? - “Better.”
           </h2>
           {ltcParagraphs.map((paragraph, index) => (
@@ -118,7 +118,7 @@ export default function LeadingTechnicalChangePage() {
        <section className="flex flex-col md:flex-row-reverse gap-12 items-start"> {/* Reversed order for image on left */}
          {/* Right Column: Text Content */}
          <div className="w-full md:w-1/2 space-y-6">
-           <h2 className="text-3xl font-semibold mb-4">
+           <h2 className="text-3xl font-semibold mb-4 font-heading">
              The Course Leader
            </h2>
            {courseLeaderParagraphs.map((paragraph, index) => (
@@ -145,7 +145,7 @@ export default function LeadingTechnicalChangePage() {
         <section className="flex flex-col md:flex-row gap-12 items-start">
           {/* Left Column: Text Content */}
           <div className="w-full md:w-1/2 space-y-6">
-            <h2 className="text-3xl font-semibold mb-4">
+            <h2 className="text-3xl font-semibold mb-4 font-heading">
               Theory of Change
             </h2>
             {theoryOfChangeParagraphs.map((paragraph, index) => (
@@ -180,7 +180,7 @@ export default function LeadingTechnicalChangePage() {
         <section className="flex flex-col md:flex-row-reverse gap-12 items-start"> {/* Reversed order */}
           {/* Right Column: Text Content */}
           <div className="w-full md:w-1/2 space-y-6">
-            <h2 className="text-3xl font-semibold mb-4">
+            <h2 className="text-3xl font-semibold mb-4 font-heading">
               Technique of Change
             </h2>
             {techniqueOfChangeParagraphs.map((paragraph, index) => (
@@ -206,7 +206,7 @@ export default function LeadingTechnicalChangePage() {
         <section className="flex flex-col md:flex-row gap-12 items-start">
           {/* Left Column: Text Content */}
           <div className="w-full md:w-1/2 space-y-6">
-            <h2 className="text-3xl font-semibold mb-4">
+            <h2 className="text-3xl font-semibold mb-4 font-heading">
               Practice of Change
             </h2>
             {practiceOfChangeParagraphs.map((paragraph, index) => (
@@ -242,7 +242,7 @@ export default function LeadingTechnicalChangePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-center md:text-left">
                 {/* CTA 1: Join Cohort */}
                 <div className="space-y-3">
-                    <h3 className="text-2xl font-semibold text-accent-foreground">Join the Next LTC Cohort</h3>
+                    <h3 className="text-2xl font-semibold text-accent-foreground font-heading">Join the Next LTC Cohort</h3>
                     <Button size="lg" disabled> {/* Disabled until booking is ready */}
                         <UserPlus className="mr-2 h-5 w-5" />
                         Get Your Seat (Coming Soon)
@@ -252,7 +252,7 @@ export default function LeadingTechnicalChangePage() {
 
                  {/* CTA 2: Download Overview */}
                  <div className="space-y-3">
-                    <h3 className="text-2xl font-semibold text-accent-foreground">Download the LTC Overview</h3>
+                    <h3 className="text-2xl font-semibold text-accent-foreground font-heading">Download the LTC Overview</h3>
                      <Button size="lg" disabled> {/* Disabled until PDF is available */}
                          <Download className="mr-2 h-5 w-5" />
                          Download the PDF (Coming Soon)

@@ -96,10 +96,10 @@ export default function AdminDashboardPage() {
                 <Skeleton className="h-5 w-60" />
               </>
             ) : error ? (
-               <h1 className="text-4xl font-bold text-destructive">{error}</h1>
+               <h1 className="text-4xl font-bold text-destructive font-heading">{error}</h1>
             ) : (
               <>
-                <h1 className="text-4xl font-bold">Welcome, {userProfile?.firstName} {userProfile?.lastName}.</h1>
+                <h1 className="text-4xl font-bold font-heading">Welcome, {userProfile?.firstName} {userProfile?.lastName}.</h1>
                  <p className="text-sm text-muted-foreground mt-1">Logged in as: {userProfile?.email}</p>
               </>
             )}

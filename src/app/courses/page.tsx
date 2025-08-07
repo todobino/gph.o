@@ -1,4 +1,5 @@
 
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -69,7 +70,7 @@ export default function CoursesPage() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-16">
       <section className="text-center">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 font-heading">
           Explore Our Courses
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -79,7 +80,7 @@ export default function CoursesPage() {
       </section>
 
       <section>
-        <h2 className="text-3xl font-semibold mb-8">Advanced Software Development</h2>
+        <h2 className="text-3xl font-semibold mb-8 font-heading">Advanced Software Development</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {softwareCourses.map((course) => (
             <Card key={course.slug} className="flex flex-col overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -118,7 +119,7 @@ export default function CoursesPage() {
       </section>
 
       <section>
-        <h2 className="text-3xl font-semibold mb-8">Software Leadership</h2>
+        <h2 className="text-3xl font-semibold mb-8 font-heading">Software Leadership</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {leadershipCourses.map((course) => (
             <Card key={course.slug} className="flex flex-col overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">

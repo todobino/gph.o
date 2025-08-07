@@ -19,7 +19,7 @@ export async function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Column 1: Featured Video */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Featured Video</h3>
+              <h3 className="text-lg font-semibold font-heading">Featured Video</h3>
               <Link href="/posts?tag=video" className="block group"> {/* Link to video tag page */}
                 <div className="relative aspect-video overflow-hidden rounded-lg shadow-md">
                   <Image
@@ -41,7 +41,7 @@ export async function Footer() {
 
             {/* Column 2: Recent Posts */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Recent Posts</h3>
+              <h3 className="text-lg font-semibold font-heading">Recent Posts</h3>
               <ul className="space-y-2">
                 {recentPosts.map((post) => (
                   <li key={post.slug}>
@@ -62,7 +62,7 @@ export async function Footer() {
 
             {/* Column 3: Stay Updated */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Stay Updated</h3>
+              <h3 className="text-lg font-semibold font-heading">Stay Updated</h3>
               <EmailSignupForm />
             </div>
           </div>

@@ -40,7 +40,7 @@ export default function ModernBackendNodejsPage() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-12">
       <section className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-8 md:p-16 rounded-lg shadow-xl text-center">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">{title}</h1>
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 font-heading">{title}</h1>
         <p className="text-lg md:text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
           {description}
         </p>
@@ -51,7 +51,7 @@ export default function ModernBackendNodejsPage() {
 
       <section className="grid md:grid-cols-3 gap-8 items-start">
         <div className="md:col-span-2 space-y-6">
-          <h2 className="text-3xl font-semibold">What You'll Learn</h2>
+          <h2 className="text-3xl font-semibold font-heading">What You'll Learn</h2>
           <ul className="space-y-3">
             {whatYouWillLearn.map((item, index) => (
               <li key={index} className="flex items-start">
@@ -96,7 +96,7 @@ export default function ModernBackendNodejsPage() {
       </section>
 
       <section>
-        <h2 className="text-3xl font-semibold mb-6">Course Content</h2>
+        <h2 className="text-3xl font-semibold mb-6 font-heading">Course Content</h2>
         <div className="space-y-4">
           {modules.map((module, index) => (
             <Card key={index} className="shadow-sm hover:shadow-md transition-shadow bg-card">
@@ -110,7 +110,7 @@ export default function ModernBackendNodejsPage() {
       </section>
 
       <section className="bg-muted p-8 rounded-lg mt-12">
-        <h2 className="text-3xl font-semibold mb-6 text-center">Meet Your Instructor</h2>
+        <h2 className="text-3xl font-semibold mb-6 text-center font-heading">Meet Your Instructor</h2>
         <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-8 max-w-3xl mx-auto">
           <Image
             src={`https://placehold.co/200x200.png`}
@@ -121,14 +121,14 @@ export default function ModernBackendNodejsPage() {
             data-ai-hint={instructor.imageHint}
           />
           <div>
-            <h3 className="text-2xl font-semibold mb-2">{instructor.name}</h3>
+            <h3 className="text-2xl font-semibold mb-2 font-heading">{instructor.name}</h3>
             <p className="text-muted-foreground">{instructor.bio}</p>
           </div>
         </div>
       </section>
 
       <section className="text-center py-8">
-        <h2 className="text-2xl font-semibold mb-4">Ready to Build Modern Backends?</h2>
+        <h2 className="text-2xl font-semibold mb-4 font-heading">Ready to Build Modern Backends?</h2>
         <Button size="lg" disabled>Enroll in {title} (Coming Soon)</Button>
       </section>
     </div>

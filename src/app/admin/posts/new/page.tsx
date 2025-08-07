@@ -135,7 +135,7 @@ export default function NewPostPage() {
   return (
     <div className="space-y-8 p-4 md:p-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl md:text-4xl font-bold">Create New Post</h1>
+        <h1 className="text-3xl md:text-4xl font-bold font-heading">Create New Post</h1>
         <Button variant="outline" onClick={handleCancel}>Cancel</Button>
       </div>
 

@@ -49,7 +49,7 @@ export default async function Home() {
             </div>
              {/* Right Column: Text and Button */}
             <div className="w-full md:w-2/3 text-center md:text-left"> {/* Text column */}
-              <h1 className="text-4xl font-bold tracking-tight mb-4">Helping Geeks Produce for Over 40 Years.</h1>
+              <h1 className="text-4xl font-bold tracking-tight mb-4 font-heading">Helping Geeks Produce for Over 40 Years.</h1>
               {/* Updated body text with two paragraphs */}
                <p className="text-xl text-muted-foreground mb-4"> {/* Added mb-4 for spacing between paragraphs */}
                   My mission is to help people learn how to embrace change and harvest its value. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
@@ -69,7 +69,7 @@ export default async function Home() {
 
       {/* New Recent Posts Section */}
        <section>
-         <h2 className="text-3xl font-semibold mb-6">Recent Posts</h2>
+         <h2 className="text-3xl font-semibold mb-6 font-heading">Recent Posts</h2>
          {recentPosts.length > 0 ? (
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
              {recentPosts.map((post) => {
@@ -114,7 +114,7 @@ export default async function Home() {
 
       {/* Existing Latest Videos Section */}
       <section>
-        <h2 className="text-3xl font-semibold mb-6">Latest Videos</h2>
+        <h2 className="text-3xl font-semibold mb-6 font-heading">Latest Videos</h2>
         {latestVideos.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {latestVideos.map((video) => {
@@ -161,7 +161,7 @@ export default async function Home() {
       </section>
 
       <section className="py-12 bg-muted rounded-lg shadow-sm px-6">
-         <h2 className="text-3xl font-semibold text-center mb-6">Stay Updated</h2>
+         <h2 className="text-3xl font-semibold text-center mb-6 font-heading">Stay Updated</h2>
          <p className="text-center text-muted-foreground mb-8">Sign up for email updates on new posts and events.</p>
          <div className="max-w-md mx-auto">
            <EmailSignupForm />

@@ -1,4 +1,5 @@
 
+
 import Link from 'next/link';
 import { getPosts, type Post, getAllSeries } from '@/services/posts'; // Updated import path, added getAllSeries
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -50,7 +51,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
          <PostsSidebar tags={tags} archives={archives} series={series} /> {/* Pass series to sidebar */}
        </aside>
        <main className="w-full md:w-2/3 lg:w-3/4 px-4 md:px-0">
-        <h1 className="text-4xl font-bold mb-8">
+        <h1 className="text-4xl font-bold mb-8 font-heading">
           {tag ? `Posts tagged: ${toTitleCase(tag)}` : 
            archive ? `Posts from: ${archive}` :
            seriesFilter ? `Posts in series: "${seriesFilter}"` : // Display series filter in title
