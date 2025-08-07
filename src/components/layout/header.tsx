@@ -222,9 +222,9 @@ export function Header() {
                       <ul className="space-y-1 mt-1">
                         {postResults.map(post => (
                           <li key={`post-${post.slug}`}>
-                            <Link href={`/posts/${post.slug}`} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                            <Link href={`/posts/${post.slug}`} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors overflow-hidden">
                               {getPostIcon(post)}
-                              <span className="flex-1 min-w-0 truncate">{post.title}</span>
+                              <span className="flex-1 truncate">{post.title}</span>
                             </Link>
                           </li>
                         ))}
@@ -237,9 +237,9 @@ export function Header() {
                       <ul className="space-y-1 mt-1">
                         {courseResults.map(course => (
                           <li key={`course-${course.slug}`}>
-                            <Link href={course.slug} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                            <Link href={course.slug} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors overflow-hidden">
                                 <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                                <span className="flex-1 min-w-0 truncate">{course.title}</span>
+                                <span className="flex-1 truncate">{course.title}</span>
                             </Link>
                           </li>
                         ))}
@@ -252,9 +252,9 @@ export function Header() {
                       <ul className="space-y-1 mt-1">
                         {pageResults.map(page => (
                           <li key={`page-${page.slug}`}>
-                            <Link href={page.slug} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                            <Link href={page.slug} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors overflow-hidden">
                                <Book className="h-4 w-4 text-muted-foreground" />
-                               <span className="flex-1 min-w-0 truncate">{page.title}</span>
+                               <span className="flex-1 truncate">{page.title}</span>
                             </Link>
                           </li>
                         ))}
