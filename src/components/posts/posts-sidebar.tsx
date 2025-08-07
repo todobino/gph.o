@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -30,13 +29,9 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
 
   const createQueryString = (name: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    // If clicking the same filter, toggle it off. Otherwise, set it.
-    // For series, we only allow one active series filter at a time.
-    // If another filter type (tag/archive) is active, preserve it.
     
     const currentFilterValue = params.get(name);
 
-    // Clear other filter types if a new type is selected
     if (name === 'tag' && (params.has('archive') || params.has('series'))) {
         params.delete('archive');
         params.delete('series');
@@ -59,7 +54,29 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
   return (
     <Card>
       <CardContent className="space-y-6 pt-6">
-        <Accordion type="multiple" className="w-full" defaultValue={['tags', 'archives', 'series']}>
+        <Accordion type="multiple" className="w-full" defaultValue={['series', 'tags', 'archives']}>
+          {series && series.length > 0 && ( // Conditionally render Series section
+            <AccordionItem value="series">
+              <AccordionTrigger className="text-lg font-medium">Series</AccordionTrigger>
+              <AccordionContent>
+                <ul className="space-y-2 pt-2">
+                  {series.map((seriesName) => (
+                    <li key={seriesName}>
+                      <Link
+                        href={pathname + '?' + createQueryString('series', seriesName)}
+                        scroll={false}
+                        className={`flex items-center text-sm hover:text-primary ${currentSeries === seriesName ? 'text-primary font-semibold' : 'text-muted-foreground'}`}
+                      >
+                        <BookOpen className="h-4 w-4 mr-2 flex-shrink-0" />
+                        {seriesName}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
           <AccordionItem value="tags">
             <AccordionTrigger className="text-lg font-medium">Tags</AccordionTrigger>
             <AccordionContent>
@@ -100,28 +117,6 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
               </ul>
             </AccordionContent>
           </AccordionItem>
-
-          {series && series.length > 0 && ( // Conditionally render Series section
-            <AccordionItem value="series">
-              <AccordionTrigger className="text-lg font-medium">Series</AccordionTrigger>
-              <AccordionContent>
-                <ul className="space-y-2 pt-2">
-                  {series.map((seriesName) => (
-                    <li key={seriesName}>
-                      <Link
-                        href={pathname + '?' + createQueryString('series', seriesName)}
-                        scroll={false}
-                        className={`flex items-center text-sm hover:text-primary ${currentSeries === seriesName ? 'text-primary font-semibold' : 'text-muted-foreground'}`}
-                      >
-                        <BookOpen className="h-4 w-4 mr-2 flex-shrink-0" />
-                        {seriesName}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          )}
         </Accordion>
 
         <Separator />
