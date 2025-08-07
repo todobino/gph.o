@@ -10,7 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuFooter,
 } from "../ui/dropdown-menu";
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -301,11 +300,9 @@ export function Header() {
                           return (
                             <>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuFooter>
-                                    <DropdownMenuItem asChild variant="footer">
-                                        <Link href={footerItem.href!}>{footerItem.label}</Link>
-                                    </DropdownMenuItem>
-                                </DropdownMenuFooter>
+                                <DropdownMenuItem asChild variant="primary">
+                                  <Link href={footerItem.href!}>{footerItem.label}</Link>
+                                </DropdownMenuItem>
                             </>
                           );
                         }
@@ -500,5 +497,7 @@ export function Header() {
     </header>
   );
 }
+
+    
 
     

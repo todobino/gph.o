@@ -79,7 +79,7 @@ const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean,
-    variant?: 'default' | 'footer'
+    variant?: 'default' | 'primary'
   }
 >(({ className, inset, variant, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
@@ -87,7 +87,7 @@ const DropdownMenuItem = React.forwardRef<
     className={cn(
       "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
       inset && "pl-8",
-       variant === 'footer' && "focus:bg-primary focus:text-primary-foreground", // Added footer variant styles
+      variant === 'primary' && "bg-primary text-primary-foreground focus:bg-primary/90 focus:text-primary-foreground",
       className
     )}
     {...props}
@@ -184,19 +184,6 @@ const DropdownMenuShortcut = ({
 }
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
 
-// New component for the footer section
-const DropdownMenuFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("border-t bg-secondary -mx-1 -mb-1 mt-1 p-1", className)}
-    {...props}
-  />
-))
-DropdownMenuFooter.displayName = "DropdownMenuFooter"
-
 export {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -213,5 +200,6 @@ export {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuRadioGroup,
-  DropdownMenuFooter,
 }
+
+    
