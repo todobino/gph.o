@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import Link from 'next/link';
@@ -16,7 +15,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus } from 'lucide-react';
+import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Podcast, Mail, BookOpen } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -31,8 +30,15 @@ import { Skeleton } from '../ui/skeleton';
 interface NavItem {
   href?: string;
   label: string;
-  dropdown?: NavItem[];
+  dropdown?: DropdownItem[];
 }
+
+interface DropdownItem {
+  href: string;
+  label: string;
+  icon?: React.ReactNode;
+}
+
 
 export function Header() {
   const [hasMounted, setHasMounted] = useState(false);
@@ -120,22 +126,22 @@ export function Header() {
     {
       label: 'Posts',
       dropdown: [
-        { href: '/posts?tag=video', label: 'Videos' },
-        { href: '/posts?tag=podcast', label: 'Podcasts' },
-        { href: '/subscribe', label: 'Subscribe!' },
+        { href: '/posts?tag=video', label: 'Videos', icon: <Video /> },
+        { href: '/posts?tag=podcast', label: 'Podcasts', icon: <Podcast /> },
+        { href: '/subscribe', label: 'Subscribe!', icon: <Mail /> },
         { href: '/posts', label: 'All Posts' },
       ],
     },
     {
       label: 'Courses',
       dropdown: [
-        { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
-        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns' },
-        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js' },
-        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript' },
-        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership' },
-        { href: '/courses/agile-project-management', label: 'Agile Project Management' },
-        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.' },
+        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <BookOpen /> },
+        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <BookOpen /> },
+        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <BookOpen /> },
+        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <BookOpen /> },
+        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <BookOpen /> },
+        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <BookOpen /> },
+        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <BookOpen /> },
         { href: '/courses', label: 'All Courses' },
       ],
     },
@@ -228,23 +234,30 @@ export function Header() {
   if (!hasMounted) {
     return (
        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-14 items-center px-4">
-            <div className="flex items-center">
+        <div className="container mx-auto flex h-14 items-center px-4 max-w-6xl">
+            <div className="mr-6 flex items-center">
               <Skeleton className="h-6 w-6 mr-2" />
               <Skeleton className="h-6 w-32" />
             </div>
-            <div className="md:flex flex-1 items-center justify-center px-4 hidden">
+            <div className="hidden md:flex items-center space-x-1">
+                 <Skeleton className="h-9 w-24" />
+                 <Skeleton className="h-9 w-24" />
+                 <Skeleton className="h-9 w-24" />
+                 <Skeleton className="h-9 w-24" />
+            </div>
+            <div className="flex flex-1 items-center justify-center px-4 md:hidden"></div>
+             <div className="hidden md:flex flex-1 items-center justify-center px-4">
                  <Skeleton className="h-9 w-full max-w-sm" />
             </div>
-            <div className="flex-1 md:hidden"></div>
             <div className="hidden md:flex items-center space-x-2">
-              <Skeleton className="h-9 w-32" />
+              <Skeleton className="h-9 w-36" />
               <Skeleton className="h-9 w-28" />
               <Skeleton className="h-9 w-20" />
             </div>
-            <div className="md:hidden flex items-center space-x-2">
+             <div className="md:hidden flex items-center space-x-2">
                 <Skeleton className="h-9 w-9" />
-                <Skeleton className="h-9 w-28" />
+                <Skeleton className="h-9 w-9" />
+                 <Skeleton className="h-9 w-28" />
             </div>
         </div>
       </header>
@@ -254,7 +267,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center px-4">
+      <div className="container mx-auto flex h-14 items-center px-4 max-w-6xl">
         {/* Desktop View (md and up) */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -273,24 +286,27 @@ export function Header() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                       {navItem.dropdown.map((item, index) => {
-                          const isFooterItem = item.label === 'All Posts' || item.label === 'All Courses';
-                          if (isFooterItem) return null; // Render these separately
+                       {navItem.dropdown.map((item) => {
+                          const isFooterItem = item.label.startsWith('All ');
+                          if (isFooterItem) return null;
                           return (
                             <DropdownMenuItem key={item.href} asChild>
-                              <Link href={item.href!}>{item.label}</Link>
+                              <Link href={item.href!}>{item.icon}{item.label}</Link>
                             </DropdownMenuItem>
                           );
                       })}
                       {(() => {
-                        const footerItem = navItem.dropdown!.find(item => item.label === 'All Posts' || item.label === 'All Courses');
+                        const footerItem = navItem.dropdown!.find(item => item.label.startsWith('All '));
                         if (footerItem) {
                           return (
-                            <DropdownMenuFooter>
-                                <DropdownMenuItem asChild variant="footer">
-                                    <Link href={footerItem.href!}>{footerItem.label}</Link>
-                                </DropdownMenuItem>
-                            </DropdownMenuFooter>
+                            <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuFooter>
+                                    <DropdownMenuItem asChild variant="footer">
+                                        <Link href={footerItem.href!}>{footerItem.label}</Link>
+                                    </DropdownMenuItem>
+                                </DropdownMenuFooter>
+                            </>
                           );
                         }
                         return null;
@@ -345,13 +361,13 @@ export function Header() {
          <div className="hidden md:flex items-center space-x-2">
             <Button asChild variant="secondary">
                 <Link href="/courses">
-                    <GraduationCap className="mr-2 h-4 w-4" />
+                    <GraduationCap />
                     Course Login
                 </Link>
             </Button>
             <Button asChild>
                 <Link href="/booking">
-                    <CalendarPlus className="mr-2 h-4 w-4" />
+                    <CalendarPlus />
                     Book Now
                 </Link>
             </Button>
@@ -404,10 +420,10 @@ export function Header() {
                                           <SheetClose key={item.href} asChild>
                                             <Link
                                               href={item.href!}
-                                              className="block w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
+                                              className="flex items-center gap-2 w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
                                               onClick={handleMobileSheetLinkClick}
                                             >
-                                              {item.label}
+                                              {item.icon}{item.label}
                                             </Link>
                                           </SheetClose>
                                       ))}
@@ -432,7 +448,7 @@ export function Header() {
                         className={cn(buttonVariants({ variant: "secondary", className: "w-full justify-start mt-4" }))}
                         onClick={handleMobileSheetLinkClick}
                       >
-                        <GraduationCap className="mr-2 h-4 w-4" />
+                        <GraduationCap />
                         Course Login
                       </Link>
                     </SheetClose>
@@ -458,7 +474,7 @@ export function Header() {
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
             <div className="flex items-center gap-1">
-             <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
+            <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                  <DialogTrigger asChild>
                      <span
                        role="button"
@@ -476,7 +492,7 @@ export function Header() {
              </Dialog>
              <Button asChild size="sm">
                 <Link href="/booking">
-                  <CalendarPlus className="mr-2 h-4 w-4" />
+                  <CalendarPlus />
                   Book Now
                 </Link>
              </Button>
@@ -486,3 +502,5 @@ export function Header() {
     </header>
   );
 }
+
+    
