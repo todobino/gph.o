@@ -14,7 +14,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Podcast, Mail, BookOpen } from 'lucide-react';
+import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, BookOpen, Headphones } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -126,7 +126,7 @@ export function Header() {
       label: 'Posts',
       dropdown: [
         { href: '/posts?tag=video', label: 'Videos', icon: <Video className="h-4 w-4" /> },
-        { href: '/posts?tag=audio', label: 'Audio', icon: <Podcast className="h-4 w-4" /> },
+        { href: '/posts?tag=audio', label: 'Audio', icon: <Headphones className="h-4 w-4" /> },
         { href: '/subscribe', label: 'Subscribe!', icon: <Mail className="h-4 w-4" /> },
         { href: '/posts', label: 'All Posts' },
       ],
@@ -497,7 +497,3 @@ export function Header() {
     </header>
   );
 }
-
-    
-
-    
