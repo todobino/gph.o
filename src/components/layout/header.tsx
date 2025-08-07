@@ -58,18 +58,18 @@ export function Header() {
   const allCourses = React.useMemo(() => [
       { title: 'Leading Technical Change', slug: '/courses/leading-technical-change' },
       { title: 'Advanced React Patterns', slug: '/courses/advanced-react-patterns' },
-      { title: 'Modern Backend Node.js', slug: '/courses/modern-backend-nodejs' },
-      { title: 'Full-Stack TypeScript', slug: '/courses/fullstack-typescript' },
-      { title: 'Effective Tech Leadership', slug: '/courses/effective-technical-leadership' },
-      { title: 'Agile Project Management', slug: '/courses/agile-project-management' },
-      { title: 'Strategic Thinking for Eng.', slug: '/courses/strategic-thinking-engineering' },
-      { title: 'All Courses', slug: '/courses' },
+      { title: 'Modern Backend Development with Node.js', slug: '/courses/modern-backend-nodejs' },
+      { title: 'Full-Stack TypeScript Mastery', slug: '/courses/fullstack-typescript' },
+      { title: 'Effective Technical Leadership', slug: '/courses/effective-technical-leadership' },
+      { title: 'Agile Project Management for Software Teams', slug: '/courses/agile-project-management' },
+      { title: 'Strategic Thinking for Engineering Managers', slug: '/courses/strategic-thinking-engineering' },
   ], []);
   const allPages = React.useMemo(() => [
       { title: 'About', slug: '/about' },
       { title: 'Contact', slug: '/contact' },
       { title: 'Booking', slug: '/booking' },
       { title: 'Subscribe', slug: '/subscribe' },
+      { title: 'All Courses', slug: '/courses' },
   ], []);
 
   const [courseResults, setCourseResults] = useState<{title: string, slug: string}[]>([]);
@@ -159,13 +159,13 @@ export function Header() {
     {
       label: 'Courses',
       dropdown: [
-        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <GraduationCap className="h-4 w-4" /> },
       ],
     },
     { href: '/about', label: 'About' },
@@ -218,13 +218,13 @@ export function Header() {
                 <div className="space-y-1 p-2">
                   {postResults.length > 0 && (
                     <div>
-                      <div className="text-xs font-semibold text-muted-foreground px-2 py-1 flex items-center gap-2"><FileText className="h-3 w-3" />Posts</div>
-                      <ul className="space-y-1">
+                      <div className="text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1">Posts</div>
+                      <ul className="space-y-1 mt-1">
                         {postResults.map(post => (
                           <li key={`post-${post.slug}`}>
                             <Link href={`/posts/${post.slug}`} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
                               {getPostIcon(post)}
-                              <span>{post.title}</span>
+                              <span className="truncate">{post.title}</span>
                             </Link>
                           </li>
                         ))}
@@ -233,13 +233,13 @@ export function Header() {
                   )}
                   {courseResults.length > 0 && (
                     <div>
-                      <div className="text-xs font-semibold text-muted-foreground px-2 py-1 flex items-center gap-2"><GraduationCap className="h-3 w-3" />Courses</div>
-                      <ul className="space-y-1">
+                      <div className="text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1 mt-1">Courses</div>
+                      <ul className="space-y-1 mt-1">
                         {courseResults.map(course => (
                           <li key={`course-${course.slug}`}>
                             <Link href={course.slug} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
                                 <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                                <span>{course.title}</span>
+                                <span className="truncate">{course.title}</span>
                             </Link>
                           </li>
                         ))}
@@ -248,13 +248,13 @@ export function Header() {
                   )}
                   {pageResults.length > 0 && (
                     <div>
-                      <div className="text-xs font-semibold text-muted-foreground px-2 py-1 flex items-center gap-2"><Book className="h-3 w-3" />Pages</div>
-                      <ul className="space-y-1">
+                      <div className="text-xs font-semibold text-primary bg-accent rounded-md px-2 py-1 mt-1">Pages</div>
+                      <ul className="space-y-1 mt-1">
                         {pageResults.map(page => (
                           <li key={`page-${page.slug}`}>
                             <Link href={page.slug} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
                                <Book className="h-4 w-4 text-muted-foreground" />
-                               <span>{page.title}</span>
+                               <span className="truncate">{page.title}</span>
                             </Link>
                           </li>
                         ))}
@@ -552,5 +552,3 @@ export function Header() {
     </header>
   );
 }
-
-    
