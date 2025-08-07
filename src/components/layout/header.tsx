@@ -14,7 +14,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones } from 'lucide-react';
+import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, Book } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -43,8 +43,9 @@ export function Header() {
   const [hasMounted, setHasMounted] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<Post[]>([]);
+  
   const [allPosts, setAllPosts] = useState<Post[]>([]);
+  const [postResults, setPostResults] = useState<Post[]>([]);
 
   const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false);
   const [isDesktopSearchPopoverOpen, setIsDesktopSearchPopoverOpen] = useState(false);
@@ -53,6 +54,26 @@ export function Header() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const isMobile = useIsMobile();
+
+  const allCourses = [
+      { title: 'Leading Technical Change', slug: '/courses/leading-technical-change' },
+      { title: 'Advanced React Patterns', slug: '/courses/advanced-react-patterns' },
+      { title: 'Modern Backend Node.js', slug: '/courses/modern-backend-nodejs' },
+      { title: 'Full-Stack TypeScript', slug: '/courses/fullstack-typescript' },
+      { title: 'Effective Tech Leadership', slug: '/courses/effective-technical-leadership' },
+      { title: 'Agile Project Management', slug: '/courses/agile-project-management' },
+      { title: 'Strategic Thinking for Eng.', slug: '/courses/strategic-thinking-engineering' },
+      { title: 'All Courses', slug: '/courses' },
+  ];
+  const allPages = [
+      { title: 'About', slug: '/about' },
+      { title: 'Contact', slug: '/contact' },
+      { title: 'Booking', slug: '/booking' },
+      { title: 'Subscribe', slug: '/subscribe' },
+  ];
+
+  const [courseResults, setCourseResults] = useState<{title: string, slug: string}[]>([]);
+  const [pageResults, setPageResults] = useState<{title: string, slug: string}[]>([]);
 
   useEffect(() => {
     setHasMounted(true);
@@ -95,30 +116,45 @@ export function Header() {
 
    useEffect(() => {
     if (!hasMounted || searchQuery.trim() === '') {
-      setSearchResults([]);
+      setPostResults([]);
+      setCourseResults([]);
+      setPageResults([]);
       if (isDesktopSearchPopoverOpen && searchQuery.trim() === '') {
-        setIsDesktopSearchPopoverOpen(false);
+        // setIsDesktopSearchPopoverOpen(false);
       }
       return;
     }
 
     const lowerCaseQuery = searchQuery.toLowerCase();
-    const results = allPosts.filter(post =>
+    
+    const posts = allPosts.filter(post =>
       post.title.toLowerCase().includes(lowerCaseQuery) ||
       (post.content && post.content.toLowerCase().includes(lowerCaseQuery))
-    );
-    setSearchResults(results.slice(0, 10));
+    ).slice(0, 5);
+    setPostResults(posts);
 
-    if (results.length > 0 && searchQuery.trim() !== '') {
+    const courses = allCourses.filter(course => 
+        course.title.toLowerCase().includes(lowerCaseQuery)
+    ).slice(0, 5);
+    setCourseResults(courses);
+
+    const pages = allPages.filter(page =>
+        page.title.toLowerCase().includes(lowerCaseQuery)
+    ).slice(0, 5);
+    setPageResults(pages);
+
+    const totalResults = posts.length + courses.length + pages.length;
+
+    if (totalResults > 0 && searchQuery.trim() !== '') {
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
-    } else if (searchQuery.trim() !== '' && results.length === 0) {
+    } else if (searchQuery.trim() !== '' && totalResults === 0) {
         if (!isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(true);
     }
      else {
-        if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
-    }
+        // if (isDesktopSearchPopoverOpen) setIsDesktopSearchPopoverOpen(false);
+     }
 
-  }, [searchQuery, allPosts, isDesktopSearchPopoverOpen, hasMounted ]);
+  }, [searchQuery, allPosts, allCourses, allPages, hasMounted ]);
 
 
   const navItems: NavItem[] = [
@@ -128,7 +164,6 @@ export function Header() {
         { href: '/posts?tag=video', label: 'Video', icon: <Video className="h-4 w-4" /> },
         { href: '/posts?tag=audio', label: 'Audio', icon: <Headphones className="h-4 w-4" /> },
         { href: '/subscribe', label: 'Subscribe!', icon: <Mail className="h-4 w-4" /> },
-        { href: '/posts', label: 'All Posts' },
       ],
     },
     {
@@ -141,7 +176,6 @@ export function Header() {
         { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <GraduationCap className="h-4 w-4" /> },
         { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <GraduationCap className="h-4 w-4" /> },
         { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses', label: 'All Courses' },
       ],
     },
     { href: '/about', label: 'About' },
@@ -154,7 +188,9 @@ export function Header() {
 
    const handleSearchResultClick = () => {
      setSearchQuery('');
-     setSearchResults([]);
+     setPostResults([]);
+     setCourseResults([]);
+     setPageResults([]);
      setIsMobileSearchDialogOpen(false);
      setIsDesktopSearchPopoverOpen(false);
    };
@@ -163,43 +199,79 @@ export function Header() {
     setIsMobileSearchDialogOpen(openState);
     if (!openState) {
         setSearchQuery('');
-        setSearchResults([]);
+        setPostResults([]);
+        setCourseResults([]);
+        setPageResults([]);
     }
    };
 
    const handleDesktopPopoverOpenChange = (openState: boolean) => {
     if (!openState && document.activeElement !== desktopSearchInputRef.current) {
         setSearchQuery('');
-        setSearchResults([]);
+        setPostResults([]);
+        setCourseResults([]);
+        setPageResults([]);
     }
     setIsDesktopSearchPopoverOpen(openState);
    };
 
+   const getPostIcon = (post: Post) => {
+     if (post.tags.includes('video')) return <Video className="h-4 w-4 text-muted-foreground" />;
+     if (post.tags.includes('audio')) return <Headphones className="h-4 w-4 text-muted-foreground" />;
+     return <FileText className="h-4 w-4 text-muted-foreground" />;
+   }
 
    const searchResultsContent = (
-    <ScrollArea className={cn("mt-2 h-fit max-h-[200px] rounded-md border sm:max-h-[300px]", (searchResults.length > 0 || searchQuery.trim() !== '') ? "" : "border-0 p-0")}>
-        {(searchResults.length > 0 || searchQuery.trim() !== '') ? (
-             searchResults.length > 0 ? (
-                <ul className="space-y-1 p-2">
-                {searchResults.map(post => {
-                    const slug = post.slug;
-                    return (
-                        <li key={post.slug}>
-                          {isMobileSearchDialogOpen ? (
-                            <DialogCloseComponent asChild>
-                              <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-3 rounded-md hover:bg-accent text-sm transition-colors">
-                                  {post.title}
-                              </Link>
-                            </DialogCloseComponent>
-                          ) : (
-                            <Link href={`/posts/${slug}`} onClick={handleSearchResultClick} className="block p-2 rounded-md hover:bg-accent text-sm transition-colors">
-                                {post.title}
+    <ScrollArea className="mt-2 h-fit max-h-[400px] rounded-md border sm:max-h-[500px]">
+        {searchQuery.trim() !== '' ? (
+             (postResults.length > 0 || courseResults.length > 0 || pageResults.length > 0) ? (
+                <div className="space-y-1 p-2">
+                  {postResults.length > 0 && (
+                    <div>
+                      <div className="text-xs font-semibold text-muted-foreground px-2 py-1 flex items-center gap-2"><FileText className="h-3 w-3" />Posts</div>
+                      <ul className="space-y-1">
+                        {postResults.map(post => (
+                          <li key={`post-${post.slug}`}>
+                            <Link href={`/posts/${post.slug}`} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                              {getPostIcon(post)}
+                              <span>{post.title}</span>
                             </Link>
-                          )}
-                        </li>
-                    )
-                })}
-                </ul>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {courseResults.length > 0 && (
+                    <div>
+                      <div className="text-xs font-semibold text-muted-foreground px-2 py-1 flex items-center gap-2"><GraduationCap className="h-3 w-3" />Courses</div>
+                      <ul className="space-y-1">
+                        {courseResults.map(course => (
+                          <li key={`course-${course.slug}`}>
+                            <Link href={course.slug} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                                <GraduationCap className="h-4 w-4 text-muted-foreground" />
+                                <span>{course.title}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {pageResults.length > 0 && (
+                    <div>
+                      <div className="text-xs font-semibold text-muted-foreground px-2 py-1 flex items-center gap-2"><Book className="h-3 w-3" />Pages</div>
+                      <ul className="space-y-1">
+                        {pageResults.map(page => (
+                          <li key={`page-${page.slug}`}>
+                            <Link href={page.slug} onClick={handleSearchResultClick} className="flex items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors">
+                               <Book className="h-4 w-4 text-muted-foreground" />
+                               <span>{page.title}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
             ) : (
                  <p className="text-sm text-muted-foreground text-center py-4 px-2">No results found.</p>
             )
@@ -225,7 +297,9 @@ export function Header() {
             className="text-base w-full"
             autoFocus
           />
-          {searchResultsContent}
+          <DialogCloseComponent asChild>
+            {searchResultsContent}
+          </DialogCloseComponent>
         </div>
       </DialogContent>
    );
@@ -285,29 +359,20 @@ export function Header() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                       {navItem.dropdown.map((item) => {
-                          const isFooterItem = item.label.startsWith('All ');
-                          if (isFooterItem) return null;
-                          return (
+                       {navItem.dropdown.map((item) => (
                             <DropdownMenuItem key={item.href} asChild>
-                              <Link href={item.href!}>{item.icon}{item.label}</Link>
+                              <Link href={item.href!} className="flex items-center gap-2 cursor-pointer">
+                                {item.icon}
+                                <span>{item.label}</span>
+                              </Link>
                             </DropdownMenuItem>
-                          );
-                      })}
-                      {(() => {
-                        const footerItem = navItem.dropdown!.find(item => item.label.startsWith('All '));
-                        if (footerItem) {
-                          return (
-                            <>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild variant="primary">
-                                  <Link href={footerItem.href!}>{footerItem.label}</Link>
-                                </DropdownMenuItem>
-                            </>
-                          );
-                        }
-                        return null;
-                      })()}
+                       ))}
+                       <DropdownMenuSeparator />
+                       <DropdownMenuItem asChild variant="primary">
+                         <Link href={navItem.label === 'Posts' ? '/posts' : '/courses'}>
+                           All {navItem.label}
+                         </Link>
+                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
@@ -497,5 +562,3 @@ export function Header() {
     </header>
   );
 }
-
-    
