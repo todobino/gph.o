@@ -1,7 +1,7 @@
 ---
 title: 'Podcast: The Future of Agile Coaching'
 date: '2024-06-10'
-tags: ['podcast', 'agile coaching', 'future trends']
+tags: ['audio', 'agile coaching', 'future trends']
 ---
 
 # Agile Coaching Podcast

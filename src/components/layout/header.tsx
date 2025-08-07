@@ -127,7 +127,7 @@ export function Header() {
       label: 'Posts',
       dropdown: [
         { href: '/posts?tag=video', label: 'Videos', icon: <Video /> },
-        { href: '/posts?tag=podcast', label: 'Podcasts', icon: <Podcast /> },
+        { href: '/posts?tag=audio', label: 'Audio', icon: <Podcast /> },
         { href: '/subscribe', label: 'Subscribe!', icon: <Mail /> },
         { href: '/posts', label: 'All Posts' },
       ],
@@ -473,8 +473,7 @@ export function Header() {
              <Cpu className="h-6 w-6 text-primary" />
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
-            <div className="flex items-center gap-1">
-            <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
+             <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                  <DialogTrigger asChild>
                      <span
                        role="button"
@@ -496,7 +495,6 @@ export function Header() {
                   Book Now
                 </Link>
              </Button>
-           </div>
         </div>
       </div>
     </header>
