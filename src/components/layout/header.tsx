@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger as RadixDialogTrigger } from "../ui/dialog";
@@ -115,19 +116,18 @@ export function Header() {
 
 
   const navItems: NavItem[] = [
-     {
+    {
       label: 'Posts',
       dropdown: [
-        { href: '/posts', label: 'All Posts' },
         { href: '/posts?tag=video', label: 'Videos' },
         { href: '/posts?tag=podcast', label: 'Podcasts' },
         { href: '/subscribe', label: 'Subscribe!' },
+        { href: '/posts', label: 'All Posts' }, // Moved to bottom
       ],
     },
     {
       label: 'Courses',
       dropdown: [
-         { href: '/courses', label: 'All Courses' },
         { href: '/courses/leading-technical-change', label: 'Leading Technical Change' },
         { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns' },
         { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js' },
@@ -135,7 +135,8 @@ export function Header() {
         { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership' },
         { href: '/courses/agile-project-management', label: 'Agile Project Management' },
         { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.' },
-      ]
+        { href: '/courses', label: 'All Courses' }, // Moved to bottom
+      ],
     },
     { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
@@ -230,25 +231,22 @@ export function Header() {
           <div className="flex items-center">
             <Skeleton className="h-6 w-6 mr-2" />
             <Skeleton className="h-6 w-32" />
-            <div className="hidden md:flex items-center space-x-1 ml-6">
+          </div>
+          <div className="hidden md:flex items-center space-x-1 ml-6">
               <Skeleton className="h-8 w-20" />
               <Skeleton className="h-8 w-20" />
-            </div>
+              <Skeleton className="h-8 w-20" />
+              <Skeleton className="h-8 w-20" />
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="hidden md:block">
-                 <Skeleton className="h-9 w-48" />
-            </div>
-             <div className="flex-1"></div>
-             <div className="hidden md:flex items-center space-x-2">
-               <Skeleton className="h-9 w-32" />
-               <Skeleton className="h-9 w-36" />
-               <Skeleton className="h-9 w-28" />
-             </div>
-             <div className="md:hidden">
-                <Skeleton className="h-9 w-9" />
-             </div>
-          </div>
+           <div className="flex-1"></div>
+           <div className="hidden md:flex items-center space-x-2">
+             <Skeleton className="h-9 w-36" />
+             <Skeleton className="h-9 w-28" />
+             <Skeleton className="h-9 w-28" />
+           </div>
+           <div className="md:hidden">
+              <Skeleton className="h-9 w-9" />
+           </div>
         </div>
       </header>
     );
@@ -276,11 +274,24 @@ export function Header() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                      {navItem.dropdown.map((item) => (
-                        <DropdownMenuItem key={item.href} asChild>
-                           <Link href={item.href!}>{item.label}</Link>
-                        </DropdownMenuItem>
-                      ))}
+                      {navItem.dropdown.map((item, index) => {
+                          const isLastItem = index === navItem.dropdown!.length - 1;
+                          if (isLastItem && (item.label === 'All Posts' || item.label === 'All Courses')) {
+                            return (
+                              <React.Fragment key={item.href}>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem asChild>
+                                  <Link href={item.href!}>{item.label}</Link>
+                                </DropdownMenuItem>
+                              </React.Fragment>
+                            );
+                          }
+                          return (
+                            <DropdownMenuItem key={item.href} asChild>
+                              <Link href={item.href!}>{item.label}</Link>
+                            </DropdownMenuItem>
+                          );
+                      })}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
