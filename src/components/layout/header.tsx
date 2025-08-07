@@ -122,7 +122,7 @@ export function Header() {
         { href: '/posts?tag=video', label: 'Videos' },
         { href: '/posts?tag=podcast', label: 'Podcasts' },
         { href: '/subscribe', label: 'Subscribe!' },
-        { href: '/posts', label: 'All Posts' }, // Moved to bottom
+        { href: '/posts', label: 'All Posts' },
       ],
     },
     {
@@ -135,7 +135,7 @@ export function Header() {
         { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership' },
         { href: '/courses/agile-project-management', label: 'Agile Project Management' },
         { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.' },
-        { href: '/courses', label: 'All Courses' }, // Moved to bottom
+        { href: '/courses', label: 'All Courses' },
       ],
     },
     { href: '/about', label: 'About' },
@@ -227,26 +227,14 @@ export function Header() {
   if (!hasMounted) {
     return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-14 items-center px-4 justify-between">
-          <div className="flex items-center">
-            <Skeleton className="h-6 w-6 mr-2" />
-            <Skeleton className="h-6 w-32" />
-          </div>
-          <div className="hidden md:flex items-center space-x-1 ml-6">
-              <Skeleton className="h-8 w-20" />
-              <Skeleton className="h-8 w-20" />
-              <Skeleton className="h-8 w-20" />
-              <Skeleton className="h-8 w-20" />
-          </div>
-           <div className="flex-1"></div>
-           <div className="hidden md:flex items-center space-x-2">
-             <Skeleton className="h-9 w-36" />
-             <Skeleton className="h-9 w-28" />
-             <Skeleton className="h-9 w-28" />
-           </div>
-           <div className="md:hidden">
-              <Skeleton className="h-9 w-9" />
-           </div>
+        <div className="container mx-auto flex h-14 items-center px-4">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
+            <Cpu className="h-6 w-6 text-primary" />
+             <span className="hidden font-bold sm:inline-block text-foreground">
+               GeePawHill.Org
+             </span>
+          </Link>
+          <div className="flex-1"></div>
         </div>
       </header>
     );
@@ -280,7 +268,7 @@ export function Header() {
                             return (
                               <React.Fragment key={item.href}>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
+                                <DropdownMenuItem asChild className="bg-secondary hover:bg-secondary/80 focus:bg-secondary/80">
                                   <Link href={item.href!}>{item.label}</Link>
                                 </DropdownMenuItem>
                               </React.Fragment>
@@ -454,30 +442,30 @@ export function Header() {
              <Cpu className="h-6 w-6 text-primary" />
              <span className="font-bold text-foreground">GeePawHill.Org</span>
            </Link>
-            <div className="flex items-center gap-1">
-                <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
-                  <RadixDialogTrigger asChild>
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        className={cn(
-                          buttonVariants({ variant: 'ghost', size: 'icon' }),
-                          'cursor-pointer'
-                        )}
-                        aria-label="Open search dialog"
-                      >
-                        <Search className="h-5 w-5" />
-                      </span>
-                    </RadixDialogTrigger>
-                    {mobileSearchDialogContent}
-                </Dialog>
-                <Button asChild size="sm">
-                   <Link href="/booking">
-                     <CalendarPlus className="mr-2 h-4 w-4" />
-                     Book Now
-                   </Link>
-                </Button>
-            </div>
+           <div className="flex items-center gap-1">
+             <Dialog open={isMobileSearchDialogOpen} onOpenChange={setIsMobileSearchDialogOpen}>
+               <RadixDialogTrigger asChild>
+                 <span
+                   role="button"
+                   tabIndex={0}
+                   className={cn(
+                     buttonVariants({ variant: 'ghost', size: 'icon' }),
+                     'cursor-pointer'
+                   )}
+                   aria-label="Open search dialog"
+                 >
+                   <Search className="h-5 w-5" />
+                 </span>
+               </RadixDialogTrigger>
+               {mobileSearchDialogContent}
+             </Dialog>
+             <Button asChild size="sm">
+                <Link href="/booking">
+                  <CalendarPlus className="mr-2 h-4 w-4" />
+                  Book Now
+                </Link>
+             </Button>
+           </div>
         </div>
       </div>
     </header>
