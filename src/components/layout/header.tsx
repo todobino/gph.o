@@ -14,7 +14,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, BookOpen, Headphones } from 'lucide-react';
+import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -125,7 +125,7 @@ export function Header() {
     {
       label: 'Posts',
       dropdown: [
-        { href: '/posts?tag=video', label: 'Videos', icon: <Video className="h-4 w-4" /> },
+        { href: '/posts?tag=video', label: 'Video', icon: <Video className="h-4 w-4" /> },
         { href: '/posts?tag=audio', label: 'Audio', icon: <Headphones className="h-4 w-4" /> },
         { href: '/subscribe', label: 'Subscribe!', icon: <Mail className="h-4 w-4" /> },
         { href: '/posts', label: 'All Posts' },
@@ -134,13 +134,13 @@ export function Header() {
     {
       label: 'Courses',
       dropdown: [
-        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <BookOpen className="h-4 w-4" /> },
-        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <BookOpen className="h-4 w-4" /> },
+        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <GraduationCap className="h-4 w-4" /> },
         { href: '/courses', label: 'All Courses' },
       ],
     },
@@ -497,3 +497,5 @@ export function Header() {
     </header>
   );
 }
+
+    
