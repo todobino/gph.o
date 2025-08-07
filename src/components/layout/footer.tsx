@@ -11,9 +11,9 @@ export async function Footer() {
   const recentPosts = await getPosts().then(posts => posts.slice(0, 5));
 
   return (
-    <footer className="border-t"> {/* Keep main footer top border */}
+    <footer className="border-t container mx-auto px-4"> {/* Keep main footer top border */}
       {/* Constrained width section for 3-column grid */}
-      <div className="container mx-auto px-4 pt-12 pb-8 space-y-8">
+      <div className="pt-12 pb-8 space-y-8">
         {/* New 3-column section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Column 1: Featured Video */}
@@ -69,7 +69,7 @@ export async function Footer() {
       </div>
 
       {/* Full-width bottom row with light gray background and top border */}
-      <div className="bg-secondary py-4 border-t"> {/* Changed py-6 to py-4 */}
+      <div className="bg-secondary py-4 border-t -mx-4 px-4"> {/* Changed py-6 to py-4 */}
         <div className="container mx-auto px-4">
           {/* Removed md:h-16 to make height content-driven */}
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -85,4 +85,3 @@ export async function Footer() {
     </footer>
   );
 }
-
