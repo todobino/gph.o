@@ -411,12 +411,6 @@ export function Header() {
         </div>
          <div className="flex-1 md:hidden"></div>
          <div className="hidden md:flex items-center space-x-2">
-            <Button asChild variant="secondary">
-                <Link href="/courses">
-                    <GraduationCap />
-                    My Courses
-                </Link>
-            </Button>
             <Button asChild>
                 <Link href="/booking">
                     <CalendarPlus />
@@ -494,16 +488,6 @@ export function Header() {
                           )}
                       </React.Fragment>
                   ))}
-                  <SheetClose asChild>
-                      <Link
-                        href="/courses"
-                        className={cn(buttonVariants({ variant: "secondary", className: "w-full justify-start mt-4" }))}
-                        onClick={handleMobileSheetLinkClick}
-                      >
-                        <GraduationCap />
-                        My Courses
-                      </Link>
-                    </SheetClose>
                     {isLoadingAuth ? (
                         <div className="px-4 py-2 mt-4"> <Skeleton className="h-8 w-28" /> </div>
                     ) : isAdmin ? (
@@ -552,3 +536,5 @@ export function Header() {
     </header>
   );
 }
+
+    
