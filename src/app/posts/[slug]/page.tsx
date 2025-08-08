@@ -81,7 +81,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   Part of the series: <Link href={`/posts?series=${encodeURIComponent(currentPost.series)}`} className="ml-1 text-primary hover:underline">{currentPost.series}</Link>
                 </p>
               )}
-               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2 border-y py-3">
+               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2 py-3">
                  <div className="flex items-center gap-1.5">
                     <Calendar className="h-4 w-4" />
                     <span>{new Date(currentPost.date).toLocaleDateString()}</span>
