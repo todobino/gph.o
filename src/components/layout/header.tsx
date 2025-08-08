@@ -24,7 +24,7 @@ import type { User } from 'firebase/auth';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Skeleton } from '../ui/skeleton';
 import { HeaderMenuButton } from '../ui/header-menu-button';
-import { Button } from '../ui/button';
+import { Button, buttonVariants } from '../ui/button';
 
 
 interface NavItem {
@@ -338,7 +338,7 @@ export function Header() {
               GeePawHill.Org
             </span>
           </Link>
-          <nav className="flex items-center space-x-1 text-sm font-medium">
+          <nav className="flex items-center space-x-1 text-sm">
              {navItems.map((navItem) =>
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
@@ -390,7 +390,7 @@ export function Header() {
                                 ref={desktopSearchInputRef}
                                 type="search"
                                 placeholder="Search posts and pages..."
-                                className="h-9 w-full pl-10 pr-3 bg-white/10 placeholder:text-white/50 text-white border-none focus-visible:ring-primary"
+                                className="h-9 w-full pl-10 pr-3 bg-white/10 placeholder:text-white/50 text-white border-none"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
