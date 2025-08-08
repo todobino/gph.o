@@ -1,3 +1,4 @@
+
 import { type Metadata, type ResolvingMetadata } from 'next';
 import React, { type ReactNode } from 'react';
 import { getPostBySlug, type Post, getPosts, getAllSeries } from '@/services/posts';
@@ -68,7 +69,7 @@ export default async function PostPage({ params }: PostPageProps) {
   ];
 
   return (
-    <div className='-mt-8'>
+    <div>
       {/* Full-width header section */}
       <section className="bg-secondary border-x border-b rounded-b-lg px-2 md:px-8 pt-2 pb-8 mb-8">
         <div className="max-w-6xl mx-auto">
