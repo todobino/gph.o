@@ -34,7 +34,7 @@ export default function RootLayout({
       >
         <AppProviders>
             <Header />
-            <main className="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+            <main className="flex-grow container mx-auto px-2 py-8 max-w-6xl">
               {children}
             </main>
             <Footer />
