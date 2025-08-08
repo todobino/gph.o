@@ -71,7 +71,7 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <div>
       {/* Full-width header section */}
-      <section className="bg-secondary border-x border-b rounded-b-lg px-2 md:px-8 pt-2 pb-8 mb-8">
+      <section className="bg-secondary border-x border-b rounded-b-lg px-2 md:px-8 py-8 mb-8">
         <div className="max-w-6xl mx-auto">
           <Breadcrumbs items={breadcrumbItems} />
           <header className="mt-4">
@@ -118,7 +118,7 @@ export default async function PostPage({ params }: PostPageProps) {
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
-                h1: (props) => <h1 className="text-3xl font-semibold mt-8 mb-4 font-heading" {...props} />,
+                h1: (props) => <h1 className="text-3xl font-semibold mt-8 mb-4 font-heading first:mt-0" {...props} />,
                 h2: (props) => <h2 className="text-2xl font-semibold mt-6 mb-3 font-heading" {...props} />,
                 h3: (props) => <h3 className="text-xl font-semibold mt-4 mb-2 font-heading" {...props} />,
                 p: (props) => <p className="my-4 leading-relaxed" {...props} />,
