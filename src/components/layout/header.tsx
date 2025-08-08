@@ -24,6 +24,7 @@ import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
 import type { User } from 'firebase/auth';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Skeleton } from '../ui/skeleton';
+import { HeaderMenuButton } from '../ui/header-menu-button';
 
 
 interface NavItem {
@@ -342,9 +343,9 @@ export function Header() {
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="hover:bg-white/10 px-3 py-2 text-white transition-none">
+                      <HeaderMenuButton>
                         {navItem.label} <ChevronDown className="ml-1 h-4 w-4" />
-                      </Button>
+                      </HeaderMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
                        {navItem.dropdown.map((item) => (
@@ -364,13 +365,14 @@ export function Header() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <Link
-                    key={navItem.href}
-                    href={navItem.href!}
-                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "hover:bg-white/10 text-white transition-none px-3 py-2")}
-                  >
-                    {navItem.label}
-                  </Link>
+                  <HeaderMenuButton asChild>
+                    <Link
+                      key={navItem.href}
+                      href={navItem.href!}
+                    >
+                      {navItem.label}
+                    </Link>
+                  </HeaderMenuButton>
                 )
               )}
           </nav>
@@ -433,7 +435,7 @@ export function Header() {
                <span
                   role="button"
                   tabIndex={0}
-                  className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'cursor-pointer hover:bg-white/10')}
+                  className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'cursor-pointer hover:bg-white/10 text-white')}
                   aria-label="Toggle Menu"
                   onClick={() => setIsMobileMenuOpen(true)}
                   onKeyDown={(e) => e.key === 'Enter' && setIsMobileMenuOpen(true)}
@@ -514,7 +516,7 @@ export function Header() {
                        tabIndex={0}
                        className={cn(
                          buttonVariants({ variant: 'ghost', size: 'icon' }),
-                         'cursor-pointer hover:bg-white/10'
+                         'cursor-pointer hover:bg-white/10 text-white'
                        )}
                        aria-label="Open search dialog"
                      >
