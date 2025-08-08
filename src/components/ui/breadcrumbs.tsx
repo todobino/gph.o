@@ -22,8 +22,8 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items, className }) => {
   }
 
   return (
-    <nav aria-label="Breadcrumb" className={cn('mb-6 text-sm text-muted-foreground', className)}>
-      <ol className="flex items-center space-x-1.5">
+    <nav aria-label="Breadcrumb" className={cn('mb-6', className)}>
+      <ol className="flex items-center space-x-1.5 bg-muted text-sm text-muted-foreground p-2 rounded-md">
         {items.map((item, index) => (
           <li key={index} className="flex items-center">
             {item.href ? (
