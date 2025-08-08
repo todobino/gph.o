@@ -314,7 +314,6 @@ export function Header() {
             </div>
             <div className="hidden md:flex items-center space-x-2">
               <Skeleton className="h-9 w-28 rounded-full bg-white/20" />
-              <Skeleton className="h-9 w-20 rounded-full bg-white/20" />
             </div>
              <div className="md:hidden flex items-center space-x-2">
                 <Skeleton className="h-9 w-9 rounded-full bg-white/20" />
@@ -343,7 +342,7 @@ export function Header() {
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="hover:bg-white/10 px-3 py-2">
+                      <Button variant="ghost" className="hover:bg-white/10 px-3 py-2 text-white transition-none">
                         {navItem.label} <ChevronDown className="ml-1 h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -368,7 +367,7 @@ export function Header() {
                   <Link
                     key={navItem.href}
                     href={navItem.href!}
-                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "hover:bg-white/10 px-3 py-2")}
+                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "hover:bg-white/10 text-white transition-none px-3 py-2")}
                   >
                     {navItem.label}
                   </Link>
