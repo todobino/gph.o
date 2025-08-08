@@ -71,7 +71,7 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <div>
       {/* Full-width header section */}
-      <section className="bg-secondary border-x border-b rounded-b-lg px-2 md:px-8 py-8 mb-8">
+      <section className="bg-secondary border rounded-lg px-2 md:px-8 py-8 mb-8">
         <div className="max-w-6xl mx-auto">
           <Breadcrumbs items={breadcrumbItems} />
           <header className="mt-4">
