@@ -338,7 +338,7 @@ export function Header() {
               GeePawHill.Org
             </span>
           </Link>
-          <nav className="flex items-center space-x-1 text-sm font-semibold">
+          <nav className="flex items-center space-x-1 text-sm font-medium">
              {navItems.map((navItem) =>
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
@@ -365,9 +365,8 @@ export function Header() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <HeaderMenuButton asChild>
+                  <HeaderMenuButton asChild key={navItem.href}>
                     <Link
-                      key={navItem.href}
                       href={navItem.href!}
                     >
                       {navItem.label}
