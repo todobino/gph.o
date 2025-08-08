@@ -313,7 +313,6 @@ export function Header() {
                  <Skeleton className="h-9 w-full max-w-sm" />
             </div>
             <div className="hidden md:flex items-center space-x-2">
-              <Skeleton className="h-9 w-36" />
               <Skeleton className="h-9 w-28" />
               <Skeleton className="h-9 w-20" />
             </div>
@@ -339,7 +338,7 @@ export function Header() {
               GeePawHill.Org
             </span>
           </Link>
-          <nav className="flex items-center space-x-1 text-sm font-medium">
+          <nav className="flex items-center space-x-1 text-sm font-semibold">
              {navItems.map((navItem) =>
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
