@@ -7,7 +7,7 @@ import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 import { Breadcrumbs, type BreadcrumbItem } from '@/components/ui/breadcrumbs';
 import { RelatedPostsSection } from '@/components/posts/related-posts-section';
-import { BookOpen, Calendar, Tags, User } from 'lucide-react'; 
+import { BookOpen, Calendar, Tags, User } from 'lucide-react';
 import { PostsSidebar } from '@/components/posts/posts-sidebar';
 
 // Helper function to convert string to Title Case (copied from posts/page.tsx)
@@ -53,7 +53,7 @@ export default async function PostPage({ params }: PostPageProps) {
   const tags = Array.from(new Set(allPosts.flatMap(post => post.tags)));
   const archives = Array.from(new Set(allPosts.map(post => new Date(post.date).toLocaleString('default', { month: 'long', year: 'numeric' })))).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
   const series = await getAllSeries();
-  
+
   const relatedPosts = allPosts
     .filter(post =>
       post.slug !== currentPost.slug &&
@@ -68,46 +68,52 @@ export default async function PostPage({ params }: PostPageProps) {
   ];
 
   return (
-    <div>
-      <Breadcrumbs items={breadcrumbItems} />
+    <div className='-mt-8'>
+      {/* Full-width header section */}
+      <section className="bg-accent text-accent-foreground -mx-2 md:-mx-8 px-2 md:px-8 pt-2 pb-8 mb-8">
+        <div className="max-w-6xl mx-auto">
+          <Breadcrumbs items={breadcrumbItems} />
+          <header className="mt-4">
+            <h1 className="text-4xl font-bold mb-2 font-heading text-primary">{currentPost.title}</h1>
+            {currentPost.series && (
+              <p className="text-accent-foreground/80 text-sm mb-4 flex items-center">
+                <BookOpen className="h-4 w-4 mr-1.5 text-primary" />
+                Part of the series: <Link href={`/posts?series=${encodeURIComponent(currentPost.series)}`} className="ml-1 text-primary hover:underline">{currentPost.series}</Link>
+              </p>
+            )}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-accent-foreground/80 mt-2">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="h-4 w-4" />
+                <span>{new Date(currentPost.date).toLocaleDateString()}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <User className="h-4 w-4" />
+                <span>{currentPost.author}</span>
+              </div>
+              {currentPost.tags.length > 0 && (
+                <div className="flex items-center gap-1.5">
+                  <Tags className="h-4 w-4" />
+                  <div className="flex flex-wrap gap-1">
+                    {currentPost.tags.map((tag, index) => (
+                      <React.Fragment key={tag}>
+                        <Link href={`/posts?tag=${tag}`} className="hover:text-primary hover:underline">
+                          {toTitleCase(tag)}
+                        </Link>
+                        {index < currentPost.tags.length - 1 && <span>,</span>}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </header>
+        </div>
+      </section>
+
+      {/* Main content and sidebar */}
       <div className="flex flex-col md:flex-row gap-8">
         <main className="w-full md:w-2/3 lg:w-3/4">
           <article className="prose prose-lg dark:prose-invert max-w-none">
-            <header className="mb-8">
-              <h1 className="text-4xl font-bold mb-2 font-heading">{currentPost.title}</h1>
-              {currentPost.series && (
-                <p className="text-muted-foreground text-sm mb-4 flex items-center">
-                  <BookOpen className="h-4 w-4 mr-1.5 text-primary" />
-                  Part of the series: <Link href={`/posts?series=${encodeURIComponent(currentPost.series)}`} className="ml-1 text-primary hover:underline">{currentPost.series}</Link>
-                </p>
-              )}
-               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2 py-3">
-                 <div className="flex items-center gap-1.5">
-                    <Calendar className="h-4 w-4" />
-                    <span>{new Date(currentPost.date).toLocaleDateString()}</span>
-                 </div>
-                 <div className="flex items-center gap-1.5">
-                    <User className="h-4 w-4" />
-                    <span>{currentPost.author}</span>
-                 </div>
-                 {currentPost.tags.length > 0 && (
-                    <div className="flex items-center gap-1.5">
-                        <Tags className="h-4 w-4" />
-                        <div className="flex flex-wrap gap-1">
-                        {currentPost.tags.map((tag, index) => (
-                            <React.Fragment key={tag}>
-                                <Link href={`/posts?tag=${tag}`} className="hover:text-primary hover:underline">
-                                    {toTitleCase(tag)}
-                                </Link>
-                                {index < currentPost.tags.length - 1 && <span>,</span>}
-                            </React.Fragment>
-                        ))}
-                        </div>
-                    </div>
-                 )}
-               </div>
-            </header>
-
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
@@ -153,7 +159,7 @@ export default async function PostPage({ params }: PostPageProps) {
               {currentPost.content}
             </ReactMarkdown>
           </article>
-          
+
           {relatedPosts.length > 0 && (
             <RelatedPostsSection posts={relatedPosts} />
           )}
