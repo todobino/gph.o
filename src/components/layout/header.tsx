@@ -348,6 +348,12 @@ export function Header() {
                       </HeaderMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
+                        <DropdownMenuItem asChild>
+                         <Link href={navItem.label === 'Posts' ? '/posts' : '/courses'}>
+                           All {navItem.label}
+                         </Link>
+                       </DropdownMenuItem>
+                       <DropdownMenuSeparator />
                        {navItem.dropdown.map((item) => (
                             <DropdownMenuItem key={item.href} asChild>
                               <Link href={item.href!} className="flex items-center gap-2 cursor-pointer">
@@ -356,12 +362,6 @@ export function Header() {
                               </Link>
                             </DropdownMenuItem>
                        ))}
-                       <DropdownMenuSeparator />
-                       <DropdownMenuItem asChild variant="primary">
-                         <Link href={navItem.label === 'Posts' ? '/posts' : '/courses'}>
-                           All {navItem.label}
-                         </Link>
-                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
