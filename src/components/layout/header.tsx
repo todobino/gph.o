@@ -298,7 +298,7 @@ export function Header() {
   if (!hasMounted) {
     return (
        <header className="sticky top-0 z-50 w-full border-b bg-primary-dark">
-        <div className="container mx-auto flex h-14 items-center px-4 max-w-6xl">
+        <div className="container mx-auto flex h-14 items-center px-2 max-w-6xl">
             <div className="mr-6 flex items-center">
               <Skeleton className="h-6 w-6 mr-2 bg-white/20" />
               <Skeleton className="h-6 w-32 bg-white/20" />
@@ -309,8 +309,8 @@ export function Header() {
                  <Skeleton className="h-9 w-24 bg-white/20" />
                  <Skeleton className="h-9 w-24 bg-white/20" />
             </div>
-            <div className="flex flex-1 items-center justify-center px-4 md:hidden"></div>
-             <div className="hidden md:flex flex-1 items-center justify-center px-4">
+            <div className="flex flex-1 items-center justify-center px-2 md:hidden"></div>
+             <div className="hidden md:flex flex-1 items-center justify-center px-2">
                  <Skeleton className="h-9 w-full max-w-sm bg-white/20" />
             </div>
             <div className="hidden md:flex items-center space-x-2">
@@ -329,7 +329,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary-dark/20 bg-primary-dark text-primary-dark-foreground">
-      <div className="container mx-auto flex h-14 items-center px-4 max-w-6xl">
+      <div className="container mx-auto flex h-14 items-center px-2 max-w-6xl">
         {/* Desktop View (md and up) */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -348,7 +348,7 @@ export function Header() {
                       </HeaderMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                        <DropdownMenuItem asChild>
+                       <DropdownMenuItem asChild>
                          <Link href={navItem.label === 'Posts' ? '/posts' : '/courses'}>
                            All {navItem.label}
                          </Link>
@@ -377,7 +377,7 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="hidden md:flex flex-1 items-center justify-center px-4">
+        <div className="hidden md:flex flex-1 items-center justify-center px-2">
             <div className="relative w-full">
                 <Popover
                     open={isDesktopSearchPopoverOpen}
