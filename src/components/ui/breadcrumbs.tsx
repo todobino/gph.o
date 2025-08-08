@@ -23,18 +23,18 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items, className }) => {
 
   return (
     <nav aria-label="Breadcrumb" className={cn('mb-6', className)}>
-      <ol className="inline-flex items-center space-x-1.5 bg-background/50 text-sm text-accent-foreground p-2 rounded-md border border-border/50">
+      <ol className="flex items-center space-x-1.5 text-sm">
         {items.map((item, index) => (
           <li key={index} className="flex items-center">
             {item.href ? (
               <Link
                 href={item.href}
-                className="hover:text-primary hover:underline transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 {item.label}
               </Link>
             ) : (
-              <span className="font-medium text-primary">{item.label}</span>
+              <span className="font-medium text-foreground">{item.label}</span>
             )}
             {index < items.length - 1 && (
               <ChevronRight className="h-4 w-4 mx-1.5 text-muted-foreground" />
