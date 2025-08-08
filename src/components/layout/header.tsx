@@ -296,30 +296,30 @@ export function Header() {
 
   if (!hasMounted) {
     return (
-       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+       <header className="sticky top-0 z-50 w-full border-b bg-primary-dark">
         <div className="container mx-auto flex h-14 items-center px-4 max-w-6xl">
             <div className="mr-6 flex items-center">
-              <Skeleton className="h-6 w-6 mr-2" />
-              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-6 w-6 mr-2 bg-white/20" />
+              <Skeleton className="h-6 w-32 bg-white/20" />
             </div>
             <div className="hidden md:flex items-center space-x-1">
-                 <Skeleton className="h-9 w-24" />
-                 <Skeleton className="h-9 w-24" />
-                 <Skeleton className="h-9 w-24" />
-                 <Skeleton className="h-9 w-24" />
+                 <Skeleton className="h-9 w-24 bg-white/20" />
+                 <Skeleton className="h-9 w-24 bg-white/20" />
+                 <Skeleton className="h-9 w-24 bg-white/20" />
+                 <Skeleton className="h-9 w-24 bg-white/20" />
             </div>
             <div className="flex flex-1 items-center justify-center px-4 md:hidden"></div>
              <div className="hidden md:flex flex-1 items-center justify-center px-4">
-                 <Skeleton className="h-9 w-full max-w-sm" />
+                 <Skeleton className="h-9 w-full max-w-sm bg-white/20" />
             </div>
             <div className="hidden md:flex items-center space-x-2">
-              <Skeleton className="h-9 w-28" />
-              <Skeleton className="h-9 w-20" />
+              <Skeleton className="h-9 w-28 rounded-full bg-white/20" />
+              <Skeleton className="h-9 w-20 rounded-full bg-white/20" />
             </div>
              <div className="md:hidden flex items-center space-x-2">
-                <Skeleton className="h-9 w-9" />
-                <Skeleton className="h-9 w-9" />
-                 <Skeleton className="h-9 w-28" />
+                <Skeleton className="h-9 w-9 rounded-full bg-white/20" />
+                <Skeleton className="h-9 w-9 rounded-full bg-white/20" />
+                 <Skeleton className="h-9 w-28 rounded-full bg-white/20" />
             </div>
         </div>
       </header>
@@ -328,22 +328,22 @@ export function Header() {
 
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-primary-dark/20 bg-primary-dark text-primary-dark-foreground">
       <div className="container mx-auto flex h-14 items-center px-4 max-w-6xl">
         {/* Desktop View (md and up) */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Cpu className="h-6 w-6 text-primary" />
-            <span className="hidden font-bold sm:inline-block text-foreground">
+            <Cpu className="h-6 w-6 text-white" />
+            <span className="hidden font-bold sm:inline-block">
               GeePawHill.Org
             </span>
           </Link>
-          <nav className="flex items-center space-x-1 text-sm font-bold">
+          <nav className="flex items-center space-x-1 text-sm font-semibold">
              {navItems.map((navItem) =>
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="text-foreground hover:text-foreground/80 px-3 py-2">
+                      <Button variant="ghost" className="hover:bg-white/10 px-3 py-2">
                         {navItem.label} <ChevronDown className="ml-1 h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -368,7 +368,7 @@ export function Header() {
                   <Link
                     key={navItem.href}
                     href={navItem.href!}
-                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "text-foreground hover:text-foreground/80 px-3 py-2")}
+                    className={cn(buttonVariants({ variant: "ghost", size: "default" }), "hover:bg-white/10 px-3 py-2")}
                   >
                     {navItem.label}
                   </Link>
@@ -385,12 +385,12 @@ export function Header() {
                 >
                     <PopoverTrigger asChild>
                         <div className="relative w-full">
-                            <Search className="absolute left-3 top-1/2 z-10 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                            <Search className="absolute left-3 top-1/2 z-10 -translate-y-1/2 h-4 w-4 text-white/50 pointer-events-none" />
                             <Input
                                 ref={desktopSearchInputRef}
                                 type="search"
                                 placeholder="Search posts and pages..."
-                                className="h-9 w-full pl-10 pr-3 focus-visible:ring-primary"
+                                className="h-9 w-full pl-10 pr-3 bg-white/10 placeholder:text-white/50 text-white border-none focus-visible:ring-primary"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -419,7 +419,7 @@ export function Header() {
             {isLoadingAuth ? (
               <Skeleton className="h-9 w-20" />
             ) : isAdmin ? (
-              <Button asChild variant="default" className="bg-foreground text-background hover:bg-foreground/80">
+              <Button asChild variant="secondary">
                 <Link href="/admin">
                    Admin
                 </Link>
@@ -434,7 +434,7 @@ export function Header() {
                <span
                   role="button"
                   tabIndex={0}
-                  className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'cursor-pointer')}
+                  className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'cursor-pointer hover:bg-white/10')}
                   aria-label="Toggle Menu"
                   onClick={() => setIsMobileMenuOpen(true)}
                   onKeyDown={(e) => e.key === 'Enter' && setIsMobileMenuOpen(true)}
@@ -505,8 +505,8 @@ export function Header() {
             </SheetContent>
           </Sheet>
            <Link href="/" className="flex items-center space-x-2">
-             <Cpu className="h-6 w-6 text-primary" />
-             <span className="font-bold text-foreground">GeePawHill.Org</span>
+             <Cpu className="h-6 w-6 text-white" />
+             <span className="font-bold">GeePawHill.Org</span>
            </Link>
              <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                  <DialogTrigger asChild>
@@ -515,7 +515,7 @@ export function Header() {
                        tabIndex={0}
                        className={cn(
                          buttonVariants({ variant: 'ghost', size: 'icon' }),
-                         'cursor-pointer'
+                         'cursor-pointer hover:bg-white/10'
                        )}
                        aria-label="Open search dialog"
                      >
