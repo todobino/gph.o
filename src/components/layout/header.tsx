@@ -276,7 +276,7 @@ export function Header() {
         className="bg-background/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg border border-border sm:max-w-md"
     >
         <DialogHeader>
-          <DialogTitle className="text-xl sm:text-2xl font-semibold">Search</DialogTitle>
+          <DialogTitle className="text-xl sm:text-2xl font-semibold font-heading">Search</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3 sm:gap-4 py-2 sm:py-4">
           <Input
@@ -338,7 +338,7 @@ export function Header() {
               GeePawHill.Org
             </span>
           </Link>
-          <nav className="flex items-center space-x-1 text-sm font-semibold">
+          <nav className="flex items-center space-x-1 text-sm font-bold">
              {navItems.map((navItem) =>
                 navItem.dropdown ? (
                   <DropdownMenu key={navItem.label}>
@@ -535,5 +535,3 @@ export function Header() {
     </header>
   );
 }
-
-    
