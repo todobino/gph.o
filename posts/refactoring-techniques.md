@@ -2,6 +2,7 @@
 title: 'Understanding Refactoring'
 date: '2024-03-10'
 tags: ['refactoring', 'clean code']
+author: 'GeePaw Hill'
 ---
 
 # Refactoring Techniques

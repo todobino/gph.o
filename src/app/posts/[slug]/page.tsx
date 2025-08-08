@@ -1,15 +1,13 @@
 import { type Metadata, type ResolvingMetadata } from 'next';
-import type { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import { getPostBySlug, type Post, getPosts, getAllSeries } from '@/services/posts';
 import { notFound } from 'next/navigation';
-import { Badge } from '@/components/ui/badge';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 import { Breadcrumbs, type BreadcrumbItem } from '@/components/ui/breadcrumbs';
 import { RelatedPostsSection } from '@/components/posts/related-posts-section';
-import { BookOpen } from 'lucide-react'; // Import BookOpen for series icon
+import { BookOpen, Calendar, Tags, User } from 'lucide-react'; 
 import { PostsSidebar } from '@/components/posts/posts-sidebar';
 
 // Helper function to convert string to Title Case (copied from posts/page.tsx)
@@ -77,28 +75,37 @@ export default async function PostPage({ params }: PostPageProps) {
           <article className="prose prose-lg dark:prose-invert max-w-none">
             <header className="mb-8">
               <h1 className="text-4xl font-bold mb-2 font-heading">{currentPost.title}</h1>
-              <p className="text-muted-foreground text-sm mb-2"> {/* Reduced mb from 4 to 2 */}
-                Published on {new Date(currentPost.date).toLocaleDateString()}
-              </p>
               {currentPost.series && (
                 <p className="text-muted-foreground text-sm mb-4 flex items-center">
                   <BookOpen className="h-4 w-4 mr-1.5 text-primary" />
                   Part of the series: <Link href={`/posts?series=${encodeURIComponent(currentPost.series)}`} className="ml-1 text-primary hover:underline">{currentPost.series}</Link>
                 </p>
               )}
-              <div className="flex flex-wrap gap-2">
-                {currentPost.tags.map((tag) => (
-                  <Link key={tag} href={`/posts?tag=${tag}`} scroll={false}>
-                    <Badge
-                      variant={cn(
-                        "cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1.5 px-3 border border-border"
-                      ) as any}
-                    >
-                      {toTitleCase(tag)}
-                    </Badge>
-                  </Link>
-                ))}
-              </div>
+               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2 border-y py-3">
+                 <div className="flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4" />
+                    <span>{new Date(currentPost.date).toLocaleDateString()}</span>
+                 </div>
+                 <div className="flex items-center gap-1.5">
+                    <User className="h-4 w-4" />
+                    <span>{currentPost.author}</span>
+                 </div>
+                 {currentPost.tags.length > 0 && (
+                    <div className="flex items-center gap-1.5">
+                        <Tags className="h-4 w-4" />
+                        <div className="flex flex-wrap gap-1">
+                        {currentPost.tags.map((tag, index) => (
+                            <React.Fragment key={tag}>
+                                <Link href={`/posts?tag=${tag}`} className="hover:text-primary hover:underline">
+                                    {toTitleCase(tag)}
+                                </Link>
+                                {index < currentPost.tags.length - 1 && <span>,</span>}
+                            </React.Fragment>
+                        ))}
+                        </div>
+                    </div>
+                 )}
+               </div>
             </header>
 
             <ReactMarkdown

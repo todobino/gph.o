@@ -2,6 +2,7 @@
 title: 'Video: Pair Programming Session'
 date: '2024-06-01'
 tags: ['pair programming', 'video', 'agile']
+author: 'GeePaw Hill'
 ---
 
 # Pairing Fun!

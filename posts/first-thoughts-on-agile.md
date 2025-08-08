@@ -2,6 +2,7 @@
 title: 'First Thoughts on Agile'
 date: '2024-05-15'
 tags: ['agile', 'software development']
+author: 'GeePaw Hill'
 ---
 
 # Agile Intro

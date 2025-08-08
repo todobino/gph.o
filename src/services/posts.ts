@@ -32,6 +32,10 @@ export interface Post {
    * The series the post belongs to, if any.
    */
   series?: string;
+  /**
+   * The author of the post.
+   */
+  author: string;
 }
 
 const postsDirectory = path.join(process.cwd(), 'posts');
@@ -64,6 +68,7 @@ export async function getPosts(): Promise<Post[]> {
           date: matterResult.data.date || new Date().toISOString().split('T')[0], // Provide default date
           tags: matterResult.data.tags || [], // Provide default tags
           series: matterResult.data.series || undefined, // Add series
+          author: matterResult.data.author || 'GeePaw Hill', // Add author
           content: matterResult.content,
         };
       });

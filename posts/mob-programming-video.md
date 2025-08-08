@@ -2,6 +2,7 @@
 title: 'Video: Introduction to Mob Programming'
 date: '2023-11-18'
 tags: ['mob programming', 'video', 'agile', 'teamwork']
+author: 'GeePaw Hill'
 ---
 
 # Mob Programming Explained
