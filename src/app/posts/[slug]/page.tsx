@@ -70,18 +70,18 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <div className='-mt-8'>
       {/* Full-width header section */}
-      <section className="bg-accent text-accent-foreground -mx-2 md:-mx-8 px-2 md:px-8 pt-2 pb-8 mb-8">
+      <section className="bg-secondary border-x border-b rounded-b-lg px-2 md:px-8 pt-2 pb-8 mb-8">
         <div className="max-w-6xl mx-auto">
           <Breadcrumbs items={breadcrumbItems} />
           <header className="mt-4">
             <h1 className="text-4xl font-bold mb-2 font-heading text-primary">{currentPost.title}</h1>
             {currentPost.series && (
-              <p className="text-accent-foreground/80 text-sm mb-4 flex items-center">
+              <p className="text-muted-foreground text-sm mb-4 flex items-center">
                 <BookOpen className="h-4 w-4 mr-1.5 text-primary" />
                 Part of the series: <Link href={`/posts?series=${encodeURIComponent(currentPost.series)}`} className="ml-1 text-primary hover:underline">{currentPost.series}</Link>
               </p>
             )}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-accent-foreground/80 mt-2">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2">
               <div className="flex items-center gap-1.5">
                 <Calendar className="h-4 w-4" />
                 <span>{new Date(currentPost.date).toLocaleDateString()}</span>
