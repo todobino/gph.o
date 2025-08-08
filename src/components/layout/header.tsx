@@ -2,7 +2,6 @@
 'use client';
 
 import Link from 'next/link';
-import { Button, buttonVariants } from '../ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
 import {
   DropdownMenu,
@@ -14,7 +13,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, Cpu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book } from 'lucide-react';
+import { Menu, BrainCog, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -25,6 +24,7 @@ import type { User } from 'firebase/auth';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Skeleton } from '../ui/skeleton';
 import { HeaderMenuButton } from '../ui/header-menu-button';
+import { Button } from '../ui/button';
 
 
 interface NavItem {
@@ -333,7 +333,7 @@ export function Header() {
         {/* Desktop View (md and up) */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Cpu className="h-6 w-6 text-white" />
+            <BrainCog className="h-6 w-6 text-white" />
             <span className="hidden font-bold sm:inline-block">
               GeePawHill.Org
             </span>
@@ -449,7 +449,7 @@ export function Header() {
                   className="flex items-center space-x-2 mb-6"
                   onClick={handleMobileSheetLinkClick}
                 >
-                  <Cpu className="h-6 w-6 text-primary" />
+                  <BrainCog className="h-6 w-6 text-primary" />
                   <span className="font-bold text-foreground">GeePawHill.Org</span>
                 </Link>
               </SheetClose>
@@ -505,7 +505,7 @@ export function Header() {
             </SheetContent>
           </Sheet>
            <Link href="/" className="flex items-center space-x-2">
-             <Cpu className="h-6 w-6 text-white" />
+             <BrainCog className="h-6 w-6 text-white" />
              <span className="font-bold">GeePawHill.Org</span>
            </Link>
              <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
