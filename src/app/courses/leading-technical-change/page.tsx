@@ -255,9 +255,11 @@ export default function LeadingTechnicalChangePage() {
                  {/* CTA 2: Download Overview */}
                  <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary-dark text-primary-dark-foreground">
                     <h3 className="text-2xl font-semibold font-heading">Download the LTC Overview</h3>
-                     <Button size="lg" variant="secondary" disabled> {/* Disabled until PDF is available */}
-                         <Download className="mr-2 h-5 w-5" />
-                         Download the PDF (Coming Soon)
+                     <Button size="lg" variant="secondary" asChild>
+                         <Link href="https://firebasestorage.googleapis.com/v0/b/gph-o-2ee61.firebasestorage.app/o/appData%2FLTC-Overview.pdf?alt=media&token=f6f256a3-7c57-4b46-b569-093e830bb3ab" target="_blank" rel="noopener noreferrer">
+                            <Download className="mr-2 h-5 w-5" />
+                            Download the PDF
+                         </Link>
                      </Button>
                      <p className="text-xs text-primary-dark-foreground/80">Get the detailed course outline.</p>
                  </div>
