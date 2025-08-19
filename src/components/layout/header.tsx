@@ -58,12 +58,6 @@ export function Header() {
 
   const allCourses = React.useMemo(() => [
       { title: 'Leading Technical Change', slug: '/courses/leading-technical-change' },
-      { title: 'Advanced React Patterns', slug: '/courses/advanced-react-patterns' },
-      { title: 'Modern Backend Development with Node.js', slug: '/courses/modern-backend-nodejs' },
-      { title: 'Full-Stack TypeScript Mastery', slug: '/courses/fullstack-typescript' },
-      { title: 'Effective Technical Leadership', slug: '/courses/effective-technical-leadership' },
-      { title: 'Agile Project Management for Software Teams', slug: '/courses/agile-project-management' },
-      { title: 'Strategic Thinking for Engineering Managers', slug: '/courses/strategic-thinking-engineering' },
   ], []);
   const allPages = React.useMemo(() => [
       { title: 'About', slug: '/about' },
@@ -161,12 +155,6 @@ export function Header() {
       label: 'Courses',
       dropdown: [
         { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/advanced-react-patterns', label: 'Advanced React Patterns', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/modern-backend-nodejs', label: 'Modern Backend Node.js', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/fullstack-typescript', label: 'Full-Stack TypeScript', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/effective-technical-leadership', label: 'Effective Tech Leadership', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/agile-project-management', label: 'Agile Project Management', icon: <GraduationCap className="h-4 w-4" /> },
-        { href: '/courses/strategic-thinking-engineering', label: 'Strategic Thinking for Eng.', icon: <GraduationCap className="h-4 w-4" /> },
       ],
     },
     { href: '/about', label: 'About' },
