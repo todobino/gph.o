@@ -104,7 +104,7 @@ export default function LeadingTechnicalChangePage() {
         {/* Right Column: Image */}
         <div className="w-full md:w-1/2">
            <Image
-               src="https://picsum.photos/seed/ltc-section1/800/450" // 16:9 aspect ratio
+               src="https://placehold.co/800x450.png" // 16:9 aspect ratio
                alt="Placeholder image representing technical change concepts"
                width={800}
                height={450}
@@ -131,7 +131,7 @@ export default function LeadingTechnicalChangePage() {
          {/* Left Column: Image */}
          <div className="w-full md:w-1/2">
             <Image
-                src="https://picsum.photos/seed/ltc-section2/800/450" // 16:9 aspect ratio
+                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
                 alt="Placeholder image representing the course leader or teaching"
                 width={800}
                 height={450}
@@ -158,7 +158,7 @@ export default function LeadingTechnicalChangePage() {
           {/* Right Column: Two Images */}
           <div className="w-full md:w-1/2 space-y-4">
             <Image
-                src="https://picsum.photos/seed/ltc-section3-1/800/450" // 16:9 aspect ratio
+                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
                 alt="Placeholder image related to cognitive frames or change strategies"
                 width={800}
                 height={450}
@@ -166,7 +166,7 @@ export default function LeadingTechnicalChangePage() {
                 data-ai-hint="abstract mind diagram"
             />
             <Image
-                src="https://picsum.photos/seed/ltc-section3-2/800/450" // 16:9 aspect ratio
+                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
                 alt="Another placeholder image related to change management concepts"
                 width={800}
                 height={450}
@@ -192,7 +192,7 @@ export default function LeadingTechnicalChangePage() {
             {/* Left Column: Image (Portrait) */}
           <div className="w-full md:w-1/2">
              <Image
-                 src="https://picsum.photos/seed/ltc-section4/450/600" // Portrait aspect ratio
+                 src="https://placehold.co/450x600.png" // Portrait aspect ratio
                  alt="Placeholder image representing technique or practice"
                  width={450}
                  height={600}
@@ -219,7 +219,7 @@ export default function LeadingTechnicalChangePage() {
           {/* Right Column: Two Images */}
           <div className="w-full md:w-1/2 space-y-4">
             <Image
-                src="https://picsum.photos/seed/ltc-section5-1/800/450" // 16:9 aspect ratio
+                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
                 alt="Placeholder image representing practice or group interaction"
                 width={800}
                 height={450}
@@ -227,7 +227,7 @@ export default function LeadingTechnicalChangePage() {
                 data-ai-hint="team discussion whiteboard"
             />
              <Image
-                src="https://picsum.photos/seed/ltc-section5-2/800/450" // 16:9 aspect ratio
+                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
                 alt="Another placeholder image related to applying learning"
                 width={800}
                 height={450}
@@ -243,9 +243,11 @@ export default function LeadingTechnicalChangePage() {
                 {/* CTA 1: Join Cohort */}
                 <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary text-primary-foreground">
                     <h3 className="text-2xl font-semibold font-heading">Join the Next LTC Cohort</h3>
-                    <Button size="lg" variant="secondary" disabled> {/* Disabled until booking is ready */}
+                    <Button size="lg" variant="secondary" asChild>
+                      <Link href="https://book.stripe.com/4gw7v991obDr1Nu007" target="_blank" rel="noopener noreferrer">
                         <UserPlus className="mr-2 h-5 w-5" />
-                        Get Your Seat (Coming Soon)
+                        Get Your Seat
+                      </Link>
                     </Button>
                      <p className="text-xs text-primary-foreground/80">Be the first to know when the next cohort opens.</p>
                 </div>
