@@ -20,7 +20,7 @@ export async function Footer() {
             {/* Column 1: Featured Video */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold font-heading">Featured Video</h3>
-              <Link href="/posts?tag=video" className="block group"> {/* Link to video tag page */}
+              <Link href="https://www.youtube.com/watch?v=lHoOUylvfxQ" target="_blank" rel="noopener noreferrer" className="block group">
                 <div className="relative aspect-video overflow-hidden rounded-lg shadow-md">
                   <Image
                     src="https://picsum.photos/seed/footer-video/400/225" // Placeholder image
@@ -32,7 +32,7 @@ export async function Footer() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute bottom-0 left-0 p-4">
                     <p className="text-primary-foreground text-sm font-medium line-clamp-2">
-                        Watch the latest video highlight! {/* Placeholder text */}
+                        Watch: Mob Programming - A Whole Team Approach
                     </p>
                   </div>
                 </div>
