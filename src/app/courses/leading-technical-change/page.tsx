@@ -239,9 +239,9 @@ export default function LeadingTechnicalChangePage() {
 
          {/* New CTA Section */}
          <section className="bg-accent p-8 md:p-12 rounded-lg shadow-sm text-accent-foreground">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-center md:text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                 {/* CTA 1: Join Cohort */}
-                <div className="space-y-3">
+                <div className="space-y-3 flex flex-col items-center text-center">
                     <h3 className="text-2xl font-semibold text-accent-foreground font-heading">Join the Next LTC Cohort</h3>
                     <Button size="lg" disabled> {/* Disabled until booking is ready */}
                         <UserPlus className="mr-2 h-5 w-5" />
@@ -251,7 +251,7 @@ export default function LeadingTechnicalChangePage() {
                 </div>
 
                  {/* CTA 2: Download Overview */}
-                 <div className="space-y-3">
+                 <div className="space-y-3 flex flex-col items-center text-center">
                     <h3 className="text-2xl font-semibold text-accent-foreground font-heading">Download the LTC Overview</h3>
                      <Button size="lg" disabled> {/* Disabled until PDF is available */}
                          <Download className="mr-2 h-5 w-5" />
