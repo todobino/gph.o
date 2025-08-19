@@ -5,6 +5,7 @@ import { getPosts } from '@/services/posts';
 import { EmailSignupForm } from '@/components/email-signup-form';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { PlayCircle } from 'lucide-react';
 
 export async function Footer() {
   // Fetch the 5 most recent posts
@@ -23,13 +24,16 @@ export async function Footer() {
               <Link href="https://www.youtube.com/watch?v=lHoOUylvfxQ" target="_blank" rel="noopener noreferrer" className="block group">
                 <div className="relative aspect-video overflow-hidden rounded-lg shadow-md">
                   <Image
-                    src="https://picsum.photos/seed/footer-video/400/225" // Placeholder image
-                    alt="Featured video thumbnail"
+                    src="https://i.ytimg.com/vi/lHoOUylvfxQ/hqdefault.jpg" // YouTube thumbnail
+                    alt="Featured video thumbnail for Mob Programming"
                     fill // Use fill to cover the container
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    data-ai-hint="video thumbnail abstract"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                   {/* Play Icon */}
+                   <div className="absolute inset-0 flex items-center justify-center">
+                        <PlayCircle className="h-12 w-12 text-white/80 transition-transform duration-300 group-hover:scale-110 group-hover:text-white" />
+                   </div>
                   <div className="absolute bottom-0 left-0 p-4">
                     <p className="text-primary-foreground text-sm font-medium line-clamp-2">
                         Watch: Mob Programming - A Whole Team Approach

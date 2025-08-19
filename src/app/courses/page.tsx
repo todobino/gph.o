@@ -20,7 +20,7 @@ export default function CoursesPage() {
     <div className="container mx-auto px-4 py-12 space-y-16">
       <section className="text-center">
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 font-heading">
-          Explore Our Courses
+          Explore Our Course
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
           Discover our course designed to elevate your skills in software development and leadership.
@@ -62,11 +62,7 @@ export default function CoursesPage() {
             </Card>
         </div>
       </section>
-      <section className="text-center mt-16">
-         <p className="text-muted-foreground">
-            More courses coming soon. Stay tuned!
-         </p>
-      </section>
+      
     </div>
   );
 }
