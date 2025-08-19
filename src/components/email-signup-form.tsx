@@ -16,7 +16,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
-// import { subscribeContact } from '@/services/mailchimp'; // Or use convertkit or firestore function
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -29,27 +28,6 @@ const formSchema = z.object({
 });
 
 export type EmailSignupFormData = z.infer<typeof formSchema>;
-
-// Placeholder function for subscribing - replace with actual Mailchimp/ConvertKit/Firestore call
-async function subscribeEmail(data: EmailSignupFormData): Promise<{ success: boolean, error?: string }> {
-    console.log("Subscribing email (placeholder):", data);
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Simulate potential failure
-    // if (Math.random() < 0.2) {
-    //    return { success: false, error: "Failed to subscribe. Please try again." };
-    // }
-
-    // TODO: Implement actual subscription logic (Mailchimp, ConvertKit, or Firestore)
-    // Example (using a generic service function):
-    // const success = await subscribeContact(data); // Assuming subscribeContact handles the API call
-    // if (!success) {
-    //    return { success: false, error: "Could not subscribe. Please check your details or try again later." };
-    // }
-    return { success: true };
-}
-
 
 export function EmailSignupForm() {
   const { toast } = useToast();
@@ -68,13 +46,18 @@ export function EmailSignupForm() {
   async function onSubmit(values: EmailSignupFormData) {
      setIsSubmitting(true);
     try {
-      // TODO: Replace with actual call to subscribe service
-      const result = await subscribeEmail(values);
+      const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(values),
+      });
 
-       if (result.success) {
+      const result = await response.json();
+
+       if (result.ok) {
             toast({
-            title: 'Subscription Successful!',
-            description: "You're signed up for updates.",
+            title: 'Subscription Pending!',
+            description: "Please check your email to confirm your subscription.",
             });
             form.reset(); // Clear the form
        } else {

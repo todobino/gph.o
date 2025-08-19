@@ -22,3 +22,4 @@ try {
 }
 
 export const authAdmin = admin.auth();
+export const adminDb = admin.firestore();
