@@ -1,5 +1,4 @@
 
-
 import Link from 'next/link';
 import { getPosts, type Post, getAllSeries } from '@/services/posts'; // Updated import path, added getAllSeries
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
