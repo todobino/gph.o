@@ -75,8 +75,8 @@ export default function LoginPage() {
    }
 
   return (
-    <div className="flex justify-center items-center min-h-screen py-12"> {/* Added min-h-screen and padding */}
-      <Card className="w-full max-w-sm mx-4"> {/* Adjusted width and added margin */}
+    <div className="flex justify-center min-h-screen pt-20">
+      <Card className="w-full max-w-sm mx-4 h-fit">
         <CardHeader>
           <CardTitle>Admin Login</CardTitle>
           <CardDescription>Enter your email and password to login.</CardDescription>
