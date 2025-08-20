@@ -1,3 +1,4 @@
+
 import { initializeApp, getApps, getApp } from "firebase/app"
 import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth';
@@ -7,12 +8,12 @@ import type { EmailSignupFormData } from '@/components/email-signup-form';
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    authDomain: "gph-o-2ee61.firebaseapp.com",
+    projectId: "gph-o-2ee61",
+    storageBucket: "gph-o-2ee61.firebasestorage.app",
+    messagingSenderId: "739808378249",
+    appId: "1:739808378249:web:0bc65f9e41d42010af7558",
+    measurementId: "G-9867FX91SW"
 };
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 let analytics;
