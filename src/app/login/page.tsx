@@ -7,9 +7,10 @@ import { signIn, getCurrentUser, checkIfAdmin, signOut } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { FormControl } from '@/components/ui/form';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -22,6 +23,7 @@ export default function LoginPage() {
   // Check if a user is already logged in and an admin
   useEffect(() => {
     const checkAuth = async () => {
+      setIsLoading(true);
       const user = await getCurrentUser();
       if (user) {
         const isAdmin = await checkIfAdmin(user);
@@ -50,31 +52,41 @@ export default function LoginPage() {
     setIsLoading(true);
     setError('');
 
-    const success = await signIn(email, password);
+    try {
+      const success = await signIn(email, password);
 
-    if (success) {
-      toast({
-        title: "Login Successful",
-        description: "Redirecting to dashboard...",
-      });
-      // Use router.replace to avoid the user going back to the login page
-      router.replace('/admin');
-    } else {
-      setError('Login failed. Please check your credentials or admin status.');
-      toast({
-        title: "Login Failed",
-        description: 'Invalid email/password or not an authorized admin.',
-        variant: "destructive",
-      });
-      setIsLoading(false);
+      if (success) {
+        toast({
+          title: "Login Successful",
+          description: "Redirecting to dashboard...",
+        });
+        // Use router.replace to avoid the user going back to the login page
+        router.replace('/admin');
+      } else {
+        setError('Login failed. Please check your credentials or admin status.');
+        toast({
+          title: "Login Failed",
+          description: 'Invalid email/password or not an authorized admin.',
+          variant: "destructive",
+        });
+        setIsLoading(false);
+      }
+    } catch (err) {
+        console.error("Login submit error:", err);
+        setError('An unexpected error occurred during login.');
+        toast({
+            title: "Login Error",
+            description: 'An unexpected error occurred. Please try again.',
+            variant: "destructive",
+        });
+        setIsLoading(false);
     }
-    // Don't set isLoading to false on success, as the page will be unmounted
   };
 
   // Render loading skeleton or login form
   if (isLoading) {
     return (
-      <div className="flex justify-center min-h-screen pt-20">
+      <div className="flex justify-center pt-20">
          <Card className="w-full max-w-sm mx-4 h-fit">
             <CardHeader>
                <Skeleton className="h-8 w-3/4" />
@@ -97,7 +109,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex justify-center min-h-screen pt-20">
+    <div className="flex justify-center pt-20">
       <Card className="w-full max-w-sm mx-4 h-fit">
         <CardHeader>
           <CardTitle>Admin Login</CardTitle>
