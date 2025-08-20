@@ -1,4 +1,5 @@
 
+
 import { type Metadata, type ResolvingMetadata } from 'next';
 import React, { type ReactNode } from 'react';
 import { getPostBySlug, type Post, getPosts, getAllSeries } from '@/services/posts';
@@ -21,7 +22,7 @@ export async function generateMetadata(
   { params, searchParams }: { params: { slug: string }; searchParams: Record<string, string[] | undefined> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { slug } = params;
+  const slug = params.slug;
   if (!slug) return {};
   const post = await getPostBySlug(slug);
   if (!post) return {};
@@ -43,7 +44,7 @@ interface PostPageProps {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = params;
+  const slug = params.slug;
   if (!slug) notFound();
 
   const currentPost = await getPostBySlug(slug);
