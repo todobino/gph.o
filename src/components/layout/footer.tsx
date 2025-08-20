@@ -49,14 +49,14 @@ export async function Footer() {
               <ul className="space-y-2">
                 {recentPosts.map((post) => (
                   <li key={post.slug}>
-                    <Link href={`/posts/${post.slug}`} className="text-sm text-muted-foreground hover:text-primary hover:underline">
+                    <Link href={`/blog/${post.slug}`} className="text-sm text-muted-foreground hover:text-primary hover:underline">
                       {post.title}
                     </Link>
                   </li>
                 ))}
                 {recentPosts.length > 4 && (
                   <li>
-                      <Link href="/posts" className={cn(buttonVariants({ variant: "link", size: "sm", className: "p-0 h-auto" }))}>
+                      <Link href="/blog" className={cn(buttonVariants({ variant: "link", size: "sm", className: "p-0 h-auto" }))}>
                           View all posts...
                       </Link>
                   </li>

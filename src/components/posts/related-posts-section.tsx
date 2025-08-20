@@ -22,7 +22,7 @@ export function RelatedPostsSection({ posts }: RelatedPostsSectionProps) {
           return (
             <li key={post.slug}>
               <Link
-                href={`/posts/${slug}`}
+                href={`/blog/${slug}`}
                 className="block group"
               >
                 <h3 className="text-lg font-semibold text-accent-foreground group-hover:underline mb-0.5 line-clamp-2 font-heading">

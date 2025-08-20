@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -15,11 +14,10 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(true); // Start as true to handle initial auth check
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { toast } = useToast();
 
-  // Check if a user is already logged in and an admin
   useEffect(() => {
     const checkAuth = async () => {
       setIsLoading(true);
@@ -27,22 +25,17 @@ export default function LoginPage() {
       if (user) {
         const isAdmin = await checkIfAdmin(user);
         if (isAdmin) {
-          console.log("Already logged in as admin, redirecting...");
-          router.push('/admin'); // Redirect if already admin
-          return; // Skip setting loading to false
+          router.push('/admin');
+          return; // component will unmount on navigation
         } else {
-          console.log("Already logged in but not admin, logging out...");
-          await signOut(); // Log out if not admin
-          toast({
-            title: "Access Denied",
-            description: "You are not authorized to access the admin area.",
-            variant: "destructive",
-          });
+          // If a non-admin user somehow gets here with a session,
+          // redirect them to their account page instead of logging them out.
+          router.push('/account');
+          return;
         }
       }
-      setIsLoading(false); // Only set to false if not redirecting
+      setIsLoading(false);
     };
-
     checkAuth();
   }, [router, toast]);
 
@@ -50,59 +43,60 @@ export default function LoginPage() {
     event.preventDefault();
     setIsLoading(true);
     setError('');
-
     try {
-      const success = await signIn(email, password);
-
-      if (success) {
-        toast({
-          title: "Login Successful",
-          description: "Redirecting to dashboard...",
-        });
-        // Use router.replace to avoid the user going back to the login page
-        router.replace('/admin');
+      const user = await signIn(email, password);
+      if (user) {
+        toast({ title: "Login Successful", description: "Redirecting..." });
+        // Instead of relying on a boolean, we re-check admin status after login
+        const isAdmin = await checkIfAdmin(user);
+        if (isAdmin) {
+            router.replace('/admin');
+        } else {
+            router.replace('/account');
+        }
       } else {
-        setError('Login failed. Please check your credentials or admin status.');
+        // signIn function now returns null on failure
+        setError('Login failed. Please check your credentials.');
         toast({
           title: "Login Failed",
-          description: 'Invalid email/password or not an authorized admin.',
+          description: 'Invalid email or password.',
           variant: "destructive",
         });
         setIsLoading(false);
       }
     } catch (err) {
-        console.error("Login submit error:", err);
-        setError('An unexpected error occurred during login.');
-        toast({
-            title: "Login Error",
-            description: 'An unexpected error occurred. Please try again.',
-            variant: "destructive",
-        });
-        setIsLoading(false);
+      console.error("Login submit error:", err);
+      const errorMessage = (err instanceof Error) ? err.message : 'An unexpected error occurred.';
+      setError(errorMessage);
+      toast({
+        title: "Login Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      setIsLoading(false);
     }
   };
 
-  // Render loading skeleton or login form
   if (isLoading) {
     return (
       <div className="flex justify-center pt-20">
-         <Card className="w-full max-w-sm mx-4 h-fit">
-            <CardHeader>
-               <Skeleton className="h-8 w-3/4" />
-               <Skeleton className="h-4 w-full mt-2" />
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-10 w-full" />
-                </div>
-                 <div className="space-y-2">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-10 w-full" />
-                </div>
-                 <Skeleton className="h-10 w-full" />
-            </CardContent>
-         </Card>
+        <Card className="w-full max-w-sm mx-4 h-fit">
+          <CardHeader>
+            <Skeleton className="h-8 w-3/4" />
+            <Skeleton className="h-4 w-full mt-2" />
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-16" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-16" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <Skeleton className="h-10 w-full" />
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -111,7 +105,7 @@ export default function LoginPage() {
     <div className="flex justify-center pt-20">
       <Card className="w-full max-w-sm mx-4 h-fit">
         <CardHeader>
-          <CardTitle>Admin Login</CardTitle>
+          <CardTitle>Login</CardTitle>
           <CardDescription>Enter your email and password to login.</CardDescription>
         </CardHeader>
         <CardContent>

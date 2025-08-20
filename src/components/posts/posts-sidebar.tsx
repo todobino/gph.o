@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -47,7 +48,11 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
     } else {
       params.set(name, value); // Set new filter
     }
-    return params.toString();
+    
+    // Always navigate to the root of the blog section when applying filters
+    const newPath = '/blog';
+
+    return `${newPath}?${params.toString()}`;
   };
 
   return (
@@ -62,7 +67,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
                   {series.map((seriesName) => (
                     <li key={seriesName}>
                       <Link
-                        href={pathname + '?' + createQueryString('series', seriesName)}
+                        href={createQueryString('series', seriesName)}
                         scroll={false}
                         className={`flex items-center text-sm hover:text-primary ${currentSeries === seriesName ? 'text-primary font-semibold' : 'text-muted-foreground'}`}
                       >
@@ -83,7 +88,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
                 {tags.map((tag) => (
                   <Link
                     key={tag}
-                    href={pathname + '?' + createQueryString('tag', tag)}
+                    href={createQueryString('tag', tag)}
                     scroll={false}
                   >
                     <Badge
@@ -105,7 +110,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
                 {archives.map((archive) => (
                   <li key={archive}>
                     <Link
-                      href={pathname + '?' + createQueryString('archive', archive)}
+                      href={createQueryString('archive', archive)}
                       scroll={false}
                       className={`text-sm hover:text-primary ${currentArchive === archive ? 'text-primary font-semibold' : 'text-muted-foreground'}`}
                     >

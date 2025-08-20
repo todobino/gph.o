@@ -1,10 +1,7 @@
-
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css';
+import '../globals.css';
 import { cn } from '@/lib/utils';
-import { Header } from '@/components/layout/header';
-import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 import { AppProviders } from '@/components/app-providers';
 
@@ -14,11 +11,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'GeePawHill.Org CMS',
-  description: 'Website and CMS for GeePawHill.Org',
+  title: 'Admin - GeePawHill.Org CMS',
+  description: 'Admin dashboard for GeePawHill.Org',
 };
 
-export default function RootLayout({
+export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -27,19 +24,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className="h-full">
       <body
         className={cn(
-          // lock the viewport, no bounce on iOS
-          'h-full overflow-hidden bg-background font-sans antialiased',
+          'h-full overflow-hidden bg-muted/40 font-sans antialiased',
           inter.variable
         )}
       >
         <AppProviders>
-            <Header />
-            {/* This is the ONLY scroller */}
+            {/* A more complex layout with a sidebar could go here */}
             <div className="h-dvh overflow-y-auto overscroll-none">
-              <main className="flex-grow container mx-auto px-2 py-8 max-w-6xl">
+              <main className="flex-grow p-4 md:p-8">
                 {children}
               </main>
-              <Footer />
             </div>
             <Toaster />
         </AppProviders>

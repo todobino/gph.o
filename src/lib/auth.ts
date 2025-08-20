@@ -4,6 +4,7 @@ import {
     signOut as firebaseSignOut,
     onAuthStateChanged,
     User,
+    getIdTokenResult,
 } from "firebase/auth";
 import { getDoc, doc, setDoc, getFirestore, collection, query, where, getDocs } from "firebase/firestore"; // Added query, where, getDocs
 import { db, app } from "./firestore"; // Ensure db and app are correctly initialized and exported
@@ -30,22 +31,9 @@ async function ensureUsersCollection() {
     }
 }
 
-// Call this once when the module loads (or in an app initialization phase)
-// ensureUsersCollection(); // Commented out - Firestore auto-creates collections
-
-export const signIn = async (email: string, password: string): Promise<boolean> => {
+export const signIn = async (email: string, password: string): Promise<User | null> => {
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password);
-
-        // Check if user is admin immediately after sign-in attempt
-        const isAdmin = await checkIfAdmin(user);
-        if (!isAdmin) {
-             console.warn(`User ${email} is not an admin. Sign-in denied.`);
-             await firebaseSignOut(auth); // Sign out the non-admin user
-             return false; // Deny login
-        }
-
-
         const idToken = await user.getIdToken();
         const resp = await fetch('/api/login', {
             method: 'POST',
@@ -53,10 +41,16 @@ export const signIn = async (email: string, password: string): Promise<boolean> 
             body: JSON.stringify({ idToken }),
         });
 
-        return resp.ok;
+        if (!resp.ok) {
+            // If API login fails, sign out the user from client
+            await firebaseSignOut(auth);
+            return null;
+        }
+
+        return user; // Return user object on success
     } catch (error) {
         console.error("Error signing in:", error);
-        return false;
+        return null;
     }
 };
 
@@ -89,6 +83,15 @@ export const getCurrentUser = (): Promise<User | null> => {
 export const checkIfAdmin = async (user: User | null): Promise<boolean> => {
   if (!user) return false;
 
+  const tokenResult = await getIdTokenResult(user, true); // Force refresh
+  const role = tokenResult.claims.role;
+  
+  if (role && (role === 'admin' || role === 'instructor')) {
+    console.log(`User ${user.email} has role '${role}' from custom claims.`);
+    return true;
+  }
+
+  // Fallback to Firestore check if claims are not set
   const docRef = doc(db, "users", user.uid);
   try {
     const docSnap = await getDoc(docRef);
@@ -101,8 +104,6 @@ export const checkIfAdmin = async (user: User | null): Promise<boolean> => {
       return isAdmin;
     } else {
       // User document doesn't exist in Firestore.
-      // Decide policy: default deny? Or maybe create profile if first login?
-      // For now, default deny if no record exists.
        console.log(`User ${user.email} document not found in Firestore. Assuming not admin.`);
       return false;
     }
