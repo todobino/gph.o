@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { signIn, getCurrentUser, checkIfAdmin, signOut } from '@/lib/auth';
+import { signIn, getCurrentUser, checkIfAdmin } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -79,7 +79,7 @@ export default function LoginPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center pt-20">
+      <div className="flex justify-center pt-20 pb-20">
         <Card className="w-full max-w-sm mx-4 h-fit">
           <CardHeader>
             <Skeleton className="h-8 w-3/4" />
@@ -102,7 +102,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex justify-center pt-20">
+    <div className="flex justify-center pt-20 pb-20">
       <Card className="w-full max-w-sm mx-4 h-fit">
         <CardHeader>
           <CardTitle>Login</CardTitle>
