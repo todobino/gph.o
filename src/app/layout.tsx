@@ -24,19 +24,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="overscroll-none">
+    <html lang="en" suppressHydrationWarning className="h-full">
       <body
         className={cn(
-          'min-h-screen bg-background font-sans antialiased flex flex-col',
+          // lock the viewport, no bounce on iOS
+          'h-full overflow-hidden bg-background font-sans antialiased',
           inter.variable
         )}
       >
         <AppProviders>
             <Header />
-            <main className="flex-grow container mx-auto px-2 py-8 max-w-6xl">
-              {children}
-            </main>
-            <Footer />
+            {/* This is the ONLY scroller */}
+            <div className="h-dvh overflow-y-auto overscroll-none">
+              <main className="flex-grow container mx-auto px-2 py-8 max-w-6xl">
+                {children}
+              </main>
+              <Footer />
+            </div>
             <Toaster />
         </AppProviders>
       </body>
