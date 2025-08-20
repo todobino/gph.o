@@ -65,7 +65,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Home', href: '/' },
-    { label: 'Blog', href: '/blog' },
+    { label: 'Posts', href: '/posts' },
     { label: currentPost.title }, // Current page, no href
   ];
 
@@ -80,7 +80,7 @@ export default async function PostPage({ params }: PostPageProps) {
             {currentPost.series && (
               <p className="text-muted-foreground text-sm mb-4 flex items-center">
                 <BookOpen className="h-4 w-4 mr-1.5 text-primary" />
-                Part of the series: <Link href={`/blog?series=${encodeURIComponent(currentPost.series)}`} className="ml-1 text-primary hover:underline">{currentPost.series}</Link>
+                Part of the series: <Link href={`/posts?series=${encodeURIComponent(currentPost.series)}`} className="ml-1 text-primary hover:underline">{currentPost.series}</Link>
               </p>
             )}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground mt-2">
@@ -98,7 +98,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   <div className="flex flex-wrap gap-1">
                     {currentPost.tags.map((tag, index) => (
                       <React.Fragment key={tag}>
-                        <Link href={`/blog?tag=${tag}`} className="hover:text-primary hover:underline">
+                        <Link href={`/posts?tag=${tag}`} className="hover:text-primary hover:underline">
                           {toTitleCase(tag)}
                         </Link>
                         {index < currentPost.tags.length - 1 && <span>,</span>}

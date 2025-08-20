@@ -75,7 +75,7 @@ export default async function Home() {
              {recentPosts.map((post) => {
                const slug = post.slug;
                return (
-                 <Link key={post.slug} href={`/blog/${slug}`} className="group block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
+                 <Link key={post.slug} href={`/posts/${slug}`} className="group block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
                    <Card className="flex flex-col h-full transition-all duration-200 border border-border group-hover:border-primary group-hover:shadow-lg"> {/* Use slug for key, add group hover styles */}
                      <CardHeader>
                        {/* Placeholder image */}
@@ -121,7 +121,7 @@ export default async function Home() {
                // Use the pre-generated slug from the post object
                const slug = video.slug;
                return (
-                 <Link key={video.slug} href={`/blog/${slug}`} className="group block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
+                 <Link key={video.slug} href={`/posts/${slug}`} className="group block focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-lg">
                   <Card className="flex flex-col h-full transition-all duration-200 border border-border group-hover:border-primary group-hover:shadow-lg"> {/* Use slug for key, add group hover styles */}
                       <CardHeader>
                       {/* Placeholder image */}

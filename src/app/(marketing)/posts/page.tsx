@@ -1,4 +1,5 @@
 
+
 import Link from 'next/link';
 import { getPosts, type Post, getAllSeries } from '@/services/posts'; // Updated import path, added getAllSeries
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +18,7 @@ interface PostsPageProps {
   searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export default async function BlogPage({ searchParams }: PostsPageProps) {
+export default async function PostsPage({ searchParams }: PostsPageProps) {
   const tag = searchParams?.tag as string | undefined;
   const archive = searchParams?.archive as string | undefined;
   const seriesFilter = searchParams?.series as string | undefined; // New series filter
@@ -51,7 +52,7 @@ export default async function BlogPage({ searchParams }: PostsPageProps) {
           {tag ? `Posts tagged: ${toTitleCase(tag)}` : 
            archive ? `Posts from: ${archive}` :
            seriesFilter ? `Posts in series: "${seriesFilter}"` : // Display series filter in title
-           'Blog'}
+           'Posts'}
         </h1>
         <div className="grid grid-cols-1 gap-6">
           {posts.length > 0 ? (
@@ -61,7 +62,7 @@ export default async function BlogPage({ searchParams }: PostsPageProps) {
                 <Card key={post.slug}> {/* Use slug for key */}
                   <CardHeader>
                     <CardTitle>
-                      <Link href={`/blog/${slug}`} className="hover:text-primary transition-colors">
+                      <Link href={`/posts/${slug}`} className="hover:text-primary transition-colors">
                         {post.title}
                       </Link>
                     </CardTitle>
@@ -69,7 +70,7 @@ export default async function BlogPage({ searchParams }: PostsPageProps) {
                       Published on {new Date(post.date).toLocaleDateString()}
                        {post.series && ( // Display series if it exists
                          <span className="text-xs text-muted-foreground">
-                           {' '}· Part of <Link href={`/blog?series=${encodeURIComponent(post.series)}`} className="hover:underline">{post.series}</Link>
+                           {' '}· Part of <Link href={`/posts?series=${encodeURIComponent(post.series)}`} className="hover:underline">{post.series}</Link>
                          </span>
                        )}
                     </CardDescription>
@@ -87,7 +88,7 @@ export default async function BlogPage({ searchParams }: PostsPageProps) {
                     </div>
                   </CardContent>
                    <CardFooter>
-                     <Link href={`/blog/${slug}`} className="text-sm text-primary hover:underline">
+                     <Link href={`/posts/${slug}`} className="text-sm text-primary hover:underline">
                        Read More
                      </Link>
                    </CardFooter>

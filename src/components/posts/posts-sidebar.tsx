@@ -50,7 +50,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
     }
     
     // Always navigate to the root of the blog section when applying filters
-    const newPath = '/blog';
+    const newPath = '/posts';
 
     return `${newPath}?${params.toString()}`;
   };

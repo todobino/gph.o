@@ -146,10 +146,10 @@ export function Header() {
 
   const navItems: NavItem[] = [
     {
-      label: 'Blog',
+      label: 'Posts',
       dropdown: [
-        { href: '/blog?tag=video', label: 'Video', icon: <Video className="h-4 w-4" /> },
-        { href: '/blog?tag=audio', label: 'Audio', icon: <Headphones className="h-4 w-4" /> },
+        { href: '/posts?tag=video', label: 'Video', icon: <Video className="h-4 w-4" /> },
+        { href: '/posts?tag=audio', label: 'Audio', icon: <Headphones className="h-4 w-4" /> },
         { href: '/subscribe', label: 'Subscribe!', icon: <Mail className="h-4 w-4" /> },
       ],
     },
@@ -213,7 +213,7 @@ export function Header() {
                       <ul className="space-y-1 mt-1">
                         {postResults.map(post => (
                           <li key={`post-${post.slug}`}>
-                            <Link href={`/blog/${post.slug}`} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors overflow-hidden">
+                            <Link href={`/posts/${post.slug}`} onClick={handleSearchResultClick} className="flex w-full items-center gap-2 p-2 rounded-md hover:bg-accent text-sm transition-colors overflow-hidden">
                               {getPostIcon(post)}
                               <span className="flex-1 min-w-0 truncate">{post.title}</span>
                             </Link>
@@ -339,7 +339,7 @@ export function Header() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
                        <DropdownMenuItem asChild>
-                         <Link href={navItem.label === 'Blog' ? '/blog' : '/courses'}>
+                         <Link href={navItem.label === 'Posts' ? '/posts' : '/courses'}>
                            All {navItem.label}
                          </Link>
                        </DropdownMenuItem>
