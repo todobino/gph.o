@@ -21,7 +21,7 @@ export default function LoginPage() {
   // Initial check if user is already logged in and admin
   useEffect(() => {
     const checkAuth = async () => {
-        setLoading(true);
+        setIsLoading(true);
         const user = await getCurrentUser();
         if(user){
             const isAdmin = await checkIfAdmin(user);
@@ -39,7 +39,7 @@ export default function LoginPage() {
                  });
             }
         }
-        setLoading(false);
+        setIsLoading(false);
     };
     checkAuth();
   }, [router, toast]); // Added toast to dependencies
