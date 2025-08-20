@@ -13,7 +13,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, BrainCog, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book } from 'lucide-react';
+import { Menu, BrainCog, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book, UserCircle } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -52,6 +52,7 @@ export function Header() {
   const [isDesktopSearchPopoverOpen, setIsDesktopSearchPopoverOpen] = useState(false);
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
 
+  const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const isMobile = useIsMobile();
@@ -92,9 +93,10 @@ export function Header() {
    useEffect(() => {
     const checkAuthStatus = async () => {
       setIsLoadingAuth(true);
-      const user = await getCurrentUser();
-      if (user) {
-        const isAdminUser = await checkIfAdmin(user);
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+      if (currentUser) {
+        const isAdminUser = await checkIfAdmin(currentUser);
         setIsAdmin(isAdminUser);
       } else {
         setIsAdmin(false);
@@ -405,14 +407,26 @@ export function Header() {
                 </Link>
             </Button>
             {isLoadingAuth ? (
-              <Skeleton className="h-9 w-20" />
-            ) : isAdmin ? (
-              <Button asChild variant="secondary">
-                <Link href="/admin">
-                   Admin
-                </Link>
-              </Button>
-            ) : null}
+              <Skeleton className="h-9 w-24" />
+            ) : user ? (
+              <>
+                 <Button asChild variant="secondary">
+                   <Link href="/account">
+                      <UserCircle />
+                      Account
+                   </Link>
+                 </Button>
+                 {isAdmin && (
+                    <Button asChild variant="ghost" className="hover:bg-white/10 text-white">
+                        <Link href="/admin">Admin</Link>
+                    </Button>
+                 )}
+              </>
+            ) : (
+                <Button asChild variant="secondary">
+                   <Link href="/login">Login</Link>
+                </Button>
+            )}
         </div>
 
         {/* Mobile View (up to md) */}
@@ -477,17 +491,32 @@ export function Header() {
                   ))}
                     {isLoadingAuth ? (
                         <div className="px-4 py-2 mt-4"> <Skeleton className="h-8 w-28" /> </div>
-                    ) : isAdmin ? (
-                    <SheetClose asChild>
-                      <Link
-                        href="/admin"
-                        className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent mt-4"
-                        onClick={handleMobileSheetLinkClick}
-                      >
-                        Admin
-                      </Link>
-                    </SheetClose>
-                  ) : null }
+                    ) : user ? (
+                        <>
+                         <SheetClose asChild>
+                          <Link href="/account" className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent mt-4">
+                            Account
+                          </Link>
+                         </SheetClose>
+                          {isAdmin && (
+                            <SheetClose asChild>
+                                <Link
+                                    href="/admin"
+                                    className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent"
+                                    onClick={handleMobileSheetLinkClick}
+                                >
+                                    Admin
+                                </Link>
+                            </SheetClose>
+                          )}
+                        </>
+                    ) : (
+                       <SheetClose asChild>
+                          <Link href="/login" className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent mt-4">
+                            Login
+                          </Link>
+                       </SheetClose>
+                    )}
                 </nav>
               </ScrollArea>
             </SheetContent>
