@@ -18,7 +18,7 @@ function toTitleCase(str: string): string {
 }
 
 export async function generateMetadata(
-  { params, searchParams }: { params: { slug: string }; searchParams: Record<string, string | string[] | undefined> },
+  { params, searchParams }: { params: { slug: string }; searchParams: Record<string, string[] | undefined> },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const { slug } = params;
