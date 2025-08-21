@@ -19,12 +19,11 @@ import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
 import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth';
 import type { User } from 'firebase/auth';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Skeleton } from '../ui/skeleton';
 import { HeaderMenuButton } from '../ui/header-menu-button';
 import { Button, buttonVariants } from '../ui/button';
+import { useRouter } from 'next/navigation';
 
 
 interface NavItem {
@@ -41,7 +40,7 @@ interface DropdownItem {
 
 
 export function Header() {
-  const [hasMounted, setHasMounted] = useState(false);
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -51,11 +50,6 @@ export function Header() {
   const [isMobileSearchDialogOpen, setIsMobileSearchDialogOpen] = useState(false);
   const [isDesktopSearchPopoverOpen, setIsDesktopSearchPopoverOpen] = useState(false);
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
-
-  const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoadingAuth, setIsLoadingAuth] = useState(true);
-  const isMobile = useIsMobile();
 
   const allCourses = React.useMemo(() => [
       { title: 'Leading Technical Change', slug: '/courses/leading-technical-change' },
@@ -71,10 +65,6 @@ export function Header() {
   const [courseResults, setCourseResults] = useState<{title: string, slug: string}[]>([]);
   const [pageResults, setPageResults] = useState<{title: string, slug: string}[]>([]);
 
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
 
   useEffect(() => {
     async function fetchPosts() {
@@ -85,35 +75,11 @@ export function Header() {
         console.error("Failed to fetch posts for search:", error);
       }
     }
-    if (hasMounted) {
-        fetchPosts();
-    }
-  }, [hasMounted]);
+    fetchPosts();
+  }, []);
 
-   useEffect(() => {
-    const checkAuthStatus = async () => {
-      setIsLoadingAuth(true);
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-      if (currentUser) {
-        const isAdminUser = await checkIfAdmin(currentUser);
-        setIsAdmin(isAdminUser);
-      } else {
-        setIsAdmin(false);
-      }
-      setIsLoadingAuth(false);
-    };
-    if (hasMounted) {
-        checkAuthStatus();
-        const handleFocus = () => checkAuthStatus();
-        window.addEventListener('focus', handleFocus);
-        return () => window.removeEventListener('focus', handleFocus);
-    }
-  }, [hasMounted]);
 
   useEffect(() => {
-    if (!hasMounted) return;
-
     const lowerCaseQuery = searchQuery.trim().toLowerCase();
 
     if (lowerCaseQuery === '') {
@@ -141,7 +107,7 @@ export function Header() {
     ).slice(0, 5);
     setPageResults(pages);
 
-  }, [searchQuery, allPosts, allCourses, allPages, hasMounted, postResults.length, courseResults.length, pageResults.length]);
+  }, [searchQuery, allPosts, allCourses, allPages, postResults.length, courseResults.length, pageResults.length]);
 
 
   const navItems: NavItem[] = [
@@ -202,6 +168,16 @@ export function Header() {
      return <FileText className="h-4 w-4 text-muted-foreground" />;
    }
 
+   const handleAccountClick = async (event: React.MouseEvent) => {
+     event.preventDefault(); // Prevent default link behavior
+     const user = await getCurrentUser();
+     if (user) {
+       router.push('/account');
+     } else {
+       router.push('/login');
+     }
+   };
+   
    const searchResultsContent = (
     <ScrollArea className="mt-2 h-fit max-h-[400px] rounded-md border sm:max-h-[500px]">
         {searchQuery.trim() !== '' ? (
@@ -284,38 +260,6 @@ export function Header() {
         </div>
       </DialogContent>
    );
-
-  if (!hasMounted) {
-    return (
-       <header className="sticky top-0 z-50 w-full border-b bg-primary-dark">
-        <div className="container mx-auto flex h-14 items-center px-2 max-w-6xl">
-            <div className="mr-6 flex items-center">
-              <Skeleton className="h-6 w-6 mr-2 bg-white/20" />
-              <Skeleton className="h-6 w-32 bg-white/20" />
-            </div>
-            <div className="hidden md:flex items-center space-x-1">
-                 <Skeleton className="h-9 w-24 bg-white/20" />
-                 <Skeleton className="h-9 w-24 bg-white/20" />
-                 <Skeleton className="h-9 w-24 bg-white/20" />
-                 <Skeleton className="h-9 w-24 bg-white/20" />
-            </div>
-            <div className="flex flex-1 items-center justify-center px-2 md:hidden"></div>
-             <div className="hidden md:flex flex-1 items-center justify-center px-2">
-                 <Skeleton className="h-9 w-full max-w-sm bg-white/20" />
-            </div>
-            <div className="hidden md:flex items-center space-x-2">
-              <Skeleton className="h-9 w-28 rounded-full bg-white/20" />
-            </div>
-             <div className="md:hidden flex items-center space-x-2">
-                <Skeleton className="h-9 w-9 rounded-full bg-white/20" />
-                <Skeleton className="h-9 w-9 rounded-full bg-white/20" />
-                 <Skeleton className="h-9 w-28 rounded-full bg-white/20" />
-            </div>
-        </div>
-      </header>
-    );
-  }
-
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary-dark/20 bg-primary-dark text-primary-dark-foreground">
@@ -406,22 +350,12 @@ export function Header() {
                     Book Now
                 </Link>
             </Button>
-            {isLoadingAuth ? (
-              <Skeleton className="h-9 w-24" />
-            ) : user ? (
-              <>
-                 <Button asChild variant="secondary">
-                   <Link href="/account">
-                      <UserCircle />
-                      Account
-                   </Link>
-                 </Button>
-              </>
-            ) : (
-                <Button asChild variant="secondary">
-                   <Link href="/login">Login</Link>
-                </Button>
-            )}
+            <Button asChild variant="secondary" onClick={handleAccountClick}>
+              <Link href="">
+                  <UserCircle />
+                  Account
+              </Link>
+            </Button>
         </div>
 
         {/* Mobile View (up to md) */}
@@ -484,23 +418,15 @@ export function Header() {
                           )}
                       </React.Fragment>
                   ))}
-                    {isLoadingAuth ? (
-                        <div className="px-4 py-2 mt-4"> <Skeleton className="h-8 w-28" /> </div>
-                    ) : user ? (
-                        <>
-                         <SheetClose asChild>
-                          <Link href="/account" className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent mt-4">
-                            Account
-                          </Link>
-                         </SheetClose>
-                        </>
-                    ) : (
-                       <SheetClose asChild>
-                          <Link href="/login" className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent mt-4">
-                            Login
-                          </Link>
-                       </SheetClose>
-                    )}
+                  <SheetClose asChild>
+                    <a 
+                      href="#" 
+                      onClick={(e) => { handleAccountClick(e); handleMobileSheetLinkClick(); }} 
+                      className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent mt-4"
+                    >
+                      Account
+                    </a>
+                  </SheetClose>
                 </nav>
               </ScrollArea>
             </SheetContent>
@@ -535,4 +461,5 @@ export function Header() {
       </div>
     </header>
   );
-}
+
+    
