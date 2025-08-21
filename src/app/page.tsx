@@ -14,10 +14,10 @@ export default async function Home() {
   return (
     <div className="flex-1 flex flex-col">
       {/* Hero Section */}
-      <section className="relative flex-1 flex items-center justify-center text-primary-dark-foreground overflow-hidden">
+      <section className="relative flex items-center justify-center text-primary-dark-foreground overflow-hidden min-h-[calc(100dvh-3.5rem)]">
         <div className="absolute inset-0 z-0">
            <iframe
-                className="absolute top-1/2 left-1/2 w-full h-full min-w-full min-h-full -translate-x-1/2 -translate-y-1/2"
+                className="absolute top-1/2 left-1/2 w-full h-full min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover"
                 src="https://www.youtube.com/embed/lNpof6rRB9U?autoplay=1&mute=1&loop=1&playlist=lNpof6rRB9U&controls=0&showinfo=0&modestbranding=1&start=327"
                 frameBorder="0"
                 allow="autoplay; encrypted-media"
