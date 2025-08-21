@@ -9,7 +9,7 @@ import Link from "next/link";
 import { PostCard } from "@/app/(marketing)/posts/components/post-card";
 
 export default async function Home() {
-  const recentPosts = await getPosts().then(posts => posts.slice(0, 3));
+  const recentPosts = await getPosts().then(posts => posts.slice(0, 6));
 
   return (
     <div className="flex-1 flex flex-col">
