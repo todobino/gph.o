@@ -13,48 +13,48 @@ export default async function Home() {
   return (
     <div className="flex-1 flex flex-col">
       {/* Hero Section */}
-      <section className="relative flex items-center justify-center text-primary-dark-foreground overflow-hidden h-[420px] md:h-[520px] lg:h-[640px]">
-        {/* Video layer */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          {/* Make the 16:9 iframe fill/cover the container without bars */}
-          <iframe
-            className="
-              absolute top-1/2 left-1/2
-              -translate-x-1/2 -translate-y-1/2
-              /* Keep 16:9, but oversize so it covers in both directions */
-              w-[100vw] h-[56.25vw]      /* 56.25vw = 9/16 of viewport width */
-              min-w-full min-h-full      /* if the above isn't enough, stretch further */
-            "
-            src="https://www.youtube.com/embed/lNpof6rRB9U?autoplay=1&mute=1&loop=1&playlist=lNpof6rRB9U&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&start=327"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-            title="Background Video"
-          />
-          {/* Legibility overlay (clearly visible) */}
-          <div className="absolute inset-0 bg-black/40 md:bg-black/30"></div>
-        </div>
+<section className="relative flex items-center justify-center text-primary-dark-foreground overflow-hidden h-[420px] md:h-[520px] lg:h-[640px]">
+  {/* Video layer */}
+  <div className="absolute inset-0 -z-10 overflow-hidden">
+    {/* Make the 16:9 iframe fill/cover the container without bars */}
+    <iframe
+      className="
+        absolute top-1/2 left-1/2
+        -translate-x-1/2 -translate-y-1/2
+        /* Keep 16:9, but oversize so it covers in both directions */
+        w-[100vw] h-[56.25vw]      /* 56.25vw = 9/16 of viewport width */
+        min-w-full min-h-full      /* if the above isn't enough, stretch further */
+      "
+      src="https://www.youtube.com/embed/lNpof6rRB9U?autoplay=1&mute=1&loop=1&playlist=lNpof6rRB9U&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&start=327"
+      frameBorder="0"
+      allow="autoplay; encrypted-media"
+      allowFullScreen
+      title="Background Video"
+    />
+    {/* Legibility overlay (clearly visible) */}
+    <div className="absolute inset-0 bg-black/40 md:bg-black/30"></div>
+  </div>
 
-        {/* Content */}
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-4xl md:text-6xl font-bold font-heading mb-4 tracking-tight">
-            Helping Geeks Produce for Over 40 Years
-          </h1>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-primary-dark-foreground/90 mb-8">
-            My mission is to help people learn how to embrace change and harvest its value. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
-          </p>
-          <div className="flex justify-center gap-4">
-            <Button asChild size="lg">
-              <Link href="/posts">
-                Explore Posts <ArrowRight className="ml-2" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/courses">View Courses</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+  {/* Content */}
+  <div className="container mx-auto px-4 text-center relative z-10">
+    <h1 className="text-4xl md:text-6xl font-bold font-heading mb-4 tracking-tight">
+      Helping Geeks Produce for Over 40 Years
+    </h1>
+    <p className="text-lg md:text-xl max-w-3xl mx-auto text-primary-dark-foreground/90 mb-8">
+      My mission is to help people learn how to <strong className="underline">embrace change and harvest its value</strong>. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
+    </p>
+    <div className="flex justify-center gap-4">
+      <Button asChild size="lg">
+        <Link href="/posts">
+          Explore Posts <ArrowRight className="ml-2" />
+        </Link>
+      </Button>
+      <Button asChild size="lg" variant="secondary">
+        <Link href="/courses">View Courses</Link>
+      </Button>
+    </div>
+  </div>
+</section>
 
       {/* Features Section */}
       <section className="py-16 md:py-24 bg-background">
