@@ -60,41 +60,61 @@ export default async function Home() {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div className="flex flex-col items-center p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30">
-              <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4">
-                 <BrainCircuit className="h-8 w-8 text-blue-600 dark:text-blue-300" />
+            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+              <div>
+                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
+                  <BrainCircuit className="h-8 w-8 text-blue-600 dark:text-blue-300" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 font-heading">Content</h3>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Deep dives into software development philosophy and practice.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2 font-heading">Content</h3>
-              <p className="text-muted-foreground text-sm">
-                Deep dives into software development philosophy and practice.
-              </p>
+              <Button asChild variant="outline" size="sm" className="mt-auto">
+                <Link href="/posts">Go To Posts</Link>
+              </Button>
             </div>
-            <div className="flex flex-col items-center p-6 rounded-lg bg-green-100 dark:bg-green-900/30">
-              <div className="bg-green-200 dark:bg-green-800/50 p-4 rounded-full mb-4">
-                <Users className="h-8 w-8 text-green-600 dark:text-green-300" />
+            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-green-100 dark:bg-green-900/30">
+              <div>
+                <div className="bg-green-200 dark:bg-green-800/50 p-4 rounded-full mb-4 inline-block">
+                  <Users className="h-8 w-8 text-green-600 dark:text-green-300" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 font-heading">Coaching</h3>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Practical guidance on pairing, mobbing, and team culture.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2 font-heading">Coaching</h3>
-              <p className="text-muted-foreground text-sm">
-                Practical guidance on pairing, mobbing, and team culture.
-              </p>
+              <Button asChild variant="outline" size="sm" className="mt-auto">
+                <Link href="/coaching">Go To Coaching</Link>
+              </Button>
             </div>
-            <div className="flex flex-col items-center p-6 rounded-lg bg-orange-100 dark:bg-orange-900/30">
-              <div className="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-full mb-4">
-                <BookOpen className="h-8 w-8 text-orange-600 dark:text-orange-300" />
+            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-orange-100 dark:bg-orange-900/30">
+              <div>
+                <div className="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-full mb-4 inline-block">
+                  <BookOpen className="h-8 w-8 text-orange-600 dark:text-orange-300" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 font-heading">Courses</h3>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Structured learning to help your team master essential skills.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2 font-heading">Courses</h3>
-              <p className="text-muted-foreground text-sm">
-                Structured learning to help your team master essential skills.
-              </p>
+              <Button asChild variant="outline" size="sm" className="mt-auto">
+                <Link href="/courses">Go To Courses</Link>
+              </Button>
             </div>
-             <div className="flex flex-col items-center p-6 rounded-lg bg-purple-100 dark:bg-purple-900/30">
-              <div className="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-full mb-4">
-                <Mic className="h-8 w-8 text-purple-600 dark:text-purple-300" />
+             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-purple-100 dark:bg-purple-900/30">
+              <div>
+                <div className="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-full mb-4 inline-block">
+                  <Mic className="h-8 w-8 text-purple-600 dark:text-purple-300" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 font-heading">Speaking</h3>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Engaging keynotes and conference talks on software and teams.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2 font-heading">Speaking</h3>
-              <p className="text-muted-foreground text-sm">
-                Engaging keynotes and conference talks on software and teams.
-              </p>
+               <Button asChild variant="outline" size="sm" className="mt-auto">
+                <Link href="/speaking">Go To Speaking</Link>
+              </Button>
             </div>
           </div>
         </div>
