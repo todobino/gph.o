@@ -6,7 +6,7 @@ import { getPosts } from "@/services/posts";
 import { ArrowRight, BookOpen, BrainCircuit, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { PostCard } from "@/app/posts/components/post-card";
+import { PostCard } from "@/components/posts/post-card";
 
 export default async function Home() {
   const recentPosts = await getPosts().then(posts => posts.slice(0, 6));
