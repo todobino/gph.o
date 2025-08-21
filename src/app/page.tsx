@@ -14,17 +14,17 @@ export default async function Home() {
   return (
     <div className="flex-1 flex flex-col">
       {/* Hero Section */}
-      <section className="relative bg-black text-primary-dark-foreground py-20 md:py-32 overflow-hidden">
+      <section className="relative flex-1 flex items-center justify-center text-primary-dark-foreground overflow-hidden">
         <div className="absolute inset-0 z-0">
            <iframe
                 className="absolute top-1/2 left-1/2 w-full h-full min-w-full min-h-full -translate-x-1/2 -translate-y-1/2"
-                src="https://www.youtube.com/embed/lNpof6rRB9U?autoplay=1&mute=1&loop=1&playlist=lNpof6rRB9U&controls=0&showinfo=0&modestbranding=1&start=325"
+                src="https://www.youtube.com/embed/lNpof6rRB9U?autoplay=1&mute=1&loop=1&playlist=lNpof6rRB9U&controls=0&showinfo=0&modestbranding=1&start=327"
                 frameBorder="0"
                 allow="autoplay; encrypted-media"
                 allowFullScreen
                 title="Background Video"
            ></iframe>
-           <div className="absolute inset-0 bg-black/60"></div>
+           <div className="absolute inset-0 bg-black/10"></div>
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold font-heading mb-4 tracking-tight">
