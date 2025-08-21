@@ -41,7 +41,7 @@ export default async function Home() {
       Helping Geeks Produce for Over 40 Years
     </h1>
     <p className="text-lg md:text-xl max-w-3xl mx-auto text-primary-dark-foreground/90 mb-8">
-      My mission is to help people learn how to <strong className="underline">embrace change and harvest its value</strong>. Here you will find hundreds of free articles and videos covering software topics ranging from highly technical to broadly philosophical.
+      My mission is to help people learn how to <strong className="underline">embrace change and harvest its value</strong>. Explore hundreds of free articles and videos, then go deeper with my <em>Leading Technical Change</em> courses and coaching.
     </p>
     <div className="flex justify-center gap-4">
       <Button asChild size="lg">
