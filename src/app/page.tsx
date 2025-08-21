@@ -26,7 +26,7 @@ export default async function Home() {
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-4xl md:text-6xl font-bold font-heading mb-4 tracking-tight">
-            Cultivating Change, Harvesting Value
+            Helping Geeks Produce for Over 40 Years
           </h1>
           <p className="text-lg md:text-xl max-w-3xl mx-auto text-primary-dark-foreground/80 mb-8">
             Helping software teams discover, practice, and celebrate better ways of working together. Explore tidbits on TDD, refactoring, and agile teamwork.
