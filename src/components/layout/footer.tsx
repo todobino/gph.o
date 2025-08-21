@@ -76,13 +76,10 @@ export async function Footer() {
       {/* Full-width bottom row with light gray background and top border */}
       <div className="bg-secondary py-4 border-t">
         <div className="container mx-auto px-2">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+          <div className="flex items-center justify-center gap-4">
+            <p className="text-center text-sm leading-loose text-muted-foreground">
               &copy; {new Date().getFullYear()} GeePawHill.Org. All rights reserved.
             </p>
-            <Link href="/login" className="text-sm text-primary hover:underline">
-              Admin Login
-            </Link>
           </div>
         </div>
       </div>
