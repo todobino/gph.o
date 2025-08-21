@@ -47,8 +47,8 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
   const series = await getAllSeries(); // Get all unique series names
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 -mx-4 md:mx-0">
-       <main className="w-full md:w-2/3 lg:w-3/4 px-4 md:px-0">
+    <div className="flex flex-col md:flex-row gap-8">
+       <main className="w-full md:w-2/3 lg:w-3/4">
         <h1 className="text-4xl font-bold mb-8 font-heading">
           {tag ? `Posts tagged: ${toTitleCase(tag)}` : 
            archive ? `Posts from: ${archive}` :
@@ -101,7 +101,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
           )}
         </div>
        </main>
-       <aside className="w-full md:w-1/3 lg:w-1/4 px-4 md:px-0">
+       <aside className="w-full md:w-1/3 lg:w-1/4">
         <Suspense fallback={<PostsSidebarSkeleton />}>
           <PostsSidebar tags={tags} archives={archives} series={series} />
         </Suspense>
