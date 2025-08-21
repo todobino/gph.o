@@ -416,11 +416,6 @@ export function Header() {
                       Account
                    </Link>
                  </Button>
-                 {isAdmin && (
-                    <Button asChild variant="ghost" className="hover:bg-white/10 text-white">
-                        <Link href="/admin">Admin</Link>
-                    </Button>
-                 )}
               </>
             ) : (
                 <Button asChild variant="secondary">
@@ -498,17 +493,6 @@ export function Header() {
                             Account
                           </Link>
                          </SheetClose>
-                          {isAdmin && (
-                            <SheetClose asChild>
-                                <Link
-                                    href="/admin"
-                                    className="block w-full text-left text-lg font-bold text-primary transition-colors hover:text-primary/80 px-4 py-2 rounded-md hover:bg-accent"
-                                    onClick={handleMobileSheetLinkClick}
-                                >
-                                    Admin
-                                </Link>
-                            </SheetClose>
-                          )}
                         </>
                     ) : (
                        <SheetClose asChild>
