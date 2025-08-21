@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function BookingPage() {
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="space-y-8">
       <h1 className="text-4xl font-bold text-center font-heading">Book Now</h1>
       <p className="text-center text-muted-foreground">
         Schedule a consultation or book a service.

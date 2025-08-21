@@ -71,12 +71,12 @@ export default function LoginPage() {
 
    // Render loading state or login form
    if (isLoading && !error) { // Show loading only if not errored out initially
-     return <div className="flex justify-center items-center h-screen"><p>Loading...</p></div>;
+     return <div className="flex justify-center items-center h-full"><p>Loading...</p></div>;
    }
 
   return (
-    <div className="flex justify-center items-center min-h-screen py-12"> {/* Added min-h-screen and padding */}
-      <Card className="w-full max-w-sm mx-4"> {/* Adjusted width and added margin */}
+    <div className="flex justify-center items-center h-full">
+      <Card className="w-full max-w-sm mx-4">
         <CardHeader>
           <CardTitle>Admin Login</CardTitle>
           <CardDescription>Enter your email and password to login.</CardDescription>
@@ -107,7 +107,7 @@ export default function LoginPage() {
                  disabled={isLoading} // Disable input while loading
               />
             </div>
-            {error && <p className="text-sm text-destructive">{error}</p>} {/* Adjusted error text size */}
+            {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" disabled={isLoading} className="w-full">
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
