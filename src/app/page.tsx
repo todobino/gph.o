@@ -17,9 +17,8 @@ export default async function Home() {
       <section className="relative bg-primary-dark text-primary-dark-foreground py-20 md:py-32">
         <div className="absolute inset-0">
            <Image 
-            src="https://placehold.co/1600x900.png"
-            alt="Abstract background image"
-            data-ai-hint="abstract technology"
+            src="/gpaw-hero.jpg"
+            alt="GeePaw Hill in a discussion"
             fill
             className="object-cover opacity-10"
            />
