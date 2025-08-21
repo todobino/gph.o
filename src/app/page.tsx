@@ -14,7 +14,7 @@ export default async function Home() {
   return (
     <div className="flex-1 flex flex-col">
       {/* Hero Section */}
-      <section className="relative bg-primary-dark text-primary-dark-foreground py-20 md:py-32">
+      <section className="relative bg-black text-primary-dark-foreground py-20 md:py-32">
         <div className="absolute inset-0">
            <Image 
             src="/gpaw-hero.jpg"
