@@ -7,18 +7,6 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { PlayCircle } from 'lucide-react';
 
-// Mastodon SVG Icon Component
-const MastodonIcon = (props: React.SVGProps<SVGSVGElement>) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      {...props}
-    >
-        <path d="M23.193 7.879c0-5.206-3.413-6.732-3.413-6.732C18.654.556 16.63.25 14.195.25c-2.434 0-4.869.274-4.869.274C6.892.56 5.868 1.44 5.256 2.223c-.762.972-.857 2.53-.857 2.53s-.04 1.62.19 3.292c.23 1.67.545 3.39.545 3.39s-.144.119-.286.23c-1.393 1.076-2.92 2.02-2.92 3.864 0 2.272 2.374 2.895 2.374 2.895s1.82.722 3.638.933c1.82.21 3.92.315 6.09.315h.063c2.17-.002 4.27-.106 6.09-.315 1.82-.21 3.638-.933 3.638-.933s2.374-.623 2.374-2.895c0-1.844-1.527-2.788-2.92-3.864-.142-.112-.286-.23-.286-.23s.316-1.72.546-3.39c.23-1.672.19-3.29.19-3.29s.096-1.558-.857-2.53zM12.043 14.43h-2.18v-4.542c0-.51.415-.925.925-.925s.925.415.925.925v3.617h1.255V9.893c0-1.284-1.04-2.323-2.324-2.323s-2.323 1.04-2.323 2.324v3.47H6.51v-2.016c0-.51.415-.925.925-.925s.925.415.925.925v1.09h1.25V9.893c0-1.284-1.04-2.323-2.324-2.323S5.51 8.61 5.51 9.893v4.542h2.186v-2.016c0-.51.415-.925.925-.925s.925.415.925.925v2.016h1.497zm5.22-2.016c0-.51.415-.925.925-.925s.925.415.925.925v2.016h2.07v-2.016c0-1.284-1.04-2.323-2.324-2.323s-2.323 1.04-2.323 2.324v2.016h2.64v-2.016z" />
-    </svg>
-);
-
 
 export async function Footer() {
   // Fetch the 5 most recent posts
@@ -85,7 +73,7 @@ export async function Footer() {
                 <p className="text-sm text-muted-foreground">Follow Me</p>
                 <Button asChild variant="outline">
                   <Link href="https://mastodon.social/@GeePawHill" target="_blank" rel="noopener noreferrer">
-                    <MastodonIcon className="h-5 w-5 mr-2" />
+                    <Image src="/mastodon-logo-purple.svg" alt="Mastodon logo" width={20} height={20} className="mr-2" />
                     Mastodon
                   </Link>
                 </Button>
