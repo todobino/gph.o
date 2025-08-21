@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmailSignupForm } from "@/components/email-signup-form";
 import { getPosts } from "@/services/posts";
-import { ArrowRight, BookOpen, BrainCircuit, Users } from "lucide-react";
+import { ArrowRight, BookOpen, BrainCircuit, Mic, Users } from "lucide-react";
 import Link from "next/link";
 import { PostCard } from "@/components/posts/post-card";
 
@@ -59,12 +59,12 @@ export default async function Home() {
       {/* Features Section */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+          <div className="grid md:grid-cols-4 gap-8 text-center">
             <div className="flex flex-col items-center">
               <div className="bg-accent p-4 rounded-full mb-4">
                  <BrainCircuit className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 font-heading">Expert Insights</h3>
+              <h3 className="text-xl font-semibold mb-2 font-heading">Content</h3>
               <p className="text-muted-foreground">
                 Deep dives into technical practices and software development philosophy from decades of experience.
               </p>
@@ -73,7 +73,7 @@ export default async function Home() {
               <div className="bg-accent p-4 rounded-full mb-4">
                 <Users className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 font-heading">Team Coaching</h3>
+              <h3 className="text-xl font-semibold mb-2 font-heading">Coaching</h3>
               <p className="text-muted-foreground">
                 Practical guidance on mob programming, pairing, and fostering effective, collaborative team cultures.
               </p>
@@ -82,9 +82,18 @@ export default async function Home() {
               <div className="bg-accent p-4 rounded-full mb-4">
                 <BookOpen className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 font-heading">Hands-On Courses</h3>
+              <h3 className="text-xl font-semibold mb-2 font-heading">Courses</h3>
               <p className="text-muted-foreground">
                 Structured learning to help your team master essential skills for sustainable development.
+              </p>
+            </div>
+             <div className="flex flex-col items-center">
+              <div className="bg-accent p-4 rounded-full mb-4">
+                <Mic className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2 font-heading">Speaking</h3>
+              <p className="text-muted-foreground">
+                Engaging keynotes and conference talks on software, teams, and how to create positive change.
               </p>
             </div>
           </div>
