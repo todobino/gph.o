@@ -70,10 +70,10 @@ export default async function PostPage({ params }: PostPageProps) {
   ];
 
   return (
-    <div>
+    <>
       {/* Full-width header section */}
-      <section className="bg-secondary border rounded-lg px-2 md:px-8 py-8 mb-8">
-        <div className="max-w-6xl mx-auto">
+      <section className="w-full bg-secondary py-8 mb-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs items={breadcrumbItems} />
           <header className="mt-4">
             <h1 className="text-4xl font-bold mb-2 font-heading text-primary">{currentPost.title}</h1>
@@ -112,68 +112,70 @@ export default async function PostPage({ params }: PostPageProps) {
         </div>
       </section>
 
-      {/* Main content and sidebar */}
-      <div className="flex flex-col md:flex-row gap-8">
-        <main className="w-full md:w-2/3 lg:w-3/4">
-          <article className="prose prose-lg dark:prose-invert max-w-none">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                h1: (props) => <h1 className="text-3xl font-semibold mt-8 mb-4 font-heading first:mt-0" {...props} />,
-                h2: (props) => <h2 className="text-2xl font-semibold mt-6 mb-3 font-heading" {...props} />,
-                h3: (props) => <h3 className="text-xl font-semibold mt-4 mb-2 font-heading" {...props} />,
-                p: (props) => <p className="my-4 leading-relaxed" {...props} />,
-                a: (props) => <a className="text-primary hover:underline" {...props} />,
-                ul: (props) => <ul className="list-disc list-inside my-4 pl-4 space-y-1" {...props} />,
-                ol: (props) => <ol className="list-decimal list-inside my-4 pl-4 space-y-1" {...props} />,
-                li: (props) => <li className="my-1" {...props} />,
-                blockquote: (props) => (
-                  <blockquote className="border-l-4 border-primary pl-4 italic my-4 text-muted-foreground" {...props} />
-                ),
-                code: ({
-                  inline,
-                  className,
-                  children,
-                  ...props
-                }: {
-                  inline?: boolean;
-                  className?: string;
-                  children?: ReactNode;
-                } & React.HTMLAttributes<HTMLElement>) => {
-                  const match = /language-(\w+)/.exec(className || '');
-                  if (!inline) {
+      {/* Main content and sidebar with padding */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row gap-8">
+            <main className="w-full md:w-2/3 lg:w-3/4">
+            <article className="prose prose-lg dark:prose-invert max-w-none">
+                <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                    h1: (props) => <h1 className="text-3xl font-semibold mt-8 mb-4 font-heading first:mt-0" {...props} />,
+                    h2: (props) => <h2 className="text-2xl font-semibold mt-6 mb-3 font-heading" {...props} />,
+                    h3: (props) => <h3 className="text-xl font-semibold mt-4 mb-2 font-heading" {...props} />,
+                    p: (props) => <p className="my-4 leading-relaxed" {...props} />,
+                    a: (props) => <a className="text-primary hover:underline" {...props} />,
+                    ul: (props) => <ul className="list-disc list-inside my-4 pl-4 space-y-1" {...props} />,
+                    ol: (props) => <ol className="list-decimal list-inside my-4 pl-4 space-y-1" {...props} />,
+                    li: (props) => <li className="my-1" {...props} />,
+                    blockquote: (props) => (
+                    <blockquote className="border-l-4 border-primary pl-4 italic my-4 text-muted-foreground" {...props} />
+                    ),
+                    code: ({
+                    inline,
+                    className,
+                    children,
+                    ...props
+                    }: {
+                    inline?: boolean;
+                    className?: string;
+                    children?: ReactNode;
+                    } & React.HTMLAttributes<HTMLElement>) => {
+                    const match = /language-(\w+)/.exec(className || '');
+                    if (!inline) {
+                        return (
+                        <pre className="bg-muted p-4 rounded-md overflow-x-auto my-4">
+                            <code className={`language-${match?.[1] ?? ''}`} {...props}>
+                            {children}
+                            </code>
+                        </pre>
+                        );
+                    }
                     return (
-                      <pre className="bg-muted p-4 rounded-md overflow-x-auto my-4">
-                        <code className={`language-${match?.[1] ?? ''}`} {...props}>
-                          {children}
+                        <code className="bg-muted px-1 py-0.5 rounded-sm font-mono text-sm" {...props}>
+                        {children}
                         </code>
-                      </pre>
                     );
-                  }
-                  return (
-                    <code className="bg-muted px-1 py-0.5 rounded-sm font-mono text-sm" {...props}>
-                      {children}
-                    </code>
-                  );
-                },
-              }}
-            >
-              {currentPost.content}
-            </ReactMarkdown>
-          </article>
+                    },
+                }}
+                >
+                {currentPost.content}
+                </ReactMarkdown>
+            </article>
 
-          {relatedPosts.length > 0 && (
-            <RelatedPostsSection posts={relatedPosts} />
-          )}
-        </main>
-        <aside className="w-full md:w-1/3 lg:w-1/4">
-          <div className="sticky top-24">
-            <Suspense fallback={<PostsSidebarSkeleton />}>
-              <PostsSidebar tags={tags} archives={archives} series={series} />
-            </Suspense>
-          </div>
-        </aside>
+            {relatedPosts.length > 0 && (
+                <RelatedPostsSection posts={relatedPosts} />
+            )}
+            </main>
+            <aside className="w-full md:w-1/3 lg:w-1/4">
+            <div className="sticky top-24">
+                <Suspense fallback={<PostsSidebarSkeleton />}>
+                <PostsSidebar tags={tags} archives={archives} series={series} />
+                </Suspense>
+            </div>
+            </aside>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
