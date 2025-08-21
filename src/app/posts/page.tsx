@@ -1,9 +1,12 @@
+
 import Link from 'next/link';
 import { getPosts, type Post, getAllSeries } from '@/services/posts'; // Updated import path, added getAllSeries
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PostsSidebar } from '@/components/posts/posts-sidebar';
 import { cn } from '@/lib/utils';
+import { Suspense } from 'react';
+import { PostsSidebarSkeleton } from '@/components/posts/posts-sidebar-skeleton';
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
@@ -99,7 +102,9 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
         </div>
        </main>
        <aside className="w-full md:w-1/3 lg:w-1/4 px-4 md:px-0">
-         <PostsSidebar tags={tags} archives={archives} series={series} /> {/* Pass series to sidebar */}
+        <Suspense fallback={<PostsSidebarSkeleton />}>
+          <PostsSidebar tags={tags} archives={archives} series={series} />
+        </Suspense>
        </aside>
     </div>
   );

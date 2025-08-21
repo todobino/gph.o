@@ -1,6 +1,6 @@
 
 import { type Metadata, type ResolvingMetadata } from 'next';
-import React, { type ReactNode } from 'react';
+import React, { type ReactNode, Suspense } from 'react';
 import { getPostBySlug, type Post, getPosts, getAllSeries } from '@/services/posts';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
@@ -10,6 +10,7 @@ import { Breadcrumbs, type BreadcrumbItem } from '@/components/ui/breadcrumbs';
 import { RelatedPostsSection } from '@/components/posts/related-posts-section';
 import { BookOpen, Calendar, Tags, User } from 'lucide-react';
 import { PostsSidebar } from '@/components/posts/posts-sidebar';
+import { PostsSidebarSkeleton } from '@/components/posts/posts-sidebar-skeleton';
 
 // Helper function to convert string to Title Case (copied from posts/page.tsx)
 function toTitleCase(str: string): string {
@@ -167,7 +168,9 @@ export default async function PostPage({ params }: PostPageProps) {
         </main>
         <aside className="w-full md:w-1/3 lg:w-1/4">
           <div className="sticky top-24">
-            <PostsSidebar tags={tags} archives={archives} series={series} />
+            <Suspense fallback={<PostsSidebarSkeleton />}>
+              <PostsSidebar tags={tags} archives={archives} series={series} />
+            </Suspense>
           </div>
         </aside>
       </div>
