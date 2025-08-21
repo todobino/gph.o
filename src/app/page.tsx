@@ -60,40 +60,40 @@ export default async function Home() {
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div className="flex flex-col items-center">
-              <div className="bg-accent p-4 rounded-full mb-4">
-                 <BrainCircuit className="h-8 w-8 text-primary" />
+            <div className="flex flex-col items-center p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+              <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4">
+                 <BrainCircuit className="h-8 w-8 text-blue-600 dark:text-blue-300" />
               </div>
               <h3 className="text-xl font-semibold mb-2 font-heading">Content</h3>
-              <p className="text-muted-foreground">
-                Deep dives into technical practices and software development philosophy from decades of experience.
+              <p className="text-muted-foreground text-sm">
+                Deep dives into software development philosophy and practice.
               </p>
             </div>
-            <div className="flex flex-col items-center">
-              <div className="bg-accent p-4 rounded-full mb-4">
-                <Users className="h-8 w-8 text-primary" />
+            <div className="flex flex-col items-center p-6 rounded-lg bg-green-100 dark:bg-green-900/30">
+              <div className="bg-green-200 dark:bg-green-800/50 p-4 rounded-full mb-4">
+                <Users className="h-8 w-8 text-green-600 dark:text-green-300" />
               </div>
               <h3 className="text-xl font-semibold mb-2 font-heading">Coaching</h3>
-              <p className="text-muted-foreground">
-                Practical guidance on mob programming, pairing, and fostering effective, collaborative team cultures.
+              <p className="text-muted-foreground text-sm">
+                Practical guidance on pairing, mobbing, and team culture.
               </p>
             </div>
-            <div className="flex flex-col items-center">
-              <div className="bg-accent p-4 rounded-full mb-4">
-                <BookOpen className="h-8 w-8 text-primary" />
+            <div className="flex flex-col items-center p-6 rounded-lg bg-orange-100 dark:bg-orange-900/30">
+              <div className="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-full mb-4">
+                <BookOpen className="h-8 w-8 text-orange-600 dark:text-orange-300" />
               </div>
               <h3 className="text-xl font-semibold mb-2 font-heading">Courses</h3>
-              <p className="text-muted-foreground">
-                Structured learning to help your team master essential skills for sustainable development.
+              <p className="text-muted-foreground text-sm">
+                Structured learning to help your team master essential skills.
               </p>
             </div>
-             <div className="flex flex-col items-center">
-              <div className="bg-accent p-4 rounded-full mb-4">
-                <Mic className="h-8 w-8 text-primary" />
+             <div className="flex flex-col items-center p-6 rounded-lg bg-purple-100 dark:bg-purple-900/30">
+              <div className="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-full mb-4">
+                <Mic className="h-8 w-8 text-purple-600 dark:text-purple-300" />
               </div>
               <h3 className="text-xl font-semibold mb-2 font-heading">Speaking</h3>
-              <p className="text-muted-foreground">
-                Engaging keynotes and conference talks on software, teams, and how to create positive change.
+              <p className="text-muted-foreground text-sm">
+                Engaging keynotes and conference talks on software and teams.
               </p>
             </div>
           </div>
