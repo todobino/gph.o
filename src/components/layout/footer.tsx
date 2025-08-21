@@ -81,8 +81,8 @@ export async function Footer() {
             <div className="space-y-4">
               <h3 className="text-lg font-semibold font-heading">Stay Updated</h3>
               <EmailSignupForm />
-               <div className="pt-4 text-center border-t border-dashed mt-6">
-                <p className="text-sm text-muted-foreground mb-2">Follow on Mastodon</p>
+               <div className="pt-4 text-center border-t border-dashed mt-6 flex items-center justify-center gap-4">
+                <p className="text-sm text-muted-foreground">Follow Me</p>
                 <Button asChild variant="outline">
                   <Link href="https://mastodon.social/@GeePawHill" target="_blank" rel="noopener noreferrer">
                     <MastodonIcon className="h-5 w-5 mr-2" />
