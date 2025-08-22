@@ -70,10 +70,9 @@ export default async function PostPage({ params }: PostPageProps) {
   ];
 
   return (
-    <>
-      {/* Full-width header section */}
-      <section className="w-full bg-secondary py-8 mb-8">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto px-4 py-12">
+      <div className="lg:flex lg:gap-8">
+        <div className="lg:w-3/4">
           <Breadcrumbs items={breadcrumbItems} />
           <header className="mt-4">
             <h1 className="text-4xl font-bold mb-2 font-heading text-primary">{currentPost.title}</h1>
@@ -109,15 +108,9 @@ export default async function PostPage({ params }: PostPageProps) {
               )}
             </div>
           </header>
-        </div>
-      </section>
-
-      {/* Main content and sidebar with padding */}
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row gap-8">
-            <main className="w-full md:w-2/3 lg:w-3/4">
+          <main className="w-full mt-8">
             <article className="prose prose-lg dark:prose-invert max-w-none">
-                <ReactMarkdown
+              <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
                     h1: (props) => <h1 className="text-3xl font-semibold mt-8 mb-4 font-heading first:mt-0" {...props} />,
@@ -166,16 +159,16 @@ export default async function PostPage({ params }: PostPageProps) {
             {relatedPosts.length > 0 && (
                 <RelatedPostsSection posts={relatedPosts} />
             )}
-            </main>
-            <aside className="w-full md:w-1/3 lg:w-1/4">
-            <div className="sticky top-24">
-                <Suspense fallback={<PostsSidebarSkeleton />}>
-                <PostsSidebar tags={tags} archives={archives} series={series} />
-                </Suspense>
-            </div>
-            </aside>
+          </main>
         </div>
+        <aside className="w-full lg:w-1/4 mt-8 lg:mt-0">
+          <div className="sticky top-24">
+            <Suspense fallback={<PostsSidebarSkeleton />}>
+              <PostsSidebar tags={tags} archives={archives} series={series} />
+            </Suspense>
+          </div>
+        </aside>
       </div>
-    </>
+    </div>
   );
 }
