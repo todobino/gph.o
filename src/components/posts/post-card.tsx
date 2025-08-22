@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Tag } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 interface PostCardProps {
   post: Post;
@@ -14,7 +15,14 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, className }: PostCardProps) {
+  const router = useRouter();
   const postUrl = `/posts/${post.slug}`;
+
+  const handleTagClick = (e: React.MouseEvent, tag: string) => {
+    e.preventDefault(); // Prevent the link from navigating to the post
+    e.stopPropagation(); // Stop the event from bubbling up to the card's link
+    router.push(`/posts?tag=${tag}`);
+  };
 
   return (
     <Link href={postUrl} className="block group">
@@ -37,11 +45,16 @@ export function PostCard({ post, className }: PostCardProps) {
                 {post.content.substring(0, 150)}...
                 </div>
                 {post.tags && post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 items-center text-xs" onClick={(e) => e.stopPropagation()}>
+                <div className="flex flex-wrap gap-2 items-center text-xs">
                     <Tag className="h-3 w-3 text-muted-foreground" />
                     {post.tags.slice(0, 3).map((tag) => (
-                    <Badge key={tag} variant="secondary" asChild>
-                        <Link href={`/posts?tag=${tag}`}>{tag}</Link>
+                    <Badge
+                        key={tag}
+                        variant="secondary"
+                        onClick={(e) => handleTagClick(e, tag)}
+                        className="cursor-pointer hover:bg-primary/20"
+                    >
+                        {tag}
                     </Badge>
                     ))}
                 </div>
