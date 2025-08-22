@@ -182,18 +182,17 @@ export default async function Home() {
       {/* CTA / Signup Section */}
       <section className="py-16 md:py-24 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4">
-            <Card className="bg-primary/90 border-primary-foreground/20 max-w-3xl mx-auto shadow-lg text-primary-foreground">
+            <Card className="bg-card text-card-foreground max-w-3xl mx-auto shadow-lg">
                 <CardHeader className="text-center">
                     <CardTitle className="text-3xl">Stay Updated</CardTitle>
-                    <CardDescription className="text-primary-foreground/80">
+                    <CardDescription>
                         Get the latest articles, videos, and course announcements delivered right to your inbox. No spam, ever.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="max-w-md mx-auto">
                         <EmailSignupForm
-                           formClassName="[&_input]:bg-background/90 [&_input]:text-foreground [&_input:focus]:bg-background [&_input::placeholder]:text-muted-foreground"
-                           buttonClassName="bg-accent hover:bg-accent/90 text-accent-foreground"
+                           buttonClassName="bg-primary hover:bg-primary/90 text-primary-foreground"
                         />
                     </div>
                 </CardContent>
