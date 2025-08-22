@@ -1,9 +1,8 @@
 
 import { EmailSignupForm } from '@/components/email-signup-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Link2, Rss, Podcast } from 'lucide-react'; // Using generic Podcast icon
 import Link from 'next/link';
-import { Rss, Podcast } from 'lucide-react'; // Using generic Podcast icon
 
 // Updated URLs with provided links
 const podcastLinks = [
@@ -20,43 +19,42 @@ const podcastLinks = [
 
 export default function SubscribePage() {
   return (
-    <div className="max-w-4xl mx-auto space-y-12">
-      <h1 className="text-4xl font-bold text-center mb-8 font-heading">Subscribe</h1>
+    <div className="container mx-auto px-4 py-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {/* Left Column: Email Signup */}
+        <section className="space-y-6">
+          <h2 className="text-3xl font-semibold text-center font-heading">Sign Up for Email Updates</h2>
+          <p className="text-center text-muted-foreground">
+            Get notified about new posts, videos, and upcoming events.
+          </p>
+          <div className="max-w-md mx-auto">
+            <EmailSignupForm />
+          </div>
+        </section>
 
-      {/* Email Signup Section */}
-      <section className="bg-muted p-8 rounded-lg shadow-sm">
-        <h2 className="text-3xl font-semibold text-center mb-6 font-heading">Sign Up for Email Updates</h2>
-        <p className="text-center text-muted-foreground mb-8">
-          Get notified about new posts, videos, and upcoming events.
-        </p>
-        <div className="max-w-md mx-auto">
-          <EmailSignupForm />
-        </div>
-      </section>
-
-      {/* Podcast Subscription Section */}
-      <section>
-        <h2 className="text-3xl font-semibold text-center mb-8 font-heading">Subscribe to the Podcast</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {podcastLinks.map((link) => (
-            <Link key={link.name} href={link.url} passHref legacyBehavior>
-              <a
-                target="_blank" // Open in new tab
-                rel="noopener noreferrer"
-                className="block transition-transform transform hover:scale-105"
-              >
-                <Card className="hover:bg-accent hover:text-accent-foreground cursor-pointer h-full">
-                  <CardContent className="p-4 flex items-center justify-center text-center">
-                    {link.icon}
-                    <span className="font-medium">{link.name}</span>
-                  </CardContent>
-                </Card>
-              </a>
-            </Link>
-          ))}
-        </div>
-        {/* Removed placeholder text */}
-      </section>
+        {/* Right Column: Podcast Subscription */}
+        <section className="space-y-6">
+          <h2 className="text-3xl font-semibold text-center font-heading">Subscribe to the Podcast</h2>
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {podcastLinks.map((link) => (
+              <Link key={link.name} href={link.url} passHref legacyBehavior>
+                <a
+                  target="_blank" // Open in new tab
+                  rel="noopener noreferrer"
+                  className="block transition-transform transform hover:scale-105"
+                >
+                  <Card className="hover:bg-accent hover:text-accent-foreground cursor-pointer h-full">
+                    <CardContent className="p-4 flex items-center justify-center text-center">
+                      {link.icon}
+                      <span className="font-medium">{link.name}</span>
+                    </CardContent>
+                  </Card>
+                </a>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
