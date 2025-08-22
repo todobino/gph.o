@@ -27,8 +27,8 @@ export function PostCard({ post, className }: PostCardProps) {
   return (
     <Link href={postUrl} className="block group">
         <Card className={cn(
-            "flex flex-col h-full transition-all duration-150 ease-in-out",
-            "group-hover:shadow-xl group-hover:border-primary",
+            "flex flex-col h-full transition-all duration-150 ease-in-out bg-card",
+            "group-hover:shadow-lg group-hover:border-primary",
             className
         )}>
             <CardHeader>
