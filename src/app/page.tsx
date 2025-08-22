@@ -62,7 +62,7 @@ export default async function Home() {
       <section className="py-16 md:py-24 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-foreground border-2 border-blue-600">
+            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
                 <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
                   <BrainCircuit className="h-8 w-8 text-blue-600 dark:text-blue-300" />
@@ -76,7 +76,7 @@ export default async function Home() {
                 <Link href="/posts">See More</Link>
               </Button>
             </div>
-            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-foreground border-2 border-blue-600">
+            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
                 <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
                   <Users className="h-8 w-8 text-blue-600 dark:text-blue-300" />
@@ -90,7 +90,7 @@ export default async function Home() {
                 <Link href="/coaching">See More</Link>
               </Button>
             </div>
-            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-foreground border-2 border-blue-600">
+            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
                 <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
                   <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-300" />
@@ -104,7 +104,7 @@ export default async function Home() {
                 <Link href="/courses">See More</Link>
               </Button>
             </div>
-             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-foreground border-2 border-blue-600">
+             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
                 <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
                   <Mic className="h-8 w-8 text-blue-600 dark:text-blue-300" />
