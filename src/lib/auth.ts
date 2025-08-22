@@ -1,3 +1,4 @@
+
 import {
     getAuth,
     signInWithEmailAndPassword,
@@ -31,9 +32,17 @@ async function ensureUsersCollection() {
     }
 }
 
-export const signIn = async (email: string, password: string): Promise<User | null> => {
+export const signIn = async (email: string, password: string): Promise<boolean> => {
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password);
+        
+        // After successful Firebase auth, verify admin status before creating session
+        const isAdmin = await checkIfAdmin(user);
+        if (!isAdmin) {
+            await firebaseSignOut(auth); // Sign out non-admin user
+            return false;
+        }
+
         const idToken = await user.getIdToken();
         const resp = await fetch('/api/login', {
             method: 'POST',
@@ -44,13 +53,13 @@ export const signIn = async (email: string, password: string): Promise<User | nu
         if (!resp.ok) {
             // If API login fails, sign out the user from client
             await firebaseSignOut(auth);
-            return null;
+            return false;
         }
 
-        return user; // Return user object on success
+        return true; // Return true on full success
     } catch (error) {
         console.error("Error signing in:", error);
-        return null;
+        return false;
     }
 };
 
