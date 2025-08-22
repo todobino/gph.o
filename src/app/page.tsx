@@ -139,6 +139,23 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* New Self-Paced Course Signup Section */}
+      <section className="py-20 md:py-28 bg-primary-dark text-primary-dark-foreground">
+        <div className="container mx-auto px-4 text-center">
+            <h2 className="text-5xl md:text-6xl font-bold mb-4 font-heading italic">Psst...</h2>
+            <p className="text-lg md:text-xl text-primary-dark-foreground/80">Self-paced online course coming soon.</p>
+            <p className="text-lg md:text-xl text-primary-dark-foreground/80 mb-8">Sign up to get an early access discount.</p>
+            <div className="max-w-md mx-auto">
+              <EmailSignupForm
+                buttonText="Sign me up!"
+                listId="selfPacedCourse"
+                formClassName="[&_input]:bg-background/90 [&_input]:text-foreground [&_input:focus]:bg-background [&_input::placeholder]:text-muted-foreground"
+                buttonClassName="bg-primary hover:bg-primary/90 text-primary-foreground"
+              />
+            </div>
+        </div>
+      </section>
+
       {/* CTA / Signup Section */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container mx-auto px-4">

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -29,7 +31,19 @@ const formSchema = z.object({
 
 export type EmailSignupFormData = z.infer<typeof formSchema>;
 
-export function EmailSignupForm() {
+interface EmailSignupFormProps {
+  buttonText?: string;
+  listId?: string;
+  formClassName?: string;
+  buttonClassName?: string;
+}
+
+export function EmailSignupForm({
+  buttonText = 'Subscribe',
+  listId,
+  formClassName,
+  buttonClassName,
+}: EmailSignupFormProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,7 +63,7 @@ export function EmailSignupForm() {
       const response = await fetch('/api/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(values),
+          body: JSON.stringify({ ...values, listId }),
       });
 
       const result = await response.json();
@@ -82,7 +96,7 @@ export function EmailSignupForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className={cn("space-y-4", formClassName)}>
         <FormField
           control={form.control}
           name="name"
@@ -109,8 +123,8 @@ export function EmailSignupForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+        <Button type="submit" className={cn("w-full", buttonClassName)} disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : buttonText}
         </Button>
       </form>
     </Form>
