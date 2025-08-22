@@ -8,7 +8,6 @@ import Link from 'next/link';
 const podcastLinks = [
   { name: 'RSS', url: 'https://anchor.fm/s/f6a6558/podcast/rss', icon: <Rss className="w-5 h-5 mr-2" /> },
   { name: 'Spotify', url: 'https://open.spotify.com/show/6rte6liF1WtEW3Pxrr2E9y', icon: <Podcast className="w-5 h-5 mr-2" /> },
-  { name: 'Apple Podcasts', url: 'https://podcasts.apple.com/us/podcast/geepawhill/id1484418432?uo=4', icon: <Podcast className="w-5 h-5 mr-2" /> },
   { name: 'Google Podcasts', url: 'https://www.google.com/podcasts?feed=aHR0cHM6Ly9hbmNob3IuZm0vcy9mNmE2NTU4L3BvZGNhc3QvcnNz', icon: <Podcast className="w-5 h-5 mr-2" /> },
   { name: 'Breaker', url: 'https://www.breaker.audio/geepawhill', icon: <Podcast className="w-5 h-5 mr-2" /> },
   { name: 'Overcast', url: 'https://overcast.fm/itunes1484418432/geepawhill', icon: <Podcast className="w-5 h-5 mr-2" /> },
