@@ -72,7 +72,7 @@ export default async function Home() {
                   Deep dives into software development philosophy and practice.
                 </p>
               </div>
-              <Button asChild variant="outline" size="sm" className="mt-auto">
+              <Button asChild size="sm" className="mt-auto bg-blue-600 hover:bg-blue-700 text-white">
                 <Link href="/posts">See More</Link>
               </Button>
             </div>
@@ -86,7 +86,7 @@ export default async function Home() {
                   Practical guidance on pairing, mobbing, and team culture.
                 </p>
               </div>
-              <Button asChild variant="outline" size="sm" className="mt-auto">
+              <Button asChild size="sm" className="mt-auto bg-green-600 hover:bg-green-700 text-white">
                 <Link href="/coaching">See More</Link>
               </Button>
             </div>
@@ -100,7 +100,7 @@ export default async function Home() {
                   Structured learning to help your team master essential skills.
                 </p>
               </div>
-              <Button asChild variant="outline" size="sm" className="mt-auto">
+              <Button asChild size="sm" className="mt-auto bg-orange-600 hover:bg-orange-700 text-white">
                 <Link href="/courses">See More</Link>
               </Button>
             </div>
@@ -114,7 +114,7 @@ export default async function Home() {
                   Engaging keynotes and conference talks on software and teams.
                 </p>
               </div>
-               <Button asChild variant="outline" size="sm" className="mt-auto">
+               <Button asChild size="sm" className="mt-auto bg-purple-600 hover:bg-purple-700 text-white">
                 <Link href="/speaking">See More</Link>
               </Button>
             </div>
