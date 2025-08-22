@@ -37,7 +37,7 @@ export function PostCard({ post, className }: PostCardProps) {
                 </CardTitle>
                 <CardDescription className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
                     <Calendar className="h-3 w-3" />
-                    <span>{new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    <span>{new Date(post.date).toLocaleDateString('en-US', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</span>
                 </CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col justify-between">
