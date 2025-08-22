@@ -21,15 +21,11 @@ const featuredKeynotes = [
 export default function SpeakingPage() {
   return (
     <div className="container mx-auto px-4 py-12">
-      <div className="max-w-7xl mx-auto space-y-12">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold font-heading">Speaking Events & Keynotes</h1>
-        </div>
-
+      <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12">
-            {/* Left Column: Text */}
+            {/* Left Column: Text and Keynotes */}
             <div className="space-y-6">
-                 {/* Featured Keynotes List */}
+                <h1 className="text-4xl font-bold font-heading">Speaking Events & Keynotes</h1>
                 <Card>
                     <CardHeader>
                         <CardTitle className="font-heading">Featured Keynotes</CardTitle>
@@ -51,28 +47,25 @@ export default function SpeakingPage() {
                     {paragraphs.map((p, i) => <p key={i}>{p}</p>)}
                 </div>
             </div>
-            {/* Right Column: Video */}
-            <div className="space-y-6">
+            {/* Right Column: Video and Contact Form */}
+            <div className="space-y-8">
                  {/* Video Embed Section */}
-                 <div className="aspect-video">
+                 <div className="aspect-video sticky top-24">
                     <iframe
                         className="w-full h-full rounded-lg shadow-md"
-                        src="https://www.youtube.com/embed/lHoOUylvfxQ" // Placeholder Video
+                        src="https://www.youtube.com/embed/lHoOUylvfxQ"
                         title="YouTube video player"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                     ></iframe>
                 </div>
+                {/* Contact Form Section */}
+                <div className="space-y-6">
+                  <h2 className="text-3xl font-bold font-heading">Inquire About Speaking</h2>
+                  <ContactForm />
+                </div>
             </div>
-        </div>
-
-        {/* Contact Form Section */}
-        <div className="space-y-6">
-          <h2 className="text-3xl font-bold text-center mb-6 font-heading">Inquire About Speaking</h2>
-          <div className="max-w-2xl mx-auto">
-            <ContactForm />
-          </div>
         </div>
       </div>
     </div>
