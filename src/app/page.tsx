@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmailSignupForm } from "@/components/email-signup-form";
 import { getPosts } from "@/services/posts";
-import { ArrowRight, BookOpen, BrainCircuit, Mic, Users } from "lucide-react";
+import { ArrowRight, BookOpen, BrainCircuit, GraduationCap, Mic, Speech, Users } from "lucide-react";
 import Link from "next/link";
 import { PostCard } from "@/components/posts/post-card";
 
@@ -93,7 +93,7 @@ export default async function Home() {
             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
                 <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
-                  <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-300" />
+                  <GraduationCap className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Courses</h3>
                 <p className="text-muted-foreground text-sm mb-6">
@@ -107,7 +107,7 @@ export default async function Home() {
              <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
                 <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
-                  <Mic className="h-8 w-8 text-blue-600 dark:text-blue-300" />
+                  <Speech className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Speaking</h3>
                 <p className="text-muted-foreground text-sm mb-6">
