@@ -24,7 +24,7 @@ export function PostCard({ post, className }: PostCardProps) {
             className
         )}>
             <CardHeader>
-                <CardTitle className="group-hover:underline">
+                <CardTitle className="group-hover:text-primary transition-colors">
                     {post.title}
                 </CardTitle>
                 <CardDescription className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
