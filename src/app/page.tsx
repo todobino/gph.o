@@ -59,7 +59,7 @@ export default async function Home() {
 </section>
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-primary text-primary-foreground">
+      <section className="py-16 md:py-24 bg-secondary text-secondary-foreground">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-foreground">
