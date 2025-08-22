@@ -276,7 +276,7 @@ export function Header() {
         {/* Desktop View (md and up) */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Image src="/android-chrome-192x192.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
+            <Image src="/gpaw-logo-white.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block">
               GeePawHill.Org
             </span>
@@ -389,7 +389,7 @@ export function Header() {
                   className="flex items-center space-x-2 mb-6"
                   onClick={handleMobileSheetLinkClick}
                 >
-                  <Image src="/android-chrome-192x192.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
+                  <Image src="/gpaw-logo-white.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
                   <span className="font-bold text-foreground">GeePawHill.Org</span>
                 </Link>
               </SheetClose>
@@ -441,7 +441,7 @@ export function Header() {
             </SheetContent>
           </Sheet>
            <Link href="/" className="flex items-center space-x-2">
-             <Image src="/android-chrome-192x192.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
+             <Image src="/gpaw-logo-white.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
              <span className="font-bold">GeePawHill.Org</span>
            </Link>
              <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
@@ -471,5 +471,3 @@ export function Header() {
     </header>
   );
 }
-
-    
