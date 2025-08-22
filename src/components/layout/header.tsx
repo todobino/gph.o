@@ -291,23 +291,21 @@ export function Header() {
                       </HeaderMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                       {navItem.dropdown.map((item, index) => (
-                            <React.Fragment key={item.href}>
-                              {index === 0 && (
-                                <DropdownMenuItem asChild>
-                                  <Link href={navItem.label === 'Posts' ? '/posts' : navItem.label === 'Courses' ? '/courses' : '/about'}>
-                                    All {navItem.label}
-                                  </Link>
-                                </DropdownMenuItem>
-                              )}
-                              {index === 0 && <DropdownMenuSeparator />}
-                              <DropdownMenuItem key={item.href} asChild>
-                                <Link href={item.href!} className="flex items-center gap-2 cursor-pointer">
-                                  {item.icon}
-                                  <span>{item.label}</span>
-                                </Link>
-                              </DropdownMenuItem>
-                            </React.Fragment>
+                       { (navItem.label === 'Posts' || navItem.label === 'Courses') &&
+                          <DropdownMenuItem asChild>
+                            <Link href={navItem.label === 'Posts' ? '/posts' : '/courses'}>
+                              All {navItem.label}
+                            </Link>
+                          </DropdownMenuItem>
+                       }
+                       { (navItem.label === 'Posts' || navItem.label === 'Courses') && <DropdownMenuSeparator /> }
+                       {navItem.dropdown.map((item) => (
+                            <DropdownMenuItem key={item.href} asChild>
+                              <Link href={item.href!} className="flex items-center gap-2 cursor-pointer">
+                                {item.icon}
+                                <span>{item.label}</span>
+                              </Link>
+                            </DropdownMenuItem>
                        ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
