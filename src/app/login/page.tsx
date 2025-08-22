@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -14,20 +15,20 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start with loading true
   const router = useRouter();
   const { toast } = useToast(); // Initialize toast
 
   // Initial check if user is already logged in and admin
   useEffect(() => {
     const checkAuth = async () => {
-        setLoading(true);
         const user = await getCurrentUser();
         if(user){
             const isAdmin = await checkIfAdmin(user);
             if (isAdmin) {
                 console.log("Already logged in as admin, redirecting...");
                 router.push('/admin'); // Redirect if already admin
+                return; // Exit after redirect
             } else {
                  console.log("Already logged in but not admin, logging out...");
                  await signOut(); // Log out if not admin
@@ -39,7 +40,7 @@ export default function LoginPage() {
                  });
             }
         }
-        setLoading(false);
+        setIsLoading(false); // Correctly use setIsLoading
     };
     checkAuth();
   }, [router, toast]); // Added toast to dependencies
@@ -65,12 +66,12 @@ export default function LoginPage() {
          description: 'Invalid email/password or not an authorized admin.',
          variant: "destructive",
        });
+       setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
    // Render loading state or login form
-   if (isLoading && !error) { // Show loading only if not errored out initially
+   if (isLoading) {
      return <div className="flex justify-center items-center h-full"><p>Loading...</p></div>;
    }
 
