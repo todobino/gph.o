@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '../ui/sheet';
 import {
   DropdownMenu,
@@ -13,7 +14,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, BrainCog, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book, UserCircle } from 'lucide-react';
+import { Menu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book, UserCircle } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -267,7 +268,7 @@ export function Header() {
         {/* Desktop View (md and up) */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <BrainCog className="h-6 w-6 text-white" />
+            <Image src="/android-chrome-192x192.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block">
               GeePawHill.Org
             </span>
@@ -380,7 +381,7 @@ export function Header() {
                   className="flex items-center space-x-2 mb-6"
                   onClick={handleMobileSheetLinkClick}
                 >
-                  <BrainCog className="h-6 w-6 text-primary" />
+                  <Image src="/android-chrome-192x192.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
                   <span className="font-bold text-foreground">GeePawHill.Org</span>
                 </Link>
               </SheetClose>
@@ -432,7 +433,7 @@ export function Header() {
             </SheetContent>
           </Sheet>
            <Link href="/" className="flex items-center space-x-2">
-             <BrainCog className="h-6 w-6 text-white" />
+             <Image src="/android-chrome-192x192.png" alt="GeePawHill.Org Logo" width={24} height={24} className="h-6 w-6" />
              <span className="font-bold">GeePawHill.Org</span>
            </Link>
              <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
@@ -462,3 +463,5 @@ export function Header() {
     </header>
   );
 }
+
+    
