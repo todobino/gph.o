@@ -22,7 +22,7 @@ export default function SubscribePage() {
     <div className="container mx-auto px-4 py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Left Column: Email Signup */}
-        <section className="space-y-6">
+        <section className="space-y-6 bg-secondary p-8 rounded-lg">
           <h2 className="text-3xl font-semibold text-center font-heading">Sign Up for Email Updates</h2>
           <p className="text-center text-muted-foreground">
             Get notified about new posts, videos, and upcoming events.
