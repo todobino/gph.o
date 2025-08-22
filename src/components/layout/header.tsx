@@ -272,7 +272,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary-dark/20 bg-primary-dark text-primary-dark-foreground">
-      <div className="container mx-auto flex h-14 items-center px-2 max-w-6xl">
+      <div className="container mx-auto flex h-14 items-center px-4">
         {/* Desktop View (md and up) */}
         <div className="hidden md:flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
@@ -323,7 +323,7 @@ export function Header() {
         </div>
 
         <div className="hidden md:flex flex-1 items-center justify-center px-2">
-            <div className="relative w-full">
+            <div className="relative w-full max-w-sm">
                 <Popover
                     open={isDesktopSearchPopoverOpen}
                     onOpenChange={handleDesktopPopoverOpenChange}
@@ -403,6 +403,17 @@ export function Header() {
                               <>
                                   <div className="text-lg font-medium text-muted-foreground px-4 pt-3 pb-1">{navItem.label}</div>
                                   <div className="flex flex-col space-y-0 pl-4">
+                                      {navItem.label === 'About' && (
+                                         <SheetClose asChild>
+                                           <Link
+                                             href="/about"
+                                             className="flex items-center gap-2 w-full text-left text-lg text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent"
+                                             onClick={handleMobileSheetLinkClick}
+                                           >
+                                             <Glasses className="h-4 w-4" />About Me
+                                           </Link>
+                                         </SheetClose>
+                                       )}
                                       {navItem.dropdown.map((item) => (
                                           <SheetClose key={item.href} asChild>
                                             <Link
@@ -473,5 +484,3 @@ export function Header() {
     </header>
   );
 }
-
-    

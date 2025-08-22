@@ -14,7 +14,7 @@ export async function Footer() {
 
   return (
     <footer className="border-t">
-      <div className="container mx-auto px-2">
+      <div className="container mx-auto px-4">
         {/* Constrained width section for 3-column grid */}
         <div className="pt-12 pb-8 space-y-8">
           {/* New 3-column section */}
@@ -85,7 +85,7 @@ export async function Footer() {
       </div>
       {/* Full-width bottom row with light gray background and top border */}
       <div className="bg-secondary py-4 border-t">
-        <div className="container mx-auto px-2">
+        <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4">
             <p className="text-center text-sm leading-loose text-muted-foreground">
               &copy; {new Date().getFullYear()} GeePawHill.Org. All rights reserved.
