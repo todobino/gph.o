@@ -14,7 +14,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book, UserCircle } from 'lucide-react';
+import { Menu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book, UserCircle, Users, Mic, Info } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -126,7 +126,15 @@ export function Header() {
         { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
       ],
     },
-    { href: '/about', label: 'About' },
+    {
+      label: 'About',
+      dropdown: [
+        { href: '/about', label: 'About', icon: <Info className="h-4 w-4" /> },
+        { href: '/coaching', label: 'Coaching', icon: <Users className="h-4 w-4" /> },
+        { href: '/speaking', label: 'Speaking', icon: <Mic className="h-4 w-4" /> },
+        { href: '/podcast', label: 'Podcast', icon: <Headphones className="h-4 w-4" /> },
+      ],
+    },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -284,7 +292,7 @@ export function Header() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
                        <DropdownMenuItem asChild>
-                         <Link href={navItem.label === 'Posts' ? '/posts' : '/courses'}>
+                         <Link href={navItem.label === 'Posts' ? '/posts' : navItem.label === 'Courses' ? '/courses' : '/about'}>
                            All {navItem.label}
                          </Link>
                        </DropdownMenuItem>
