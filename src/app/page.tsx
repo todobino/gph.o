@@ -8,7 +8,9 @@ import Link from "next/link";
 import { PostCard } from "@/components/posts/post-card";
 
 export default async function Home() {
-  const recentPosts = await getPosts().then(posts => posts.slice(0, 6));
+  const allPosts = await getPosts();
+  const recentPosts = allPosts.slice(0, 6);
+  const recentVideos = allPosts.filter(post => post.tags.includes('video')).slice(0, 6);
 
   return (
     <div className="flex-1 flex flex-col">
@@ -155,6 +157,27 @@ export default async function Home() {
             </div>
         </div>
       </section>
+
+      {/* Latest Videos Section */}
+      {recentVideos.length > 0 && (
+        <section className="py-16 md:py-24 bg-secondary">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 font-heading">
+              Latest Videos
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              {recentVideos.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </div>
+            <div className="text-center mt-12">
+              <Button asChild variant="outline">
+                <Link href="/posts?tag=video">View All Videos</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA / Signup Section */}
       <section className="py-16 md:py-24 bg-background">
