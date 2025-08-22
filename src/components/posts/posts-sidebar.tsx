@@ -2,17 +2,17 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { EmailSignupForm } from '@/components/email-signup-form';
-import { BookOpen } from 'lucide-react'; // Icon for series
+import { BookOpen } from 'lucide-react';
 
 interface PostsSidebarProps {
   tags: string[];
-  archives: string[]; // Format: "Month Year" e.g., "January 2024"
-  series: string[]; // Added series prop
+  archives: string[];
+  series: string[];
 }
 
 function toTitleCase(str: string): string {
@@ -21,45 +21,41 @@ function toTitleCase(str: string): string {
 }
 
 export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentTag = searchParams.get('tag');
+  const currentTags = searchParams.get('tags')?.split(',') || [];
   const currentArchive = searchParams.get('archive');
-  const currentSeries = searchParams.get('series'); // Get current series filter
+  const currentSeries = searchParams.get('series');
 
-  const createQueryString = (name: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    
-    const currentFilterValue = params.get(name);
-
-    if (name === 'tag' && (params.has('archive') || params.has('series'))) {
-        params.delete('archive');
-        params.delete('series');
-    } else if (name === 'archive' && (params.has('tag') || params.has('series'))) {
-        params.delete('tag');
-        params.delete('series');
-    } else if (name === 'series' && (params.has('tag') || params.has('archive'))) {
-        params.delete('tag');
-        params.delete('archive');
-    }
-
-    if (currentFilterValue === value) {
-      params.delete(name); // Toggle off
+  const createTagQueryString = (clickedTag: string) => {
+    const newTags = new Set(currentTags);
+    if (newTags.has(clickedTag)) {
+      newTags.delete(clickedTag);
     } else {
-      params.set(name, value); // Set new filter
+      newTags.add(clickedTag);
     }
-    
-    // Always navigate to the root of the blog section when applying filters
-    const newPath = '/posts';
-
-    return `${newPath}?${params.toString()}`;
+    const newTagsArray = Array.from(newTags);
+    const params = new URLSearchParams();
+    if (newTagsArray.length > 0) {
+      params.set('tags', newTagsArray.join(','));
+    }
+    return `/posts?${params.toString()}`;
+  };
+  
+  const createFilterQueryString = (name: 'archive' | 'series', value: string) => {
+    const params = new URLSearchParams();
+    if ((name === 'archive' && currentArchive === value) || (name === 'series' && currentSeries === value)) {
+        // Toggling off, so no parameter is added
+    } else {
+        params.set(name, value);
+    }
+    return `/posts?${params.toString()}`;
   };
 
   return (
     <Card>
       <CardContent className="space-y-6 pt-6">
         <Accordion type="multiple" className="w-full" defaultValue={['series', 'tags', 'archives']}>
-          {series && series.length > 0 && ( // Conditionally render Series section
+          {series && series.length > 0 && (
             <AccordionItem value="series">
               <AccordionTrigger className="text-lg font-medium font-heading">Series</AccordionTrigger>
               <AccordionContent>
@@ -67,7 +63,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
                   {series.map((seriesName) => (
                     <li key={seriesName}>
                       <Link
-                        href={createQueryString('series', seriesName)}
+                        href={createFilterQueryString('series', seriesName)}
                         scroll={false}
                         className={`flex items-center text-sm hover:text-primary ${currentSeries === seriesName ? 'text-primary font-semibold' : 'text-muted-foreground'}`}
                       >
@@ -88,11 +84,11 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
                 {tags.map((tag) => (
                   <Link
                     key={tag}
-                    href={createQueryString('tag', tag)}
+                    href={createTagQueryString(tag)}
                     scroll={false}
                   >
                     <Badge
-                      variant={currentTag === tag ? 'default' : 'secondary'}
+                      variant={currentTags.includes(tag) ? 'default' : 'secondary'}
                       className="cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-md py-1.5 px-3 border border-border"
                     >
                       {toTitleCase(tag)}
@@ -110,7 +106,7 @@ export function PostsSidebar({ tags, archives, series }: PostsSidebarProps) {
                 {archives.map((archive) => (
                   <li key={archive}>
                     <Link
-                      href={createQueryString('archive', archive)}
+                      href={createFilterQueryString('archive', archive)}
                       scroll={false}
                       className={`text-sm hover:text-primary ${currentArchive === archive ? 'text-primary font-semibold' : 'text-muted-foreground'}`}
                     >
