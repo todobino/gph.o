@@ -130,7 +130,7 @@ export default async function Home() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {recentPosts.map((post) => (
-              <PostCard key={post.slug} post={post} className="bg-secondary" />
+              <PostCard key={post.slug} post={post} className="bg-accent" />
             ))}
           </div>
           <div className="text-center mt-12">
@@ -167,7 +167,7 @@ export default async function Home() {
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               {recentVideos.map((post) => (
-                <PostCard key={post.slug} post={post} className="bg-secondary" />
+                <PostCard key={post.slug} post={post} className="bg-accent" />
               ))}
             </div>
             <div className="text-center mt-12">
