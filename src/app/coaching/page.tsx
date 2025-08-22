@@ -1,5 +1,8 @@
 
 import { ContactForm } from '@/components/contact-form';
+import { Button } from '@/components/ui/button';
+import { CalendarPlus } from 'lucide-react';
+import Link from 'next/link';
 
 const coachingText = `I am a full-time professional software development coach available to help your team. I work with a large variety of organizations, from the local non-profit with 2 developers to the gigantic Fortune 500 company with 2,000. I am a geek’s geek, and am perfectly comfortable working directly with programmers. At the same time, I can often deliver tremendous value in the executive suite, as I am strong at organization, planning, and direct conversation. I have shipped software of every kind and in most of the modern programming environments.
 
@@ -29,9 +32,20 @@ export default function CoachingPage() {
 
         {/* Right Column: Contact Form */}
         <div className="space-y-6">
-           <div className="sticky top-24">
-                <h2 className="text-3xl font-bold tracking-tight font-heading mb-4">Get in Touch</h2>
-                <ContactForm />
+           <div className="sticky top-24 space-y-8">
+                <div className="p-6 rounded-lg bg-accent text-center">
+                    <h3 className="text-2xl font-bold font-heading mb-4 text-accent-foreground">Ready to start?</h3>
+                    <Button asChild size="lg">
+                        <Link href="/booking">
+                            <CalendarPlus className="mr-2 h-5 w-5" />
+                            Book 1:1
+                        </Link>
+                    </Button>
+                </div>
+                <div>
+                    <h2 className="text-3xl font-bold tracking-tight font-heading mb-4">Get in Touch</h2>
+                    <ContactForm />
+                </div>
            </div>
         </div>
       </div>
