@@ -72,14 +72,14 @@ export default function LoginPage() {
 
    // Render loading state or login form
    if (isLoading) {
-     return <div className="flex justify-center items-center h-full"><p>Loading...</p></div>;
+     return <div className="container mx-auto px-4 py-12 flex justify-center items-center h-full"><p>Loading...</p></div>;
    }
 
   return (
-    <div className="flex justify-center items-center h-full">
-      <Card className="w-full max-w-sm mx-4">
+    <div className="container mx-auto px-4 py-12 flex justify-center items-center h-full">
+      <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Admin Login</CardTitle>
+          <CardTitle>User Login</CardTitle>
           <CardDescription>Enter your email and password to login.</CardDescription>
         </CardHeader>
         <CardContent>
