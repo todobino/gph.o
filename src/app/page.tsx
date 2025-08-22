@@ -71,7 +71,7 @@ export default async function Home() {
                 </p>
               </div>
               <Button asChild variant="outline" size="sm" className="mt-auto">
-                <Link href="/posts">Go To Posts</Link>
+                <Link href="/posts">See More</Link>
               </Button>
             </div>
             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-green-100 dark:bg-green-900/30">
@@ -85,7 +85,7 @@ export default async function Home() {
                 </p>
               </div>
               <Button asChild variant="outline" size="sm" className="mt-auto">
-                <Link href="/coaching">Go To Coaching</Link>
+                <Link href="/coaching">See More</Link>
               </Button>
             </div>
             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-orange-100 dark:bg-orange-900/30">
@@ -99,7 +99,7 @@ export default async function Home() {
                 </p>
               </div>
               <Button asChild variant="outline" size="sm" className="mt-auto">
-                <Link href="/courses">Go To Courses</Link>
+                <Link href="/courses">See More</Link>
               </Button>
             </div>
              <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-purple-100 dark:bg-purple-900/30">
@@ -113,7 +113,7 @@ export default async function Home() {
                 </p>
               </div>
                <Button asChild variant="outline" size="sm" className="mt-auto">
-                <Link href="/speaking">Go To Speaking</Link>
+                <Link href="/speaking">See More</Link>
               </Button>
             </div>
           </div>
