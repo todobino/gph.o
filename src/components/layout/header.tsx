@@ -14,7 +14,7 @@ import {
 import { Dialog, DialogClose as DialogCloseComponent, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "../ui/input";
-import { Menu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book, UserCircle, Users, Mic, Info, Speech } from 'lucide-react';
+import { Menu, ChevronDown, Search, GraduationCap, CalendarPlus, Video, Mail, Headphones, FileText, BookOpen, Book, UserCircle, Users, Mic, Info, Speech, Glasses } from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
@@ -129,7 +129,7 @@ export function Header() {
     {
       label: 'About',
       dropdown: [
-        { href: '/about', label: 'About Me', icon: <Info className="h-4 w-4" /> },
+        { href: '/about', label: 'About Me', icon: <Glasses className="h-4 w-4" /> },
         { href: '/coaching', label: 'Coaching', icon: <Users className="h-4 w-4" /> },
         { href: '/speaking', label: 'Speaking', icon: <Speech className="h-4 w-4" /> },
         { href: '/podcast', label: 'Podcast', icon: <Headphones className="h-4 w-4" /> },
@@ -291,19 +291,23 @@ export function Header() {
                       </HeaderMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                       <DropdownMenuItem asChild>
-                         <Link href={navItem.label === 'Posts' ? '/posts' : navItem.label === 'Courses' ? '/courses' : '/about'}>
-                           All {navItem.label}
-                         </Link>
-                       </DropdownMenuItem>
-                       <DropdownMenuSeparator />
-                       {navItem.dropdown.map((item) => (
-                            <DropdownMenuItem key={item.href} asChild>
-                              <Link href={item.href!} className="flex items-center gap-2 cursor-pointer">
-                                {item.icon}
-                                <span>{item.label}</span>
-                              </Link>
-                            </DropdownMenuItem>
+                       {navItem.dropdown.map((item, index) => (
+                            <React.Fragment key={item.href}>
+                              {index === 0 && (
+                                <DropdownMenuItem asChild>
+                                  <Link href={navItem.label === 'Posts' ? '/posts' : navItem.label === 'Courses' ? '/courses' : '/about'}>
+                                    All {navItem.label}
+                                  </Link>
+                                </DropdownMenuItem>
+                              )}
+                              {index === 0 && <DropdownMenuSeparator />}
+                              <DropdownMenuItem key={item.href} asChild>
+                                <Link href={item.href!} className="flex items-center gap-2 cursor-pointer">
+                                  {item.icon}
+                                  <span>{item.label}</span>
+                                </Link>
+                              </DropdownMenuItem>
+                            </React.Fragment>
                        ))}
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -471,3 +475,5 @@ export function Header() {
     </header>
   );
 }
+
+    
