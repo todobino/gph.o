@@ -47,65 +47,67 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
   const series = await getAllSeries(); // Get all unique series names
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
-       <main className="w-full md:w-2/3 lg:w-3/4">
-        <h1 className="text-4xl font-bold mb-8 font-heading">
-          {tag ? `Posts tagged: ${toTitleCase(tag)}` : 
-           archive ? `Posts from: ${archive}` :
-           seriesFilter ? `Posts in series: "${seriesFilter}"` : // Display series filter in title
-           'Posts'}
-        </h1>
-        <div className="grid grid-cols-1 gap-6">
-          {posts.length > 0 ? (
-            posts.map((post) => {
-              const slug = post.slug;
-              return (
-                <Card key={post.slug}> {/* Use slug for key */}
-                  <CardHeader>
-                    <CardTitle>
-                      <Link href={`/posts/${slug}`} className="hover:text-primary transition-colors">
-                        {post.title}
-                      </Link>
-                    </CardTitle>
-                    <CardDescription>
-                      Published on {new Date(post.date).toLocaleDateString()}
-                       {post.series && ( // Display series if it exists
-                         <span className="text-xs text-muted-foreground">
-                           {' '}· Part of <Link href={`/posts?series=${encodeURIComponent(post.series)}`} className="hover:underline">{post.series}</Link>
-                         </span>
-                       )}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground line-clamp-3">
-                       {post.content.split('\n').slice(0,3).join(' ')}...
-                    </p>
-                     <div className="mt-4 flex flex-wrap gap-2">
-                      {post.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="border border-border py-1.5 px-3 rounded-md">
-                           {toTitleCase(tag)}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                   <CardFooter>
-                     <Link href={`/posts/${slug}`} className="text-sm text-primary hover:underline">
-                       Read More
-                     </Link>
-                   </CardFooter>
-                </Card>
-              );
-            })
-          ) : (
-            <p className="text-muted-foreground">No posts found matching your filters.</p>
-          )}
+    <div className="container mx-auto px-4 py-12">
+        <div className="flex flex-col md:flex-row gap-8">
+        <main className="w-full md:w-2/3 lg:w-3/4">
+            <h1 className="text-4xl font-bold mb-8 font-heading">
+            {tag ? `Posts tagged: ${toTitleCase(tag)}` : 
+            archive ? `Posts from: ${archive}` :
+            seriesFilter ? `Posts in series: "${seriesFilter}"` : // Display series filter in title
+            'Posts'}
+            </h1>
+            <div className="grid grid-cols-1 gap-6">
+            {posts.length > 0 ? (
+                posts.map((post) => {
+                const slug = post.slug;
+                return (
+                    <Card key={post.slug}> {/* Use slug for key */}
+                    <CardHeader>
+                        <CardTitle>
+                        <Link href={`/posts/${slug}`} className="hover:text-primary transition-colors">
+                            {post.title}
+                        </Link>
+                        </CardTitle>
+                        <CardDescription>
+                        Published on {new Date(post.date).toLocaleDateString()}
+                        {post.series && ( // Display series if it exists
+                            <span className="text-xs text-muted-foreground">
+                            {' '}· Part of <Link href={`/posts?series=${encodeURIComponent(post.series)}`} className="hover:underline">{post.series}</Link>
+                            </span>
+                        )}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground line-clamp-3">
+                        {post.content.split('\n').slice(0,3).join(' ')}...
+                        </p>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                        {post.tags.map((tag) => (
+                            <Badge key={tag} variant="secondary" className="border border-border py-1.5 px-3 rounded-md">
+                            {toTitleCase(tag)}
+                            </Badge>
+                        ))}
+                        </div>
+                    </CardContent>
+                    <CardFooter>
+                        <Link href={`/posts/${slug}`} className="text-sm text-primary hover:underline">
+                        Read More
+                        </Link>
+                    </CardFooter>
+                    </Card>
+                );
+                })
+            ) : (
+                <p className="text-muted-foreground">No posts found matching your filters.</p>
+            )}
+            </div>
+        </main>
+        <aside className="w-full md:w-1/3 lg:w-1/4">
+            <Suspense fallback={<PostsSidebarSkeleton />}>
+            <PostsSidebar tags={tags} archives={archives} series={series} />
+            </Suspense>
+        </aside>
         </div>
-       </main>
-       <aside className="w-full md:w-1/3 lg:w-1/4">
-        <Suspense fallback={<PostsSidebarSkeleton />}>
-          <PostsSidebar tags={tags} archives={archives} series={series} />
-        </Suspense>
-       </aside>
     </div>
   );
 }
