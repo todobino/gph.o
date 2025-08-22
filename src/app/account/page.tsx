@@ -11,29 +11,40 @@ import { ProfileTab } from '@/components/account/profile-tab';
 import { AdminTab } from '@/components/account/admin-tab';
 import { SecurityTab } from '@/components/account/security-tab';
 import { Shield, User as UserIcon, Settings } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function AccountPage() {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const tab = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tab || 'profile');
 
   useEffect(() => {
     const checkUser = async () => {
       const currentUser = await getCurrentUser();
       if (!currentUser) {
-        router.push('/login');
+        router.push('/login?next=/account');
         return;
       }
       setUser(currentUser);
       const adminStatus = await checkIfAdmin(currentUser);
       setIsAdmin(adminStatus);
+
+      // If the user is trying to access the admin tab but isn't an admin,
+      // default them to the profile tab.
+      if (tab === 'admin' && !adminStatus) {
+        setActiveTab('profile');
+      }
+
       setLoading(false);
     };
 
     checkUser();
-  }, [router]);
+  }, [router, tab]);
 
   if (loading) {
     return (
@@ -58,7 +69,7 @@ export default function AccountPage() {
   }
 
   if (!user) {
-    return null; // or a redirect component
+    return null; // Should be redirected by the effect
   }
 
   return (
@@ -66,7 +77,7 @@ export default function AccountPage() {
       <h1 className="text-4xl font-bold font-heading mb-4">Your Account</h1>
       <p className="text-muted-foreground mb-8">Manage your profile, security settings, and more.</p>
       
-      <Tabs defaultValue="profile" className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:w-auto lg:grid-cols-3">
           <TabsTrigger value="profile">
             <UserIcon className="mr-2 h-4 w-4" /> Profile

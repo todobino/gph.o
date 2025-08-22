@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 export default function AdminPage() {
-  // The root /admin page should redirect to the posts manager
-  // as it's the primary admin function for now.
-  redirect('/admin/posts');
+  // The root /admin page should now redirect to the account page,
+  // which will handle showing the admin tab for authorized users.
+  redirect('/account?tab=admin');
 }

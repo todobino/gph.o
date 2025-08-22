@@ -2,78 +2,50 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { signIn, getCurrentUser, checkIfAdmin, signOut } from '@/lib/auth'; // Import signOut
+import { useRouter, useSearchParams } from 'next/navigation';
+import { signIn, getCurrentUser, signOut } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User } from 'firebase/auth';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from '@/hooks/use-toast'; // Import useToast
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(true); // Start with loading true
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast(); // Initialize toast
-
-  // Initial check if user is already logged in and admin
-  useEffect(() => {
-    const checkAuth = async () => {
-        const user = await getCurrentUser();
-        if(user){
-            const isAdmin = await checkIfAdmin(user);
-            if (isAdmin) {
-                console.log("Already logged in as admin, redirecting...");
-                router.push('/admin'); // Redirect if already admin
-                return; // Exit after redirect
-            } else {
-                 console.log("Already logged in but not admin, logging out...");
-                 await signOut(); // Log out if not admin
-                 // Optionally show a message
-                 toast({
-                     title: "Access Denied",
-                     description: "You are not authorized to access the admin area.",
-                     variant: "destructive",
-                 });
-            }
-        }
-        setIsLoading(false); // Correctly use setIsLoading
-    };
-    checkAuth();
-  }, [router, toast]); // Added toast to dependencies
+  const searchParams = useSearchParams();
+  const { toast } = useToast();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
     setError('');
 
-    // Use the updated signIn function which now internally checks for admin
     const success = await signIn(email, password);
 
     if (success) {
         toast({
             title: "Login Successful",
-            description: "Redirecting to dashboard...",
+            description: "Redirecting to your account...",
         });
-      router.push('/admin');
+      // Always redirect to the account page after login.
+      // The account page will handle showing the correct tabs.
+      const nextUrl = searchParams.get('next') || '/account';
+      router.push(nextUrl);
     } else {
-      setError('Invalid email/password or not an admin.'); // Updated error message
+       setError('Invalid email or password.');
        toast({
          title: "Login Failed",
-         description: 'Invalid email/password or not an authorized admin.',
+         description: 'Invalid email or password. Please try again.',
          variant: "destructive",
        });
        setIsLoading(false);
     }
   };
-
-   // Render loading state or login form
-   if (isLoading) {
-     return <div className="container mx-auto px-4 py-12 flex justify-center items-center h-full"><p>Loading...</p></div>;
-   }
 
   return (
     <div className="container mx-auto px-4 py-12 flex justify-center items-center h-full">
@@ -93,7 +65,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                disabled={isLoading} // Disable input while loading
+                disabled={isLoading}
               />
             </div>
             <div className="grid w-full items-center gap-1.5">
@@ -105,7 +77,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                 disabled={isLoading} // Disable input while loading
+                 disabled={isLoading}
               />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}

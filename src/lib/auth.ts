@@ -13,36 +13,12 @@ import { db, app } from "./firestore"; // Ensure db and app are correctly initia
 const auth = getAuth(app);
 const firestore = getFirestore(app); // Use getFirestore instance from firestore.ts if available, or initialize here
 
-
-// Function to check if the users collection exists, creates it if not (simplistic)
-// Note: Collections are implicitly created when the first document is added.
-// This function primarily checks if *any* document exists, which implies the collection exists.
-async function ensureUsersCollection() {
-    try {
-        const usersRef = collection(firestore, "users");
-        const q = query(usersRef, where("email", "!=", "")); // Query for any document with an email
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) {
-            console.log("Users collection appears empty or doesn't exist. It will be created on first user document write.");
-            // You could potentially add a placeholder document here if needed,
-            // but Firestore creates collections automatically.
-        }
-    } catch (error) {
-        console.error("Error checking/ensuring users collection:", error);
-    }
-}
-
 export const signIn = async (email: string, password: string): Promise<boolean> => {
     try {
         const { user } = await signInWithEmailAndPassword(auth, email, password);
-        
-        // After successful Firebase auth, verify admin status before creating session
-        const isAdmin = await checkIfAdmin(user);
-        if (!isAdmin) {
-            await firebaseSignOut(auth); // Sign out non-admin user
-            return false;
-        }
 
+        // Do NOT check for admin here. Let anyone log in.
+        // The session cookie will be created for any authenticated user.
         const idToken = await user.getIdToken();
         const resp = await fetch('/api/login', {
             method: 'POST',
@@ -51,12 +27,12 @@ export const signIn = async (email: string, password: string): Promise<boolean> 
         });
 
         if (!resp.ok) {
-            // If API login fails, sign out the user from client
+            // If API login fails (e.g., server error), sign out the user from client
             await firebaseSignOut(auth);
             return false;
         }
 
-        return true; // Return true on full success
+        return true; // Return true on successful authentication and session creation
     } catch (error) {
         console.error("Error signing in:", error);
         return false;
@@ -88,11 +64,12 @@ export const getCurrentUser = (): Promise<User | null> => {
     });
 }
 
-// Checks if a user is an admin based on Firestore data
+// Checks if a user is an admin based on custom claims or Firestore data.
+// This is used for UI gating, not for blocking login.
 export const checkIfAdmin = async (user: User | null): Promise<boolean> => {
   if (!user) return false;
 
-  const tokenResult = await getIdTokenResult(user, true); // Force refresh
+  const tokenResult = await getIdTokenResult(user, true); // Force refresh to get latest claims
   const role = tokenResult.claims.role;
   
   if (role && (role === 'admin' || role === 'instructor')) {
@@ -101,18 +78,17 @@ export const checkIfAdmin = async (user: User | null): Promise<boolean> => {
   }
 
   // Fallback to Firestore check if claims are not set
+  console.log(`No admin role claim found for ${user.email}. Checking Firestore.`);
   const docRef = doc(db, "users", user.uid);
   try {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
       const userData = docSnap.data();
-      // Check for either 'isAdmin: true' or 'userType: "admin"'
       const isAdmin = userData.isAdmin === true || userData.userType === "admin";
        console.log(`User ${user.email} admin status from Firestore: ${isAdmin}`);
       return isAdmin;
     } else {
-      // User document doesn't exist in Firestore.
        console.log(`User ${user.email} document not found in Firestore. Assuming not admin.`);
       return false;
     }

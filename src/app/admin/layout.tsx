@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -17,12 +18,16 @@ export default function AdminLayout({
     const verifyAdmin = async () => {
       const user = await getCurrentUser();
       if (!user) {
-        router.push('/login');
+        // If not logged in, redirect to login page with a 'next' parameter
+        // so they can be redirected back here after logging in.
+        const currentPath = window.location.pathname;
+        router.push(`/login?next=${encodeURIComponent(currentPath)}`);
         return;
       }
       const isAdmin = await checkIfAdmin(user);
       if (!isAdmin) {
-        router.push('/account'); // or a dedicated 'unauthorized' page
+        // If logged in but not an admin, redirect to the main account page.
+        router.push('/account'); 
       } else {
         setIsVerified(true);
       }
