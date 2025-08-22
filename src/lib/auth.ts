@@ -19,7 +19,7 @@ export const signIn = async (email: string, password: string): Promise<boolean> 
 
         // Do NOT check for admin here. Let anyone log in.
         // The session cookie will be created for any authenticated user.
-        const idToken = await user.getIdToken();
+        const idToken = await user.getIdToken(true); // force refresh
         const resp = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

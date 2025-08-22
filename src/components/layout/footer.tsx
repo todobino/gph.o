@@ -28,6 +28,7 @@ export async function Footer() {
                     src="https://i.ytimg.com/vi/lHoOUylvfxQ/hqdefault.jpg" // YouTube thumbnail
                     alt="Featured video thumbnail for Mob Programming"
                     fill // Use fill to cover the container
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -73,7 +74,7 @@ export async function Footer() {
                 <p className="text-sm text-muted-foreground">Follow Me</p>
                 <Button asChild variant="outline">
                   <Link href="https://mastodon.social/@GeePawHill" target="_blank" rel="noopener noreferrer">
-                    <Image src="/mastodon-logo-purple.svg" alt="Mastodon logo" width={20} height={20} className="mr-2" />
+                    <Image src="/mastodon-logo-purple.svg" alt="Mastodon logo" width={20} height={20} className="mr-2" style={{ height: 'auto' }} />
                     Mastodon
                   </Link>
                 </Button>
