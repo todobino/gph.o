@@ -83,9 +83,11 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                         </p>
                         <div className="mt-4 flex flex-wrap gap-2">
                         {post.tags.map((tag) => (
-                            <Badge key={tag} variant="secondary" className="border border-border py-1.5 px-3 rounded-md">
+                          <Link key={tag} href={`/posts?tag=${tag}`}>
+                            <Badge variant="secondary" className="border border-border py-1.5 px-3 rounded-md hover:bg-primary/20 cursor-pointer">
                             {toTitleCase(tag)}
                             </Badge>
+                          </Link>
                         ))}
                         </div>
                     </CardContent>
