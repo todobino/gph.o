@@ -43,7 +43,7 @@ export default function CoachingPage() {
                     </Button>
                 </div>
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight font-heading mb-4">Get in Touch</h2>
+                    <h2 className="text-3xl font-bold tracking-tight font-heading mb-4">Group Coaching Inquiries</h2>
                     <ContactForm />
                 </div>
            </div>
