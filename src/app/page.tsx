@@ -76,45 +76,45 @@ export default async function Home() {
                 <Link href="/posts">See More</Link>
               </Button>
             </div>
-            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-green-100 dark:bg-green-900/30 text-foreground border-2 border-green-600">
+            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-foreground border-2 border-blue-600">
               <div>
-                <div className="bg-green-200 dark:bg-green-800/50 p-4 rounded-full mb-4 inline-block">
-                  <Users className="h-8 w-8 text-green-600 dark:text-green-300" />
+                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
+                  <Users className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Coaching</h3>
                 <p className="text-muted-foreground text-sm mb-6">
                   Practical guidance on pairing, mobbing, and team culture.
                 </p>
               </div>
-              <Button asChild size="sm" className="mt-auto bg-green-600 hover:bg-green-700 text-white">
+              <Button asChild size="sm" className="mt-auto bg-blue-600 hover:bg-blue-700 text-white">
                 <Link href="/coaching">See More</Link>
               </Button>
             </div>
-            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-foreground border-2 border-orange-600">
+            <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-foreground border-2 border-blue-600">
               <div>
-                <div className="bg-orange-200 dark:bg-orange-800/50 p-4 rounded-full mb-4 inline-block">
-                  <BookOpen className="h-8 w-8 text-orange-600 dark:text-orange-300" />
+                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
+                  <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Courses</h3>
                 <p className="text-muted-foreground text-sm mb-6">
                   Structured learning to help your team master essential skills.
                 </p>
               </div>
-              <Button asChild size="sm" className="mt-auto bg-orange-600 hover:bg-orange-700 text-white">
+              <Button asChild size="sm" className="mt-auto bg-blue-600 hover:bg-blue-700 text-white">
                 <Link href="/courses">See More</Link>
               </Button>
             </div>
-             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-foreground border-2 border-purple-600">
+             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-foreground border-2 border-blue-600">
               <div>
-                <div className="bg-purple-200 dark:bg-purple-800/50 p-4 rounded-full mb-4 inline-block">
-                  <Mic className="h-8 w-8 text-purple-600 dark:text-purple-300" />
+                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
+                  <Mic className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Speaking</h3>
                 <p className="text-muted-foreground text-sm mb-6">
                   Engaging keynotes and conference talks on software and teams.
                 </p>
               </div>
-               <Button asChild size="sm" className="mt-auto bg-purple-600 hover:bg-purple-700 text-white">
+               <Button asChild size="sm" className="mt-auto bg-blue-600 hover:bg-blue-700 text-white">
                 <Link href="/speaking">See More</Link>
               </Button>
             </div>
@@ -130,7 +130,7 @@ export default async function Home() {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {recentPosts.map((post) => (
-              <PostCard key={post.slug} post={post} />
+              <PostCard key={post.slug} post={post} className="bg-white" />
             ))}
           </div>
           <div className="text-center mt-12">
@@ -167,7 +167,7 @@ export default async function Home() {
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               {recentVideos.map((post) => (
-                <PostCard key={post.slug} post={post} />
+                <PostCard key={post.slug} post={post} className="bg-white" />
               ))}
             </div>
             <div className="text-center mt-12">
