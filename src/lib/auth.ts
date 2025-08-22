@@ -8,9 +8,9 @@ import {
     getIdTokenResult,
 } from "firebase/auth";
 import { getDoc, doc, setDoc, getFirestore, collection, query, where, getDocs } from "firebase/firestore"; // Added query, where, getDocs
-import { db, app } from "./firestore"; // Ensure db and app are correctly initialized and exported
+import { db, auth, app } from "./firestore"; // Ensure db and app are correctly initialized and exported
 
-const auth = getAuth(app);
+// const auth = getAuth(app); // No longer needed, imported from firestore.ts
 const firestore = getFirestore(app); // Use getFirestore instance from firestore.ts if available, or initialize here
 
 export const signIn = async (email: string, password: string): Promise<boolean> => {
