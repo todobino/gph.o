@@ -25,7 +25,7 @@ export default function SpeakingPage() {
         <div className="grid md:grid-cols-2 gap-12">
             {/* Left Column: Text and Keynotes */}
             <div className="space-y-6">
-                <h1 className="text-4xl font-bold font-heading">Speaking Events & Keynotes</h1>
+                <h1 className="text-4xl font-bold font-heading">Speaking Events</h1>
                 <Card>
                     <CardHeader>
                         <CardTitle className="font-heading">Featured Keynotes</CardTitle>
@@ -50,10 +50,10 @@ export default function SpeakingPage() {
             {/* Right Column: Video and Contact Form */}
             <div className="space-y-8">
                  {/* Video Embed Section */}
-                 <div className="aspect-video sticky top-24">
+                 <div className="aspect-video">
                     <iframe
                         className="w-full h-full rounded-lg shadow-md"
-                        src="https://www.youtube.com/embed/lHoOUylvfxQ"
+                        src="https://www.youtube.com/embed/lNpof6rRB9U?autoplay=1&mute=1&start=325"
                         title="YouTube video player"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
