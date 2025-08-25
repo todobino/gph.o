@@ -62,6 +62,8 @@ const techniqueOfChangeParagraphs = techniqueOfChangeBodyText.split('\n\n');
 const practiceOfChangeParagraphs = practiceOfChangeBodyText.split('\n\n');
 
 export default function LeadingTechnicalChangePage() {
+  const pdfUrl = "https://firebasestorage.googleapis.com/v0/b/gph-o-2ee61.firebasestorage.app/o/appData%2FLTC-Overview.pdf?alt=media&token=f6f256a3-7c57-4b46-b569-093e830bb3ab";
+  
   return (
     <div className="container mx-auto px-4 py-12 space-y-16"> {/* Added space-y */}
       {/* Hero Section */}
@@ -75,10 +77,11 @@ export default function LeadingTechnicalChangePage() {
         <p className="text-lg md:text-xl text-accent-foreground/80 mb-8"> {/* Changed text-muted-foreground to text-accent-foreground/80 */}
           Learn more about the course and download the outline below!
         </p>
-         {/* Placeholder button for downloading outline */}
-         <Button size="lg" disabled> {/* Disabled until functionality is added */}
-             <Download className="mr-2 h-5 w-5" />
-             Download Course Outline (Coming Soon)
+         <Button asChild size="lg">
+            <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
+              <Download className="mr-2 h-5 w-5" />
+              Download Course Outline
+            </Link>
          </Button>
       </div>
 
@@ -95,10 +98,12 @@ export default function LeadingTechnicalChangePage() {
             </p>
           ))}
           {/* Download button again */}
-          <Button size="lg" disabled className="mt-4"> {/* Added margin-top */}
-            <Download className="mr-2 h-5 w-5" />
-            Download Course Outline (Coming Soon)
-          </Button>
+           <Button asChild size="lg" className="mt-4">
+              <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
+                <Download className="mr-2 h-5 w-5" />
+                Download Course Outline
+              </Link>
+           </Button>
         </div>
 
         {/* Right Column: Image */}
@@ -256,7 +261,7 @@ export default function LeadingTechnicalChangePage() {
                  <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary-dark text-primary-dark-foreground">
                     <h3 className="text-2xl font-semibold font-heading">Download the LTC Overview</h3>
                      <Button size="lg" variant="secondary" asChild>
-                         <Link href="https://firebasestorage.googleapis.com/v0/b/gph-o-2ee61.firebasestorage.app/o/appData%2FLTC-Overview.pdf?alt=media&token=f6f256a3-7c57-4b46-b569-093e830bb3ab" target="_blank" rel="noopener noreferrer">
+                         <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
                             <Download className="mr-2 h-5 w-5" />
                             Download the PDF
                          </Link>
