@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState } from 'react';
@@ -59,7 +58,7 @@ export function UpcomingCourses() {
         <CardHeader>
           <CardTitle className="text-2xl font-bold font-heading">Upcoming</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           {upcomingCoursesData.map((course) => {
             const seatsAvailable = course.seatsTotal - course.seatsFilled;
             const isFull = seatsAvailable <= 0;
@@ -67,7 +66,7 @@ export function UpcomingCourses() {
             return (
               <div key={course.id} className="p-4 border rounded-lg space-y-4">
                 {/* Top Row: Title and Action Button */}
-                <div className="flex justify-between items-start">
+                <div className="flex justify-between items-start border-b pb-4">
                   <div>
                     <h3 className="font-semibold text-lg">{course.name} - {course.cohort}</h3>
                   </div>
@@ -83,7 +82,7 @@ export function UpcomingCourses() {
                 </div>
 
                 {/* Bottom Row: Details */}
-                <div className="flex justify-between items-end text-sm">
+                <div className="flex justify-between items-end text-sm pt-2">
                   <div>
                     <p className="text-muted-foreground flex items-center gap-2 mb-2">
                         <Clock className="h-4 w-4"/> {course.time}
