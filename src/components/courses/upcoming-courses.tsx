@@ -55,7 +55,7 @@ export function UpcomingCourses() {
     <>
       <div className="space-y-8">
         <div className="text-center">
-            <h2 className="text-3xl font-bold font-heading">Upcoming Live Courses</h2>
+            <h2 className="text-3xl font-bold font-heading">Upcoming</h2>
         </div>
         <div className="grid gap-6">
           {upcomingCoursesData.map((course) => {
