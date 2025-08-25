@@ -17,7 +17,7 @@ interface CourseStatsProps {
 
 export function CourseStats({ title, description, imageUrl, imageHint, seats, duration, format }: CourseStatsProps) {
     return (
-        <Card>
+        <Card className="shadow-lg">
              <CardHeader className="p-0">
                 <div className="relative aspect-video">
                     <Image
@@ -27,8 +27,8 @@ export function CourseStats({ title, description, imageUrl, imageHint, seats, du
                         className="object-cover rounded-t-lg"
                         data-ai-hint={imageHint}
                     />
-                     <div className="absolute top-4 left-4 bg-blue-100/90 dark:bg-blue-800/90 p-3 rounded-full border-2 border-white/50 backdrop-blur-sm">
-                        <GraduationCap className="h-6 w-6 text-blue-600 dark:text-blue-300" />
+                     <div className="absolute top-4 left-4 bg-primary p-3 rounded-full">
+                        <GraduationCap className="h-6 w-6 text-primary-foreground" />
                     </div>
                 </div>
             </CardHeader>
