@@ -256,6 +256,10 @@ export default function LeadingTechnicalChangePage() {
         <aside className="lg:col-span-1">
           <div className="sticky top-24 space-y-8">
             <CourseStats 
+              title="Leading Technical Change"
+              imageUrl="https://picsum.photos/seed/ltc-sidebar/800/450"
+              imageHint="planning session sticky notes"
+              description="Learn to make change, not just which change to make."
               seats={6}
               duration="4 sessions / 8 hours"
               format="Live, Remote"
