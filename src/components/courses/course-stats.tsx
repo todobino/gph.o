@@ -1,9 +1,11 @@
 
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Clock, Tv, GraduationCap } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Users, Clock, Tv, GraduationCap, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface CourseStatsProps {
     title: string;
@@ -16,6 +18,9 @@ interface CourseStatsProps {
 }
 
 export function CourseStats({ title, description, imageUrl, imageHint, seats, duration, format }: CourseStatsProps) {
+    // This is a placeholder URL. In a real application, you might pass this as a prop.
+    const purchaseUrl = "https://book.stripe.com/4gw7v991obDr1Nu007";
+
     return (
         <Card className="shadow-lg">
              <CardHeader className="p-0">
@@ -54,6 +59,13 @@ export function CourseStats({ title, description, imageUrl, imageHint, seats, du
                     </div>
                 </div>
             </CardContent>
+            <CardFooter className="p-6 pt-0">
+                 <Button asChild className="w-full">
+                    <Link href={purchaseUrl} target="_blank" rel="noopener noreferrer">
+                        Grab a Seat <ArrowRight className="ml-2" />
+                    </Link>
+                </Button>
+            </CardFooter>
         </Card>
     );
 }
