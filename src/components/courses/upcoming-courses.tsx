@@ -15,7 +15,7 @@ const upcomingCoursesData = [
     cohort: "LTC 13",
     seatsTotal: 6,
     seatsFilled: 2,
-    purchaseUrl: "https://buy.stripe.com/some-link",
+    purchaseUrl: "https://book.stripe.com/4gw7v991obDr1Nu007",
     dates: [
       "Monday, Oct 6",
       "Tuesday, Oct 7",
@@ -31,7 +31,7 @@ const upcomingCoursesData = [
     cohort: "LTC 14",
     seatsTotal: 6,
     seatsFilled: 6,
-    purchaseUrl: "https://buy.stripe.com/some-other-link",
+    purchaseUrl: "https://book.stripe.com/4gw7v991obDr1Nu007",
     dates: [
       "Monday, Nov 3",
       "Tuesday, Nov 4",
