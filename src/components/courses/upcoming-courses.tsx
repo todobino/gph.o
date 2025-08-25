@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -58,7 +59,7 @@ export function UpcomingCourses() {
         <div className="text-center">
             <h2 className="text-3xl font-bold font-heading">Upcoming</h2>
         </div>
-        <div className="grid gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {upcomingCoursesData.map((course) => {
             const seatsAvailable = course.seatsTotal - course.seatsFilled;
             const isFull = seatsAvailable <= 0;
