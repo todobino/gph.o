@@ -249,7 +249,7 @@ export default function LeadingTechnicalChangePage() {
         </div>
         
         {/* Right Column: Sidebar */}
-        <aside className="lg:col-span-1 space-y-8 lg:sticky lg:top-24 h-fit">
+        <aside className="lg:col-span-1 space-y-8 h-fit">
             <CourseStats 
               seats={6}
               duration="4 sessions / 8 hours"
