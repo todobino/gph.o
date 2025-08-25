@@ -254,7 +254,6 @@ export default function LeadingTechnicalChangePage() {
               seats={6}
               duration="4 sessions / 8 hours"
               format="Live, Remote"
-              nextCohort="October 6th"
             />
             <UpcomingCourses />
         </aside>

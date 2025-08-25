@@ -8,14 +8,13 @@ interface CourseStatsProps {
     seats: number;
     duration: string;
     format: string;
-    nextCohort: string;
 }
 
-export function CourseStats({ seats, duration, format, nextCohort }: CourseStatsProps) {
+export function CourseStats({ seats, duration, format }: CourseStatsProps) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="font-heading">Course Stats</CardTitle>
+                <CardTitle className="font-heading">Course Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm">
                 <div className="flex items-center gap-3 text-muted-foreground">
@@ -29,10 +28,6 @@ export function CourseStats({ seats, duration, format, nextCohort }: CourseStats
                  <div className="flex items-center gap-3 text-muted-foreground">
                     <Tv className="h-5 w-5 text-primary" />
                     <span><span className="font-semibold text-foreground">{format}</span> format</span>
-                </div>
-                 <div className="flex items-center gap-3 text-muted-foreground">
-                    <Calendar className="h-5 w-5 text-primary" />
-                    <span>Next cohort: <span className="font-semibold text-foreground">{nextCohort}</span></span>
                 </div>
             </CardContent>
         </Card>
