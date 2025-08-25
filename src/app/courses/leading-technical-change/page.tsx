@@ -70,12 +70,6 @@ export default function LeadingTechnicalChangePage() {
   
   return (
     <div className="container mx-auto px-4 py-12 space-y-12">
-      {/* Page Header */}
-      <CourseHeader 
-        title="Leading Technical Change"
-        description="A course designed to focus on how to make change, not which change to make."
-      />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-12">
         {/* Left Column: Main Content */}
         <div className="lg:col-span-2 space-y-16">
