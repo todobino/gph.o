@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Download, UserPlus } from 'lucide-react'; // Added UserPlus
 import Image from 'next/image'; // Import Image component
 import Link from 'next/link'; // Import Link for the button
+import { UpcomingCourses } from '@/components/courses/upcoming-courses';
 
 const ltcBodyText = `How can we help our software teams get stronger? Faster? Smarter? Happier? More positive and more productive?
 
@@ -66,24 +67,8 @@ export default function LeadingTechnicalChangePage() {
   
   return (
     <div className="container mx-auto px-4 py-12 space-y-16"> {/* Added space-y */}
-      {/* Hero Section */}
-      <div className="bg-accent text-accent-foreground p-8 md:p-12 rounded-lg shadow-sm text-center"> {/* Changed bg-secondary to bg-accent and added text-accent-foreground */}
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 font-heading">
-          Leading Technical Change
-        </h1>
-        <p className="text-lg md:text-xl text-accent-foreground/80 mb-4"> {/* Changed text-muted-foreground to text-accent-foreground/80 */}
-          No upcoming LTC classes at this time. Be on the lookout for announcements of the next live cohort.
-        </p>
-        <p className="text-lg md:text-xl text-accent-foreground/80 mb-8"> {/* Changed text-muted-foreground to text-accent-foreground/80 */}
-          Learn more about the course and download the outline below!
-        </p>
-         <Button asChild size="lg">
-            <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
-              <Download className="mr-2 h-5 w-5" />
-              Download Course Outline
-            </Link>
-         </Button>
-      </div>
+      {/* Upcoming Courses Section */}
+      <UpcomingCourses />
 
       {/* Section 1: What is LTC? */}
       <section className="flex flex-col md:flex-row gap-12 items-start">
