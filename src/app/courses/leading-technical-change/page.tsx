@@ -67,6 +67,14 @@ export default function LeadingTechnicalChangePage() {
   
   return (
     <div className="container mx-auto px-4 py-12 space-y-16"> {/* Added space-y */}
+      {/* Page Header */}
+      <div className="text-center">
+        <h1 className="text-4xl font-bold tracking-tight font-heading">Leading Technical Change</h1>
+        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+          A course designed to focus on how to make change, not which change to make.
+        </p>
+      </div>
+      
       {/* Upcoming Courses Section */}
       <UpcomingCourses />
 
