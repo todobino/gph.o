@@ -2,10 +2,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WaitlistDialog } from "./waitlist-dialog";
+import { CalendarDays } from 'lucide-react';
 
 const upcomingCoursesData = [
   {
@@ -63,39 +64,40 @@ export function UpcomingCourses() {
             const isFull = seatsAvailable <= 0;
 
             return (
-              <Card key={course.id} className="shadow-lg border-2 border-primary/20">
+              <Card key={course.id} className="shadow-md border-primary/20 flex flex-col">
                 <CardHeader>
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                    <div>
-                      <CardTitle className="text-2xl font-bold font-heading">{course.name} - {course.cohort}</CardTitle>
-                      <CardDescription>{course.time}</CardDescription>
-                    </div>
-                    <div className="flex items-center gap-4">
+                  <CardTitle className="text-xl font-bold font-heading">{course.name} - {course.cohort}</CardTitle>
+                  <CardDescription>{course.time}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 flex-grow">
+                   <div>
                       {isFull ? (
                         <Badge variant="destructive" className="text-sm">Full</Badge>
                       ) : (
                         <Badge variant="secondary" className="text-sm">{seatsAvailable} of {course.seatsTotal} seats open</Badge>
                       )}
-                      {isFull ? (
-                        <Button onClick={() => handleWaitlistClick(course.id)}>Join Waitlist</Button>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold mb-2 flex items-center gap-2 text-muted-foreground">
+                        <CalendarDays className="h-4 w-4" />
+                        Course Dates
+                      </h4>
+                      <ul className="space-y-1 text-sm text-foreground/90 pl-6">
+                          {course.dates.map((date) => (
+                              <li key={date} className="list-disc list-outside">{date}</li>
+                          ))}
+                      </ul>
+                    </div>
+                </CardContent>
+                <CardFooter>
+                   {isFull ? (
+                        <Button onClick={() => handleWaitlistClick(course.id)} className="w-full">Join Waitlist</Button>
                       ) : (
-                        <Button asChild>
+                        <Button asChild className="w-full">
                           <a href={course.purchaseUrl} target="_blank" rel="noopener noreferrer">Buy a Seat</a>
                         </Button>
                       )}
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center">
-                    {course.dates.map((date) => (
-                      <li key={date} className="bg-accent text-accent-foreground p-3 rounded-md">
-                        <p className="font-semibold">{date.split(',')[0]}</p>
-                        <p className="text-sm">{date.split(',').slice(1).join(',').trim()}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
+                </CardFooter>
               </Card>
             );
           })}
