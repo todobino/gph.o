@@ -1,11 +1,13 @@
 
 
 import { Button } from '@/components/ui/button';
-import { Download, UserPlus } from 'lucide-react'; // Added UserPlus
-import Image from 'next/image'; // Import Image component
-import Link from 'next/link'; // Import Link for the button
+import { Download, UserPlus } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { UpcomingCourses } from '@/components/courses/upcoming-courses';
 import { CourseHeader } from '@/components/courses/course-header';
+import { CourseStats } from '@/components/courses/course-stats';
+
 
 const ltcBodyText = `How can we help our software teams get stronger? Faster? Smarter? Happier? More positive and more productive?
 
@@ -67,209 +69,196 @@ export default function LeadingTechnicalChangePage() {
   const pdfUrl = "https://firebasestorage.googleapis.com/v0/b/gph-o-2ee61.firebasestorage.app/o/appData%2FLTC-Overview.pdf?alt=media&token=f6f256a3-7c57-4b46-b569-093e830bb3ab";
   
   return (
-    <div className="container mx-auto px-4 py-12 space-y-16"> {/* Added space-y */}
+    <div className="container mx-auto px-4 py-12 space-y-12">
       {/* Page Header */}
       <CourseHeader 
         title="Leading Technical Change"
         description="A course designed to focus on how to make change, not which change to make."
-        seats={6}
-        duration="4 sessions over 1 week"
-        nextCohort="October 6th"
       />
-      
-      {/* Upcoming Courses Section */}
-      <UpcomingCourses />
 
-      <div className="text-center pt-8">
-        <h2 className="text-3xl font-bold font-heading tracking-tight">About the Course</h2>
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-12">
+        {/* Left Column: Main Content */}
+        <div className="lg:col-span-2 space-y-16">
+            {/* Section 1: What is LTC? */}
+            <section className="flex flex-col md:flex-row gap-12 items-start">
+              <div className="w-full md:w-1/2 space-y-6">
+                <h2 className="text-3xl font-semibold mb-4 font-heading">
+                  What is LTC? - “Better.”
+                </h2>
+                {ltcParagraphs.map((paragraph, index) => (
+                  <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                    {paragraph}
+                  </p>
+                ))}
+                 <Button asChild size="lg" className="mt-4">
+                    <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
+                      <Download className="mr-2 h-5 w-5" />
+                      Download Course Outline
+                    </Link>
+                 </Button>
+              </div>
+              <div className="w-full md:w-1/2">
+                 <Image
+                     src="https://picsum.photos/seed/ltc-what/800/450"
+                     alt="Team collaboration diagram"
+                     width={800}
+                     height={450}
+                     className="rounded-lg shadow-md object-cover w-full h-auto"
+                     data-ai-hint="team collaboration diagram"
+                 />
+              </div>
+            </section>
 
-      {/* Section 1: What is LTC? */}
-      <section className="flex flex-col md:flex-row gap-12 items-start">
-        {/* Left Column: Text Content */}
-        <div className="w-full md:w-1/2 space-y-6">
-          <h2 className="text-3xl font-semibold mb-4 font-heading">
-            What is LTC? - “Better.”
-          </h2>
-          {ltcParagraphs.map((paragraph, index) => (
-            <p key={index} className="text-lg text-foreground/80 leading-relaxed">
-              {paragraph}
-            </p>
-          ))}
-          {/* Download button again */}
-           <Button asChild size="lg" className="mt-4">
-              <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
-                <Download className="mr-2 h-5 w-5" />
-                Download Course Outline
-              </Link>
-           </Button>
-        </div>
+             {/* Section 2: The Course Leader */}
+             <section className="flex flex-col md:flex-row-reverse gap-12 items-start">
+               <div className="w-full md:w-1/2 space-y-6">
+                 <h2 className="text-3xl font-semibold mb-4 font-heading">
+                   The Course Leader
+                 </h2>
+                 {courseLeaderParagraphs.map((paragraph, index) => (
+                   <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                     {paragraph}
+                   </p>
+                 ))}
+               </div>
+               <div className="w-full md:w-1/2">
+                  <Image
+                      src="https://picsum.photos/seed/ltc-leader/800/450"
+                      alt="Speaker giving a presentation"
+                      width={800}
+                      height={450}
+                      className="rounded-lg shadow-md object-cover w-full h-auto"
+                      data-ai-hint="speaker teaching presentation"
+                  />
+               </div>
+             </section>
 
-        {/* Right Column: Image */}
-        <div className="w-full md:w-1/2">
-           <Image
-               src="https://placehold.co/800x450.png" // 16:9 aspect ratio
-               alt="Placeholder image representing technical change concepts"
-               width={800}
-               height={450}
-               className="rounded-lg shadow-md object-cover w-full h-auto"
-               data-ai-hint="team collaboration diagram"
-           />
-        </div>
-      </section>
-
-       {/* Section 2: The Course Leader */}
-       <section className="flex flex-col md:flex-row-reverse gap-12 items-start"> {/* Reversed order for image on left */}
-         {/* Right Column: Text Content */}
-         <div className="w-full md:w-1/2 space-y-6">
-           <h2 className="text-3xl font-semibold mb-4 font-heading">
-             The Course Leader
-           </h2>
-           {courseLeaderParagraphs.map((paragraph, index) => (
-             <p key={index} className="text-lg text-foreground/80 leading-relaxed">
-               {paragraph}
-             </p>
-           ))}
-         </div>
-
-         {/* Left Column: Image */}
-         <div className="w-full md:w-1/2">
-            <Image
-                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
-                alt="Placeholder image representing the course leader or teaching"
-                width={800}
-                height={450}
-                className="rounded-lg shadow-md object-cover w-full h-auto"
-                data-ai-hint="speaker teaching presentation"
-            />
-         </div>
-       </section>
-
-       {/* Section 3: Theory of Change */}
-        <section className="flex flex-col md:flex-row gap-12 items-start">
-          {/* Left Column: Text Content */}
-          <div className="w-full md:w-1/2 space-y-6">
-            <h2 className="text-3xl font-semibold mb-4 font-heading">
-              Theory of Change
-            </h2>
-            {theoryOfChangeParagraphs.map((paragraph, index) => (
-              <p key={index} className="text-lg text-foreground/80 leading-relaxed">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-
-          {/* Right Column: Two Images */}
-          <div className="w-full md:w-1/2 space-y-4">
-            <Image
-                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
-                alt="Placeholder image related to cognitive frames or change strategies"
-                width={800}
-                height={450}
-                className="rounded-lg shadow-md object-cover w-full h-auto"
-                data-ai-hint="abstract mind diagram"
-            />
-            <Image
-                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
-                alt="Another placeholder image related to change management concepts"
-                width={800}
-                height={450}
-                className="rounded-lg shadow-md object-cover w-full h-auto"
-                data-ai-hint="steps progress illustration"
-            />
-          </div>
-        </section>
-
-        {/* Section 4: Technique of Change */}
-        <section className="flex flex-col md:flex-row-reverse gap-12 items-start"> {/* Reversed order */}
-          {/* Right Column: Text Content */}
-          <div className="w-full md:w-1/2 space-y-6">
-            <h2 className="text-3xl font-semibold mb-4 font-heading">
-              Technique of Change
-            </h2>
-            {techniqueOfChangeParagraphs.map((paragraph, index) => (
-              <p key={index} className="text-lg text-foreground/80 leading-relaxed">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-            {/* Left Column: Image (Portrait) */}
-          <div className="w-full md:w-1/2">
-             <Image
-                 src="https://placehold.co/450x600.png" // Portrait aspect ratio
-                 alt="Placeholder image representing technique or practice"
-                 width={450}
-                 height={600}
-                 className="rounded-lg shadow-md object-cover w-full h-auto max-w-md mx-auto" // Center image on smaller screens if needed
-                 data-ai-hint="hands writing code"
-             />
-          </div>
-        </section>
-
-        {/* Section 5: Practice of Change */}
-        <section className="flex flex-col md:flex-row gap-12 items-start">
-          {/* Left Column: Text Content */}
-          <div className="w-full md:w-1/2 space-y-6">
-            <h2 className="text-3xl font-semibold mb-4 font-heading">
-              Practice of Change
-            </h2>
-            {practiceOfChangeParagraphs.map((paragraph, index) => (
-              <p key={index} className="text-lg text-foreground/80 leading-relaxed">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-
-          {/* Right Column: Two Images */}
-          <div className="w-full md:w-1/2 space-y-4">
-            <Image
-                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
-                alt="Placeholder image representing practice or group interaction"
-                width={800}
-                height={450}
-                className="rounded-lg shadow-md object-cover w-full h-auto"
-                data-ai-hint="team discussion whiteboard"
-            />
-             <Image
-                src="https://placehold.co/800x450.png" // 16:9 aspect ratio
-                alt="Another placeholder image related to applying learning"
-                width={800}
-                height={450}
-                className="rounded-lg shadow-md object-cover w-full h-auto"
-                data-ai-hint="person writing notes"
-            />
-          </div>
-        </section>
-
-         {/* New CTA Section */}
-         <section className="p-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                {/* CTA 1: Join Cohort */}
-                <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary text-primary-foreground">
-                    <h3 className="text-2xl font-semibold font-heading">Join the Next LTC Cohort</h3>
-                    <Button size="lg" variant="secondary" asChild>
-                      <Link href="https://book.stripe.com/4gw7v991obDr1Nu007" target="_blank" rel="noopener noreferrer">
-                        <UserPlus className="mr-2 h-5 w-5" />
-                        Get Your Seat
-                      </Link>
-                    </Button>
-                     <p className="text-xs text-primary-foreground/80">Be the first to know when the next cohort opens.</p>
+             {/* Section 3: Theory of Change */}
+              <section className="flex flex-col md:flex-row gap-12 items-start">
+                <div className="w-full md:w-1/2 space-y-6">
+                  <h2 className="text-3xl font-semibold mb-4 font-heading">
+                    Theory of Change
+                  </h2>
+                  {theoryOfChangeParagraphs.map((paragraph, index) => (
+                    <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                      {paragraph}
+                    </p>
+                  ))}
                 </div>
+                <div className="w-full md:w-1/2 space-y-4">
+                  <Image
+                      src="https://picsum.photos/seed/ltc-theory1/800/450"
+                      alt="Abstract mind diagram"
+                      width={800}
+                      height={450}
+                      className="rounded-lg shadow-md object-cover w-full h-auto"
+                      data-ai-hint="abstract mind diagram"
+                  />
+                  <Image
+                      src="https://picsum.photos/seed/ltc-theory2/800/450"
+                      alt="Steps progress illustration"
+                      width={800}
+                      height={450}
+                      className="rounded-lg shadow-md object-cover w-full h-auto"
+                      data-ai-hint="steps progress illustration"
+                  />
+                </div>
+              </section>
 
-                 {/* CTA 2: Download Overview */}
-                 <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary-dark text-primary-dark-foreground">
-                    <h3 className="text-2xl font-semibold font-heading">Download the LTC Overview</h3>
-                     <Button size="lg" variant="secondary" asChild>
-                         <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
-                            <Download className="mr-2 h-5 w-5" />
-                            Download the PDF
-                         </Link>
-                     </Button>
-                     <p className="text-xs text-primary-dark-foreground/80">Get the detailed course outline.</p>
-                 </div>
-            </div>
-         </section>
+              {/* Section 4: Technique of Change */}
+              <section className="flex flex-col md:flex-row-reverse gap-12 items-start">
+                <div className="w-full md:w-1/2 space-y-6">
+                  <h2 className="text-3xl font-semibold mb-4 font-heading">
+                    Technique of Change
+                  </h2>
+                  {techniqueOfChangeParagraphs.map((paragraph, index) => (
+                    <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+                <div className="w-full md:w-1/2">
+                   <Image
+                       src="https://picsum.photos/seed/ltc-technique/450/600"
+                       alt="Hands writing code on a laptop"
+                       width={450}
+                       height={600}
+                       className="rounded-lg shadow-md object-cover w-full h-auto max-w-md mx-auto"
+                       data-ai-hint="hands writing code"
+                   />
+                </div>
+              </section>
 
+              {/* Section 5: Practice of Change */}
+              <section className="flex flex-col md:flex-row gap-12 items-start">
+                <div className="w-full md:w-1/2 space-y-6">
+                  <h2 className="text-3xl font-semibold mb-4 font-heading">
+                    Practice of Change
+                  </h2>
+                  {practiceOfChangeParagraphs.map((paragraph, index) => (
+                    <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+                <div className="w-full md:w-1/2 space-y-4">
+                  <Image
+                      src="https://picsum.photos/seed/ltc-practice1/800/450"
+                      alt="Team discussion at a whiteboard"
+                      width={800}
+                      height={450}
+                      className="rounded-lg shadow-md object-cover w-full h-auto"
+                      data-ai-hint="team discussion whiteboard"
+                  />
+                   <Image
+                      src="https://picsum.photos/seed/ltc-practice2/800/450"
+                      alt="Person writing notes in a notebook"
+                      width={800}
+                      height={450}
+                      className="rounded-lg shadow-md object-cover w-full h-auto"
+                      data-ai-hint="person writing notes"
+                  />
+                </div>
+              </section>
+
+               {/* CTA Section */}
+               <section className="p-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                      <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary text-primary-foreground">
+                          <h3 className="text-2xl font-semibold font-heading">Join the Next LTC Cohort</h3>
+                          <Button size="lg" variant="secondary" asChild>
+                            <Link href="https://book.stripe.com/4gw7v991obDr1Nu007" target="_blank" rel="noopener noreferrer">
+                              <UserPlus className="mr-2 h-5 w-5" />
+                              Get Your Seat
+                            </Link>
+                          </Button>
+                           <p className="text-xs text-primary-foreground/80">Be the first to know when the next cohort opens.</p>
+                      </div>
+                       <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary-dark text-primary-dark-foreground">
+                          <h3 className="text-2xl font-semibold font-heading">Download the LTC Overview</h3>
+                           <Button size="lg" variant="secondary" asChild>
+                               <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
+                                  <Download className="mr-2 h-5 w-5" />
+                                  Download the PDF
+                               </Link>
+                           </Button>
+                           <p className="text-xs text-primary-dark-foreground/80">Get the detailed course outline.</p>
+                       </div>
+                  </div>
+               </section>
+        </div>
+        
+        {/* Right Column: Sidebar */}
+        <aside className="lg:col-span-1 space-y-8 lg:sticky lg:top-24 h-fit">
+            <CourseStats 
+              seats={6}
+              duration="4 sessions / 8 hours"
+              format="Live, Remote"
+              nextCohort="October 6th"
+            />
+            <UpcomingCourses />
+        </aside>
+      </div>
     </div>
   );
 }
