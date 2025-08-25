@@ -80,6 +80,11 @@ export default function LeadingTechnicalChangePage() {
       {/* Upcoming Courses Section */}
       <UpcomingCourses />
 
+      <div className="text-center pt-8">
+        <h2 className="text-3xl font-bold font-heading tracking-tight">About the Course</h2>
+        <p className="mt-2 text-lg text-muted-foreground">A deep dive into the principles and practices of leading change.</p>
+      </div>
+
       {/* Section 1: What is LTC? */}
       <section className="flex flex-col md:flex-row gap-12 items-start">
         {/* Left Column: Text Content */}
