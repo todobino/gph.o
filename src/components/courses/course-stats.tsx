@@ -27,13 +27,13 @@ export function CourseStats({ title, description, imageUrl, imageHint, seats, du
                         className="object-cover rounded-t-lg"
                         data-ai-hint={imageHint}
                     />
+                     <div className="absolute top-4 left-4 bg-blue-100/90 dark:bg-blue-800/90 p-3 rounded-full border-2 border-white/50 backdrop-blur-sm">
+                        <GraduationCap className="h-6 w-6 text-blue-600 dark:text-blue-300" />
+                    </div>
                 </div>
             </CardHeader>
             <CardContent className="p-6 space-y-4">
                 <div className="flex items-start gap-4">
-                    <div className="bg-blue-100 dark:bg-blue-800/50 p-3 rounded-full">
-                        <GraduationCap className="h-6 w-6 text-blue-600 dark:text-blue-300" />
-                    </div>
                     <div className="flex-1">
                         <CardTitle className="font-heading text-xl">{title}</CardTitle>
                     </div>
