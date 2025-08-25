@@ -76,12 +76,13 @@ export default function LeadingTechnicalChangePage() {
         description="A course designed to focus on how to make change, not which change to make."
       />
 
-      {/* Upcoming Courses Section */}
-      <UpcomingCourses />
-
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-12">
         {/* Left Column: Main Content */}
         <div className="lg:col-span-2 space-y-16">
+            
+            {/* Upcoming Courses Section */}
+            <UpcomingCourses />
+
             {/* Section 1: What is LTC? */}
             <section className="flex flex-col md:flex-row gap-12 items-start">
               <div className="w-full md:w-1/2 space-y-6">
@@ -252,8 +253,8 @@ export default function LeadingTechnicalChangePage() {
         </div>
         
         {/* Right Column: Sidebar */}
-        <aside className="lg:col-span-1 space-y-8 h-fit">
-          <div className="sticky top-24">
+        <aside className="lg:col-span-1">
+          <div className="sticky top-24 space-y-8">
             <CourseStats 
               seats={6}
               duration="4 sessions / 8 hours"
