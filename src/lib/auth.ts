@@ -69,32 +69,27 @@ export const getCurrentUser = (): Promise<User | null> => {
 export const checkIfAdmin = async (user: User | null): Promise<boolean> => {
   if (!user) return false;
 
-  const tokenResult = await getIdTokenResult(user, true); // Force refresh to get latest claims
+  // 1. Check custom claims first for efficiency
+  const tokenResult = await getIdTokenResult(user, true); // Force refresh
   const role = tokenResult.claims.role;
-  
-  if (role && (role === 'admin' || role === 'instructor')) {
-    console.log(`User ${user.email} has role '${role}' from custom claims.`);
+
+  if (role === 'admin' || role === 'instructor') {
     return true;
   }
 
-  // Fallback to Firestore check if claims are not set
-  console.log(`No admin role claim found for ${user.email}. Checking Firestore.`);
+  // 2. Fallback to Firestore check
   const docRef = doc(db, "users", user.uid);
   try {
     const docSnap = await getDoc(docRef);
-
     if (docSnap.exists()) {
       const userData = docSnap.data();
-      const isAdmin = userData.isAdmin === true || userData.userType === "admin";
-       console.log(`User ${user.email} admin status from Firestore: ${isAdmin}`);
-      return isAdmin;
-    } else {
-       console.log(`User ${user.email} document not found in Firestore. Assuming not admin.`);
-      return false;
+      // Check for either a boolean `isAdmin` or a `userType` string
+      return userData.isAdmin === true || userData.userType === 'admin';
     }
+    return false; // User document doesn't exist
   } catch (error) {
-    console.error(`Error checking admin status for ${user.email}:`, error);
-    return false; // Default to false on error
+    console.error("Error checking admin status in Firestore:", error);
+    return false; // Default to not admin on error
   }
 };
 
