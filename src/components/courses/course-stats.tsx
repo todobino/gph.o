@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Clock, Tv } from 'lucide-react';
+import { Users, Clock, Tv, GraduationCap } from 'lucide-react';
 import Image from 'next/image';
 
 interface CourseStatsProps {
@@ -30,7 +30,14 @@ export function CourseStats({ title, description, imageUrl, imageHint, seats, du
                 </div>
             </CardHeader>
             <CardContent className="p-6 space-y-4">
-                <CardTitle className="font-heading text-xl">{title}</CardTitle>
+                <div className="flex items-start gap-4">
+                    <div className="bg-blue-100 dark:bg-blue-800/50 p-3 rounded-full">
+                        <GraduationCap className="h-6 w-6 text-blue-600 dark:text-blue-300" />
+                    </div>
+                    <div className="flex-1">
+                        <CardTitle className="font-heading text-xl">{title}</CardTitle>
+                    </div>
+                </div>
                 <CardDescription className="text-sm">{description}</CardDescription>
                 <div className="space-y-3 text-sm pt-2">
                     <div className="flex items-center gap-3 text-muted-foreground">
