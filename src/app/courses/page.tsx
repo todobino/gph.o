@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { UpcomingCourses } from "@/components/courses/upcoming-courses";
 
 // In a real app, this data would likely come from a CMS or a database
 const courses = [
@@ -27,49 +28,54 @@ export default function CoursesPage() {
         </p>
       </div>
 
-      {courses.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course) => (
-            <Card key={course.title} className="flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-xl">
-              <CardHeader className="p-0">
-                <Link href={course.href} className="block group">
-                  <div className="relative aspect-video">
-                    <Image
-                      src={course.imageUrl}
-                      alt={`Image for ${course.title}`}
-                      fill
-                      className="object-cover transition-transform duration-200 group-hover:scale-105"
-                      data-ai-hint={course.imageHint}
-                    />
-                  </div>
-                </Link>
-              </CardHeader>
-              <CardContent className="p-6 flex-grow">
-                <CardTitle className="mb-2">
-                  <Link href={course.href} className="hover:text-primary">
-                    {course.title}
+      <UpcomingCourses />
+
+      <div className="mt-16">
+        <h2 className="text-3xl font-bold text-center mb-12 font-heading">Self-Paced Learning</h2>
+        {courses.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {courses.map((course) => (
+              <Card key={course.title} className="flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-xl">
+                <CardHeader className="p-0">
+                  <Link href={course.href} className="block group">
+                    <div className="relative aspect-video">
+                      <Image
+                        src={course.imageUrl}
+                        alt={`Image for ${course.title}`}
+                        fill
+                        className="object-cover transition-transform duration-200 group-hover:scale-105"
+                        data-ai-hint={course.imageHint}
+                      />
+                    </div>
                   </Link>
-                </CardTitle>
-                <CardDescription>{course.description}</CardDescription>
-              </CardContent>
-              <CardFooter className="p-6 pt-0">
-                <Button asChild className="w-full">
-                  <Link href={course.href}>
-                    View Course <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16 border-dashed border-2 rounded-lg">
-          <h2 className="text-2xl font-semibold font-heading">More Courses Coming Soon</h2>
-          <p className="mt-2 text-muted-foreground">
-            We're busy developing new content. Check back later for more courses!
-          </p>
-        </div>
-      )}
+                </CardHeader>
+                <CardContent className="p-6 flex-grow">
+                  <CardTitle className="mb-2">
+                    <Link href={course.href} className="hover:text-primary">
+                      {course.title}
+                    </Link>
+                  </CardTitle>
+                  <CardDescription>{course.description}</CardDescription>
+                </CardContent>
+                <CardFooter className="p-6 pt-0">
+                  <Button asChild className="w-full">
+                    <Link href={course.href}>
+                      View Course Details <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 border-dashed border-2 rounded-lg">
+            <h2 className="text-2xl font-semibold font-heading">More Courses Coming Soon</h2>
+            <p className="mt-2 text-muted-foreground">
+              We're busy developing new content. Check back later for more courses!
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
