@@ -5,6 +5,7 @@ import { Download, UserPlus } from 'lucide-react'; // Added UserPlus
 import Image from 'next/image'; // Import Image component
 import Link from 'next/link'; // Import Link for the button
 import { UpcomingCourses } from '@/components/courses/upcoming-courses';
+import { CourseHeader } from '@/components/courses/course-header';
 
 const ltcBodyText = `How can we help our software teams get stronger? Faster? Smarter? Happier? More positive and more productive?
 
@@ -68,12 +69,13 @@ export default function LeadingTechnicalChangePage() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-16"> {/* Added space-y */}
       {/* Page Header */}
-      <div className="text-center">
-        <h1 className="text-4xl font-bold tracking-tight font-heading">Leading Technical Change</h1>
-        <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-          A course designed to focus on how to make change, not which change to make.
-        </p>
-      </div>
+      <CourseHeader 
+        title="Leading Technical Change"
+        description="A course designed to focus on how to make change, not which change to make."
+        seats={6}
+        duration="4 sessions over 1 week"
+        nextCohort="October 6th"
+      />
       
       {/* Upcoming Courses Section */}
       <UpcomingCourses />
