@@ -56,7 +56,6 @@ export function UpcomingCourses() {
       <div className="space-y-8">
         <div className="text-center">
             <h2 className="text-3xl font-bold font-heading">Upcoming Live Courses</h2>
-            <p className="text-muted-foreground mt-2">Join a live cohort to learn and interact directly.</p>
         </div>
         <div className="grid gap-6">
           {upcomingCoursesData.map((course) => {
