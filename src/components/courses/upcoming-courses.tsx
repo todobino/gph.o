@@ -69,6 +69,14 @@ export function UpcomingCourses() {
                 <div className="flex justify-between items-start border-b pb-4">
                   <div>
                     <h3 className="font-semibold text-lg">{course.name} - {course.cohort}</h3>
+                     <div className="text-sm text-muted-foreground flex items-center gap-2 mt-2">
+                      <Users className="h-4 w-4"/> 
+                      {isFull ? (
+                        <Badge variant="destructive">Full</Badge>
+                      ) : (
+                        <Badge variant="secondary">{seatsAvailable} of {course.seatsTotal} seats open</Badge>
+                      )}
+                    </div>
                   </div>
                   <div>
                     {isFull ? (
@@ -81,31 +89,18 @@ export function UpcomingCourses() {
                   </div>
                 </div>
 
-                {/* Bottom Row: Details */}
-                <div className="flex justify-between items-end text-sm pt-2">
-                  <div>
-                    <p className="text-muted-foreground flex items-center gap-2 mb-2">
-                        <Clock className="h-4 w-4"/> {course.time}
-                    </p>
-                    <ul className="space-y-1">
-                      {course.dates.map((date) => (
-                        <li key={date} className="flex items-center gap-2">
-                          <CalendarDays className="h-4 w-4 text-muted-foreground"/>
-                          <span>{date}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-muted-foreground flex items-center justify-end gap-2">
-                      <Users className="h-4 w-4"/> 
-                      {isFull ? (
-                        <Badge variant="destructive" className="text-sm">Full</Badge>
-                      ) : (
-                        <Badge variant="secondary" className="text-sm">{seatsAvailable} of {course.seatsTotal} seats open</Badge>
-                      )}
-                    </div>
-                  </div>
+                {/* Bottom Row: Dates as Tiles */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pt-2">
+                    {course.dates.map((date) => (
+                        <div key={date} className="flex flex-col items-center justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-center">
+                            <span className="font-semibold text-sm">{date.split(',')[0]},</span>
+                            <span className="font-semibold text-sm">{date.split(',')[1]}</span>
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                                <Clock className="h-3 w-3" />
+                                <span>{course.time}</span>
+                            </div>
+                        </div>
+                    ))}
                 </div>
               </div>
             );
