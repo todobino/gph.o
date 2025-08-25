@@ -5,7 +5,6 @@ import { Download, UserPlus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { UpcomingCourses } from '@/components/courses/upcoming-courses';
-import { CourseHeader } from '@/components/courses/course-header';
 import { CourseStats } from '@/components/courses/course-stats';
 
 
@@ -71,7 +70,22 @@ export default function LeadingTechnicalChangePage() {
   return (
     <div className="container mx-auto px-4 py-12 space-y-12">
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-12">
-        {/* Left Column: Main Content */}
+        {/* Left Column: Sidebar */}
+        <aside className="lg:col-span-1">
+          <div className="sticky top-24 space-y-8">
+            <CourseStats 
+              title="Leading Technical Change"
+              imageUrl="https://picsum.photos/seed/ltc-sidebar/800/450"
+              imageHint="planning session sticky notes"
+              description="Learn to make change, not just which change to make."
+              seats={6}
+              duration="4 sessions / 8 hours"
+              format="Live, Remote"
+            />
+          </div>
+        </aside>
+
+        {/* Right Column: Main Content */}
         <div className="lg:col-span-2 space-y-16">
             
             {/* Upcoming Courses Section */}
@@ -246,20 +260,6 @@ export default function LeadingTechnicalChangePage() {
                </section>
         </div>
         
-        {/* Right Column: Sidebar */}
-        <aside className="lg:col-span-1">
-          <div className="sticky top-24 space-y-8">
-            <CourseStats 
-              title="Leading Technical Change"
-              imageUrl="https://picsum.photos/seed/ltc-sidebar/800/450"
-              imageHint="planning session sticky notes"
-              description="Learn to make change, not just which change to make."
-              seats={6}
-              duration="4 sessions / 8 hours"
-              format="Live, Remote"
-            />
-          </div>
-        </aside>
       </div>
     </div>
   );
