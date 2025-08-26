@@ -54,10 +54,14 @@ export function UpcomingCourses() {
   return (
     <>
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold font-heading flex items-center gap-2">
-          <Calendar className="h-6 w-6" />
-          Upcoming Classes
-        </h2>
+        <div className="flex items-center gap-3">
+            <div className="flex-shrink-0 bg-accent text-primary rounded-full p-2">
+                <Calendar className="h-6 w-6" />
+            </div>
+            <h2 className="text-2xl font-bold font-heading">
+            Upcoming Classes
+            </h2>
+        </div>
         <div className="space-y-6">
           {upcomingCoursesData.map((course) => {
             const seatsAvailable = course.seatsTotal - course.seatsFilled;
