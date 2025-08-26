@@ -20,8 +20,7 @@ import type { Post } from '@/services/posts';
 import { getPosts } from '@/services/posts';
 import { ScrollArea } from '../ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { getCurrentUser } from '@/lib/auth';
-import type { User } from 'firebase/auth';
+import { useUser } from '@/hooks/useUser';
 import { HeaderMenuButton } from '../ui/header-menu-button';
 import { Button, buttonVariants } from '../ui/button';
 import { useRouter } from 'next/navigation';
@@ -42,6 +41,7 @@ interface DropdownItem {
 
 export function Header() {
   const router = useRouter();
+  const user = useUser();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -177,9 +177,8 @@ export function Header() {
      return <FileText className="h-4 w-4 text-muted-foreground" />;
    }
 
-   const handleAccountClick = async (event: React.MouseEvent) => {
+   const handleAccountClick = (event: React.MouseEvent) => {
      event.preventDefault(); // Prevent default link behavior
-     const user = await getCurrentUser();
      if (user) {
        router.push('/account');
      } else {
@@ -361,10 +360,10 @@ export function Header() {
                     Book Now
                 </Link>
             </Button>
-            <Button asChild variant="secondary" onClick={handleAccountClick}>
-              <Link href="">
+             <Button asChild variant="secondary" onClick={handleAccountClick}>
+              <Link href={user ? "/account" : "/login"}>
                   <UserCircle />
-                  Account
+                  {user ? "Account" : "Login"}
               </Link>
             </Button>
         </div>
@@ -441,13 +440,13 @@ export function Header() {
                       </React.Fragment>
                   ))}
                   <SheetClose asChild>
-                    <a 
-                      href="#" 
-                      onClick={(e) => { handleAccountClick(e); handleMobileSheetLinkClick(); }} 
+                    <Link
+                      href={user ? "/account" : "/login"}
+                      onClick={(e) => { handleMobileSheetLinkClick(); }} 
                       className="block w-full text-left text-lg font-medium text-foreground transition-colors hover:text-primary px-4 py-2 rounded-md hover:bg-accent mt-4"
                     >
-                      Account
-                    </a>
+                      {user ? "Account" : "Login"}
+                    </Link>
                   </SheetClose>
                 </nav>
               </ScrollArea>

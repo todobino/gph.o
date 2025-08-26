@@ -1,83 +1,46 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
-import type { User } from 'firebase/auth';
-import { getCurrentUser, checkIfAdmin } from '@/lib/auth';
+// Avoid static prerender; we need client auth.
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+import { useIsAdmin, useUser } from '@/hooks/useUser';
+import AuthGate from '@/components/auth-gate';
+import { Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { ProfileTab } from '@/components/account/profile-tab';
-import { AdminTab } from '@/components/account/admin-tab';
 import { SecurityTab } from '@/components/account/security-tab';
+import { AdminTab } from '@/components/account/admin-tab';
 import { Shield, User as UserIcon, Settings } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { User } from 'firebase/auth';
 
 export default function AccountPage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  return (
+    // If AuthGate uses useSearchParams, keep Suspense. If you removed it, you can also remove Suspense.
+    <Suspense fallback={<div className="container mx-auto px-4 py-12">Loading…</div>}>
+      <AuthGate>
+        <AccountInner />
+      </AuthGate>
+    </Suspense>
+  );
+}
 
-  const tab = searchParams.get('tab');
-  const [activeTab, setActiveTab] = useState(tab || 'profile');
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const currentUser = await getCurrentUser();
-      if (!currentUser) {
-        router.push('/login?next=/account');
-        return;
-      }
-      setUser(currentUser);
-      const adminStatus = await checkIfAdmin(currentUser);
-      setIsAdmin(adminStatus);
-
-      // If the user is trying to access the admin tab but isn't an admin,
-      // default them to the profile tab.
-      if (tab === 'admin' && !adminStatus) {
-        setActiveTab('profile');
-      }
-
-      setLoading(false);
-    };
-
-    checkUser();
-  }, [router, tab]);
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="space-y-4">
-            <Skeleton className="h-10 w-48" />
-            <Skeleton className="h-8 w-full" />
-            <Card>
-                <CardHeader>
-                    <Skeleton className="h-8 w-32" />
-                    <Skeleton className="h-4 w-64" />
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-full" />
-                    <Skeleton className="h-10 w-24" />
-                </CardContent>
-            </Card>
-        </div>
-      </div>
-    );
-  }
+function AccountInner() {
+  const user = useUser() as User; // AuthGate ensures user is not null/undefined
+  const isAdmin = useIsAdmin(user);
 
   if (!user) {
-    return null; // Should be redirected by the effect
+    // This should technically not be reached due to AuthGate, but as a fallback
+    return <div className="container mx-auto px-4 py-12">Loading user data...</div>
   }
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold font-heading mb-4">Your Account</h1>
-      <p className="text-muted-foreground mb-8">Manage your profile, security settings, and more.</p>
-      
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+    <main className="container mx-auto p-6">
+       <h1 className="text-4xl font-bold font-heading mb-4">Your Account</h1>
+       <p className="text-muted-foreground mb-8">Manage your profile, security settings, and more.</p>
+
+      <Tabs defaultValue="profile" className="w-full">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:w-auto lg:grid-cols-3">
           <TabsTrigger value="profile">
             <UserIcon className="mr-2 h-4 w-4" /> Profile
@@ -106,6 +69,6 @@ export default function AccountPage() {
             </TabsContent>
         )}
       </Tabs>
-    </div>
+    </main>
   );
 }
