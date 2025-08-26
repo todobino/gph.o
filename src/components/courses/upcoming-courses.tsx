@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WaitlistDialog } from "./waitlist-dialog";
-import { Clock, Users, CalendarClock, Video } from 'lucide-react';
+import { Clock, Users, CalendarClock, Video, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const upcomingCoursesData = [
   {
@@ -16,11 +17,11 @@ const upcomingCoursesData = [
     seatsFilled: 2,
     purchaseUrl: "https://book.stripe.com/4gw7v991obDr1Nu007",
     dates: [
-      "Monday, Oct 6",
-      "Tuesday, Oct 7",
-      "Wednesday, Oct 8",
-      "Thursday, Oct 9",
-      "Friday, Oct 10"
+      { day: "Monday", date: "Oct 6" },
+      { day: "Tuesday", date: "Oct 7" },
+      { day: "No Class", date: "Oct 8", isNoClass: true },
+      { day: "Thursday", date: "Oct 9" },
+      { day: "Friday", date: "Oct 10" },
     ],
     time: "1-3pm",
     duration: "4 sessions / 8 hours",
@@ -34,11 +35,11 @@ const upcomingCoursesData = [
     seatsFilled: 6,
     purchaseUrl: "https://book.stripe.com/4gw7v991obDr1Nu007",
     dates: [
-      "Monday, Nov 3",
-      "Tuesday, Nov 4",
-      "Wednesday, Nov 5",
-      "Thursday, Nov 6",
-      "Friday, Nov 7"
+        { day: "Monday", date: "Nov 3" },
+        { day: "Tuesday", date: "Nov 4" },
+        { day: "No Class", date: "Nov 5", isNoClass: true },
+        { day: "Thursday", date: "Nov 6" },
+        { day: "Friday", date: "Nov 7" },
     ],
     time: "1-3pm",
     duration: "4 sessions / 8 hours",
@@ -59,8 +60,8 @@ export function UpcomingCourses() {
     <>
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 bg-accent text-primary rounded-full p-2">
-                <CalendarClock className="h-6 w-6" />
+            <div className="flex-shrink-0 bg-blue-200 dark:bg-blue-800/50 p-2 rounded-full">
+                <CalendarClock className="h-6 w-6 text-blue-600 dark:text-blue-300" />
             </div>
             <h2 className="text-2xl font-bold font-heading">
             Upcoming Classes
@@ -107,11 +108,14 @@ export function UpcomingCourses() {
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pt-2">
-                    {course.dates.map((date) => (
-                        <div key={date} className="flex flex-col items-start justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-left">
-                            <span className="text-sm font-normal text-muted-foreground">{date.split(',')[0]}</span>
-                            <span className="text-lg font-bold text-foreground -mt-1">{date.split(',')[1].trim()}</span>
-                            <span className="text-xs text-muted-foreground">{course.time}</span>
+                    {course.dates.map((d) => (
+                        <div key={d.date} className={cn(
+                            "flex flex-col items-start justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-left",
+                            d.isNoClass && "bg-secondary/50 line-through text-muted-foreground"
+                        )}>
+                            <span className="text-sm font-normal">{d.day}</span>
+                            <span className="text-lg font-bold text-foreground -mt-1">{d.isNoClass ? <X className="h-5 w-5"/> : d.date}</span>
+                            {!d.isNoClass && <span className="text-xs">{course.time}</span>}
                         </div>
                     ))}
                 </div>
