@@ -92,11 +92,18 @@ export default function LeadingTechnicalChangePage() {
             <UpcomingCourses />
 
             {/* Section 1: What is LTC? */}
-            <section className="flex flex-col md:flex-row gap-12 items-start">
-              <div className="w-full md:w-1/2 space-y-6">
+            <section className="space-y-6">
                 <h2 className="text-3xl font-semibold mb-4 font-heading">
                   What is LTC? - “Better.”
                 </h2>
+                <Image
+                     src="https://picsum.photos/seed/ltc-what/800/450"
+                     alt="Team collaboration diagram"
+                     width={800}
+                     height={450}
+                     className="rounded-lg shadow-md object-cover w-full h-auto"
+                     data-ai-hint="team collaboration diagram"
+                 />
                 {ltcParagraphs.map((paragraph, index) => (
                   <p key={index} className="text-lg text-foreground/80 leading-relaxed">
                     {paragraph}
@@ -108,32 +115,13 @@ export default function LeadingTechnicalChangePage() {
                       Download Course Outline
                     </Link>
                  </Button>
-              </div>
-              <div className="w-full md:w-1/2">
-                 <Image
-                     src="https://picsum.photos/seed/ltc-what/800/450"
-                     alt="Team collaboration diagram"
-                     width={800}
-                     height={450}
-                     className="rounded-lg shadow-md object-cover w-full h-auto"
-                     data-ai-hint="team collaboration diagram"
-                 />
-              </div>
             </section>
 
              {/* Section 2: The Course Leader */}
-             <section className="flex flex-col md:flex-row-reverse gap-12 items-start">
-               <div className="w-full md:w-1/2 space-y-6">
+             <section className="space-y-6">
                  <h2 className="text-3xl font-semibold mb-4 font-heading">
                    The Course Leader
                  </h2>
-                 {courseLeaderParagraphs.map((paragraph, index) => (
-                   <p key={index} className="text-lg text-foreground/80 leading-relaxed">
-                     {paragraph}
-                   </p>
-                 ))}
-               </div>
-               <div className="w-full md:w-1/2">
                   <Image
                       src="https://picsum.photos/seed/ltc-leader/800/450"
                       alt="Speaker giving a presentation"
@@ -142,54 +130,48 @@ export default function LeadingTechnicalChangePage() {
                       className="rounded-lg shadow-md object-cover w-full h-auto"
                       data-ai-hint="speaker teaching presentation"
                   />
-               </div>
+                 {courseLeaderParagraphs.map((paragraph, index) => (
+                   <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                     {paragraph}
+                   </p>
+                 ))}
              </section>
 
              {/* Section 3: Theory of Change */}
-              <section className="flex flex-col md:flex-row gap-12 items-start">
-                <div className="w-full md:w-1/2 space-y-6">
+              <section className="space-y-6">
                   <h2 className="text-3xl font-semibold mb-4 font-heading">
                     Theory of Change
                   </h2>
+                  <div className="space-y-4">
+                    <Image
+                        src="https://picsum.photos/seed/ltc-theory1/800/450"
+                        alt="Abstract mind diagram"
+                        width={800}
+                        height={450}
+                        className="rounded-lg shadow-md object-cover w-full h-auto"
+                        data-ai-hint="abstract mind diagram"
+                    />
+                    <Image
+                        src="https://picsum.photos/seed/ltc-theory2/800/450"
+                        alt="Steps progress illustration"
+                        width={800}
+                        height={450}
+                        className="rounded-lg shadow-md object-cover w-full h-auto"
+                        data-ai-hint="steps progress illustration"
+                    />
+                  </div>
                   {theoryOfChangeParagraphs.map((paragraph, index) => (
                     <p key={index} className="text-lg text-foreground/80 leading-relaxed">
                       {paragraph}
                     </p>
                   ))}
-                </div>
-                <div className="w-full md:w-1/2 space-y-4">
-                  <Image
-                      src="https://picsum.photos/seed/ltc-theory1/800/450"
-                      alt="Abstract mind diagram"
-                      width={800}
-                      height={450}
-                      className="rounded-lg shadow-md object-cover w-full h-auto"
-                      data-ai-hint="abstract mind diagram"
-                  />
-                  <Image
-                      src="https://picsum.photos/seed/ltc-theory2/800/450"
-                      alt="Steps progress illustration"
-                      width={800}
-                      height={450}
-                      className="rounded-lg shadow-md object-cover w-full h-auto"
-                      data-ai-hint="steps progress illustration"
-                  />
-                </div>
               </section>
 
               {/* Section 4: Technique of Change */}
-              <section className="flex flex-col md:flex-row-reverse gap-12 items-start">
-                <div className="w-full md:w-1/2 space-y-6">
+              <section className="space-y-6">
                   <h2 className="text-3xl font-semibold mb-4 font-heading">
                     Technique of Change
                   </h2>
-                  {techniqueOfChangeParagraphs.map((paragraph, index) => (
-                    <p key={index} className="text-lg text-foreground/80 leading-relaxed">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-                <div className="w-full md:w-1/2">
                    <Image
                        src="https://picsum.photos/seed/ltc-technique/450/600"
                        alt="Hands writing code on a laptop"
@@ -198,39 +180,41 @@ export default function LeadingTechnicalChangePage() {
                        className="rounded-lg shadow-md object-cover w-full h-auto max-w-md mx-auto"
                        data-ai-hint="hands writing code"
                    />
-                </div>
+                  {techniqueOfChangeParagraphs.map((paragraph, index) => (
+                    <p key={index} className="text-lg text-foreground/80 leading-relaxed">
+                      {paragraph}
+                    </p>
+                  ))}
               </section>
 
               {/* Section 5: Practice of Change */}
-              <section className="flex flex-col md:flex-row gap-12 items-start">
-                <div className="w-full md:w-1/2 space-y-6">
+              <section className="space-y-6">
                   <h2 className="text-3xl font-semibold mb-4 font-heading">
                     Practice of Change
                   </h2>
+                  <div className="space-y-4">
+                    <Image
+                        src="https://picsum.photos/seed/ltc-practice1/800/450"
+                        alt="Team discussion at a whiteboard"
+                        width={800}
+                        height={450}
+                        className="rounded-lg shadow-md object-cover w-full h-auto"
+                        data-ai-hint="team discussion whiteboard"
+                    />
+                     <Image
+                        src="https://picsum.photos/seed/ltc-practice2/800/450"
+                        alt="Person writing notes in a notebook"
+                        width={800}
+                        height={450}
+                        className="rounded-lg shadow-md object-cover w-full h-auto"
+                        data-ai-hint="person writing notes"
+                    />
+                  </div>
                   {practiceOfChangeParagraphs.map((paragraph, index) => (
                     <p key={index} className="text-lg text-foreground/80 leading-relaxed">
                       {paragraph}
                     </p>
                   ))}
-                </div>
-                <div className="w-full md:w-1/2 space-y-4">
-                  <Image
-                      src="https://picsum.photos/seed/ltc-practice1/800/450"
-                      alt="Team discussion at a whiteboard"
-                      width={800}
-                      height={450}
-                      className="rounded-lg shadow-md object-cover w-full h-auto"
-                      data-ai-hint="team discussion whiteboard"
-                  />
-                   <Image
-                      src="https://picsum.photos/seed/ltc-practice2/800/450"
-                      alt="Person writing notes in a notebook"
-                      width={800}
-                      height={450}
-                      className="rounded-lg shadow-md object-cover w-full h-auto"
-                      data-ai-hint="person writing notes"
-                  />
-                </div>
               </section>
 
                {/* CTA Section */}
