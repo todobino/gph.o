@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WaitlistDialog } from "./waitlist-dialog";
-import { Clock, Users, Calendar } from 'lucide-react';
+import { Clock, Users, CalendarClock } from 'lucide-react';
 
 const upcomingCoursesData = [
   {
@@ -56,7 +56,7 @@ export function UpcomingCourses() {
       <div className="space-y-6">
         <div className="flex items-center gap-3">
             <div className="flex-shrink-0 bg-accent text-primary rounded-full p-2">
-                <Calendar className="h-6 w-6" />
+                <CalendarClock className="h-6 w-6" />
             </div>
             <h2 className="text-2xl font-bold font-heading">
             Upcoming Classes
@@ -68,7 +68,7 @@ export function UpcomingCourses() {
             const isFull = seatsAvailable <= 0;
 
             return (
-              <div key={course.id} className="p-4 border rounded-lg space-y-4">
+              <div key={course.id} className="p-4 border rounded-lg space-y-4 shadow-md hover:border-primary transition-colors">
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-semibold text-lg">{course.name} - {course.cohort}</h3>
