@@ -22,7 +22,7 @@ const upcomingCoursesData = [
       "Thursday, Oct 9",
       "Friday, Oct 10"
     ],
-    time: "1-3pm Eastern Time"
+    time: "1-3pm"
   },
   {
     id: "ltc14",
@@ -38,7 +38,7 @@ const upcomingCoursesData = [
       "Thursday, Nov 6",
       "Friday, Nov 7"
     ],
-    time: "1-3pm Eastern Time"
+    time: "1-3pm"
   }
 ];
 
@@ -75,15 +75,15 @@ export function UpcomingCourses() {
                      <div className="text-sm text-muted-foreground flex items-center gap-2 mt-2">
                       <Users className="h-4 w-4"/> 
                       {isFull ? (
-                        <Badge variant="destructive">Full</Badge>
+                        <Badge variant="secondary">Full</Badge>
                       ) : (
-                        <Badge variant="secondary">{seatsAvailable} of {course.seatsTotal} seats open</Badge>
+                        <Badge variant="secondary">{seatsAvailable} of {course.seatsTotal} seats left</Badge>
                       )}
                     </div>
                   </div>
                   <div>
                     {isFull ? (
-                      <Button onClick={() => handleWaitlistClick(course.id)} className="w-full md:w-auto">Join Waitlist</Button>
+                      <Button onClick={() => handleWaitlistClick(course.id)} className="w-full md:w-auto" variant="secondary">Join Waitlist</Button>
                     ) : (
                       <Button asChild className="w-full md:w-auto">
                         <a href={course.purchaseUrl} target="_blank" rel="noopener noreferrer">Buy a Seat</a>
