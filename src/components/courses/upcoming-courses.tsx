@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WaitlistDialog } from "./waitlist-dialog";
-import { Clock, Users, CalendarClock } from 'lucide-react';
+import { Clock, Users, CalendarClock, Video } from 'lucide-react';
 
 const upcomingCoursesData = [
   {
@@ -22,7 +22,9 @@ const upcomingCoursesData = [
       "Thursday, Oct 9",
       "Friday, Oct 10"
     ],
-    time: "1-3pm"
+    time: "1-3pm",
+    duration: "4 sessions / 8 hours",
+    format: "Zoom",
   },
   {
     id: "ltc14",
@@ -38,7 +40,9 @@ const upcomingCoursesData = [
       "Thursday, Nov 6",
       "Friday, Nov 7"
     ],
-    time: "1-3pm"
+    time: "1-3pm",
+    duration: "4 sessions / 8 hours",
+    format: "Zoom",
   }
 ];
 
@@ -72,13 +76,23 @@ export function UpcomingCourses() {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-semibold text-lg">{course.name} - {course.cohort}</h3>
-                     <div className="text-sm text-muted-foreground flex items-center gap-2 mt-2">
-                      <Users className="h-4 w-4"/> 
-                      {isFull ? (
-                        <Badge variant="secondary">Full</Badge>
-                      ) : (
-                        <Badge variant="secondary">{seatsAvailable} of {course.seatsTotal} seats left</Badge>
-                      )}
+                     <div className="text-sm text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
+                        <div className="flex items-center gap-2">
+                            <Users className="h-4 w-4"/> 
+                            {isFull ? (
+                                <Badge variant="secondary">Full</Badge>
+                            ) : (
+                                <Badge variant="secondary">{seatsAvailable} seats left</Badge>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Clock className="h-4 w-4" />
+                            <span>{course.duration}</span>
+                        </div>
+                         <div className="flex items-center gap-2">
+                            <Video className="h-4 w-4" />
+                            <span>{course.format}</span>
+                        </div>
                     </div>
                   </div>
                   <div>
