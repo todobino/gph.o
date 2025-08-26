@@ -1,18 +1,23 @@
-
 // src/components/AuthGate.tsx
 'use client';
 
-import { ReactNode, Suspense } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useUser } from '@/hooks/useUser';
-import { redirect, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Skeleton } from './ui/skeleton';
 
 export default function AuthGate({ children }: { children: ReactNode }) {
-  // Using useSearchParams triggers CSR bailout; wrap this component with <Suspense> where used.
-  const params = useSearchParams();
-  const pathname = usePathname();
-
   const user = useUser();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (user === null) {
+      const callbackUrl = `${pathname}?${searchParams.toString()}`;
+      router.replace(`/login?next=${encodeURIComponent(callbackUrl)}`);
+    }
+  }, [user, router, pathname, searchParams]);
 
   if (user === undefined) {
     return (
@@ -31,8 +36,7 @@ export default function AuthGate({ children }: { children: ReactNode }) {
   };
 
   if (user === null) {
-      const callbackUrl = `${pathname}?${params.toString()}`;
-      redirect(`/login?next=${encodeURIComponent(callbackUrl)}`);
+    return null; // or a loading spinner while redirecting
   }
 
   return <>{children}</>;
