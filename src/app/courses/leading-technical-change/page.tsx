@@ -235,19 +235,9 @@ export default function LeadingTechnicalChangePage() {
 
                {/* CTA Section */}
                <section className="p-0">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                      <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary text-primary-foreground">
-                          <h3 className="text-2xl font-semibold font-heading">Join the Next LTC Cohort</h3>
-                          <Button size="lg" variant="secondary" asChild>
-                            <Link href="https://book.stripe.com/4gw7v991obDr1Nu007" target="_blank" rel="noopener noreferrer">
-                              <UserPlus className="mr-2 h-5 w-5" />
-                              Get Your Seat
-                            </Link>
-                          </Button>
-                           <p className="text-xs text-primary-foreground/80">Be the first to know when the next cohort opens.</p>
-                      </div>
+                  <div className="grid grid-cols-1 gap-8 items-center">
                        <div className="space-y-3 flex flex-col items-center text-center p-8 md:p-12 rounded-lg shadow-sm bg-primary-dark text-primary-dark-foreground">
-                          <h3 className="text-2xl font-semibold font-heading">Download the LTC Overview</h3>
+                          <h3 className="text-2xl font-semibold font-heading">Download the Overview</h3>
                            <Button size="lg" variant="secondary" asChild>
                                <Link href={pdfUrl} target="_blank" rel="noopener noreferrer">
                                   <Download className="mr-2 h-5 w-5" />
