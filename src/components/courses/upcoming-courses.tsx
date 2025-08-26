@@ -2,11 +2,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WaitlistDialog } from "./waitlist-dialog";
-import { CalendarDays, Clock, Users } from 'lucide-react';
+import { Clock, Users } from 'lucide-react';
 
 const upcomingCoursesData = [
   {
@@ -54,19 +53,16 @@ export function UpcomingCourses() {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold font-heading">Upcoming</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold font-heading">Upcoming Classes</h2>
+        <div className="space-y-6">
           {upcomingCoursesData.map((course) => {
             const seatsAvailable = course.seatsTotal - course.seatsFilled;
             const isFull = seatsAvailable <= 0;
 
             return (
               <div key={course.id} className="p-4 border rounded-lg space-y-4">
-                {/* Top Row: Title and Action Button */}
-                <div className="flex justify-between items-start border-b pb-4">
+                <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-semibold text-lg">{course.name} - {course.cohort}</h3>
                      <div className="text-sm text-muted-foreground flex items-center gap-2 mt-2">
@@ -89,7 +85,6 @@ export function UpcomingCourses() {
                   </div>
                 </div>
 
-                {/* Bottom Row: Dates as Tiles */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pt-2">
                     {course.dates.map((date) => (
                         <div key={date} className="flex flex-col items-center justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-center">
@@ -105,8 +100,8 @@ export function UpcomingCourses() {
               </div>
             );
           })}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
       <WaitlistDialog
         isOpen={dialogOpen}
         onOpenChange={setDialogOpen}
