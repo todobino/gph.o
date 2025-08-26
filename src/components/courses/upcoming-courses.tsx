@@ -78,7 +78,7 @@ export function UpcomingCourses() {
                     <h3 className="font-semibold text-lg">{course.name} - {course.cohort}</h3>
                      <div className="text-sm text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
                         <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4"/> 
+                            <Users className="h-4 w-4"/>
                             {isFull ? (
                                 <Badge variant="secondary">Full</Badge>
                             ) : (
@@ -108,13 +108,10 @@ export function UpcomingCourses() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pt-2">
                     {course.dates.map((date) => (
-                        <div key={date} className="flex flex-col items-center justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-center">
-                            <span className="font-semibold text-sm">{date.split(',')[0]},</span>
-                            <span className="font-semibold text-sm">{date.split(',')[1]}</span>
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                                <Clock className="h-3 w-3" />
-                                <span>{course.time}</span>
-                            </div>
+                        <div key={date} className="flex flex-col items-start justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-left">
+                            <span className="text-sm font-normal text-muted-foreground">{date.split(',')[0]}</span>
+                            <span className="text-lg font-bold text-foreground -mt-1">{date.split(',')[1].trim()}</span>
+                            <span className="text-xs text-muted-foreground">{course.time}</span>
                         </div>
                     ))}
                 </div>
