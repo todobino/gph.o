@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WaitlistDialog } from "./waitlist-dialog";
-import { Clock, Users } from 'lucide-react';
+import { Clock, Users, Calendar } from 'lucide-react';
 
 const upcomingCoursesData = [
   {
@@ -54,7 +54,10 @@ export function UpcomingCourses() {
   return (
     <>
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold font-heading">Upcoming Classes</h2>
+        <h2 className="text-2xl font-bold font-heading flex items-center gap-2">
+          <Calendar className="h-6 w-6" />
+          Upcoming Classes
+        </h2>
         <div className="space-y-6">
           {upcomingCoursesData.map((course) => {
             const seatsAvailable = course.seatsTotal - course.seatsFilled;
