@@ -35,13 +35,13 @@ const upcomingCoursesData = [
     seatsFilled: 6,
     purchaseUrl: "https://book.stripe.com/4gw7v991obDr1Nu007",
     dates: [
-        { day: "Monday", date: "Nov 3" },
-        { day: "Tuesday", date: "Nov 4" },
-        { day: "No Class", date: "Nov 5", isNoClass: true },
-        { day: "Thursday", date: "Nov 6" },
-        { day: "Friday", date: "Nov 7" },
+        { day: "Monday", date: "Nov 17" },
+        { day: "Tuesday", date: "Nov 18" },
+        { day: "No Class", date: "Nov 19", isNoClass: true },
+        { day: "Thursday", date: "Nov 20" },
+        { day: "Friday", date: "Nov 21" },
     ],
-    time: "1-3pm",
+    time: "11-1pm",
     duration: "4 sessions / 8 hours",
     format: "Zoom",
   }
@@ -111,11 +111,17 @@ export function UpcomingCourses() {
                     {course.dates.map((d) => (
                         <div key={d.date} className={cn(
                             "flex flex-col items-start justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-left",
-                            d.isNoClass && "bg-secondary/50 line-through text-muted-foreground"
+                             d.isNoClass && "bg-gray-800 text-white"
                         )}>
-                            <span className="text-sm font-normal">{d.day}</span>
-                            <span className="text-lg font-bold text-foreground -mt-1">{d.isNoClass ? <X className="h-5 w-5"/> : d.date}</span>
-                            {!d.isNoClass && <span className="text-xs">{course.time}</span>}
+                           {d.isNoClass ? (
+                                <span className="font-semibold mx-auto">No Class</span>
+                           ) : (
+                            <>
+                                <span className="text-sm font-normal">{d.day}</span>
+                                <span className="text-lg font-bold text-foreground -mt-1">{d.date}</span>
+                                <span className="text-xs">{course.time}</span>
+                            </>
+                           )}
                         </div>
                     ))}
                 </div>
