@@ -18,19 +18,13 @@ export default async function Home() {
 <section className="relative flex items-center justify-center text-primary-dark-foreground overflow-hidden h-[420px] md:h-[520px] lg:h-[640px]">
   {/* Video layer */}
   <div className="absolute inset-0 -z-10 overflow-hidden">
-    {/* Make the 16:9 iframe fill/cover the container without bars */}
-    <iframe
-      className="
-        absolute top-1/2 left-1/2
-        -translate-x-1/2 -translate-y-1/2
-        /* Keep 16:9, but oversize so it covers in both directions */
-        w-[100vw] h-[56.25vw]      /* 56.25vw = 9/16 of viewport width */
-        min-w-full min-h-full      /* if the above isn't enough, stretch further */
-      "
-      src="https://www.youtube.com/embed/lNpof6rRB9U?autoplay=1&mute=1&loop=1&playlist=lNpof6rRB9U&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1&start=327"
-      frameBorder="0"
-      allow="autoplay; encrypted-media"
-      allowFullScreen
+    <video
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-auto h-auto min-w-full min-h-full object-cover"
+      src="https://bt8piafsi9gzsa88.public.blob.vercel-storage.com/gpaw-stage.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
       title="Background Video"
     />
     {/* Legibility overlay (clearly visible) */}
