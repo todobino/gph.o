@@ -151,7 +151,7 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
       <div className="flex items-center py-4 gap-2">
         {/* Filter Input */}
         <Input
-          placeholder="Filter posts by title..."
+          placeholder="Search for post..."
           value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('title')?.setFilterValue(event.target.value)
