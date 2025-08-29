@@ -58,7 +58,7 @@ export default async function Home() {
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
-                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
+                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-lg mb-4 inline-block">
                   <BrainCircuit className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Content</h3>
@@ -72,7 +72,7 @@ export default async function Home() {
             </div>
             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
-                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
+                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-lg mb-4 inline-block">
                   <Users className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Coaching</h3>
@@ -86,7 +86,7 @@ export default async function Home() {
             </div>
             <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
-                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
+                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-lg mb-4 inline-block">
                   <GraduationCap className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Courses</h3>
@@ -100,7 +100,7 @@ export default async function Home() {
             </div>
              <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
               <div>
-                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-full mb-4 inline-block">
+                <div className="bg-blue-200 dark:bg-blue-800/50 p-4 rounded-lg mb-4 inline-block">
                   <Speech className="h-8 w-8 text-blue-600 dark:text-blue-300" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2 font-heading">Speaking</h3>

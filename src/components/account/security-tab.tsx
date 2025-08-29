@@ -10,7 +10,7 @@ export function SecurityTab() {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-4">
-            <div className="flex-shrink-0 bg-green-100 dark:bg-green-800/50 p-3 rounded-full">
+            <div className="flex-shrink-0 bg-green-100 dark:bg-green-800/50 p-3 rounded-lg">
                 <ShieldCheck className="h-6 w-6 text-green-600 dark:text-green-300" />
             </div>
             <div className="flex-grow">

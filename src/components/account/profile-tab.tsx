@@ -99,7 +99,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-4">
-            <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-full">
+            <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-lg">
                 <UserCircle className="h-6 w-6 text-blue-600 dark:text-blue-300" />
             </div>
             <div className="flex-grow">

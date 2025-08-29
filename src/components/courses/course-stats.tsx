@@ -32,7 +32,7 @@ export function CourseStats({ title, description, imageUrl, imageHint, seats, du
                         className="object-cover rounded-t-lg"
                         data-ai-hint={imageHint}
                     />
-                     <div className="absolute top-4 left-4 bg-primary p-3 rounded-full">
+                     <div className="absolute top-4 left-4 bg-primary p-3 rounded-lg">
                         <GraduationCap className="h-6 w-6 text-primary-foreground" />
                     </div>
                 </div>
