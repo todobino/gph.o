@@ -11,7 +11,6 @@ import type { User } from 'firebase/auth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
 
 export default function AccountClient() {
   return (
@@ -78,7 +77,6 @@ function AccountInner() {
         
         <div className="space-y-12">
             <ProfileTab user={user} />
-            <Separator />
             <SecurityTab />
         </div>
       </div>
