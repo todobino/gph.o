@@ -7,21 +7,48 @@ import { Book, GraduationCap, Home, Newspaper, Users } from 'lucide-react';
 import Link from 'next/link';
 
 import AuthGate from '@/components/auth-gate';
-import { Button } from '@/components/ui/button';
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useIsAdmin, useUser } from '@/hooks/useUser';
-import './admin.css';
+import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+
+function AdminNav() {
+    const pathname = usePathname();
+    const navItems = [
+        { href: '/admin', label: 'Overview', icon: <Home className="h-4 w-4" /> },
+        { href: '/admin/posts', label: 'Posts', icon: <Newspaper className="h-4 w-4" /> },
+        { href: '/admin/courses', label: 'Courses', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/admin/subscribers', label: 'Subscribers', icon: <Users className="h-4 w-4" /> },
+    ];
+    return (
+         <aside className="w-full md:w-1/4 lg:w-1/5">
+            <nav className="flex flex-col space-y-2">
+                 <Button variant="outline" size="sm" asChild className="mb-4">
+                      <Link href="/account">
+                        Back to Account
+                      </Link>
+                  </Button>
+                {navItems.map((item) => (
+                    <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                        'flex items-center gap-2 rounded-md p-2 text-sm font-medium transition-colors',
+                        pathname === item.href
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    )}
+                    >
+                    {item.icon}
+                    <span>{item.label}</span>
+                    </Link>
+                ))}
+            </nav>
+        </aside>
+    );
+}
+
 
 function AdminAuth({ children }: { children: React.ReactNode }) {
   const user = useUser();
@@ -55,63 +82,14 @@ function AdminAuth({ children }: { children: React.ReactNode }) {
   // If the user is an admin, render the admin layout.
   if (isAdmin) {
     return (
-        <SidebarProvider>
-            <Sidebar>
-                <SidebarContent>
-                    <SidebarGroup>
-                        <SidebarMenu>
-                            <SidebarMenuItem>
-                                <SidebarMenuButton href="/admin" asChild>
-                                    <Link href="/admin">
-                                        <Home />
-                                        Overview
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                            <SidebarMenuItem>
-                                <SidebarMenuButton href="/admin/posts" asChild>
-                                    <Link href="/admin/posts">
-                                        <Newspaper />
-                                        Posts
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                             <SidebarMenuItem>
-                                <SidebarMenuButton href="/admin/courses" asChild>
-                                    <Link href="/admin/courses">
-                                        <GraduationCap />
-                                        Courses
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                             <SidebarMenuItem>
-                                <SidebarMenuButton href="/admin/subscribers" asChild>
-                                    <Link href="/admin/subscribers">
-                                        <Users />
-                                        Subscribers
-                                    </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        </SidebarMenu>
-                    </SidebarGroup>
-                </SidebarContent>
-            </Sidebar>
-             <SidebarInset>
-                <div className="p-4 sm:p-6 lg:p-8">
-                  <div className="flex items-center gap-4">
-                    <SidebarTrigger className="md:hidden" />
-                     <Button variant="outline" size="sm" asChild>
-                          <Link href="/account">
-                            Back to Account
-                          </Link>
-                      </Button>
-                  </div>
-                   <div className="mt-6">
-                      {children}
-                   </div>
-                </div>
-            </SidebarInset>
-        </SidebarProvider>
+        <div className="container mx-auto px-4 py-12">
+            <div className="flex flex-col md:flex-row gap-8">
+                <AdminNav />
+                <main className="w-full md:w-3/4 lg:w-4/5">
+                    {children}
+                </main>
+            </div>
+        </div>
     );
   }
 
