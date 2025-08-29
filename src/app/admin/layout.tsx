@@ -3,7 +3,7 @@
 
 import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Book, GraduationCap, Home, Newspaper, Users } from 'lucide-react';
+import { ArrowLeft, Book, GraduationCap, Home, Newspaper, Users } from 'lucide-react';
 import Link from 'next/link';
 
 import AuthGate from '@/components/auth-gate';
@@ -24,8 +24,9 @@ function AdminNav() {
     return (
          <aside className="w-full md:w-1/4 lg:w-1/5">
             <nav className="flex flex-col space-y-2">
-                 <Button variant="outline" size="sm" asChild className="mb-4">
+                 <Button variant="secondary" size="sm" asChild className="mb-4 justify-start">
                       <Link href="/account">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Account
                       </Link>
                   </Button>
