@@ -277,7 +277,7 @@ export function Header() {
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Image src="/gpaw-logo-white.png" alt="GeePaw Logo" width={24} height={24} className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block">
-              GeePaw
+              GeePawHill
             </span>
           </Link>
           <nav className="flex items-center space-x-1 text-sm">
@@ -391,7 +391,7 @@ export function Header() {
                   onClick={handleMobileSheetLinkClick}
                 >
                   <Image src="/gpaw-logo-white.png" alt="GeePaw Logo" width={24} height={24} className="h-6 w-6" />
-                  <span className="font-bold text-foreground">GeePaw</span>
+                  <span className="font-bold text-foreground">GeePawHill</span>
                 </Link>
               </SheetClose>
               <ScrollArea className="h-[calc(100vh-8rem)]">
@@ -454,7 +454,7 @@ export function Header() {
           </Sheet>
            <Link href="/" className="flex items-center space-x-2">
              <Image src="/gpaw-logo-white.png" alt="GeePaw Logo" width={24} height={24} className="h-6 w-6" />
-             <span className="font-bold">GeePaw</span>
+             <span className="font-bold">GeePawHill</span>
            </Link>
              <Dialog open={isMobileSearchDialogOpen} onOpenChange={handleSearchDialogChange}>
                  <DialogTrigger asChild>
