@@ -63,44 +63,6 @@ const selectionColumn: ColumnDef<Post> = {
     enableHiding: false,
 };
 
-// Add actions column definition
-const actionsColumn: ColumnDef<Post> = {
-    id: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => {
-      const post = row.original;
-      return (
-        <div className="flex space-x-2">
-            {/* Placeholder Edit Button */}
-            <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => console.log('Edit post:', post.slug)} // Placeholder action
-            aria-label={`Edit post ${post.title}`}
-            disabled // Disable until functionality is added
-            >
-                <Edit className="h-4 w-4" />
-            </Button>
-            {/* Placeholder Delete Button */}
-            <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-destructive hover:text-destructive"
-            onClick={() => console.log('Delete post:', post.slug)} // Placeholder action
-            aria-label={`Delete post ${post.title}`}
-            disabled // Disable until functionality is added
-            >
-                <Trash2 className="h-4 w-4" />
-            </Button>
-        </div>
-      );
-    },
-    enableSorting: false,
-    enableHiding: false,
-  };
-
-
 export function PostsDataTable({ columns: propColumns, data }: { columns: any[], data: any[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -131,7 +93,6 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
                 </div>
             ),
         })),
-        actionsColumn,
     ],
     [propColumns]
  );
@@ -173,7 +134,7 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
         {/* Filter By Dropdown */}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="h-9 rounded-md">
                     <ListFilter className="mr-2 h-4 w-4" />
                     Filter
                 </Button>
@@ -199,7 +160,7 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
          <Button
             variant="outline"
             size="sm"
-            className="ml-auto"
+            className="ml-auto h-9 rounded-md"
             disabled={selectedRowCount === 0}
             onClick={() => {
               const selectedRows = table.getFilteredSelectedRowModel().rows;

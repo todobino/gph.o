@@ -10,10 +10,6 @@ const columns = [
     header: 'Title',
   },
   {
-    accessorKey: 'author',
-    header: 'Author',
-  },
-  {
     accessorKey: 'date',
     header: 'Date',
   },
