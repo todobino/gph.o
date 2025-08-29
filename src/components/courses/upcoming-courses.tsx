@@ -82,7 +82,7 @@ export function UpcomingCourses() {
                             <Users className="h-4 w-4"/>
                             <span>{course.seatsTotal} Seats</span>
                             {isFull ? (
-                                <Badge variant="destructive">Full</Badge>
+                                <Badge variant="destructive" className="bg-accent text-accent-foreground hover:bg-accent/80">Full</Badge>
                             ) : (
                                 <Badge variant="secondary">{seatsAvailable} left</Badge>
                             )}
@@ -141,4 +141,5 @@ export function UpcomingCourses() {
     </>
   );
 }
+
 
