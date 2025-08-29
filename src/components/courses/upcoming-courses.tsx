@@ -111,7 +111,7 @@ export function UpcomingCourses() {
                     {course.dates.map((d) => (
                         <div key={d.date} className={cn(
                             "flex flex-col items-start justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-left",
-                             d.isNoClass && "bg-gray-800 text-white"
+                             d.isNoClass && "bg-gray-300 text-black dark:bg-gray-700 dark:text-gray-200"
                         )}>
                            {d.isNoClass ? (
                                 <span className="font-semibold mx-auto">No Class</span>
