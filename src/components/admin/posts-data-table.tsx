@@ -36,6 +36,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Trash2, Edit, ListFilter, ArrowUpDown } from 'lucide-react'; 
 import type { Post } from '@/services/posts'; 
+import { Badge } from '@/components/ui/badge';
 
 // Add selection column definition
 const selectionColumn: ColumnDef<Post> = {
@@ -83,13 +84,23 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
                     </Button>
                 )
             },
-            cell: ({ row }: { row: any }) => (
-                <div className={col.accessorKey === 'title' ? 'font-medium pl-4' : 'pl-4'}>
-                {Array.isArray(row.getValue(col.accessorKey))
-                    ? (row.getValue(col.accessorKey) as string[]).join(', ')
-                    : row.getValue(col.accessorKey)}
-                </div>
-            ),
+            cell: ({ row }: { row: any }) => {
+                const value = row.getValue(col.accessorKey);
+                if (col.accessorKey === 'tags' && Array.isArray(value)) {
+                    return (
+                        <div className="flex flex-wrap gap-1 pl-4">
+                            {(value as string[]).map(tag => (
+                                <Badge key={tag} variant="secondary" className="font-normal">{tag}</Badge>
+                            ))}
+                        </div>
+                    )
+                }
+                return (
+                    <div className={col.accessorKey === 'title' ? 'font-medium pl-4' : 'pl-4'}>
+                        {value}
+                    </div>
+                )
+            },
         })),
     ],
     [propColumns]
@@ -126,7 +137,7 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
           onChange={(event) =>
             table.getColumn('title')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm h-9"
+          className="max-w-sm h-9 rounded-md"
         />
 
         {/* Filter By Tag */}
