@@ -43,6 +43,7 @@ export default function AdminSubscribersPage() {
                  <PostsDataTable 
                     columns={subscriberColumns} 
                     data={placeholderSubscribers} 
+                    searchColumnId="email"
                     filterColumnId="status"
                     filterColumnName="Status"
                     searchPlaceholder='Search for subscriber...'

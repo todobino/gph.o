@@ -41,7 +41,7 @@ export default async function AdminPostsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <PostsDataTable columns={columns} data={posts} />
+          <PostsDataTable columns={columns} data={posts} searchColumnId="title" />
         </CardContent>
       </Card>
     </div>

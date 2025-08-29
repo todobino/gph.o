@@ -65,12 +65,13 @@ const selectionColumn: ColumnDef<Post> = {
 interface PostsDataTableProps {
     columns: any[];
     data: any[];
+    searchColumnId?: string;
     filterColumnId?: string;
     filterColumnName?: string;
     searchPlaceholder?: string;
 }
 
-export function PostsDataTable({ columns: propColumns, data, filterColumnId = 'tags', filterColumnName = 'Tags', searchPlaceholder = 'Search for post...' }: PostsDataTableProps) {
+export function PostsDataTable({ columns: propColumns, data, searchColumnId = 'title', filterColumnId, filterColumnName, searchPlaceholder = 'Search for post...' }: PostsDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -94,7 +95,7 @@ export function PostsDataTable({ columns: propColumns, data, filterColumnId = 't
             },
             cell: ({ row }: { row: any }) => {
                 const value = row.getValue(col.accessorKey);
-                if (col.accessorKey === 'tags' && Array.isArray(value)) {
+                if (Array.isArray(value)) {
                     return (
                         <div className="flex flex-wrap gap-1 pl-4">
                             {(value as string[]).map(tag => (
@@ -102,9 +103,6 @@ export function PostsDataTable({ columns: propColumns, data, filterColumnId = 't
                             ))}
                         </div>
                     )
-                }
-                if (col.accessorKey === 'listIds' && Array.isArray(value)) {
-                    return <div className="pl-4">{(value as string[]).join(', ')}</div>
                 }
                 return (
                     <div className={col.accessorKey === 'title' || col.accessorKey === 'email' ? 'font-medium pl-4' : 'pl-4'}>
@@ -138,9 +136,9 @@ export function PostsDataTable({ columns: propColumns, data, filterColumnId = 't
 
   const selectedRowCount = Object.keys(rowSelection).length;
   
-  const filterColumn = table.getColumn(filterColumnId);
+  const filterColumn = filterColumnId ? table.getColumn(filterColumnId) : undefined;
   const filterValues = React.useMemo(() => {
-    if (!filterColumn) return [];
+    if (!filterColumn || !filterColumnId) return [];
     const values = new Set<string>();
     data.forEach(row => {
       const cellValue = row[filterColumnId];
@@ -159,19 +157,18 @@ export function PostsDataTable({ columns: propColumns, data, filterColumnId = 't
       <div className="flex items-center py-4 gap-2">
         <Input
           placeholder={searchPlaceholder}
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? (table.getColumn('email')?.getFilterValue() as string) ?? ''}
+          value={(table.getColumn(searchColumnId)?.getFilterValue() as string) ?? ''}
           onChange={(event) => {
-            table.getColumn('title')?.setFilterValue(event.target.value)
-            table.getColumn('email')?.setFilterValue(event.target.value)
+            table.getColumn(searchColumnId)?.setFilterValue(event.target.value)
            }
           }
-          className="max-w-sm h-9 rounded-md"
+          className="max-w-sm"
         />
 
-        {filterColumn && (
+        {filterColumn && filterColumnName && (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-9 rounded-md">
+                    <Button variant="outline" size="sm">
                         <ListFilter className="mr-2 h-4 w-4" />
                         Filter by {filterColumnName}
                     </Button>
@@ -207,7 +204,7 @@ export function PostsDataTable({ columns: propColumns, data, filterColumnId = 't
             <Button
                 variant="destructive"
                 size="sm"
-                className="ml-auto h-9 rounded-md"
+                className="ml-auto"
                 onClick={() => {
                 const selectedRows = table.getFilteredSelectedRowModel().rows;
                 const selectedIds = selectedRows.map(row => row.original.id || row.original.slug);
