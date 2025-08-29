@@ -33,8 +33,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, Trash2, Edit, ListFilter, ArrowUpDown } from 'lucide-react'; 
 import type { Post } from '@/services/posts'; 
@@ -117,7 +115,6 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
   });
 
   const selectedRowCount = Object.keys(rowSelection).length;
-  const uniqueAuthors = React.useMemo(() => Array.from(new Set(data.map(post => post.author))), [data]);
   const uniqueTags = React.useMemo(() => Array.from(new Set(data.flatMap(post => post.tags))), [data]);
 
   return (
@@ -131,30 +128,6 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
           }
           className="max-w-sm h-9"
         />
-
-        {/* Filter By Author */}
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-9 rounded-md">
-                    <ListFilter className="mr-2 h-4 w-4" />
-                    Filter Authors
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Filter by Author</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup 
-                    value={table.getColumn('author')?.getFilterValue() as string ?? ''}
-                    onValueChange={(value) => {
-                        table.getColumn('author')?.setFilterValue(value === table.getColumn('author')?.getFilterValue() ? undefined : value)
-                    }}
-                >
-                {uniqueAuthors.map(author => (
-                    <DropdownMenuRadioItem key={author} value={author}>{author}</DropdownMenuRadioItem>
-                ))}
-                </DropdownMenuRadioGroup>
-            </DropdownMenuContent>
-        </DropdownMenu>
 
         {/* Filter By Tag */}
         <DropdownMenu>
