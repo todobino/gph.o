@@ -19,10 +19,14 @@ const courseColumns = [
     accessorKey: 'enrollment',
     header: 'Enrollment',
   },
+  {
+    accessorKey: 'tags',
+    header: 'Tags',
+  },
 ];
 
 const placeholderCourses = [
-    { id: 'ltc', title: 'Leading Technical Change', status: 'Published', enrollment: '12/20' },
+    { id: 'ltc', title: 'Leading Technical Change', status: 'Published', enrollment: '12/20', tags: ['leadership', 'change management', 'teams'] },
     // Add more placeholder courses as needed
 ];
 
