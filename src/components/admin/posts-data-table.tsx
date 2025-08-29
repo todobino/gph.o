@@ -62,7 +62,15 @@ const selectionColumn: ColumnDef<Post> = {
     enableHiding: false,
 };
 
-export function PostsDataTable({ columns: propColumns, data }: { columns: any[], data: any[] }) {
+interface PostsDataTableProps {
+    columns: any[];
+    data: any[];
+    filterColumnId?: string;
+    filterColumnName?: string;
+    searchPlaceholder?: string;
+}
+
+export function PostsDataTable({ columns: propColumns, data, filterColumnId = 'tags', filterColumnName = 'Tags', searchPlaceholder = 'Search for post...' }: PostsDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -95,8 +103,11 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
                         </div>
                     )
                 }
+                if (col.accessorKey === 'listIds' && Array.isArray(value)) {
+                    return <div className="pl-4">{(value as string[]).join(', ')}</div>
+                }
                 return (
-                    <div className={col.accessorKey === 'title' ? 'font-medium pl-4' : 'pl-4'}>
+                    <div className={col.accessorKey === 'title' || col.accessorKey === 'email' ? 'font-medium pl-4' : 'pl-4'}>
                         {value}
                     </div>
                 )
@@ -126,51 +137,69 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
   });
 
   const selectedRowCount = Object.keys(rowSelection).length;
-  const uniqueTags = React.useMemo(() => Array.from(new Set(data.flatMap(post => post.tags))), [data]);
+  
+  const filterColumn = table.getColumn(filterColumnId);
+  const filterValues = React.useMemo(() => {
+    if (!filterColumn) return [];
+    const values = new Set<string>();
+    data.forEach(row => {
+      const cellValue = row[filterColumnId];
+      if (Array.isArray(cellValue)) {
+        cellValue.forEach(v => values.add(v));
+      } else if (typeof cellValue === 'string') {
+        values.add(cellValue);
+      }
+    });
+    return Array.from(values);
+  }, [data, filterColumnId, filterColumn]);
+
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-2">
         <Input
-          placeholder="Search for post..."
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
+          placeholder={searchPlaceholder}
+          value={(table.getColumn('title')?.getFilterValue() as string) ?? (table.getColumn('email')?.getFilterValue() as string) ?? ''}
+          onChange={(event) => {
             table.getColumn('title')?.setFilterValue(event.target.value)
+            table.getColumn('email')?.setFilterValue(event.target.value)
+           }
           }
           className="max-w-sm h-9 rounded-md"
         />
 
-        {/* Filter By Tag */}
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-9 rounded-md">
-                    <ListFilter className="mr-2 h-4 w-4" />
-                    Filter Tags
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Filter by Tag</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {uniqueTags.map(tag => (
-                    <DropdownMenuCheckboxItem
-                        key={tag}
-                        checked={(table.getColumn('tags')?.getFilterValue() as string[] ?? []).includes(tag)}
-                        onCheckedChange={(checked) => {
-                            const currentTags = (table.getColumn('tags')?.getFilterValue() as string[] ?? []);
-                            let newTags;
-                            if (checked) {
-                                newTags = [...currentTags, tag];
-                            } else {
-                                newTags = currentTags.filter(t => t !== tag);
-                            }
-                            table.getColumn('tags')?.setFilterValue(newTags.length > 0 ? newTags : undefined);
-                        }}
-                    >
-                        {tag}
-                    </DropdownMenuCheckboxItem>
-                ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
+        {filterColumn && (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-9 rounded-md">
+                        <ListFilter className="mr-2 h-4 w-4" />
+                        Filter by {filterColumnName}
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Filter by {filterColumnName}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {filterValues.map(value => (
+                        <DropdownMenuCheckboxItem
+                            key={value}
+                            checked={(filterColumn.getFilterValue() as string[] ?? []).includes(value)}
+                            onCheckedChange={(checked) => {
+                                const currentFilter = (filterColumn.getFilterValue() as string[] ?? []);
+                                let newFilter;
+                                if (checked) {
+                                    newFilter = [...currentFilter, value];
+                                } else {
+                                    newFilter = currentFilter.filter(v => v !== value);
+                                }
+                                filterColumn.setFilterValue(newFilter.length > 0 ? newFilter : undefined);
+                            }}
+                        >
+                            {value}
+                        </DropdownMenuCheckboxItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
+        )}
 
         <div className="flex-grow" />
 
@@ -181,8 +210,8 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
                 className="ml-auto h-9 rounded-md"
                 onClick={() => {
                 const selectedRows = table.getFilteredSelectedRowModel().rows;
-                const selectedSlugs = selectedRows.map(row => row.original.slug);
-                console.log('Delete selected posts:', selectedSlugs);
+                const selectedIds = selectedRows.map(row => row.original.id || row.original.slug);
+                console.log('Delete selected items:', selectedIds);
                 }}
             >
                 <Trash2 className="mr-2 h-4 w-4" /> Delete ({selectedRowCount})

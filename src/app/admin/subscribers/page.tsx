@@ -40,7 +40,13 @@ export default function AdminSubscribersPage() {
                 </p>
             </CardHeader>
             <CardContent>
-                 <PostsDataTable columns={subscriberColumns} data={placeholderSubscribers} />
+                 <PostsDataTable 
+                    columns={subscriberColumns} 
+                    data={placeholderSubscribers} 
+                    filterColumnId="status"
+                    filterColumnName="Status"
+                    searchPlaceholder='Search for subscriber...'
+                />
             </CardContent>
         </Card>
     </div>
