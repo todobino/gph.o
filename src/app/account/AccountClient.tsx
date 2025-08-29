@@ -63,7 +63,7 @@ function AccountInner() {
         <h1 className="text-4xl font-bold font-heading">Your Account</h1>
         {isAdmin && (
           <Button asChild>
-            <Link href="/admin/posts">
+            <Link href="/admin">
               <Cog className="mr-2 h-4 w-4" />
               Admin Panel
             </Link>
