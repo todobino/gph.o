@@ -31,12 +31,12 @@ function AdminAuth({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // We only want to redirect if the isAdmin check is complete and the user is *not* an admin.
     if (isAdmin === false) {
-      router.push('/account');
+      router.replace('/account'); // use replace to avoid back-button issues
     }
   }, [isAdmin, router]);
 
   // Show a loading skeleton while the admin status is being determined.
-  if (isAdmin === undefined) {
+  if (isAdmin === undefined || user === undefined) {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="space-y-4">
