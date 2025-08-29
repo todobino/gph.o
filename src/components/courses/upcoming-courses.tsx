@@ -101,7 +101,7 @@ export function UpcomingCourses() {
                       <Button onClick={() => handleWaitlistClick(course.id)} className="w-full md:w-auto" variant="secondary">Join Waitlist</Button>
                     ) : (
                       <Button asChild className="w-full md:w-auto">
-                        <a href={course.purchaseUrl} target="_blank" rel="noopener noreferrer">Buy a Seat</a>
+                        <a href={course.purchaseUrl} target="_blank" rel="noopener noreferrer">Grab a Seat</a>
                       </Button>
                     )}
                   </div>
