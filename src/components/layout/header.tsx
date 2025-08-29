@@ -334,7 +334,7 @@ export function Header() {
                                 ref={desktopSearchInputRef}
                                 type="search"
                                 placeholder="Search posts and pages..."
-                                className="h-9 w-full pl-10 pr-3 bg-white/10 placeholder:text-white/50 text-white border-none"
+                                className="h-9 w-full pl-10 pr-3 bg-white/10 placeholder:text-white/50 text-white border-none rounded-full"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
