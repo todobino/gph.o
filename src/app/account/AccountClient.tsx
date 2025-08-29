@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Suspense } from 'react';
@@ -7,9 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProfileTab } from '@/components/account/profile-tab';
 import { SecurityTab } from '@/components/account/security-tab';
 import { AdminTab } from '@/components/account/admin-tab';
-import { Shield, User as UserIcon, Settings } from 'lucide-react';
+import { Shield, User as UserIcon, Settings, Cog } from 'lucide-react';
 import type { User } from 'firebase/auth';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function AccountClient() {
   return (
@@ -55,9 +58,19 @@ function AccountInner() {
   }
 
   return (
-    <main className="container mx-auto p-6">
-       <h1 className="text-4xl font-bold font-heading mb-4">Your Account</h1>
-       <p className="text-muted-foreground mb-8">Manage your profile, security settings, and more.</p>
+    <main className="container mx-auto px-6 py-12">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-4xl font-bold font-heading">Your Account</h1>
+        {isAdmin && (
+          <Button asChild>
+            <Link href="/admin/posts">
+              <Cog className="mr-2 h-4 w-4" />
+              Admin Panel
+            </Link>
+          </Button>
+        )}
+      </div>
+      <p className="text-muted-foreground mb-8">Manage your profile, security settings, and more.</p>
 
       <Tabs defaultValue="profile" className="w-full">
         <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:w-auto lg:grid-cols-3">
