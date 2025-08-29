@@ -23,6 +23,7 @@ import { useState, useEffect } from 'react';
 import { updateUserProfile } from '@/lib/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
+import { UserCircle } from 'lucide-react';
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, { message: 'First name must be at least 2 characters.' }).optional(),
@@ -97,10 +98,17 @@ export function ProfileTab({ user }: ProfileTabProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Profile</CardTitle>
-        <CardDescription>
-          This is how your name appears on the site. Your email address is not editable.
-        </CardDescription>
+        <div className="flex items-center gap-4">
+            <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-full">
+                <UserCircle className="h-6 w-6 text-blue-600 dark:text-blue-300" />
+            </div>
+            <div className="flex-grow">
+                <CardTitle>Profile</CardTitle>
+                <CardDescription>
+                This is how your name appears on the site.
+                </CardDescription>
+            </div>
+        </div>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -140,6 +148,7 @@ export function ProfileTab({ user }: ProfileTabProps) {
                         <FormControl>
                             <Input {...field} readOnly disabled />
                         </FormControl>
+                        <FormDescription>Your email address is not editable.</FormDescription>
                         <FormMessage />
                         </FormItem>
                     )}

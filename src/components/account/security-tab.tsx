@@ -3,22 +3,30 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ShieldCheck } from "lucide-react";
 
 export function SecurityTab() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Security Settings</CardTitle>
-        <CardDescription>
-          Manage your password and two-factor authentication.
-        </CardDescription>
+        <div className="flex items-center gap-4">
+            <div className="flex-shrink-0 bg-green-100 dark:bg-green-800/50 p-3 rounded-full">
+                <ShieldCheck className="h-6 w-6 text-green-600 dark:text-green-300" />
+            </div>
+            <div className="flex-grow">
+                <CardTitle>Security Settings</CardTitle>
+                <CardDescription>
+                Manage your password and 2FA settings.
+                </CardDescription>
+            </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex items-center justify-between p-4 border rounded-lg">
           <div>
             <h3 className="font-semibold">Change Password</h3>
             <p className="text-sm text-muted-foreground">
-              It's a good idea to use a strong password that you're not using elsewhere.
+              It's a good idea to use a strong password.
             </p>
           </div>
           <Button disabled>Change Password</Button>

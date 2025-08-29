@@ -6,7 +6,7 @@ import AuthGate from '@/components/auth-gate';
 import { useIsAdmin, useUser } from '@/hooks/useUser';
 import { ProfileTab } from '@/components/account/profile-tab';
 import { SecurityTab } from '@/components/account/security-tab';
-import { Cog, UserCircle } from 'lucide-react';
+import { Cog } from 'lucide-react';
 import type { User } from 'firebase/auth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -57,14 +57,9 @@ function AccountInner() {
 
   return (
     <main className="container mx-auto px-6 py-12">
-      <div className="space-y-8 max-w-3xl mx-auto">
+      <div className="space-y-8">
         <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-                 <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-full">
-                    <UserCircle className="h-8 w-8 text-blue-600 dark:text-blue-300" />
-                </div>
-                <h1 className="text-4xl font-bold font-heading">Your Account</h1>
-            </div>
+            <h1 className="text-4xl font-bold font-heading">Your Account</h1>
             {isAdmin && (
             <Button asChild>
                 <Link href="/admin">
@@ -75,7 +70,7 @@ function AccountInner() {
             )}
         </div>
         
-        <div className="space-y-12">
+        <div className="grid md:grid-cols-2 gap-8 items-start">
             <ProfileTab user={user} />
             <SecurityTab />
         </div>
