@@ -112,7 +112,7 @@ export function UpcomingCourses() {
                         <div key={d.date} className={cn(
                             "flex flex-col items-start justify-center p-3 rounded-lg text-left",
                              d.isNoClass 
-                                ? "bg-gray-300 text-black dark:bg-gray-700 dark:text-gray-200" 
+                                ? "bg-muted text-muted-foreground" 
                                 : "bg-background border border-border"
                         )}>
                            {d.isNoClass ? (
