@@ -29,11 +29,13 @@ function AdminAuth({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
+    // We only want to redirect if the isAdmin check is complete and the user is *not* an admin.
     if (isAdmin === false) {
       router.push('/account');
     }
   }, [isAdmin, router]);
 
+  // Show a loading skeleton while the admin status is being determined.
   if (isAdmin === undefined) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -50,6 +52,7 @@ function AdminAuth({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // If the user is an admin, render the admin layout.
   if (isAdmin) {
     return (
         <SidebarProvider>
@@ -112,6 +115,8 @@ function AdminAuth({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // In the case where isAdmin is false, the useEffect will handle the redirect.
+  // Returning null here prevents a flash of unstyled content.
   return null;
 }
 
