@@ -1,6 +1,9 @@
 
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
 
 // Placeholder subscriber data and columns
 const subscriberColumns = [
@@ -34,10 +37,15 @@ export default function AdminSubscribersPage() {
         <h1 className="text-4xl font-bold font-heading">Manage Subscribers</h1>
         <Card>
             <CardHeader>
-                <CardTitle>All Subscribers</CardTitle>
-                <p className="text-sm text-muted-foreground pt-1">
-                    Subscriber management interface is under development. The table below is a placeholder.
-                </p>
+                <div className="flex justify-between items-center">
+                    <CardTitle>All Subscribers</CardTitle>
+                    <Button asChild>
+                      <Link href="/admin/subscribers/new-list">
+                        <Plus className="mr-2 h-4 w-4" />
+                        New List
+                      </Link>
+                    </Button>
+                </div>
             </CardHeader>
             <CardContent>
                  <PostsDataTable 
