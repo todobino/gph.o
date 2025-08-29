@@ -118,6 +118,7 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
 
   const selectedRowCount = Object.keys(rowSelection).length;
   const uniqueAuthors = React.useMemo(() => Array.from(new Set(data.map(post => post.author))), [data]);
+  const uniqueTags = React.useMemo(() => Array.from(new Set(data.flatMap(post => post.tags))), [data]);
 
   return (
     <div className="w-full">
@@ -131,12 +132,12 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
           className="max-w-sm h-9"
         />
 
-        {/* Filter By Dropdown */}
+        {/* Filter By Author */}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="h-9 rounded-md">
                     <ListFilter className="mr-2 h-4 w-4" />
-                    Filter
+                    Filter Authors
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -155,21 +156,54 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
             </DropdownMenuContent>
         </DropdownMenu>
 
+        {/* Filter By Tag */}
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-9 rounded-md">
+                    <ListFilter className="mr-2 h-4 w-4" />
+                    Filter Tags
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Filter by Tag</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {uniqueTags.map(tag => (
+                    <DropdownMenuCheckboxItem
+                        key={tag}
+                        checked={(table.getColumn('tags')?.getFilterValue() as string[] ?? []).includes(tag)}
+                        onCheckedChange={(checked) => {
+                            const currentTags = (table.getColumn('tags')?.getFilterValue() as string[] ?? []);
+                            let newTags;
+                            if (checked) {
+                                newTags = [...currentTags, tag];
+                            } else {
+                                newTags = currentTags.filter(t => t !== tag);
+                            }
+                            table.getColumn('tags')?.setFilterValue(newTags.length > 0 ? newTags : undefined);
+                        }}
+                    >
+                        {tag}
+                    </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
+
         <div className="flex-grow" />
 
-         <Button
-            variant="outline"
-            size="sm"
-            className="ml-auto h-9 rounded-md"
-            disabled={selectedRowCount === 0}
-            onClick={() => {
-              const selectedRows = table.getFilteredSelectedRowModel().rows;
-              const selectedSlugs = selectedRows.map(row => row.original.slug);
-              console.log('Delete selected posts:', selectedSlugs);
-            }}
-         >
-            <Trash2 className="mr-2 h-4 w-4" /> Delete ({selectedRowCount})
-         </Button>
+         {selectedRowCount > 0 && (
+            <Button
+                variant="destructive"
+                size="sm"
+                className="ml-auto h-9 rounded-md"
+                onClick={() => {
+                const selectedRows = table.getFilteredSelectedRowModel().rows;
+                const selectedSlugs = selectedRows.map(row => row.original.slug);
+                console.log('Delete selected posts:', selectedSlugs);
+                }}
+            >
+                <Trash2 className="mr-2 h-4 w-4" /> Delete ({selectedRowCount})
+            </Button>
+         )}
 
       </div>
       <div className="rounded-md border">
