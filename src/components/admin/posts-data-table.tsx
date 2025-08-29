@@ -167,13 +167,13 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
           onChange={(event) =>
             table.getColumn('title')?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm h-9"
         />
 
         {/* Filter By Dropdown */}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="h-10">
+                <Button variant="outline" size="sm">
                     <ListFilter className="mr-2 h-4 w-4" />
                     Filter
                 </Button>
