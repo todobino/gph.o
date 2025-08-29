@@ -31,9 +31,13 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown, Trash2, Edit } from 'lucide-react'; // Import Trash2 and Edit icons
-import type { Post } from '@/services/posts'; // Assuming Post type is available
+import { ChevronDown, Trash2, Edit, ListFilter, ArrowUpDown } from 'lucide-react'; 
+import type { Post } from '@/services/posts'; 
 
 // Add selection column definition
 const selectionColumn: ColumnDef<Post> = {
@@ -103,27 +107,34 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  // Define columns dynamically based on props, adding selection and actions
   const columns: ColumnDef<any>[] = React.useMemo(
     () => [
-        selectionColumn, // Add selection column first
+        selectionColumn,
         ...propColumns.map((col) => ({
             accessorKey: col.accessorKey,
-            header: col.header,
+            header: ({ column }: { column: any}) => {
+                return (
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        {col.header}
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                )
+            },
             cell: ({ row }: { row: any }) => (
-                <div className={col.accessorKey === 'title' ? 'font-medium' : ''}>
-                {/* Handle potential array data like tags */}
+                <div className={col.accessorKey === 'title' ? 'font-medium pl-4' : 'pl-4'}>
                 {Array.isArray(row.getValue(col.accessorKey))
                     ? (row.getValue(col.accessorKey) as string[]).join(', ')
                     : row.getValue(col.accessorKey)}
                 </div>
             ),
         })),
-        actionsColumn, // Add actions column last
+        actionsColumn,
     ],
     [propColumns]
  );
-
 
   const table = useReactTable({
     data,
@@ -145,11 +156,11 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
   });
 
   const selectedRowCount = Object.keys(rowSelection).length;
+  const uniqueAuthors = React.useMemo(() => Array.from(new Set(data.map(post => post.author))), [data]);
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-2">
-        {/* Filter Input */}
         <Input
           placeholder="Search for post..."
           value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
@@ -159,48 +170,46 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
           className="max-w-sm"
         />
 
-        {/* Bulk Actions Button (Placeholder) */}
+        {/* Filter By Dropdown */}
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-10">
+                    <ListFilter className="mr-2 h-4 w-4" />
+                    Filter
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Filter by Author</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup 
+                    value={table.getColumn('author')?.getFilterValue() as string ?? ''}
+                    onValueChange={(value) => {
+                        table.getColumn('author')?.setFilterValue(value === table.getColumn('author')?.getFilterValue() ? undefined : value)
+                    }}
+                >
+                {uniqueAuthors.map(author => (
+                    <DropdownMenuRadioItem key={author} value={author}>{author}</DropdownMenuRadioItem>
+                ))}
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+
+        <div className="flex-grow" />
+
          <Button
             variant="outline"
             size="sm"
             className="ml-auto"
-            disabled={selectedRowCount === 0} // Disable if no rows selected
+            disabled={selectedRowCount === 0}
             onClick={() => {
               const selectedRows = table.getFilteredSelectedRowModel().rows;
               const selectedSlugs = selectedRows.map(row => row.original.slug);
-              console.log('Delete selected posts:', selectedSlugs); // Placeholder action
+              console.log('Delete selected posts:', selectedSlugs);
             }}
          >
-            <Trash2 className="mr-2 h-4 w-4" /> Delete Selected ({selectedRowCount})
+            <Trash2 className="mr-2 h-4 w-4" /> Delete ({selectedRowCount})
          </Button>
 
-        {/* Column Visibility Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide() && column.id !== 'select' && column.id !== 'actions') // Exclude select and actions columns
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="rounded-md border">
         <Table>
