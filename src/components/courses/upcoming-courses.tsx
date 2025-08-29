@@ -110,8 +110,10 @@ export function UpcomingCourses() {
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pt-2">
                     {course.dates.map((d) => (
                         <div key={d.date} className={cn(
-                            "flex flex-col items-start justify-center p-3 rounded-lg bg-secondary text-secondary-foreground text-left",
-                             d.isNoClass && "bg-gray-300 text-black dark:bg-gray-700 dark:text-gray-200"
+                            "flex flex-col items-start justify-center p-3 rounded-lg text-left",
+                             d.isNoClass 
+                                ? "bg-gray-300 text-black dark:bg-gray-700 dark:text-gray-200" 
+                                : "bg-background border border-border"
                         )}>
                            {d.isNoClass ? (
                                 <span className="font-semibold mx-auto">No Class</span>
