@@ -279,4 +279,3 @@ export function PostsDataTable({ columns: propColumns, data }: { columns: any[],
     </div>
   );
 }
-
