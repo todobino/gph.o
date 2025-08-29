@@ -4,15 +4,14 @@
 import { Suspense } from 'react';
 import AuthGate from '@/components/auth-gate';
 import { useIsAdmin, useUser } from '@/hooks/useUser';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProfileTab } from '@/components/account/profile-tab';
 import { SecurityTab } from '@/components/account/security-tab';
-import { AdminTab } from '@/components/account/admin-tab';
-import { Shield, User as UserIcon, Settings, Cog } from 'lucide-react';
+import { Cog } from 'lucide-react';
 import type { User } from 'firebase/auth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Separator } from '@/components/ui/separator';
 
 export default function AccountClient() {
   return (
@@ -59,48 +58,28 @@ function AccountInner() {
 
   return (
     <main className="container mx-auto px-6 py-12">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-4xl font-bold font-heading">Your Account</h1>
-        {isAdmin && (
-          <Button asChild>
-            <Link href="/admin">
-              <Cog className="mr-2 h-4 w-4" />
-              Admin Panel
-            </Link>
-          </Button>
-        )}
-      </div>
-      <p className="text-muted-foreground mb-8">Manage your profile, security settings, and more.</p>
-
-      <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:w-auto lg:grid-cols-3">
-          <TabsTrigger value="profile">
-            <UserIcon className="mr-2 h-4 w-4" /> Profile
-          </TabsTrigger>
-          <TabsTrigger value="security">
-            <Shield className="mr-2 h-4 w-4" /> Security
-          </TabsTrigger>
-          {isAdmin && (
-            <TabsTrigger value="admin">
-              <Settings className="mr-2 h-4 w-4" /> Admin
-            </TabsTrigger>
-          )}
-        </TabsList>
+      <div className="space-y-8 max-w-3xl mx-auto">
+        <div className="flex justify-between items-center">
+            <div>
+                <h1 className="text-4xl font-bold font-heading">Your Account</h1>
+                <p className="text-muted-foreground mt-2">Manage your profile, security settings, and more.</p>
+            </div>
+            {isAdmin && (
+            <Button asChild>
+                <Link href="/admin">
+                <Cog className="mr-2 h-4 w-4" />
+                Admin Panel
+                </Link>
+            </Button>
+            )}
+        </div>
         
-        <TabsContent value="profile" className="mt-6">
-          <ProfileTab user={user} />
-        </TabsContent>
-        
-        <TabsContent value="security" className="mt-6">
+        <div className="space-y-12">
+            <ProfileTab user={user} />
+            <Separator />
             <SecurityTab />
-        </TabsContent>
-
-        {isAdmin && (
-            <TabsContent value="admin" className="mt-6">
-                <AdminTab />
-            </TabsContent>
-        )}
-      </Tabs>
+        </div>
+      </div>
     </main>
   );
 }
