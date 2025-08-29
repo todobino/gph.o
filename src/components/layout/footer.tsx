@@ -89,7 +89,7 @@ export async function Footer() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4">
             <p className="text-center text-sm leading-loose text-muted-foreground">
-              &copy; {new Date().getFullYear()} GeePawHill.Org. All rights reserved.
+              &copy; {new Date().getFullYear()} GeePaw. All rights reserved.
             </p>
           </div>
         </div>

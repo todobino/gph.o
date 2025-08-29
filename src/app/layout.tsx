@@ -15,7 +15,7 @@ const fontSans = Inter({
 
 
 export const metadata: Metadata = {
-  title: "GeePawHill.Org",
+  title: "GeePaw",
   description: "Software Development Tidbits",
 };
 
