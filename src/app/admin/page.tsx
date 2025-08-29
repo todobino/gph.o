@@ -1,25 +1,20 @@
 
-'use client';
-import { redirect, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
-
-function AdminRedirect() {
-    const searchParams = useSearchParams();
-    const tab = searchParams.get('tab');
-    if (!tab) {
-        redirect('/account?tab=admin');
-    } else {
-        redirect('/account?' + searchParams.toString());
-    }
-    return null;
-}
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function AdminPage() {
-  // The root /admin page should now redirect to the account page,
-  // which will handle showing the admin tab for authorized users.
   return (
-    <Suspense>
-        <AdminRedirect />
-    </Suspense>
-  )
+    <div>
+        <h1 className="text-4xl font-bold font-heading mb-8">Admin Panel</h1>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Overview</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-muted-foreground">Welcome to the admin dashboard. Here you can manage your site's content and settings.</p>
+                </CardContent>
+            </Card>
+        </div>
+    </div>
+  );
 }
