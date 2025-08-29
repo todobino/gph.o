@@ -23,29 +23,31 @@ function AdminNav() {
     ];
     return (
          <aside className="w-full md:w-1/4 lg:w-1/5">
-            <nav className="flex flex-col space-y-2">
-                 <Button variant="secondary" size="sm" asChild className="mb-4 justify-start">
-                      <Link href="/account">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to Account
-                      </Link>
-                  </Button>
-                {navItems.map((item) => (
-                    <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                        'flex items-center gap-2 rounded-md p-2 text-sm font-medium transition-colors',
-                        pathname === item.href
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                    )}
-                    >
-                    {item.icon}
-                    <span>{item.label}</span>
-                    </Link>
-                ))}
-            </nav>
+            <div className="sticky top-24">
+                <nav className="flex flex-col space-y-2">
+                    <Button variant="secondary" size="sm" asChild className="mb-4 justify-start">
+                        <Link href="/account">
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Back to Account
+                        </Link>
+                    </Button>
+                    {navItems.map((item) => (
+                        <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                            'flex items-center gap-2 rounded-md p-2 text-sm font-medium transition-colors',
+                            pathname === item.href
+                            ? 'bg-primary text-primary-foreground'
+                            : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        )}
+                        >
+                        {item.icon}
+                        <span>{item.label}</span>
+                        </Link>
+                    ))}
+                </nav>
+            </div>
         </aside>
     );
 }
