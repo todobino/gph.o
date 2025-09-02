@@ -8,6 +8,7 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { getLists, type List } from '@/services/subscribers';
 import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 // Placeholder list data and columns
 const listColumns = [
@@ -18,27 +19,27 @@ const listColumns = [
   {
     accessorKey: 'subscribed',
     header: 'Subscribed',
-    cell: ({ row }: { row: any }) => row.original.subscriberCount, // Using total for now
+    cell: ({ row }: { row: any }) => <div className="text-right pr-4">{row.original.subscriberCount}</div>,
   },
   {
     accessorKey: 'unconfirmed',
     header: 'Unconfirmed',
-     cell: () => 0, // Placeholder
+     cell: () => <div className="text-right pr-4">0</div>,
   },
   {
     accessorKey: 'unsubscribed',
     header: 'Unsubscribed',
-    cell: () => 0, // Placeholder
+    cell: () => <div className="text-right pr-4">0</div>,
   },
   {
       accessorKey: 'inactive',
       header: 'Inactive',
-      cell: () => 0, // Placeholder
+      cell: () => <div className="text-right pr-4">0</div>,
   },
   {
       accessorKey: 'bounced',
       header: 'Bounced',
-      cell: () => 0, // Placeholder
+      cell: () => <div className="text-right pr-4">0</div>,
   },
 ];
 

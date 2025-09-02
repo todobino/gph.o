@@ -37,6 +37,7 @@ import {
 import { ChevronDown, Trash2, Edit, ListFilter, ArrowUpDown } from 'lucide-react'; 
 import type { Post } from '@/services/posts'; 
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 // Add selection column definition
 const selectionColumn: ColumnDef<Post> = {
@@ -71,7 +72,7 @@ interface PostsDataTableProps {
     searchPlaceholder?: string;
 }
 
-export function PostsDataTable({ columns: propColumns, data, searchColumnId = 'title', filterColumnId, filterColumnName, searchPlaceholder = 'Search for post...' }: PostsDataTableProps) {
+export function PostsDataTable({ columns: propColumns, data, searchColumnId, filterColumnId, filterColumnName, searchPlaceholder = 'Search...' }: PostsDataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -81,19 +82,24 @@ export function PostsDataTable({ columns: propColumns, data, searchColumnId = 't
     () => [
         selectionColumn,
         ...propColumns.map((col) => ({
-            accessorKey: col.accessorKey,
-            header: ({ column }: { column: any}) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        {col.header}
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
-            cell: ({ row }: { row: any }) => {
+            ...col,
+            header: col.header ? ({ column }: { column: any}) => {
+                // If header is a string, render our default sortable button
+                if (typeof col.header === 'string') {
+                    return (
+                        <Button
+                            variant="ghost"
+                            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        >
+                            {col.header}
+                            <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </Button>
+                    )
+                }
+                // Otherwise, render the custom header component
+                return col.header({ column });
+            } : undefined,
+            cell: col.cell ? col.cell : ({ row }: { row: any }) => {
                 const value = row.getValue(col.accessorKey);
                 if (Array.isArray(value)) {
                     return (
@@ -104,8 +110,9 @@ export function PostsDataTable({ columns: propColumns, data, searchColumnId = 't
                         </div>
                     )
                 }
+                 const isWideColumn = ['name', 'title', 'email'].includes(col.accessorKey);
                 return (
-                    <div className={col.accessorKey === 'title' || col.accessorKey === 'email' ? 'font-medium pl-4' : 'pl-4'}>
+                    <div className={cn('pl-4', { 'font-medium': isWideColumn })}>
                         {value}
                     </div>
                 )
@@ -155,15 +162,17 @@ export function PostsDataTable({ columns: propColumns, data, searchColumnId = 't
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-2">
-        <Input
-          placeholder={searchPlaceholder}
-          value={(table.getColumn(searchColumnId)?.getFilterValue() as string) ?? ''}
-          onChange={(event) => {
-            table.getColumn(searchColumnId)?.setFilterValue(event.target.value)
-           }
-          }
-          className="max-w-sm"
-        />
+        {searchColumnId && (
+            <Input
+            placeholder={searchPlaceholder}
+            value={(table.getColumn(searchColumnId)?.getFilterValue() as string) ?? ''}
+            onChange={(event) => {
+                table.getColumn(searchColumnId)?.setFilterValue(event.target.value)
+            }
+            }
+            className="max-w-sm"
+            />
+        )}
 
         {filterColumn && filterColumnName && (
             <DropdownMenu>
