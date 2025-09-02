@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 import AuthGate from '@/components/auth-gate';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useIsAdmin, useUser } from '@/hooks/useUser';
+import { useIsAdmin } from '@/hooks/useUser';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -55,8 +55,7 @@ function AdminNav() {
 
 
 function AdminAuth({ children }: { children: React.ReactNode }) {
-  const user = useUser();
-  const isAdmin = useIsAdmin(user);
+  const isAdmin = useIsAdmin();
   const router = useRouter();
 
   useEffect(() => {
@@ -67,7 +66,7 @@ function AdminAuth({ children }: { children: React.ReactNode }) {
   }, [isAdmin, router]);
 
   // Show a loading skeleton while the admin status is being determined.
-  if (isAdmin === undefined || user === undefined) {
+  if (isAdmin === undefined) {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="space-y-4">

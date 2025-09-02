@@ -13,9 +13,7 @@ export default function LogoutPage() {
   useEffect(() => {
     const handleLogout = async () => {
       await signOut(auth);
-      // After signing out of Firebase on the client,
-      // the user will be redirected to the login page
-      // on the next navigation that requires auth.
+      // After signing out, redirect to home.
       router.push("/");
     };
 

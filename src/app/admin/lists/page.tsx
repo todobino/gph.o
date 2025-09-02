@@ -1,10 +1,13 @@
 
+'use client';
+
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { getLists, type List } from '@/services/subscribers';
+import { useEffect, useState } from 'react';
 
 // Placeholder list data and columns
 const listColumns = [
@@ -29,8 +32,13 @@ const listColumns = [
   }
 ];
 
-export default async function AdminListsPage() {
-  const lists: List[] = await getLists();
+export default function AdminListsPage() {
+  const [lists, setLists] = useState<List[]>([]);
+
+  useEffect(() => {
+    getLists().then(setLists);
+  }, []);
+
 
   return (
     <div>

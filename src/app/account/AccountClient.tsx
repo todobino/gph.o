@@ -6,7 +6,6 @@ import AuthGate from '@/components/auth-gate';
 import { useIsAdmin, useUser } from '@/hooks/useUser';
 import { ProfileTab } from '@/components/account/profile-tab';
 import { SecurityTab } from '@/components/account/security-tab';
-import { Cog } from 'lucide-react';
 import type { User } from 'firebase/auth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -35,8 +34,8 @@ export default function AccountClient() {
 }
 
 function AccountInner() {
-  const user = useUser() as User | null;
-  const isAdmin = useIsAdmin(user);
+  const user = useUser();
+  const isAdmin = useIsAdmin();
 
   if (!user) {
     // This should technically not be reached due to AuthGate, but as a fallback

@@ -1,10 +1,13 @@
 
+'use client';
+
 import { getPosts, type Post } from '@/services/posts';
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 // Define columns for the data table
 const columns = [
@@ -22,8 +25,12 @@ const columns = [
   },
 ];
 
-export default async function AdminPostsPage() {
-  const posts: Post[] = await getPosts();
+export default function AdminPostsPage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    getPosts().then(setPosts);
+  }, []);
 
   return (
     <div>

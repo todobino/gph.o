@@ -4,7 +4,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,6 +17,10 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firestore';
+
+const NEWSLETTER_LIST_ID = 'newsletter';
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -40,14 +43,13 @@ interface EmailSignupFormProps {
 
 export function EmailSignupForm({
   buttonText = 'Subscribe',
-  listId,
+  listId = NEWSLETTER_LIST_ID,
   formClassName,
   buttonClassName,
 }: EmailSignupFormProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 1. Define your form.
   const form = useForm<EmailSignupFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,31 +58,40 @@ export function EmailSignupForm({
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: EmailSignupFormData) {
-     setIsSubmitting(true);
+    setIsSubmitting(true);
+    const cleanEmail = values.email.trim().toLowerCase();
+
     try {
-      const response = await fetch('/api/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...values, listId }),
+      // For anonymous signups, the UID is the email address.
+      const subscriberRef = doc(db, 'subscribers', cleanEmail);
+      const subscriptionRef = doc(db, 'subscriptions', `${cleanEmail}_${listId}`);
+
+      await setDoc(subscriberRef, {
+        id: cleanEmail,
+        email: cleanEmail,
+        displayName: values.name,
+        status: 'active', // Assuming single opt-in for simplicity based on new rules
+        source: 'web_form',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+
+      await setDoc(subscriptionRef, {
+        id: `${cleanEmail}_${listId}`,
+        subscriberId: cleanEmail,
+        listId: listId,
+        status: 'subscribed',
+        channel: 'email',
+        subscribedAt: serverTimestamp(),
+        lastChangedAt: serverTimestamp(),
       });
-
-      const result = await response.json();
-
-       if (result.ok) {
-            toast({
-            title: 'Subscription Pending!',
-            description: "Please check your email to confirm your subscription.",
-            });
-            form.reset(); // Clear the form
-       } else {
-            toast({
-                title: 'Subscription Failed',
-                description: result.error || 'An unexpected error occurred. Please try again.',
-                variant: 'destructive',
-            });
-       }
+      
+      toast({
+        title: 'Subscription Successful!',
+        description: "You've been added to the list.",
+      });
+      form.reset();
 
     } catch (error) {
       console.error('Signup form submission error:', error);
@@ -90,7 +101,7 @@ export function EmailSignupForm({
         variant: 'destructive',
       });
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   }
 

@@ -1,4 +1,6 @@
 
+'use client';
+
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -43,7 +45,7 @@ export default function AdminCoursesPage() {
                 </div>
             </CardHeader>
             <CardContent>
-                <PostsDataTable columns={courseColumns} data={placeholderCourses} />
+                <PostsDataTable columns={courseColumns} data={placeholderCourses} searchColumnId="title" />
             </CardContent>
         </Card>
     </div>

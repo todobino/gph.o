@@ -1,9 +1,9 @@
 
-'use server';
+'use client';
 
-import { adminDb } from '@/lib/firebaseAdmin';
+import { db } from '@/lib/firestore';
 import type { Subscriber, List } from '@/types/subscriber';
-import { Timestamp } from 'firebase-admin/firestore';
+import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 
 function convertTimestamps(docData: any) {
     const data = { ...docData };
@@ -11,7 +11,7 @@ function convertTimestamps(docData: any) {
         if (data[key] instanceof Timestamp) {
             data[key] = data[key].toDate().toISOString();
         } else if (typeof data[key] === 'object' && data[key] !== null) {
-            // Recursively convert nested timestamps, e.g., in gdprConsent
+            // Recursively convert nested timestamps
             for (const nestedKey in data[key]) {
                 if (data[key][nestedKey] instanceof Timestamp) {
                      data[key][nestedKey] = data[key][nestedKey].toDate().toISOString();
@@ -28,7 +28,8 @@ function convertTimestamps(docData: any) {
  */
 export async function getSubscribers(): Promise<Subscriber[]> {
   try {
-    const subscribersSnapshot = await adminDb.collection('subscribers').orderBy('createdAt', 'desc').get();
+    const q = query(collection(db, 'subscribers'), orderBy('createdAt', 'desc'));
+    const subscribersSnapshot = await getDocs(q);
     if (subscribersSnapshot.empty) {
       return [];
     }
@@ -45,10 +46,10 @@ export async function getSubscribers(): Promise<Subscriber[]> {
  */
 export async function getLists(): Promise<List[]> {
   try {
-    const listsSnapshot = await adminDb.collection('lists').orderBy('createdAt', 'desc').get();
+    const q = query(collection(db, 'lists'), orderBy('createdAt', 'desc'));
+    const listsSnapshot = await getDocs(q);
     if (listsSnapshot.empty) {
       return [
-        // Return a placeholder if no lists exist
         { id: 'newsletter', slug: 'newsletter', name: 'Newsletter', description: 'General updates and news.', isPublic: true, createdAt: new Date(), updatedAt: new Date(), subscriberCount: 0 },
       ];
     }
