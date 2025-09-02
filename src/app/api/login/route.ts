@@ -1,44 +1,8 @@
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{db}/documents {
-    function isSignedIn() { return request.auth != null; }
-    function isSelf(uid) { return isSignedIn() && request.auth.uid == uid; }
-    function isAdmin() {
-      return isSignedIn() &&
-        get(/databases/$(db)/documents/users/$(request.auth.uid)).data.userType == "admin";
-    }
+import { NextResponse } from 'next/server';
 
-    // USERS
-    match /users/{uid} {
-      allow read: if isSelf(uid) || isAdmin();
-      allow create: if isSelf(uid);
-      allow update: if isSelf(uid) || isAdmin();
-    }
-
-    // LISTS
-    match /lists/{id} {
-      allow read: if resource.data.isPublic == true || isAdmin();
-      allow create, update, delete: if isAdmin();
-    }
-
-    // SUBSCRIBERS (doc id == auth.uid; minimal model with listIds array)
-    match /subscribers/{uid} {
-      allow read: if isAdmin() || isSelf(uid);
-      allow create: if isSelf(uid);
-      allow update: if isSelf(uid);
-      allow delete: if isAdmin();
-    }
-
-    // POSTS (example: public read if published; admins full control)
-    match /posts/{id} {
-      allow read: if resource.data.status == "published" || isAdmin();
-      allow create, update, delete: if isAdmin();
-    }
-
-    // COURSES (same pattern)
-    match /courses/{id} {
-      allow read: if resource.data.isPublic == true || isAdmin();
-      allow create, update, delete: if isAdmin();
-    }
-  }
+export async function POST(req: Request) {
+  // This is a placeholder. User authentication is handled on the client-side
+  // by the Firebase SDK in this application architecture.
+  // See /src/app/login/page.tsx for the implementation.
+  return NextResponse.json({ ok: true, message: "Login logic is client-side." });
 }

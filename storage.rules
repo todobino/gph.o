@@ -1,0 +1,18 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow public read access to appData folder for assets like PDFs
+    match /appData/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null; // Or more specific admin rules
+    }
+
+    // Allow read access to other files for authenticated users
+    // And write access only for authenticated users (you might want to lock this down further)
+    match /{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+  }
+}

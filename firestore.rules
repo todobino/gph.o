@@ -14,15 +14,15 @@ service cloud.firestore {
       allow create: if isSelf(uid);
       allow update: if isSelf(uid) || isAdmin();
     }
-    
-    // FORMS
-    match /forms/{id} {
+
+    // LISTS
+    match /lists/{id} {
       allow read: if resource.data.isPublic == true || isAdmin();
       allow create, update, delete: if isAdmin();
     }
 
-    // LISTS
-    match /lists/{id} {
+    // FORMS
+    match /forms/{id} {
       allow read: if resource.data.isPublic == true || isAdmin();
       allow create, update, delete: if isAdmin();
     }
@@ -50,23 +50,23 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    // Optional: log submissions (create-only by signed-in user)
-    match /formSubmissions/{sid} {
-      allow create: if isSignedIn();
-      allow read: if isAdmin();
-      allow update, delete: if false;
-    }
-
-    // POSTS (example: public read if published; admins full control)
+    // POSTS
     match /posts/{id} {
       allow read: if resource.data.status == "published" || isAdmin();
       allow create, update, delete: if isAdmin();
     }
 
-    // COURSES (same pattern)
+    // COURSES
     match /courses/{id} {
       allow read: if resource.data.isPublic == true || isAdmin();
       allow create, update, delete: if isAdmin();
+    }
+
+    // FORM SUBMISSIONS (Optional logging)
+    match /formSubmissions/{sid} {
+      allow create: if isSignedIn();
+      allow read: if isAdmin();
+      allow update, delete: if false;
     }
   }
 }
