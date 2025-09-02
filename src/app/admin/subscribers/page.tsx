@@ -16,16 +16,16 @@ const subscriberColumns = [
     header: 'Email',
   },
   {
+    accessorKey: 'displayName',
+    header: 'Name',
+  },
+  {
     accessorKey: 'status',
     header: 'Status',
   },
   {
-    accessorKey: 'createdAt',
-    header: 'Subscribed On',
-    cell: ({ row }: { row: any }) => {
-        const date = new Date(row.original.createdAt);
-        return date.toLocaleDateString();
-    }
+    accessorKey: 'listIds',
+    header: 'Lists',
   },
 ];
 
