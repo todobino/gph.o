@@ -1,25 +1,60 @@
+
 import { adminDb } from '@/lib/firebaseAdmin';
 import { redirect } from 'next/navigation';
+import { FieldValue } from 'firebase-admin/firestore';
 
-export default async function Confirm({ searchParams }: { searchParams: { token?: string }}) {
-  const token = searchParams.token;
-  if (!token) redirect('/?confirm=missing');
-  const ref = adminDb.collection('confirmTokens').doc(token);
-  const snap = await ref.get();
-  if (!snap.exists) redirect('/?confirm=invalid');
+export default async function Confirm({ searchParams }: { searchParams: { token?: string, sub?: string }}) {
+  const { token, sub: subscriptionId } = searchParams;
 
-  const { email, listIds, expiresAt } = snap.data()!;
-  if (Date.now() > expiresAt) { await ref.delete(); redirect('/?confirm=expired'); }
+  if (!token || !subscriptionId) {
+    redirect('/?confirm=missing');
+  }
 
-  const subRef = adminDb.collection('subscribers').doc(email);
-  await adminDb.runTransaction(async (tx) => {
-    const s = await tx.get(subRef);
-    const setLists = new Set([...(s.data()?.listIds || []), ...(listIds || [])]);
-    tx.set(subRef, {
-      email, status: 'subscribed', listIds: Array.from(setLists), confirmedAt: new Date(),
-    }, { merge: true });
-    tx.delete(ref);
-  });
+  const subscriptionRef = adminDb.collection('subscriptions').doc(subscriptionId);
+  
+  try {
+    const result = await adminDb.runTransaction(async (tx) => {
+      const subSnap = await tx.get(subscriptionRef);
+      if (!subSnap.exists) {
+        return { success: false, reason: 'invalid' };
+      }
 
-  redirect('/?confirm=ok');
+      const subscriptionData = subSnap.data()!;
+      if (subscriptionData.doubleOptIn?.token !== token) {
+        return { success: false, reason: 'invalid' };
+      }
+
+      // Token is valid, proceed with confirmation
+      const now = new Date();
+      const subscriberId = subscriptionData.subscriberId;
+      const subscriberRef = adminDb.collection('subscribers').doc(subscriberId);
+      
+      // Update subscription
+      tx.update(subscriptionRef, {
+        status: 'subscribed',
+        subscribedAt: now,
+        lastChangedAt: now,
+        'doubleOptIn.confirmedAt': now,
+        'doubleOptIn.token': FieldValue.delete(), // Remove token after use
+      });
+
+      // Update global subscriber status to 'active'
+      tx.set(subscriberRef, { 
+        status: 'active',
+        confirmedAt: now,
+        updatedAt: now,
+      }, { merge: true });
+
+      return { success: true };
+    });
+
+    if (result.success) {
+      redirect('/?confirm=ok');
+    } else {
+      redirect(`/?confirm=${result.reason}`);
+    }
+  } catch (error) {
+    console.error('Confirmation transaction failed:', error);
+    redirect('/?confirm=error');
+  }
 }

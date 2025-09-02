@@ -1,61 +1,88 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { adminDb } from '@/lib/firebaseAdmin'; // init Admin SDK
 import sgMail from '@sendgrid/mail';
+import { FieldValue } from 'firebase-admin/firestore';
 
 if (process.env.SENDGRID_API_KEY) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 }
 
+const NEWSLETTER_LIST_ID = 'newsletter'; // Default list ID
+
 export async function POST(req: NextRequest) {
-  const { email, listId } = await req.json();
-  const clean = String(email || '').trim().toLowerCase();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) {
+  const { email, listId = NEWSLETTER_LIST_ID } = await req.json();
+  const cleanEmail = String(email || '').trim().toLowerCase();
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
     return NextResponse.json({ ok: false, error: 'bad_email' }, { status: 400 });
   }
 
-  // rate limit (very light example)
-  const ip = req.headers.get('x-forwarded-for') || 'unknown';
-  // TODO: implement proper IP+email throttle
-
-  const token = crypto.randomBytes(24).toString('hex');
-  const expiresAt = Date.now() + 1000 * 60 * 60 * 24; // 24h
-
   const now = new Date();
-  await adminDb.runTransaction(async (tx) => {
-    const subRef = adminDb.collection('subscribers').doc(clean);
-    const subSnap = await tx.get(subRef);
-    if (!subSnap.exists) {
-      tx.set(subRef, {
-        email: clean,
-        status: 'pending',
-        listIds: listId ? [listId] : [],
-        source: 'web_form',
-        ipSignup: ip,
-        ua: req.headers.get('user-agent') || '',
-        createdAt: now,
+  const confirmationToken = crypto.randomBytes(24).toString('hex');
+  const subscriptionId = `${cleanEmail}_${listId}`;
+
+  try {
+    await adminDb.runTransaction(async (tx) => {
+        const subscriberRef = adminDb.collection('subscribers').doc(cleanEmail);
+        const subscriptionRef = adminDb.collection('subscriptions').doc(subscriptionId);
+
+        const subscriberSnap = await tx.get(subscriberRef);
+        
+        // 1. Create or update the global subscriber document
+        if (!subscriberSnap.exists) {
+            tx.set(subscriberRef, {
+                id: cleanEmail,
+                email: cleanEmail,
+                status: 'unconfirmed',
+                source: 'web_form',
+                createdAt: now,
+                updatedAt: now,
+            });
+        } else {
+            // If user exists and is unsubscribed, let them re-subscribe but keep as unconfirmed
+            const currentStatus = subscriberSnap.data()?.status;
+            if (currentStatus !== 'active' && currentStatus !== 'unconfirmed') {
+                 tx.update(subscriberRef, { status: 'unconfirmed', updatedAt: now });
+            } else {
+                 tx.update(subscriberRef, { updatedAt: now });
+            }
+        }
+        
+        // 2. Create the specific subscription document with 'pending' status
+        tx.set(subscriptionRef, {
+            id: subscriptionId,
+            subscriberId: cleanEmail,
+            listId: listId,
+            status: 'pending',
+            channel: 'email',
+            lastChangedAt: now,
+            doubleOptIn: {
+                required: true,
+                token: confirmationToken,
+                sentAt: now
+            }
+        });
+    });
+
+    const confirmUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/confirm?token=${confirmationToken}&sub=${subscriptionId}`;
+  
+    if (process.env.SENDGRID_API_KEY) {
+      await sgMail.send({
+        to: cleanEmail,
+        from: { email: process.env.SEND_FROM_EMAIL!, name: process.env.SEND_FROM_NAME! },
+        subject: 'Confirm your subscription',
+        html: `<p>Please click the link below to confirm your subscription:</p><p><a href="${confirmUrl}">${confirmUrl}</a></p>`,
       });
     } else {
-      const d = subSnap.data()!;
-      const listIds = new Set([...(d.listIds || []), ...(listId ? [listId] : [])]);
-      tx.update(subRef, { listIds: Array.from(listIds), status: d.status === 'subscribed' ? 'subscribed' : 'pending' });
+       console.log(`CONFIRMATION LINK (no email sent): ${confirmUrl}`);
     }
-    tx.set(adminDb.collection('confirmTokens').doc(token), {
-      email: clean, listIds: listId ? [listId] : [], expiresAt, createdAt: now
-    });
-  });
 
-  const confirmUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/confirm?token=${token}`;
-  
-  if (sgMail.send) {
-    await sgMail.send({
-      to: clean,
-      from: { email: process.env.SEND_FROM_EMAIL!, name: process.env.SEND_FROM_NAME! },
-      subject: 'Confirm your subscription',
-      html: `<p>Click to confirm: <a href="${confirmUrl}">${confirmUrl}</a></p>`,
-    });
+    return NextResponse.json({ ok: true });
+
+  } catch (error) {
+    console.error('Error in /api/subscribe:', error);
+    return NextResponse.json({ ok: false, error: 'server_error' }, { status: 500 });
   }
-
-
-  return NextResponse.json({ ok: true });
 }

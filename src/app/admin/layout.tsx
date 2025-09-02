@@ -3,7 +3,7 @@
 
 import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Book, GraduationCap, Home, Newspaper, Users } from 'lucide-react';
+import { ArrowLeft, Book, GraduationCap, Home, List, Newspaper, Users } from 'lucide-react';
 import Link from 'next/link';
 
 import AuthGate from '@/components/auth-gate';
@@ -20,6 +20,7 @@ function AdminNav() {
         { href: '/admin/posts', label: 'Posts', icon: <Newspaper className="h-4 w-4" /> },
         { href: '/admin/courses', label: 'Courses', icon: <GraduationCap className="h-4 w-4" /> },
         { href: '/admin/subscribers', label: 'Subscribers', icon: <Users className="h-4 w-4" /> },
+        { href: '/admin/lists', label: 'Lists', icon: <List className="h-4 w-4" /> },
     ];
     return (
          <aside className="w-full md:w-1/4 lg:w-1/5">
