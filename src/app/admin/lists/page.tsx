@@ -16,20 +16,30 @@ const listColumns = [
     header: 'Name',
   },
   {
-    accessorKey: 'slug',
-    header: 'Slug',
+    accessorKey: 'subscribed',
+    header: 'Subscribed',
+    cell: ({ row }: { row: any }) => row.original.subscriberCount, // Using total for now
   },
   {
-    accessorKey: 'subscriberCount',
-    header: 'Subscribers',
+    accessorKey: 'unconfirmed',
+    header: 'Unconfirmed',
+     cell: () => 0, // Placeholder
   },
   {
-      accessorKey: 'isPublic',
-      header: 'Public',
-      cell: ({ row }: { row: any }) => {
-        return row.original.isPublic ? 'Yes' : 'No';
-      },
-  }
+    accessorKey: 'unsubscribed',
+    header: 'Unsubscribed',
+    cell: () => 0, // Placeholder
+  },
+  {
+      accessorKey: 'inactive',
+      header: 'Inactive',
+      cell: () => 0, // Placeholder
+  },
+  {
+      accessorKey: 'bounced',
+      header: 'Bounced',
+      cell: () => 0, // Placeholder
+  },
 ];
 
 export default function AdminListsPage() {
