@@ -3,7 +3,7 @@
 
 import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Book, GraduationCap, Home, List, Newspaper, Users } from 'lucide-react';
+import { ArrowLeft, Book, Box, GraduationCap, Home, List, Newspaper, Users } from 'lucide-react';
 import Link from 'next/link';
 
 import AuthGate from '@/components/auth-gate';
@@ -24,6 +24,7 @@ const navSections = [
     {
         title: 'CRM',
         items: [
+            { href: '/admin/forms', label: 'Forms', icon: <Box className="h-4 w-4" /> },
             { href: '/admin/subscribers', label: 'Subscribers', icon: <Users className="h-4 w-4" /> },
             { href: '/admin/lists', label: 'Lists', icon: <List className="h-4 w-4" /> },
         ]
