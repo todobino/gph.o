@@ -8,7 +8,8 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { getLists, type List } from '@/services/subscribers';
 import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { useIsAdmin } from '@/hooks/useUser';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Placeholder list data and columns
 const listColumns = [
@@ -45,11 +46,30 @@ const listColumns = [
 
 export default function AdminListsPage() {
   const [lists, setLists] = useState<List[]>([]);
+  const isAdmin = useIsAdmin();
 
   useEffect(() => {
-    getLists().then(setLists);
-  }, []);
+    if (isAdmin) {
+      getLists().then(setLists);
+    }
+  }, [isAdmin]);
 
+  if (isAdmin === undefined) {
+    return (
+       <Card>
+          <CardHeader>
+              <Skeleton className="h-8 w-1/4" />
+          </CardHeader>
+          <CardContent>
+              <div className="space-y-2">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-12 w-full" />
+              </div>
+          </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div>

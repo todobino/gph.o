@@ -49,14 +49,13 @@ service cloud.firestore {
            );
       allow delete: if isAdmin();
     }
-    
+
     // Optional: log submissions (create-only by signed-in user)
     match /formSubmissions/{sid} {
       allow create: if isSignedIn();
       allow read: if isAdmin();
       allow update, delete: if false;
     }
-
 
     // POSTS (example: public read if published; admins full control)
     match /posts/{id} {

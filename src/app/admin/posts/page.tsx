@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useIsAdmin } from '@/hooks/useUser';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Define columns for the data table
 const columns = [
@@ -27,10 +29,30 @@ const columns = [
 
 export default function AdminPostsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const isAdmin = useIsAdmin();
 
   useEffect(() => {
-    getPosts().then(setPosts);
-  }, []);
+    if (isAdmin) {
+        getPosts().then(setPosts);
+    }
+  }, [isAdmin]);
+
+   if (isAdmin === undefined) {
+    return (
+       <Card>
+          <CardHeader>
+              <Skeleton className="h-8 w-1/4" />
+          </CardHeader>
+          <CardContent>
+              <div className="space-y-2">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-12 w-full" />
+              </div>
+          </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div>

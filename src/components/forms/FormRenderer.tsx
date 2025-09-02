@@ -19,8 +19,12 @@ export function FormRenderer({ slug }: { slug: string }) {
 
   useEffect(() => {
     (async () => {
-      // load form by slug
-      const q = query(collection(db, "forms"), where("slug", "==", slug));
+      // load form by slug, only public forms
+      const q = query(
+        collection(db, "forms"),
+        where("slug", "==", slug),
+        where("isPublic", "==", true)
+      );
       const formsSnap = await getDocs(q);
 
       if (formsSnap.empty) {
@@ -35,11 +39,15 @@ export function FormRenderer({ slug }: { slug: string }) {
 
       if (f.assignMode === "choose") {
         // Load names for the target lists to render checkboxes
-        const all = await getDocs(collection(db, "lists"));
-        const map = new Map(all.docs.map(d => [d.id, d.data() as any]));
+        const allListsQuery = query(collection(db, "lists"), where("isPublic", "==", true));
+        const allListsSnap = await getDocs(allListsQuery);
+
+        const listMap = new Map(allListsSnap.docs.map(d => [d.id, d.data() as any]));
+        
         const arr = f.targetListIds
-          .filter((id: string) => map.get(id)?.isPublic)
-          .map((id: string) => ({ id, name: map.get(id).name }));
+          .filter((id: string) => listMap.has(id)) // Ensure list is public
+          .map((id: string) => ({ id, name: listMap.get(id).name }));
+
         setLists(arr);
         setChecked(Object.fromEntries(arr.map(x => [x.id, true]))); // Default to checked
       }
@@ -53,7 +61,7 @@ export function FormRenderer({ slug }: { slug: string }) {
     try {
       setStatus("submitting");
       const user = auth.currentUser;
-      if (!user && form.requireLogin) {
+      if (!user) { // No need to check form.requireLogin, rules enforce it
         setStatus("error");
         alert("Please sign in first.");
         return;
@@ -61,8 +69,7 @@ export function FormRenderer({ slug }: { slug: string }) {
       const uid = user!.uid;
       const subRef = doc(db, "subscribers", uid);
       const subSnap = await getDoc(subRef);
-      const alreadyHadLists = subSnap.exists() && Array.isArray(subSnap.data().listIds) && subSnap.data().listIds.length > 0;
-
+      
       const toAdd = form.assignMode === "fixed"
         ? form.targetListIds
         : Object.entries(checked).filter(([, v]) => v).map(([k]) => k);
@@ -72,27 +79,33 @@ export function FormRenderer({ slug }: { slug: string }) {
         return;
       }
 
-      const updateData: any = { 
-          updatedAt: serverTimestamp(),
-          listIds: arrayUnion(...toAdd),
-        };
-      
-      if (form.allowFirstTimeFlag && !alreadyHadLists) {
-        updateData.firstSubscribedAt = serverTimestamp();
-        updateData.sources = arrayUnion(`form:${form.slug}`);
-      }
-      
       if (subSnap.exists()) {
+        // Update existing subscriber
+        const updateData: any = { 
+            updatedAt: serverTimestamp(),
+            listIds: arrayUnion(...toAdd),
+          };
+        
+        if (form.allowFirstTimeFlag && !subSnap.data().firstSubscribedAt) {
+          updateData.firstSubscribedAt = serverTimestamp();
+          updateData.sources = arrayUnion(`form:${form.slug}`);
+        }
         await updateDoc(subRef, updateData);
+
       } else {
         // Create the subscriber doc if it doesn't exist
-        await setDoc(subRef, {
+        const createData: any = {
             email: user?.email,
-            displayName: user?.displayName,
+            displayName: user?.displayName || '',
             listIds: toAdd,
             createdAt: serverTimestamp(),
-            ...updateData
-        });
+            updatedAt: serverTimestamp(),
+            sources: arrayUnion(`form:${form.slug}`),
+        }
+        if (form.allowFirstTimeFlag) {
+            createData.firstSubscribedAt = serverTimestamp();
+        }
+        await setDoc(subRef, createData, { merge: true });
       }
 
       setStatus("done");
@@ -100,10 +113,6 @@ export function FormRenderer({ slug }: { slug: string }) {
     } catch (e) {
       console.error(e);
       setStatus("error");
-    } finally {
-        if (status !== 'done') { // to prevent flicker if we redirect
-            setStatus(s => s === 'submitting' ? 'idle' : s);
-        }
     }
   };
 
