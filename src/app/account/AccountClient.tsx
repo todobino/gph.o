@@ -71,7 +71,7 @@ function AccountInner() {
             )}
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <div className="space-y-8">
                 <ProfileTab user={user} />
                 <SecurityTab />
@@ -85,4 +85,3 @@ function AccountInner() {
     </main>
   );
 }
-

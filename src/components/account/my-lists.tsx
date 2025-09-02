@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { List, Loader2, Unplug } from "lucide-react";
 import { useUser } from "@/hooks/useUser";
 import { useEffect, useState } from "react";
-import { collection, query, where, getDocs, doc, writeBatch } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, writeBatch, documentId, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firestore";
 import type { List as ListType, Subscription } from "@/types/subscriber";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "../ui/skeleton";
 
 interface EnrichedSubscription extends Subscription {
+    id: string; // Ensure id is part of the type
     listName: string;
 }
 
@@ -29,7 +30,12 @@ export function MyLists() {
             // 1. Get user's subscriptions
             const subsQuery = query(collection(db, "subscriptions"), where("subscriberId", "==", userId), where("status", "==", "subscribed"));
             const subsSnap = await getDocs(subsQuery);
-            const userSubscriptions = subsSnap.docs.map(d => d.data() as Subscription);
+            // A) Include the doc id when reading subscriptions
+            const userSubscriptions = subsSnap.docs.map(d => ({
+                id: d.id,
+                ...d.data(),
+            } as Subscription & { id: string }));
+
 
             if (userSubscriptions.length === 0) {
                  setSubscriptions([]);
@@ -38,16 +44,31 @@ export function MyLists() {
             }
 
             // 2. Get list details for those subscriptions
+            // B) Fetch lists by documentId() and include isPublic to satisfy rules
             const listIds = userSubscriptions.map(s => s.listId);
-            const listsQuery = query(collection(db, "lists"), where("id", "in", listIds));
-            const listsSnap = await getDocs(listsQuery);
-            const listsMap = new Map(listsSnap.docs.map(d => [d.id, d.data() as ListType]));
+            const chunks: string[][] = [];
+            for (let i = 0; i < listIds.length; i += 10) {
+              chunks.push(listIds.slice(i, i + 10));
+            }
+
+            const listsMap = new Map<string, ListType>();
+            for (const chunk of chunks) {
+                 const listsQuery = query(
+                    collection(db, "lists"), 
+                    where(documentId(), "in", chunk),
+                    where("isPublic", "==", true) // Required by security rules for non-admin reads
+                 );
+                 const listsSnap = await getDocs(listsQuery);
+                 listsSnap.docs.forEach(d => listsMap.set(d.id, d.data() as ListType));
+            }
 
             // 3. Enrich subscriptions with list names
-            const enriched = userSubscriptions.map(sub => ({
-                ...sub,
-                listName: listsMap.get(sub.listId)?.name || 'Unknown List'
-            }));
+            const enriched = userSubscriptions
+                .map(sub => ({
+                    ...sub,
+                    listName: listsMap.get(sub.listId)?.name || 'Unknown List'
+                }))
+                .filter(sub => listsMap.has(sub.listId)); // Only show subscriptions to public lists the user can see
 
             setSubscriptions(enriched);
 
@@ -64,9 +85,9 @@ export function MyLists() {
     };
     
     useEffect(() => {
-        if (user) {
+        if (user?.uid) {
            fetchSubscriptions(user.uid);
-        } else {
+        } else if (user === null) { // user object is loaded, but is null
             setLoading(false);
         }
     }, [user]);
@@ -76,13 +97,13 @@ export function MyLists() {
         setUnsubscribing(subscriptionId);
         try {
             const batch = writeBatch(db);
-            const now = new Date();
-
+            
             const subRef = doc(db, "subscriptions", subscriptionId);
+             // C) Use serverTimestamp() for time fields on unsubscribe
             batch.update(subRef, {
                 status: "unsubscribed",
-                unsubscribedAt: now,
-                lastChangedAt: now,
+                unsubscribedAt: serverTimestamp(),
+                lastChangedAt: serverTimestamp(),
                 reason: "user"
             });
             
@@ -93,7 +114,7 @@ export function MyLists() {
                 description: "You have been successfully removed from the list.",
             });
             
-            // Refresh the list client-side
+            // D) After commit, remove from UI by id
             setSubscriptions(prev => prev.filter(s => s.id !== subscriptionId));
 
         } catch (error) {
