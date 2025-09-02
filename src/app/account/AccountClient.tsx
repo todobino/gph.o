@@ -10,6 +10,9 @@ import type { User } from 'firebase/auth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { MyLists } from '@/components/account/my-lists';
+import { MyCourses } from '@/components/account/my-courses';
+
 
 export default function AccountClient() {
   return (
@@ -68,11 +71,18 @@ function AccountInner() {
             )}
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-            <ProfileTab user={user} />
-            <SecurityTab />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <div className="space-y-8">
+                <ProfileTab user={user} />
+                <SecurityTab />
+            </div>
+             <div className="space-y-8">
+                <MyLists />
+                <MyCourses />
+            </div>
         </div>
       </div>
     </main>
   );
 }
+
