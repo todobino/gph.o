@@ -10,9 +10,9 @@ import { UpcomingCourses } from "@/components/courses/upcoming-courses";
 const courses = [
   {
     title: "Leading Technical Change",
-    description: "A course designed to focus on how to make change, not which change to make. Learn to lead your team to stronger, faster, smarter, and happier outcomes.",
-    href: "/courses/leading-technical-change",
-    imageUrl: "https://placehold.co/600x400.png",
+    shortDescription: "A course designed to focus on how to make change, not which change to make. Learn to lead your team to stronger, faster, smarter, and happier outcomes.",
+    slug: "leading-technical-change",
+    heroImageUrl: "https://picsum.photos/seed/courses-ltc/600/400",
     imageHint: "team brainstorming session"
   },
   // Add more courses here as they become available
@@ -37,10 +37,10 @@ export default function CoursesPage() {
             {courses.map((course) => (
               <Card key={course.title} className="flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-xl">
                 <CardHeader className="p-0">
-                  <Link href={course.href} className="block group">
+                  <Link href={`/courses/${course.slug}`} className="block group">
                     <div className="relative aspect-video">
                       <Image
-                        src={course.imageUrl}
+                        src={course.heroImageUrl}
                         alt={`Image for ${course.title}`}
                         fill
                         className="object-cover transition-transform duration-200 group-hover:scale-105"
@@ -51,15 +51,15 @@ export default function CoursesPage() {
                 </CardHeader>
                 <CardContent className="p-6 flex-grow">
                   <CardTitle className="mb-2">
-                    <Link href={course.href} className="hover:text-primary">
+                    <Link href={`/courses/${course.slug}`} className="hover:text-primary">
                       {course.title}
                     </Link>
                   </CardTitle>
-                  <CardDescription>{course.description}</CardDescription>
+                  <CardDescription>{course.shortDescription}</CardDescription>
                 </CardContent>
                 <CardFooter className="p-6 pt-0">
                   <Button asChild className="w-full">
-                    <Link href={course.href}>
+                    <Link href={`/courses/${course.slug}`}>
                       View Course Details <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>

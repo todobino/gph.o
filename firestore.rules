@@ -1,3 +1,4 @@
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{db}/documents {
@@ -14,11 +15,46 @@ service cloud.firestore {
       allow create: if isSelf(uid);
       allow update: if isSelf(uid) || isAdmin();
     }
-
-    // LISTS
-    match /lists/{id} {
-      allow read: if resource.data.isPublic == true || isAdmin();
+    
+    // COURSES
+    match /courses/{courseId} {
+      allow read: if resource.data.active == true || isAdmin();
       allow create, update, delete: if isAdmin();
+
+      match /cohorts/{cohortId} {
+        allow read: if get(/databases/$(db)/documents/courses/$(courseId)).data.active == true
+                     && (resource.data.status in ["published","waitlist","soldout","completed"])
+                     || isAdmin();
+        allow create, update, delete: if isAdmin();
+
+        match /waitlist/{waitId} {
+          allow create: if true;
+          allow read: if isAdmin();
+          allow delete, update: if isAdmin();
+        }
+
+        match /enrollments/{enrollmentId} {
+          allow read, write: if isAdmin();
+        }
+      }
+
+      // Self-paced subcollections
+      match /modules/{moduleId} {
+        allow read: if resource.data != null && get(/databases/$(db)/documents/courses/$(courseId)).data.active == true || isAdmin();
+        allow write: if isAdmin();
+
+        match /lessons/{lessonId} {
+          allow read: if true || isAdmin();
+          allow write: if isAdmin();
+        }
+      }
+
+      match /quizzes/{quizId} {
+        allow read, write: if isAdmin();
+        match /questions/{questionId} {
+          allow read, write: if isAdmin();
+        }
+      }
     }
 
     // FORMS
@@ -26,23 +62,32 @@ service cloud.firestore {
       allow read: if resource.data.isPublic == true || isAdmin();
       allow create, update, delete: if isAdmin();
     }
+    
+    match /formSubmissions/{sid} {
+      allow create: if isSignedIn();
+      allow read: if isAdmin();
+      allow update, delete: if false;
+    }
 
-    // SUBSCRIBERS (doc id == auth.uid)
+    // LISTS
+    match /lists/{id} {
+      allow read: if resource.data.isPublic == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // SUBSCRIBERS
     match /subscribers/{uid} {
       allow read: if isSelf(uid) || isAdmin();
       allow create: if isSelf(uid);
-      // Allow the user to update only allowed fields
       allow update: if isSelf(uid)
         && request.resource.data.keys().hasOnly([
             'email','displayName','listIds','createdAt','updatedAt','firstSubscribedAt','sources'
            ])
         && request.resource.data.listIds is list
-        // (optional) only set firstSubscribedAt once
         && (
           (resource.data.firstSubscribedAt == null && request.resource.data.firstSubscribedAt is timestamp)
           || (request.resource.data.firstSubscribedAt == resource.data.firstSubscribedAt)
         )
-        // Ensure all listIds reference existing public lists
         && request.resource.data.listIds.all(id =>
              exists(/databases/$(db)/documents/lists/$(id)) &&
              get(/databases/$(db)/documents/lists/$(id)).data.isPublic == true
@@ -54,19 +99,6 @@ service cloud.firestore {
     match /posts/{id} {
       allow read: if resource.data.status == "published" || isAdmin();
       allow create, update, delete: if isAdmin();
-    }
-
-    // COURSES
-    match /courses/{id} {
-      allow read: if resource.data.isPublic == true || isAdmin();
-      allow create, update, delete: if isAdmin();
-    }
-
-    // FORM SUBMISSIONS (Optional logging)
-    match /formSubmissions/{sid} {
-      allow create: if isSignedIn();
-      allow read: if isAdmin();
-      allow update, delete: if false;
     }
   }
 }

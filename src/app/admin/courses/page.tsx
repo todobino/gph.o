@@ -14,6 +14,10 @@ const courseColumns = [
     header: 'Title',
   },
   {
+    accessorKey: 'type',
+    header: 'Type',
+  },
+  {
     accessorKey: 'status',
     header: 'Status',
   },
@@ -24,8 +28,10 @@ const courseColumns = [
 ];
 
 const placeholderCourses = [
-    { id: 'ltc', title: 'Leading Technical Change', status: 'Published', tags: ['leadership', 'change management', 'teams'] },
-    // Add more placeholder courses as needed
+    { id: 'ltc', title: 'Leading Technical Change', type: 'live', status: 'Published', tags: ['leadership', 'change management', 'teams'] },
+    // In a real app, this data would be fetched from Firestore.
+    // Example fetching logic would be placed in a useEffect hook here,
+    // similar to other admin pages.
 ];
 
 export default function AdminCoursesPage() {
