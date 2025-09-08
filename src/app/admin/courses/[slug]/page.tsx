@@ -172,6 +172,14 @@ export default function EditCoursePage() {
                                     <span className="text-muted-foreground">Seat Number</span>
                                     <span>{course.defaultSeatCapacity || 'N/A'}</span>
                                 </div>
+                                 <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Sessions</span>
+                                    <span>{course.sessionCount || 'N/A'}</span>
+                                </div>
+                                 <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Session Length</span>
+                                    <span>{course.hoursPerSession ? `${course.hoursPerSession} hours` : 'N/A'}</span>
+                                </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-muted-foreground">Price</span>
                                     <span>{formatCurrency(course.priceCents)}</span>

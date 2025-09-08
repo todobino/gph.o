@@ -45,6 +45,8 @@ const editCourseSchema = z.object({
   defaultSeatCapacity: z.coerce.number().int().optional(),
   priceDollars: z.coerce.number().optional(), // Changed from priceCents
   format: z.enum(['remote', 'in-person', 'hybrid']).optional(),
+  sessionCount: z.coerce.number().int().optional(),
+  hoursPerSession: z.coerce.number().optional(),
 });
 
 type EditCourseFormValues = z.infer<typeof editCourseSchema>;
@@ -70,6 +72,8 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
       defaultSeatCapacity: course.defaultSeatCapacity || undefined,
       priceDollars: course.priceCents !== undefined && course.priceCents !== null ? course.priceCents / 100 : undefined,
       format: course.format || undefined,
+      sessionCount: course.sessionCount || undefined,
+      hoursPerSession: course.hoursPerSession || undefined,
     },
   });
 
@@ -84,6 +88,8 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
         ...restOfValues,
         defaultSeatCapacity: values.defaultSeatCapacity === undefined ? null : values.defaultSeatCapacity,
         priceCents: priceDollars !== undefined && priceDollars !== null ? Math.round(priceDollars * 100) : null,
+        sessionCount: values.sessionCount === undefined ? null : values.sessionCount,
+        hoursPerSession: values.hoursPerSession === undefined ? null : values.hoursPerSession,
         updatedAt: serverTimestamp(),
       };
 
@@ -189,6 +195,19 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
+                name="priceDollars"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price (in dollars)</FormLabel>
+                    <FormControl>
+                      <Input type="number" step="0.01" {...field} value={field.value ?? ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+               <FormField
+                control={form.control}
                 name="defaultSeatCapacity"
                 render={({ field }) => (
                   <FormItem>
@@ -200,14 +219,29 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
                   </FormItem>
                 )}
               />
-              <FormField
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+                 <FormField
                 control={form.control}
-                name="priceDollars"
+                name="sessionCount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price (in dollars)</FormLabel>
+                    <FormLabel>Sessions</FormLabel>
                     <FormControl>
-                      <Input type="number" step="0.01" {...field} value={field.value ?? ''} />
+                      <Input type="number" {...field} value={field.value ?? ''} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="hoursPerSession"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Session Length (Hours)</FormLabel>
+                    <FormControl>
+                      <Input type="number" step="0.5" {...field} value={field.value ?? ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
