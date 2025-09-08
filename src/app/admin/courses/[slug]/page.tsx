@@ -17,6 +17,7 @@ import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { EditCourseDetailsDialog } from '@/components/admin/edit-course-dialog';
+import { AddCohortDialog } from '@/components/admin/add-cohort-dialog';
 
 function CourseSkeleton() {
     return (
@@ -71,8 +72,9 @@ export default function EditCoursePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    
-    const fetchCourse = async () => {
+    const [isAddCohortDialogOpen, setIsAddCohortDialogOpen] = useState(false);
+
+    const fetchCourseAndCohorts = async () => {
         setLoading(true);
         try {
             const courseQuery = query(collection(db, "courses"), where("slug", "==", slug));
@@ -87,10 +89,7 @@ export default function EditCoursePage() {
                 setCourse(courseData);
                 
                 if (courseData.type === 'live') {
-                    const cohortsRef = collection(db, "courses", courseDoc.id, "cohorts");
-                    const cohortsSnapshot = await getDocs(cohortsRef);
-                    const cohortsData = cohortsSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Cohort));
-                    setCohorts(cohortsData);
+                    await fetchCohorts(courseDoc.id);
                 }
             }
         } catch (err) {
@@ -100,10 +99,18 @@ export default function EditCoursePage() {
             setLoading(false);
         }
     };
+    
+    const fetchCohorts = async (courseId: string) => {
+        const cohortsRef = collection(db, "courses", courseId, "cohorts");
+        const cohortsSnapshot = await getDocs(cohortsRef);
+        const cohortsData = cohortsSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Cohort));
+        setCohorts(cohortsData);
+    };
+
 
     useEffect(() => {
         if (isAdmin && slug) {
-            fetchCourse();
+            fetchCourseAndCohorts();
         }
     }, [isAdmin, slug]);
 
@@ -131,7 +138,8 @@ export default function EditCoursePage() {
 
     return (
         <div className="space-y-6">
-             {course && <EditCourseDetailsDialog isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} course={course} onCourseUpdated={fetchCourse} />}
+             {course && <EditCourseDetailsDialog isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} course={course} onCourseUpdated={fetchCourseAndCohorts} />}
+             {course && <AddCohortDialog isOpen={isAddCohortDialogOpen} onOpenChange={setIsAddCohortDialogOpen} course={course} onCohortAdded={() => fetchCohorts(course.id)} />}
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <h1 className="text-3xl md:text-4xl font-bold font-heading break-words">
                    {course.title}
@@ -199,7 +207,7 @@ export default function EditCoursePage() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <CardTitle>Manage Cohorts</CardTitle>
-                                <Button size="sm">
+                                <Button size="sm" onClick={() => setIsAddCohortDialogOpen(true)}>
                                     <Plus className="mr-2 h-4 w-4" />
                                     Add Cohort
                                 </Button>
