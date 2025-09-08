@@ -20,14 +20,14 @@ function CourseSkeleton() {
                 <Skeleton className="h-10 w-1/2" />
                 <Skeleton className="h-9 w-32" />
             </div>
-            <Card>
-                <CardHeader>
-                    <Skeleton className="h-6 w-32" />
-                </CardHeader>
-                <CardContent>
-                     <Skeleton className="h-40 w-full" />
-                </CardContent>
-            </Card>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="md:col-span-1">
+                    <Skeleton className="h-48 w-full" />
+                </div>
+                <div className="md:col-span-2">
+                    <Skeleton className="h-64 w-full" />
+                </div>
+            </div>
         </div>
     );
 }
@@ -59,7 +59,6 @@ export default function EditCoursePage() {
                     const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
                     setCourse(courseData);
                     
-                    // If it's a live course, fetch its cohorts
                     if (courseData.type === 'live') {
                         const cohortsRef = collection(db, "courses", courseDoc.id, "cohorts");
                         const cohortsSnapshot = await getDocs(cohortsRef);
@@ -84,7 +83,6 @@ export default function EditCoursePage() {
     }
     
     if (!isAdmin) {
-         // This should ideally be handled by the layout, but as a fallback
         return <p className="text-destructive">You do not have permission to view this page.</p>;
     }
 
@@ -110,52 +108,58 @@ export default function EditCoursePage() {
                 </Button>
             </div>
 
-            <div className="space-y-6">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Edit Course Details</CardTitle>
-                        <CardDescription>
-                            Modify the general settings for this course.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-center text-muted-foreground py-8">
-                            Course editing form will be here.
-                        </p>
-                    </CardContent>
-                </Card>
-
-                {course.type === 'live' && (
-                    <Card>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+                {/* Left Sidebar */}
+                <aside className="md:col-span-1 space-y-6 sticky top-24">
+                     <Card>
                         <CardHeader>
-                            <CardTitle>Manage Cohorts ({cohorts.length})</CardTitle>
-                                <CardDescription>
-                                View, create, and edit cohorts for this live course.
+                            <CardTitle>Edit Course Details</CardTitle>
+                            <CardDescription>
+                                Modify the general settings for this course.
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <p className="text-center text-muted-foreground py-8">
-                                Cohort management UI will be here.
+                                Course editing form will be here.
                             </p>
                         </CardContent>
                     </Card>
-                )}
+                </aside>
 
-                 {course.type === 'self-paced' && (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Manage Modules</CardTitle>
-                                <CardDescription>
-                                Create and organize modules and lessons for this self-paced course.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-center text-muted-foreground py-8">
-                                Module management UI will be here (coming soon).
-                            </p>
-                        </CardContent>
-                    </Card>
-                )}
+                {/* Main Content */}
+                <main className="md:col-span-2 space-y-6">
+                    {course.type === 'live' && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Manage Cohorts ({cohorts.length})</CardTitle>
+                                    <CardDescription>
+                                    View, create, and edit cohorts for this live course.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-center text-muted-foreground py-8">
+                                    Cohort management UI will be here.
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )}
+
+                    {course.type === 'self-paced' && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Manage Modules</CardTitle>
+                                    <CardDescription>
+                                    Create and organize modules and lessons for this self-paced course.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-center text-muted-foreground py-8">
+                                    Module management UI will be here (coming soon).
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )}
+                </main>
             </div>
 
         </div>
