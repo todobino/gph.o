@@ -64,12 +64,12 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
   const form = useForm<EditCourseFormValues>({
     resolver: zodResolver(editCourseSchema),
     defaultValues: {
-      title: course.title,
-      shortDescription: course.shortDescription,
+      title: course.title || '',
+      shortDescription: course.shortDescription || '',
       type: course.type,
-      defaultSeatCapacity: course.defaultSeatCapacity,
-      priceDollars: course.priceCents !== undefined && course.priceCents !== null ? course.priceCents / 100 : undefined, // Convert cents to dollars for UI
-      format: course.format,
+      defaultSeatCapacity: course.defaultSeatCapacity || undefined,
+      priceDollars: course.priceCents !== undefined && course.priceCents !== null ? course.priceCents / 100 : undefined,
+      format: course.format || undefined,
     },
   });
 
@@ -83,7 +83,7 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
       const dataToUpdate: Partial<Course> & { updatedAt: any } = {
         ...restOfValues,
         defaultSeatCapacity: values.defaultSeatCapacity === undefined ? null : values.defaultSeatCapacity,
-        priceCents: priceDollars !== undefined && priceDollars !== null ? Math.round(priceDollars * 100) : null, // Convert dollars to cents for DB
+        priceCents: priceDollars !== undefined && priceDollars !== null ? Math.round(priceDollars * 100) : null,
         updatedAt: serverTimestamp(),
       };
 
@@ -194,7 +194,7 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
                   <FormItem>
                     <FormLabel>Default Seats</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input type="number" {...field} value={field.value ?? ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -207,7 +207,7 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
                   <FormItem>
                     <FormLabel>Price (in dollars)</FormLabel>
                     <FormControl>
-                      <Input type="number" step="0.01" {...field} />
+                      <Input type="number" step="0.01" {...field} value={field.value ?? ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
