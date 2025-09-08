@@ -11,7 +11,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, FileText, Plus, Users, BadgeDollarSign, Tv, CheckCircle } from 'lucide-react';
+import { PostsDataTable } from '@/components/admin/posts-data-table';
+import { Badge } from '@/components/ui/badge';
 
 function CourseSkeleton() {
     return (
@@ -31,6 +33,30 @@ function CourseSkeleton() {
         </div>
     );
 }
+
+const cohortColumns = [
+    {
+        accessorKey: 'name',
+        header: 'Cohort Name',
+    },
+    {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }: { row: any }) => (
+            <Badge variant={row.original.status === 'published' ? 'default' : 'secondary'} className="capitalize">{row.original.status}</Badge>
+        )
+    },
+    {
+        accessorKey: 'seatsConfirmed',
+        header: 'Confirmed Seats',
+    },
+     {
+        accessorKey: 'seatsTotal',
+        header: 'Total Seats',
+    },
+    // Add actions column later
+];
+
 
 export default function EditCoursePage() {
     const params = useParams();
@@ -94,6 +120,11 @@ export default function EditCoursePage() {
         return <p>Course could not be loaded.</p>;
     }
 
+    const formatCurrency = (cents: number | undefined) => {
+        if (typeof cents !== 'number') return 'N/A';
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: course.currency || 'USD' }).format(cents / 100);
+    }
+
 
     return (
         <div className="space-y-6">
@@ -113,15 +144,34 @@ export default function EditCoursePage() {
                 <aside className="md:col-span-1 space-y-6 sticky top-24">
                      <Card>
                         <CardHeader>
-                            <CardTitle>Edit Course Details</CardTitle>
-                            <CardDescription>
-                                Modify the general settings for this course.
-                            </CardDescription>
+                            <div className="flex items-center gap-3">
+                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-lg">
+                                    <FileText className="h-6 w-6 text-blue-600 dark:text-blue-300" />
+                                </div>
+                                <CardTitle>Details</CardTitle>
+                            </div>
                         </CardHeader>
-                        <CardContent>
-                            <p className="text-center text-muted-foreground py-8">
-                                Course editing form will be here.
-                            </p>
+                        <CardContent className="space-y-4 text-sm">
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Type</span>
+                                <Badge variant="outline" className="capitalize">{course.type}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Status</span>
+                                <Badge variant={course.active ? 'default' : 'destructive'}>{course.active ? 'Active' : 'Draft'}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Default Seats</span>
+                                <span>{course.defaultSeatCapacity || 'N/A'}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Price</span>
+                                <span>{formatCurrency(course.priceCents)}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Format</span>
+                                <span className="capitalize">{course.format || 'N/A'}</span>
+                            </div>
                         </CardContent>
                     </Card>
                 </aside>
@@ -130,16 +180,15 @@ export default function EditCoursePage() {
                 <main className="md:col-span-2 space-y-6">
                     {course.type === 'live' && (
                         <Card>
-                            <CardHeader>
-                                <CardTitle>Manage Cohorts ({cohorts.length})</CardTitle>
-                                    <CardDescription>
-                                    View, create, and edit cohorts for this live course.
-                                </CardDescription>
+                            <CardHeader className="flex flex-row items-center justify-between">
+                                <CardTitle>Manage Cohorts</CardTitle>
+                                <Button size="sm">
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Add Cohort
+                                </Button>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-center text-muted-foreground py-8">
-                                    Cohort management UI will be here.
-                                </p>
+                                <PostsDataTable columns={cohortColumns} data={cohorts} searchColumnId="name" />
                             </CardContent>
                         </Card>
                     )}
