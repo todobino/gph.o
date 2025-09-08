@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useIsAdmin } from '@/hooks/useUser';
-import { getDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
+import { getDoc, doc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
 import type { Course, Cohort } from '@/types/course';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -102,7 +102,7 @@ export default function EditCoursePage() {
     
     const fetchCohorts = async (courseId: string) => {
         const cohortsRef = collection(db, "courses", courseId, "cohorts");
-        const cohortsSnapshot = await getDocs(cohortsRef);
+        const cohortsSnapshot = await getDocs(query(cohortsRef, orderBy("number", "desc")));
         const cohortsData = cohortsSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Cohort));
         setCohorts(cohortsData);
     };
@@ -139,7 +139,7 @@ export default function EditCoursePage() {
     return (
         <div className="space-y-6">
              {course && <EditCourseDetailsDialog isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} course={course} onCourseUpdated={fetchCourseAndCohorts} />}
-             {course && <AddCohortDialog isOpen={isAddCohortDialogOpen} onOpenChange={setIsAddCohortDialogOpen} course={course} onCohortAdded={() => fetchCohorts(course.id)} />}
+             {course && <AddCohortDialog isOpen={isAddCohortDialogOpen} onOpenChange={setIsAddCohortDialogOpen} course={course} cohorts={cohorts} onCohortAdded={() => fetchCohorts(course.id)} />}
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <h1 className="text-3xl md:text-4xl font-bold font-heading break-words">
                    {course.title}

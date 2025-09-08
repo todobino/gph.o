@@ -33,11 +33,11 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
 import { useRouter } from 'next/navigation';
-import type { Course } from '@/types/course';
+import type { Course, Cohort } from '@/types/course';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon, Plus, Trash2 } from 'lucide-react';
@@ -49,7 +49,7 @@ const sessionSchema = z.object({
 });
 
 const addCohortSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  number: z.coerce.number().int().positive({ message: 'Cohort number must be a positive integer.' }),
   status: z.enum(['draft', 'published', 'waitlist', 'soldout']),
   sessions: z.array(sessionSchema).min(1, "You must add at least one session."),
 });
@@ -60,31 +60,55 @@ interface AddCohortDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   course: Course;
+  cohorts: Cohort[];
   onCohortAdded: () => void;
 }
 
-export function AddCohortDialog({ isOpen, onOpenChange, course, onCohortAdded }: AddCohortDialogProps) {
+export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohortAdded }: AddCohortDialogProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const nextCohortNumber = (cohorts && cohorts.length > 0) ? Math.max(...cohorts.map(c => c.number || 0)) + 1 : 1;
 
   const form = useForm<AddCohortFormValues>({
     resolver: zodResolver(addCohortSchema),
     defaultValues: {
-      name: '',
+      number: nextCohortNumber,
       status: 'draft',
       sessions: [],
     },
   });
+
+  // When dialog opens or cohorts change, reset the number field to the next sequential one
+  useEffect(() => {
+    if (isOpen) {
+      form.reset({
+        number: nextCohortNumber,
+        status: 'draft',
+        sessions: [],
+      });
+    }
+  }, [isOpen, nextCohortNumber, form]);
   
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "sessions",
   });
 
+  const getCourseAcronym = (title: string) => {
+    return title
+        .split(' ')
+        .map(word => word[0])
+        .join('')
+        .toUpperCase();
+  };
+
   const handleFormSubmit = async (values: AddCohortFormValues) => {
     setIsSubmitting(true);
     try {
-        const cohortCode = values.name.toLowerCase().replace(/\s+/g, '-');
+        const acronym = getCourseAcronym(course.title);
+        const cohortName = `${acronym} #${values.number}`;
+        const cohortCode = `${acronym.toLowerCase()}-${values.number}`;
         const cohortRef = collection(db, 'courses', course.id, 'cohorts');
         
         const sessionsWithTimestamps = values.sessions.map(session => {
@@ -104,8 +128,9 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, onCohortAdded }:
         });
 
         await addDoc(cohortRef, {
-            name: values.name,
+            name: cohortName,
             code: cohortCode,
+            number: values.number,
             status: values.status,
             seatsTotal: course.defaultSeatCapacity || 0,
             seatsHeld: 0,
@@ -118,7 +143,7 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, onCohortAdded }:
 
       toast({
         title: 'Cohort Created',
-        description: `Cohort "${values.name}" has been successfully added.`,
+        description: `Cohort "${cohortName}" has been successfully added.`,
       });
 
       onCohortAdded();
@@ -151,12 +176,12 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, onCohortAdded }:
              <div className="grid grid-cols-2 gap-4">
                  <FormField
                   control={form.control}
-                  name="name"
+                  name="number"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Cohort Name</FormLabel>
+                      <FormLabel>Cohort Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., Fall 2024 Cohort" {...field} />
+                        <Input type="number" placeholder="e.g., 14" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

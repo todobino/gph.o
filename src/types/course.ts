@@ -37,8 +37,9 @@ export interface CohortSession {
 
 export interface Cohort {
     id: string; // Document ID
-    name: string;
-    code: string;
+    name: string; // e.g., "LTC #14"
+    number: number; // e.g., 14
+    code: string; // e.g., "ltc-14"
     status: "draft" | "published" | "waitlist" | "soldout" | "completed" | "cancelled";
     seatsTotal: number;
     seatsHeld: number;
