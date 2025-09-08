@@ -123,7 +123,7 @@ export default function EditCoursePage() {
         return <p>Course could not be loaded.</p>;
     }
 
-    const formatCurrency = (cents: number | undefined) => {
+    const formatCurrency = (cents: number | undefined | null) => {
         if (typeof cents !== 'number') return 'N/A';
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: course.currency || 'USD' }).format(cents / 100);
     }

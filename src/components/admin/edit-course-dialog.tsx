@@ -43,7 +43,7 @@ const editCourseSchema = z.object({
   shortDescription: z.string().optional(),
   type: z.enum(['live', 'self-paced']),
   defaultSeatCapacity: z.coerce.number().int().optional(),
-  priceCents: z.coerce.number().int().optional(),
+  priceDollars: z.coerce.number().optional(), // Changed from priceCents
   format: z.enum(['remote', 'in-person', 'hybrid']).optional(),
 });
 
@@ -68,7 +68,7 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
       shortDescription: course.shortDescription,
       type: course.type,
       defaultSeatCapacity: course.defaultSeatCapacity,
-      priceCents: course.priceCents,
+      priceDollars: course.priceCents !== undefined && course.priceCents !== null ? course.priceCents / 100 : undefined, // Convert cents to dollars for UI
       format: course.format,
     },
   });
@@ -78,10 +78,12 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
     try {
       const courseRef = doc(db, 'courses', course.id);
       
-      const dataToUpdate = {
-        ...values,
+      const { priceDollars, ...restOfValues } = values;
+
+      const dataToUpdate: Partial<Course> & { updatedAt: any } = {
+        ...restOfValues,
         defaultSeatCapacity: values.defaultSeatCapacity === undefined ? null : values.defaultSeatCapacity,
-        priceCents: values.priceCents === undefined ? null : values.priceCents,
+        priceCents: priceDollars !== undefined && priceDollars !== null ? Math.round(priceDollars * 100) : null, // Convert dollars to cents for DB
         updatedAt: serverTimestamp(),
       };
 
@@ -200,12 +202,12 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
               />
               <FormField
                 control={form.control}
-                name="priceCents"
+                name="priceDollars"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price (in cents)</FormLabel>
+                    <FormLabel>Price (in dollars)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input type="number" step="0.01" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
