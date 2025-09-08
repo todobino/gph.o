@@ -11,10 +11,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowUpRight, FileText, Plus, Users, BadgeDollarSign, Tv, CheckCircle } from 'lucide-react';
+import { ArrowUpRight, FileText, Plus, Users, BadgeDollarSign, Tv, CheckCircle, Pencil } from 'lucide-react';
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { EditCourseDetailsDialog } from '@/components/admin/edit-course-dialog';
 
 function CourseSkeleton() {
     return (
@@ -68,40 +69,41 @@ export default function EditCoursePage() {
     const [cohorts, setCohorts] = useState<Cohort[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     
-    useEffect(() => {
-        if (!isAdmin || !slug) return;
+    const fetchCourse = async () => {
+        setLoading(true);
+        try {
+            const courseQuery = query(collection(db, "courses"), where("slug", "==", slug));
+            const courseSnapshot = await getDocs(courseQuery);
 
-        const fetchCourse = async () => {
-            setLoading(true);
-            try {
-                const courseQuery = query(collection(db, "courses"), where("slug", "==", slug));
-                const courseSnapshot = await getDocs(courseQuery);
-
-                if (courseSnapshot.empty) {
-                    setError("Course not found.");
-                    setCourse(null);
-                } else {
-                    const courseDoc = courseSnapshot.docs[0];
-                    const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
-                    setCourse(courseData);
-                    
-                    if (courseData.type === 'live') {
-                        const cohortsRef = collection(db, "courses", courseDoc.id, "cohorts");
-                        const cohortsSnapshot = await getDocs(cohortsRef);
-                        const cohortsData = cohortsSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Cohort));
-                        setCohorts(cohortsData);
-                    }
+            if (courseSnapshot.empty) {
+                setError("Course not found.");
+                setCourse(null);
+            } else {
+                const courseDoc = courseSnapshot.docs[0];
+                const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
+                setCourse(courseData);
+                
+                if (courseData.type === 'live') {
+                    const cohortsRef = collection(db, "courses", courseDoc.id, "cohorts");
+                    const cohortsSnapshot = await getDocs(cohortsRef);
+                    const cohortsData = cohortsSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Cohort));
+                    setCohorts(cohortsData);
                 }
-            } catch (err) {
-                console.error("Error fetching course:", err);
-                setError("Failed to fetch course data.");
-            } finally {
-                setLoading(false);
             }
-        };
+        } catch (err) {
+            console.error("Error fetching course:", err);
+            setError("Failed to fetch course data.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        fetchCourse();
+    useEffect(() => {
+        if (isAdmin && slug) {
+            fetchCourse();
+        }
     }, [isAdmin, slug]);
 
 
@@ -126,9 +128,9 @@ export default function EditCoursePage() {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: course.currency || 'USD' }).format(cents / 100);
     }
 
-
     return (
         <div className="space-y-6">
+             {course && <EditCourseDetailsDialog isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} course={course} onCourseUpdated={fetchCourse} />}
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <h1 className="text-3xl md:text-4xl font-bold font-heading break-words">
                    {course.title}
@@ -143,11 +145,16 @@ export default function EditCoursePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                 {/* Left Sidebar */}
                 <aside className="md:col-span-1 space-y-6 sticky top-24">
-                     <Card>
-                        <CardHeader>
-                            <CardTitle>Details</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
+                     <Card className="group relative">
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => setIsEditDialogOpen(true)}
+                        >
+                            <Pencil className="h-4 w-4" />
+                        </Button>
+                        <CardContent className="space-y-4 pt-6">
                             <div>
                                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Description</h4>
                                 <p className="text-sm text-foreground">
