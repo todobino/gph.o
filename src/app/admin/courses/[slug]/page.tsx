@@ -168,11 +168,7 @@ export default function EditCoursePage() {
                                     <Badge variant="outline" className="capitalize">{course.type}</Badge>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-muted-foreground">Status</span>
-                                    <Badge variant={course.active ? 'default' : 'destructive'}>{course.active ? 'Active' : 'Draft'}</Badge>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-muted-foreground">Default Seats</span>
+                                    <span className="text-muted-foreground">Seat Number</span>
                                     <span>{course.defaultSeatCapacity || 'N/A'}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
