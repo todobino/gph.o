@@ -37,7 +37,7 @@ function AdminNav() {
     return (
          <aside className="w-full md:w-1/4 lg:w-1/5">
             <div className="sticky top-24">
-                <nav className="flex flex-col space-y-1">
+                <nav className="flex flex-col space-y-1 p-4 border rounded-lg shadow-sm">
                     <Button variant="secondary" size="sm" asChild className="mb-4 justify-start">
                         <Link href="/account">
                             <ArrowLeft className="mr-2 h-4 w-4" />
