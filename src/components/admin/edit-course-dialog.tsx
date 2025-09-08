@@ -77,10 +77,15 @@ export function EditCourseDetailsDialog({ isOpen, onOpenChange, course, onCourse
     setIsSubmitting(true);
     try {
       const courseRef = doc(db, 'courses', course.id);
-      await updateDoc(courseRef, {
+      
+      const dataToUpdate = {
         ...values,
+        defaultSeatCapacity: values.defaultSeatCapacity === undefined ? null : values.defaultSeatCapacity,
+        priceCents: values.priceCents === undefined ? null : values.priceCents,
         updatedAt: serverTimestamp(),
-      });
+      };
+
+      await updateDoc(courseRef, dataToUpdate);
 
       toast({
         title: 'Course Updated',
