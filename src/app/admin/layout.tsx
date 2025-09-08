@@ -19,11 +19,6 @@ const navSections = [
             { href: '/admin', label: 'Overview', icon: <Home className="h-4 w-4" /> },
             { href: '/admin/posts', label: 'Posts', icon: <Newspaper className="h-4 w-4" /> },
             { href: '/admin/courses', label: 'Courses', icon: <GraduationCap className="h-4 w-4" /> },
-        ]
-    },
-    {
-        title: 'CRM',
-        items: [
             { href: '/admin/subscribers', label: 'Subscribers', icon: <Users className="h-4 w-4" /> },
             { href: '/admin/lists', label: 'Lists', icon: <List className="h-4 w-4" /> },
             { href: '/admin/forms', label: 'Forms', icon: <ClipboardType className="h-4 w-4" /> },
@@ -38,7 +33,7 @@ function AdminNav() {
          <aside className="w-full md:w-1/4 lg:w-1/5">
             <div className="sticky top-24">
                 <nav className="flex flex-col space-y-1 p-4 border rounded-lg shadow-sm">
-                    <Button variant="secondary" size="sm" asChild className="mb-4 justify-start">
+                    <Button variant="default" size="sm" asChild className="mb-4 justify-start">
                         <Link href="/account">
                             <ArrowLeft className="mr-2 h-4 w-4" />
                             Back to Account
