@@ -10,7 +10,6 @@ import type { Course, Cohort } from '@/types/course';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 
@@ -111,36 +110,26 @@ export default function EditCoursePage() {
                 </Button>
             </div>
 
-            <Tabs defaultValue="settings">
-                <TabsList>
-                    <TabsTrigger value="settings">Course Settings</TabsTrigger>
-                    {course.type === 'live' && (
-                        <TabsTrigger value="cohorts">Cohorts ({cohorts.length})</TabsTrigger>
-                    )}
-                    {course.type === 'self-paced' && (
-                        <TabsTrigger value="modules" disabled>Modules</TabsTrigger>
-                    )}
-                </TabsList>
-                <TabsContent value="settings">
+            <div className="space-y-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Edit Course Details</CardTitle>
+                        <CardDescription>
+                            Modify the general settings for this course.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-center text-muted-foreground py-8">
+                            Course editing form will be here.
+                        </p>
+                    </CardContent>
+                </Card>
+
+                {course.type === 'live' && (
                     <Card>
                         <CardHeader>
-                            <CardTitle>Edit Course Details</CardTitle>
-                            <CardDescription>
-                                Modify the general settings for this course.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                           <p className="text-center text-muted-foreground py-8">
-                                Course editing form will be here.
-                           </p>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-                <TabsContent value="cohorts">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Manage Cohorts</CardTitle>
-                             <CardDescription>
+                            <CardTitle>Manage Cohorts ({cohorts.length})</CardTitle>
+                                <CardDescription>
                                 View, create, and edit cohorts for this live course.
                             </CardDescription>
                         </CardHeader>
@@ -150,8 +139,24 @@ export default function EditCoursePage() {
                             </p>
                         </CardContent>
                     </Card>
-                </TabsContent>
-            </Tabs>
+                )}
+
+                 {course.type === 'self-paced' && (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Manage Modules</CardTitle>
+                                <CardDescription>
+                                Create and organize modules and lessons for this self-paced course.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-center text-muted-foreground py-8">
+                                Module management UI will be here (coming soon).
+                            </p>
+                        </CardContent>
+                    </Card>
+                )}
+            </div>
 
         </div>
     )
