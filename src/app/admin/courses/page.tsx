@@ -12,10 +12,12 @@ import { db } from '@/lib/firestore';
 import type { Course } from '@/types/course';
 import { useIsAdmin } from '@/hooks/useUser';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AddCourseDialog } from '@/components/admin/add-course-dialog';
 
 export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const isAdmin = useIsAdmin();
 
   const courseColumns = [
@@ -94,15 +96,14 @@ export default function AdminCoursesPage() {
   return (
     <div>
       <h1 className="text-4xl font-bold font-heading mb-8">Manage Courses</h1>
+      <AddCourseDialog isOpen={isDialogOpen} onOpenChange={setIsDialogOpen} />
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle>All Courses</CardTitle>
-            <Button asChild>
-              <Link href="/admin/courses/new">
+            <Button onClick={() => setIsDialogOpen(true)}>
                 <Plus className="mr-2 h-4 w-4" />
                 Add New
-              </Link>
             </Button>
           </div>
         </CardHeader>
