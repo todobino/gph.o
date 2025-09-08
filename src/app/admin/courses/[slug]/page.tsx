@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { ArrowUpRight, FileText, Plus, Users, BadgeDollarSign, Tv, CheckCircle } from 'lucide-react';
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 function CourseSkeleton() {
     return (
@@ -144,33 +145,37 @@ export default function EditCoursePage() {
                 <aside className="md:col-span-1 space-y-6 sticky top-24">
                      <Card>
                         <CardHeader>
-                            <div className="flex items-center gap-3">
-                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-lg">
-                                    <FileText className="h-6 w-6 text-blue-600 dark:text-blue-300" />
-                                </div>
-                                <CardTitle>Details</CardTitle>
-                            </div>
+                            <CardTitle>Details</CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-4 text-sm">
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Type</span>
-                                <Badge variant="outline" className="capitalize">{course.type}</Badge>
+                        <CardContent className="space-y-4">
+                            <div>
+                                <h4 className="text-sm font-medium text-muted-foreground mb-2">Description</h4>
+                                <p className="text-sm text-foreground">
+                                    {course.shortDescription || <span className="text-muted-foreground italic">No description provided.</span>}
+                                </p>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Status</span>
-                                <Badge variant={course.active ? 'default' : 'destructive'}>{course.active ? 'Active' : 'Draft'}</Badge>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Default Seats</span>
-                                <span>{course.defaultSeatCapacity || 'N/A'}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Price</span>
-                                <span>{formatCurrency(course.priceCents)}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Format</span>
-                                <span className="capitalize">{course.format || 'N/A'}</span>
+                            <Separator />
+                            <div className="space-y-3 text-sm">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Type</span>
+                                    <Badge variant="outline" className="capitalize">{course.type}</Badge>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Status</span>
+                                    <Badge variant={course.active ? 'default' : 'destructive'}>{course.active ? 'Active' : 'Draft'}</Badge>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Default Seats</span>
+                                    <span>{course.defaultSeatCapacity || 'N/A'}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Price</span>
+                                    <span>{formatCurrency(course.priceCents)}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Format</span>
+                                    <span className="capitalize">{course.format || 'N/A'}</span>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
