@@ -4,56 +4,112 @@
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus } from 'lucide-react';
+import { Plus, Pencil } from 'lucide-react';
 import Link from 'next/link';
-
-// Placeholder course data and columns
-const courseColumns = [
-  {
-    accessorKey: 'title',
-    header: 'Title',
-  },
-  {
-    accessorKey: 'type',
-    header: 'Type',
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-  },
-  {
-    accessorKey: 'tags',
-    header: 'Tags',
-  },
-];
-
-const placeholderCourses = [
-    { id: 'ltc', title: 'Leading Technical Change', type: 'live', status: 'Published', tags: ['leadership', 'change management', 'teams'] },
-    // In a real app, this data would be fetched from Firestore.
-    // Example fetching logic would be placed in a useEffect hook here,
-    // similar to other admin pages.
-];
+import { useEffect, useState } from 'react';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from '@/lib/firestore';
+import type { Course } from '@/types/course';
+import { useIsAdmin } from '@/hooks/useUser';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminCoursesPage() {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const isAdmin = useIsAdmin();
+
+  const courseColumns = [
+    {
+      accessorKey: 'title',
+      header: 'Title',
+      cell: ({ row }: { row: any }) => (
+         <Link href={`/admin/courses/${row.original.slug}`} className="font-medium hover:underline">
+            {row.original.title}
+        </Link>
+      ),
+    },
+    {
+      accessorKey: 'type',
+      header: 'Type',
+    },
+    {
+      accessorKey: 'active',
+      header: 'Status',
+       cell: ({ row }: { row: any }) => (row.original.active ? 'Active' : 'Draft'),
+    },
+    {
+      accessorKey: 'tags',
+      header: 'Tags',
+    },
+    {
+        id: 'actions',
+        header: 'Actions',
+        cell: ({ row }: { row: any }) => (
+            <Button asChild variant="outline" size="sm">
+                <Link href={`/admin/courses/${row.original.slug}`}>
+                    <Pencil className="mr-2 h-3 w-3" />
+                    Edit
+                </Link>
+            </Button>
+        ),
+    }
+  ];
+
+  useEffect(() => {
+    if (isAdmin) {
+      const fetchCourses = async () => {
+        try {
+          const coursesSnapshot = await getDocs(query(collection(db, 'courses')));
+          const coursesData = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Course);
+          setCourses(coursesData);
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchCourses();
+    } else if (isAdmin === false) {
+      setLoading(false);
+    }
+  }, [isAdmin]);
+
+  if (loading) {
+     return (
+       <Card>
+          <CardHeader>
+              <Skeleton className="h-8 w-1/4" />
+          </CardHeader>
+          <CardContent>
+              <div className="space-y-2">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-12 w-full" />
+              </div>
+          </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <div>
-        <h1 className="text-4xl font-bold font-heading mb-8">Manage Courses</h1>
-        <Card>
-            <CardHeader>
-                <div className="flex justify-between items-center">
-                    <CardTitle>All Courses</CardTitle>
-                    <Button asChild>
-                      <Link href="/admin/courses/new">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add New
-                      </Link>
-                    </Button>
-                </div>
-            </CardHeader>
-            <CardContent>
-                <PostsDataTable columns={courseColumns} data={placeholderCourses} searchColumnId="title" />
-            </CardContent>
-        </Card>
+      <h1 className="text-4xl font-bold font-heading mb-8">Manage Courses</h1>
+      <Card>
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle>All Courses</CardTitle>
+            <Button asChild>
+              <Link href="/admin/courses/new">
+                <Plus className="mr-2 h-4 w-4" />
+                Add New
+              </Link>
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <PostsDataTable columns={courseColumns} data={courses} searchColumnId="title" />
+        </CardContent>
+      </Card>
     </div>
   );
 }
