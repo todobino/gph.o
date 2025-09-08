@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -165,7 +166,7 @@ export default function EditCoursePage() {
                             <div className="space-y-3 text-sm">
                                 <div className="flex justify-between items-center">
                                     <span className="text-muted-foreground">Type</span>
-                                    <Badge variant="outline" className="capitalize">{course.type}</Badge>
+                                    <Badge variant={course.type === 'live' ? 'default' : 'secondary'} className="capitalize">{course.type}</Badge>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-muted-foreground">Seat Number</span>
