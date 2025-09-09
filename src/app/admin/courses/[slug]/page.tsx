@@ -179,7 +179,7 @@ export default function EditCoursePage() {
                             </div>
                         </CardHeader>
                         <CardContent className="space-y-4 pt-6">
-                            <div>
+                             <div>
                                 <p className="text-sm text-foreground">
                                     {course.shortDescription || <span className="text-muted-foreground italic">No description provided.</span>}
                                 </p>
@@ -219,7 +219,7 @@ export default function EditCoursePage() {
                 <main className="md:col-span-2 space-y-6">
                     {course.type === 'live' && (
                         <Card>
-                            <CardHeader className="flex flex-row items-center justify-between">
+                            <CardHeader className="flex flex-row items-center justify-between py-4">
                                 <CardTitle>Manage Cohorts</CardTitle>
                                 <Button size="sm" onClick={() => setIsAddCohortDialogOpen(true)}>
                                     <Plus className="mr-2 h-4 w-4" />
