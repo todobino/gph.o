@@ -12,12 +12,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowUpRight, FileText, Plus, Users, BadgeDollarSign, Tv, CheckCircle, Pencil } from 'lucide-react';
+import { ArrowUpRight, FileText, Plus, Users, BadgeDollarSign, Tv, CheckCircle, Pencil, GraduationCap } from 'lucide-react';
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { EditCourseDetailsDialog } from '@/components/admin/edit-course-dialog';
 import { AddCohortDialog } from '@/components/admin/add-cohort-dialog';
+import Image from 'next/image';
 
 function CourseSkeleton() {
     return (
@@ -158,11 +159,25 @@ export default function EditCoursePage() {
                         <Button
                             variant="outline"
                             size="icon"
-                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                             onClick={() => setIsEditDialogOpen(true)}
                         >
                             <Pencil className="h-4 w-4" />
                         </Button>
+                         <CardHeader className="p-0">
+                            <div className="relative aspect-video">
+                                <Image
+                                    src={course.heroImageUrl || "https://picsum.photos/seed/course-placeholder/600/400"}
+                                    alt={course.title}
+                                    fill
+                                    className="object-cover rounded-t-lg"
+                                    data-ai-hint="course image"
+                                />
+                                <div className="absolute top-4 left-4 bg-primary p-3 rounded-lg">
+                                    <GraduationCap className="h-6 w-6 text-primary-foreground" />
+                                </div>
+                            </div>
+                        </CardHeader>
                         <CardContent className="space-y-4 pt-6">
                             <div>
                                 <h4 className="text-sm font-medium text-muted-foreground mb-2">Description</h4>
