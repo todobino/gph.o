@@ -39,30 +39,6 @@ function CourseSkeleton() {
     );
 }
 
-const cohortColumns = [
-    {
-        accessorKey: 'name',
-        header: 'Cohort Name',
-    },
-    {
-        accessorKey: 'status',
-        header: 'Status',
-        cell: ({ row }: { row: any }) => (
-            <Badge variant={row.original.status === 'published' ? 'default' : 'secondary'} className="capitalize">{row.original.status}</Badge>
-        )
-    },
-    {
-        accessorKey: 'seatsConfirmed',
-        header: 'Confirmed Seats',
-    },
-     {
-        accessorKey: 'seatsTotal',
-        header: 'Total Seats',
-    },
-    // Add actions column later
-];
-
-
 export default function EditCoursePage() {
     const params = useParams();
     const slug = params.slug as string;
@@ -74,6 +50,34 @@ export default function EditCoursePage() {
     const [error, setError] = useState<string | null>(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isAddCohortDialogOpen, setIsAddCohortDialogOpen] = useState(false);
+
+    const cohortColumns = [
+        {
+            accessorKey: 'name',
+            header: 'Cohort Name',
+            cell: ({ row }: { row: any }) => (
+                <Link href={`/admin/courses/${slug}/${row.original.id}`} className="font-medium hover:underline">
+                    {row.original.name}
+                </Link>
+            )
+        },
+        {
+            accessorKey: 'status',
+            header: 'Status',
+            cell: ({ row }: { row: any }) => (
+                <Badge variant={row.original.status === 'published' ? 'default' : 'secondary'} className="capitalize">{row.original.status}</Badge>
+            )
+        },
+        {
+            accessorKey: 'seatsConfirmed',
+            header: 'Confirmed Seats',
+        },
+         {
+            accessorKey: 'seatsTotal',
+            header: 'Total Seats',
+        },
+        // Add actions column later
+    ];
 
     const fetchCourseAndCohorts = async () => {
         setLoading(true);
