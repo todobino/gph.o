@@ -39,13 +39,12 @@ import { db } from '@/lib/firestore';
 import { useRouter } from 'next/navigation';
 import type { Course, Cohort } from '@/types/course';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, addHours } from 'date-fns';
 import { CalendarIcon, Plus, Trash2 } from 'lucide-react';
 
 const sessionSchema = z.object({
   date: z.date({ required_error: 'A date is required.' }),
   startTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:mm)'),
-  endTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:mm)'),
 });
 
 const addCohortSchema = z.object({
@@ -79,21 +78,27 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
     },
   });
 
-  // When dialog opens or cohorts change, reset the number field to the next sequential one
-  useEffect(() => {
-    if (isOpen) {
-      form.reset({
-        number: nextCohortNumber,
-        status: 'draft',
-        sessions: [],
-      });
-    }
-  }, [isOpen, nextCohortNumber, form]);
-  
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control: form.control,
     name: "sessions",
   });
+  
+  // When dialog opens, pre-populate sessions based on course settings
+  useEffect(() => {
+    if (isOpen) {
+      const defaultSessionCount = course.sessionCount || 1;
+      const initialSessions = Array.from({ length: defaultSessionCount }, () => ({
+        date: new Date(),
+        startTime: '13:00',
+      }));
+
+      form.reset({
+        number: nextCohortNumber,
+        status: 'draft',
+        sessions: initialSessions,
+      });
+    }
+  }, [isOpen, course, nextCohortNumber, form]);
 
   const getCourseAcronym = (title: string) => {
     return title
@@ -116,9 +121,7 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
             const [startHours, startMinutes] = session.startTime.split(':').map(Number);
             startDateTime.setHours(startHours, startMinutes, 0, 0);
 
-            const endDateTime = new Date(session.date);
-            const [endHours, endMinutes] = session.endTime.split(':').map(Number);
-            endDateTime.setHours(endHours, endMinutes, 0, 0);
+            const endDateTime = addHours(startDateTime, course.hoursPerSession || 2);
 
             return {
                 label: `Session on ${format(startDateTime, 'MMM d')}`,
@@ -162,17 +165,26 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
     }
   };
 
+  const renderEndTime = (startTime: string) => {
+    if (!/^\d{2}:\d{2}$/.test(startTime)) return '';
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const startDate = new Date();
+    startDate.setHours(hours, minutes, 0, 0);
+    const endDate = addHours(startDate, course.hoursPerSession || 2);
+    return format(endDate, 'h:mm a');
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Add New Cohort</DialogTitle>
           <DialogDescription>
-            Define a new cohort for the course: {course.title}.
+            Define a new cohort for the course: {course.title}. Sessions are pre-populated based on course settings.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6 py-2">
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6 py-2 max-h-[70vh] overflow-y-auto pr-2">
              <div className="grid grid-cols-2 gap-4">
                  <FormField
                   control={form.control}
@@ -227,7 +239,7 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
                                             <Button
                                               variant={"outline"}
                                               className={cn(
-                                                "w-full pl-3 text-left font-normal",
+                                                "w-full pl-3 text-left font-normal justify-start",
                                                 !field.value && "text-muted-foreground"
                                               )}
                                             >
@@ -257,7 +269,7 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
                                     control={form.control}
                                     name={`sessions.${index}.startTime`}
                                     render={({ field }) => (
-                                        <FormItem className="flex-grow">
+                                        <FormItem className="flex-grow w-40">
                                             <FormLabel>Start Time</FormLabel>
                                             <FormControl>
                                                 <Input {...field} type="time" className="w-full" />
@@ -266,19 +278,12 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
                                         </FormItem>
                                     )}
                                 />
-                                 <FormField
-                                    control={form.control}
-                                    name={`sessions.${index}.endTime`}
-                                    render={({ field }) => (
-                                        <FormItem className="flex-grow">
-                                            <FormLabel>End Time</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} type="time" className="w-full" />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                 <div className="flex-grow">
+                                     <FormLabel className="text-sm">End Time</FormLabel>
+                                    <div className="h-10 flex items-center px-3 text-sm text-muted-foreground">
+                                        (ends ~{renderEndTime(form.watch(`sessions.${index}.startTime`))})
+                                    </div>
+                                 </div>
                             </div>
                             <Button type="button" variant="outline" size="icon" onClick={() => remove(index)}>
                                 <Trash2 className="h-4 w-4" />
@@ -289,7 +294,7 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => append({ date: new Date(), startTime: '13:00', endTime: '15:00' })}
+                        onClick={() => append({ date: new Date(), startTime: '13:00' })}
                     >
                         <Plus className="mr-2 h-4 w-4" />
                         Add Session
@@ -298,7 +303,7 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
                 </div>
              </div>
 
-            <DialogFooter className="pt-4">
+            <DialogFooter className="pt-4 sticky bottom-0 bg-background pb-1">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   Cancel
