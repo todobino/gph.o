@@ -17,6 +17,7 @@ import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { format } from 'date-fns';
+import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
 
 function CohortSkeleton() {
     return (
@@ -42,6 +43,7 @@ const attendeeColumns = [
     {
         accessorKey: 'name',
         header: 'Name',
+        cell: ({ row }: { row: any }) => `${row.original.firstName} ${row.original.lastName}`
     },
     {
         accessorKey: 'email',
@@ -52,6 +54,13 @@ const attendeeColumns = [
         header: 'Status',
         cell: ({ row }: { row: any }) => (
             <Badge variant={row.original.status === 'confirmed' ? 'default' : 'secondary'} className="capitalize">{row.original.status}</Badge>
+        )
+    },
+     {
+        accessorKey: 'paymentStatus',
+        header: 'Payment',
+        cell: ({ row }: { row: any }) => (
+            <Badge variant={row.original.paymentStatus === 'paid' ? 'default' : 'destructive'} className="capitalize">{row.original.paymentStatus}</Badge>
         )
     },
     {
@@ -76,35 +85,30 @@ export default function EditCohortPage() {
     const [attendees, setAttendees] = useState<Attendee[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isAddAttendeeDialogOpen, setIsAddAttendeeDialogOpen] = useState(false);
 
-    const fetchCohortDetails = async () => {
+    const fetchCohortDetails = async (courseIdParam?: string) => {
         setLoading(true);
         try {
-            // 1. Get Course ID from slug
-            const courseQuery = query(collection(db, "courses"), where("slug", "==", slug));
-            const courseSnapshot = await getDocs(courseQuery);
-
-            if (courseSnapshot.empty) {
-                throw new Error("Course not found.");
+            let courseId = courseIdParam;
+            if (!courseId) {
+                const courseQuery = query(collection(db, "courses"), where("slug", "==", slug));
+                const courseSnapshot = await getDocs(courseQuery);
+                if (courseSnapshot.empty) throw new Error("Course not found.");
+                const courseDoc = courseSnapshot.docs[0];
+                courseId = courseDoc.id;
+                setCourse({ id: courseDoc.id, ...courseDoc.data() } as Course);
             }
-            const courseDoc = courseSnapshot.docs[0];
-            const courseData = { id: courseDoc.id, ...courseDoc.data() } as Course;
-            setCourse(courseData);
 
-            // 2. Get Cohort from subcollection
-            const cohortRef = doc(db, "courses", courseDoc.id, "cohorts", cohortId);
+            const cohortRef = doc(db, "courses", courseId, "cohorts", cohortId);
             const cohortSnap = await getDoc(cohortRef);
-
-            if (!cohortSnap.exists()) {
-                throw new Error("Cohort not found.");
-            }
+            if (!cohortSnap.exists()) throw new Error("Cohort not found.");
             setCohort({ id: cohortSnap.id, ...cohortSnap.data() } as Cohort);
 
-            // 3. Fetch attendees (placeholder - implement when data is available)
-            // const attendeesQuery = query(collection(db, "courses", courseDoc.id, "cohorts", cohortId, "attendees"));
-            // const attendeesSnapshot = await getDocs(attendeesQuery);
-            // const attendeesData = attendeesSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Attendee));
-            // setAttendees(attendeesData);
+            const attendeesQuery = query(collection(db, "courses", courseId, "cohorts", cohortId, "attendees"), orderBy("addedAt", "desc"));
+            const attendeesSnapshot = await getDocs(attendeesQuery);
+            const attendeesData = attendeesSnapshot.docs.map(d => ({ id: d.id, ...d.data() } as Attendee));
+            setAttendees(attendeesData);
 
         } catch (err: any) {
             console.error("Error fetching cohort details:", err);
@@ -116,7 +120,7 @@ export default function EditCohortPage() {
 
     useEffect(() => {
         if (isAdmin && slug && cohortId) {
-            fetchCohortDetails();
+            fetchCohortDetails(course?.id);
         }
     }, [isAdmin, slug, cohortId]);
 
@@ -148,6 +152,13 @@ export default function EditCohortPage() {
 
     return (
         <div className="space-y-6">
+            <AddAttendeeDialog 
+                isOpen={isAddAttendeeDialogOpen}
+                onOpenChange={setIsAddAttendeeDialogOpen}
+                courseId={course.id}
+                cohortId={cohort.id}
+                onAttendeeAdded={() => fetchCohortDetails(course.id)}
+            />
             <Button variant="outline" size="sm" asChild>
                 <Link href={`/admin/courses/${slug}`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -229,13 +240,13 @@ export default function EditCohortPage() {
                                 <Users className="h-5 w-5" />
                                 <CardTitle>Attendees</CardTitle>
                             </div>
-                            <Button size="sm" disabled>
+                            <Button size="sm" onClick={() => setIsAddAttendeeDialogOpen(true)}>
                                 <Plus className="mr-2 h-4 w-4" />
                                 Add Attendee
                             </Button>
                         </CardHeader>
                         <CardContent>
-                           <PostsDataTable columns={attendeeColumns} data={attendees} searchColumnId="name" />
+                           <PostsDataTable columns={attendeeColumns} data={attendees} searchColumnId="email" searchPlaceholder="Search by email..."/>
                            {attendees.length === 0 && (
                              <p className="text-center text-muted-foreground py-8">No attendees enrolled yet.</p>
                            )}
