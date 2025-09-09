@@ -180,7 +180,6 @@ export default function EditCoursePage() {
                         </CardHeader>
                         <CardContent className="space-y-4 pt-6">
                             <div>
-                                <h4 className="text-sm font-medium text-muted-foreground mb-2">Description</h4>
                                 <p className="text-sm text-foreground">
                                     {course.shortDescription || <span className="text-muted-foreground italic">No description provided.</span>}
                                 </p>
