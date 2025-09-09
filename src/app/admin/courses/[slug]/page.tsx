@@ -3,7 +3,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useIsAdmin } from '@/hooks/useUser';
 import { getDoc, doc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
@@ -41,6 +41,7 @@ function CourseSkeleton() {
 
 export default function EditCoursePage() {
     const params = useParams();
+    const router = useRouter();
     const slug = params.slug as string;
     const isAdmin = useIsAdmin();
 
@@ -231,7 +232,12 @@ export default function EditCoursePage() {
                                 </Button>
                             </CardHeader>
                             <CardContent>
-                                <PostsDataTable columns={cohortColumns} data={cohorts} searchColumnId="name" />
+                                <PostsDataTable 
+                                    columns={cohortColumns} 
+                                    data={cohorts} 
+                                    searchColumnId="name"
+                                    onRowClick={(row) => router.push(`/admin/courses/${slug}/${row.original.id}`)}
+                                />
                             </CardContent>
                         </Card>
                     )}

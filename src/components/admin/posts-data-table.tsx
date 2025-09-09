@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import * as React from 'react';
@@ -13,6 +14,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  Row,
 } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
@@ -63,16 +65,25 @@ const selectionColumn: ColumnDef<Post> = {
     enableHiding: false,
 };
 
-interface PostsDataTableProps {
-    columns: any[];
-    data: any[];
+interface PostsDataTableProps<TData> {
+    columns: ColumnDef<TData>[];
+    data: TData[];
     searchColumnId?: string;
     filterColumnId?: string;
     filterColumnName?: string;
     searchPlaceholder?: string;
+    onRowClick?: (row: Row<TData>) => void;
 }
 
-export function PostsDataTable({ columns: propColumns, data, searchColumnId, filterColumnId, filterColumnName, searchPlaceholder = 'Search...' }: PostsDataTableProps) {
+export function PostsDataTable<TData>({ 
+    columns: propColumns, 
+    data, 
+    searchColumnId, 
+    filterColumnId, 
+    filterColumnName, 
+    searchPlaceholder = 'Search...',
+    onRowClick 
+}: PostsDataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -81,7 +92,7 @@ export function PostsDataTable({ columns: propColumns, data, searchColumnId, fil
   const columns: ColumnDef<any>[] = React.useMemo(
     () => [
         selectionColumn,
-        ...propColumns.map((col) => ({
+        ...propColumns.map((col: any) => ({
             ...col,
             header: col.header ? ({ column }: { column: any}) => {
                 // If header is a string, render our default sortable button
@@ -148,7 +159,7 @@ export function PostsDataTable({ columns: propColumns, data, searchColumnId, fil
     if (!filterColumn || !filterColumnId) return [];
     const values = new Set<string>();
     data.forEach(row => {
-      const cellValue = row[filterColumnId];
+      const cellValue = (row as any)[filterColumnId];
       if (Array.isArray(cellValue)) {
         cellValue.forEach(v => values.add(v));
       } else if (typeof cellValue === 'string') {
@@ -216,7 +227,7 @@ export function PostsDataTable({ columns: propColumns, data, searchColumnId, fil
                 className="ml-auto"
                 onClick={() => {
                 const selectedRows = table.getFilteredSelectedRowModel().rows;
-                const selectedIds = selectedRows.map(row => row.original.id || row.original.slug);
+                const selectedIds = selectedRows.map(row => (row.original as any).id || (row.original as any).slug);
                 console.log('Delete selected items:', selectedIds);
                 }}
             >
@@ -251,9 +262,18 @@ export function PostsDataTable({ columns: propColumns, data, searchColumnId, fil
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  onClick={() => onRowClick && onRowClick(row)}
+                  className={cn(onRowClick && 'cursor-pointer')}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} onClick={(e) => {
+                        // Stop propagation if the cell itself has a click handler (e.g., a link or button)
+                        if (cell.column.id !== 'select' && cell.column.id !== 'actions' && !e.currentTarget.querySelector('a, button')) {
+                           // Allow click
+                        } else if (cell.column.id !== 'select') {
+                           e.stopPropagation();
+                        }
+                    }}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { PostsDataTable } from '@/components/admin/posts-data-table';
@@ -13,8 +14,10 @@ import type { Course } from '@/types/course';
 import { useIsAdmin } from '@/hooks/useUser';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AddCourseDialog } from '@/components/admin/add-course-dialog';
+import { useRouter } from 'next/navigation';
 
 export default function AdminCoursesPage() {
+  const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -25,7 +28,7 @@ export default function AdminCoursesPage() {
       accessorKey: 'title',
       header: 'Title',
       cell: ({ row }: { row: any }) => (
-         <Link href={`/admin/courses/${row.original.slug}`} className="font-medium hover:underline">
+         <Link href={`/admin/courses/${row.original.slug}`} className="font-medium hover:underline" onClick={(e) => e.stopPropagation()}>
             {row.original.title}
         </Link>
       ),
@@ -47,7 +50,7 @@ export default function AdminCoursesPage() {
         id: 'actions',
         header: 'Actions',
         cell: ({ row }: { row: any }) => (
-            <Button asChild variant="outline" size="sm">
+            <Button asChild variant="outline" size="sm" onClick={(e) => e.stopPropagation()}>
                 <Link href={`/admin/courses/${row.original.slug}`}>
                     <Pencil className="mr-2 h-3 w-3" />
                     Edit
@@ -108,7 +111,12 @@ export default function AdminCoursesPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <PostsDataTable columns={courseColumns} data={courses} searchColumnId="title" />
+          <PostsDataTable 
+            columns={courseColumns} 
+            data={courses} 
+            searchColumnId="title"
+            onRowClick={(row) => router.push(`/admin/courses/${row.original.slug}`)}
+          />
         </CardContent>
       </Card>
     </div>
