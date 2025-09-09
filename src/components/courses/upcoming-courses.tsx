@@ -81,7 +81,7 @@ export function UpcomingCourses() {
             const seatsRemaining = cohort.seatsTotal - cohort.seatsConfirmed;
             const isFull = seatsRemaining <= 0;
             const statusLabel = isFull ? 'Full' : `${seatsRemaining} left`;
-            const badgeVariant = isFull ? 'destructive' : 'secondary';
+            const badgeVariant = isFull ? 'default' : 'secondary';
             const cohortStatusLabel = cohort.status.charAt(0).toUpperCase() + cohort.status.slice(1);
 
             return (
@@ -103,7 +103,9 @@ export function UpcomingCourses() {
                             <Video className="h-4 w-4" />
                             <span>{cohort.format}</span>
                         </div>
-                        <Badge variant={statusVariantMap[cohort.status] || statusVariantMap.default} className="capitalize">{cohortStatusLabel}</Badge>
+                         {cohort.status !== 'soldout' && (
+                            <Badge variant={statusVariantMap[cohort.status] || statusVariantMap.default} className="capitalize">{cohortStatusLabel}</Badge>
+                         )}
                     </div>
                   </div>
                   <div>
