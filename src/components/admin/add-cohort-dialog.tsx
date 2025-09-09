@@ -231,7 +231,7 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
                                           )}
                                         >
                                           {field.value ? (
-                                            format(field.value, "PPP")
+                                            format(field.value, "MM/dd/yy")
                                           ) : (
                                             <span>Pick a date</span>
                                           )}
