@@ -213,71 +213,73 @@ export function AddCohortDialog({ isOpen, onOpenChange, course, cohorts, onCohor
                 <FormLabel>Sessions</FormLabel>
                 <div className="space-y-3 mt-2">
                     {fields.map((field, index) => (
-                        <div key={field.id} className="flex gap-2 items-end p-3 border rounded-lg">
-                           <FormField
-                              control={form.control}
-                              name={`sessions.${index}.date`}
-                              render={({ field }) => (
-                                <FormItem className="flex flex-col">
-                                   <FormLabel>Date</FormLabel>
-                                  <Popover>
-                                    <PopoverTrigger asChild>
-                                      <FormControl>
-                                        <Button
-                                          variant={"outline"}
-                                          className={cn(
-                                            "w-[150px] pl-3 text-left font-normal",
-                                            !field.value && "text-muted-foreground"
-                                          )}
-                                        >
-                                          {field.value ? (
-                                            format(field.value, "MM/dd/yy")
-                                          ) : (
-                                            <span>Pick a date</span>
-                                          )}
-                                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                        </Button>
-                                      </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                      <Calendar
-                                        mode="single"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
-                                        initialFocus
-                                      />
-                                    </PopoverContent>
-                                  </Popover>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name={`sessions.${index}.startTime`}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Start Time</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} type="time" className="w-[110px]" />
-                                        </FormControl>
-                                        <FormMessage />
+                        <div key={field.id} className="flex gap-2 items-end p-3 border rounded-lg w-full">
+                            <div className="flex-1 flex items-end gap-2">
+                               <FormField
+                                  control={form.control}
+                                  name={`sessions.${index}.date`}
+                                  render={({ field }) => (
+                                    <FormItem className="flex flex-col flex-grow">
+                                       <FormLabel>Date</FormLabel>
+                                      <Popover>
+                                        <PopoverTrigger asChild>
+                                          <FormControl>
+                                            <Button
+                                              variant={"outline"}
+                                              className={cn(
+                                                "w-full pl-3 text-left font-normal",
+                                                !field.value && "text-muted-foreground"
+                                              )}
+                                            >
+                                              {field.value ? (
+                                                format(field.value, "MM/dd/yy")
+                                              ) : (
+                                                <span>Pick a date</span>
+                                              )}
+                                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                            </Button>
+                                          </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                          <Calendar
+                                            mode="single"
+                                            selected={field.value}
+                                            onSelect={field.onChange}
+                                            initialFocus
+                                          />
+                                        </PopoverContent>
+                                      </Popover>
+                                      <FormMessage />
                                     </FormItem>
-                                )}
-                            />
-                             <FormField
-                                control={form.control}
-                                name={`sessions.${index}.endTime`}
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>End Time</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} type="time" className="w-[110px]" />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                                  )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name={`sessions.${index}.startTime`}
+                                    render={({ field }) => (
+                                        <FormItem className="flex-grow">
+                                            <FormLabel>Start Time</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="time" className="w-full" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                 <FormField
+                                    control={form.control}
+                                    name={`sessions.${index}.endTime`}
+                                    render={({ field }) => (
+                                        <FormItem className="flex-grow">
+                                            <FormLabel>End Time</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type="time" className="w-full" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <Button type="button" variant="outline" size="icon" onClick={() => remove(index)}>
                                 <Trash2 className="h-4 w-4" />
                             </Button>
