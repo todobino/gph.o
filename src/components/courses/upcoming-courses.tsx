@@ -65,11 +65,11 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
 
             if (courseSlug) {
                 // First, get the course ID from the slug
-                const courseQuery = query(collection(db, 'courses'), where('slug', '==', courseSlug));
+                const courseQuery = query(collection(db, 'courses'), where('slug', '==', courseSlug), where('active', '==', true));
                 const courseSnapshot = await getDocs(courseQuery);
                 
                 if (courseSnapshot.empty) {
-                    console.warn(`No course found with slug: ${courseSlug}`);
+                    console.warn(`No active course found with slug: ${courseSlug}`);
                     setCohorts([]);
                     setLoading(false);
                     return;
@@ -179,7 +179,7 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
                       <Button onClick={() => handleWaitlistClick(cohort.id)} className="w-full md:w-auto" variant="secondary">Join Waitlist</Button>
                     ) : (
                       <Button asChild className="w-full md:w-auto">
-                        <a href={cohort.registrationUrl || '#'} target="_blank" rel="noopener noreferrer">Grab a Seat</a>
+                        <a href={cohort.checkoutLink || cohort.registrationUrl || '#'} target="_blank" rel="noopener noreferrer">Grab a Seat</a>
                       </Button>
                     )}
                   </div>

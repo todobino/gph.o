@@ -47,6 +47,7 @@ export interface Cohort {
     seatsRemaining: number;
     priceCentsOverride?: number | null;
     registrationUrl?: string | null;
+    checkoutLink?: string;
     instructors?: string[];
     notes?: string;
     sessions: CohortSession[];

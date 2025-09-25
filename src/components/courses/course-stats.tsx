@@ -19,7 +19,7 @@ interface CourseStatsProps {
 
 export function CourseStats({ title, description, imageUrl, imageHint, seats, duration, format }: CourseStatsProps) {
     // This is a placeholder URL. In a real application, you might pass this as a prop.
-    const purchaseUrl = "https://book.stripe.com/4gw7v991obDr1Nu007";
+    const purchaseUrl = "#";
 
     return (
         <Card className="shadow-lg">
