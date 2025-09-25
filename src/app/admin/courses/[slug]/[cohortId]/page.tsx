@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink } from 'lucide-react';
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -206,6 +206,16 @@ export default function EditCohortPage() {
                                     <span className="text-muted-foreground">Remaining</span>
                                     <span>{cohort.seatsRemaining}</span>
                                 </div>
+                                {cohort.checkoutLink && (
+                                    <div className="flex justify-between items-center pt-2">
+                                        <span className="text-muted-foreground">Checkout Link</span>
+                                        <Button asChild variant="outline" size="sm">
+                                            <Link href={cohort.checkoutLink} target="_blank">
+                                                View <ExternalLink className="ml-2 h-3 w-3" />
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
                     </div>
