@@ -32,14 +32,9 @@ function AdminNav() {
     return (
          <aside className="w-full md:w-1/4 lg:w-1/5">
             <div className="sticky top-24">
-                <nav className="flex flex-col space-y-1 p-4 border rounded-lg shadow-lg bg-accent/50">
+                <nav className="flex flex-col space-y-1 p-4 border rounded-lg shadow-sm bg-card">
                     {navSections.map((section, sectionIndex) => (
                         <div key={sectionIndex} className="space-y-1">
-                           {section.title && (
-                             <h4 className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                               {section.title}
-                             </h4>
-                           )}
                            {section.items.map((item) => (
                                 <Link
                                 key={item.href}
