@@ -9,7 +9,7 @@ import { Clock, Users, CalendarClock, Video } from 'lucide-react';
 import { collection, query, where, orderBy, getDocs, Timestamp, collectionGroup, Query, DocumentData } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
 import type { Cohort, Course } from '@/types/course';
-import { format } from 'date-fns';
+import { format, addDays, differenceInDays, isSameDay } from 'date-fns';
 import { Skeleton } from '../ui/skeleton';
 
 
@@ -114,6 +114,45 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
     setSelectedCourse(courseId);
     setDialogOpen(true);
   };
+  
+  const renderSessionTiles = (cohort: Cohort) => {
+    if (!cohort.sessions || cohort.sessions.length === 0) {
+      return null;
+    }
+    const tiles = [];
+    const firstSessionDate = cohort.sessions[0].startAt.toDate();
+    const lastSessionDate = cohort.sessions[cohort.sessions.length - 1].startAt.toDate();
+    const totalDays = differenceInDays(lastSessionDate, firstSessionDate);
+
+    for (let i = 0; i <= totalDays; i++) {
+        const currentDate = addDays(firstSessionDate, i);
+        const sessionOnThisDay = cohort.sessions.find(s => isSameDay(s.startAt.toDate(), currentDate));
+
+        if (sessionOnThisDay) {
+            const { day, date, time } = formatSessionDate(sessionOnThisDay.startAt);
+            tiles.push(
+                <div key={i} className="flex flex-col items-start justify-center p-3 rounded-lg text-left bg-background border border-border">
+                    <span className="text-sm font-normal">{day}</span>
+                    <span className="text-lg font-bold text-foreground -mt-1">{date}</span>
+                    <span className="text-xs">{time}</span>
+                </div>
+            );
+        } else {
+             const dayOfWeek = format(currentDate, 'EEEE');
+             if (dayOfWeek !== 'Saturday' && dayOfWeek !== 'Sunday') {
+                tiles.push(
+                    <div key={`skipped-${i}`} className="flex flex-col items-start justify-center p-3 rounded-lg text-left bg-muted border border-border text-muted-foreground">
+                        <span className="text-sm font-normal">{format(currentDate, 'EEEE')}</span>
+                        <span className="text-lg font-bold -mt-1">{format(currentDate, 'MMM d')}</span>
+                        <span className="text-xs font-semibold">Skipped</span>
+                    </div>
+                );
+             }
+        }
+    }
+    return tiles;
+  };
+
 
   return (
     <>
@@ -186,16 +225,7 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 pt-2">
-                    {cohort.sessions.map((s, index) => {
-                        const { day, date, time } = formatSessionDate(s.startAt);
-                        return (
-                            <div key={index} className="flex flex-col items-start justify-center p-3 rounded-lg text-left bg-background border border-border">
-                                <span className="text-sm font-normal">{day}</span>
-                                <span className="text-lg font-bold text-foreground -mt-1">{date}</span>
-                                <span className="text-xs">{time}</span>
-                            </div>
-                        )
-                    })}
+                  {renderSessionTiles(cohort)}
                 </div>
               </div>
             );
