@@ -79,7 +79,7 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
                 cohortsQuery = query(
                     collection(db, 'courses', courseId, 'cohorts'), 
                     where('status', 'in', ['published', 'waitlist', 'soldout']),
-                    orderBy('sessions.0.startAt', 'asc')
+                    orderBy('number', 'asc') // Order by cohort number
                 );
 
             } else {
@@ -87,12 +87,20 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
                 cohortsQuery = query(
                     collectionGroup(db, 'cohorts'), 
                     where('status', 'in', ['published', 'waitlist', 'soldout']),
-                    orderBy('sessions.0.startAt', 'asc')
+                    orderBy('number', 'asc') // Order by cohort number
                 );
             }
             
             const querySnapshot = await getDocs(cohortsQuery);
             const fetchedCohorts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Cohort));
+            
+            // Sort by the start date of the first session client-side
+            fetchedCohorts.sort((a, b) => {
+                const aStart = a.sessions?.[0]?.startAt?.toDate()?.getTime() || 0;
+                const bStart = b.sessions?.[0]?.startAt?.toDate()?.getTime() || 0;
+                return aStart - bStart;
+            });
+
             setCohorts(fetchedCohorts);
         } catch (error) {
             console.error("Error fetching cohorts:", error);
@@ -139,8 +147,8 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
           {!loading && cohorts.map((cohort) => {
             const seatsRemaining = cohort.seatsTotal - cohort.seatsConfirmed;
             const isFull = seatsRemaining <= 0;
-             const statusLabel = isFull ? 'Full' : `${seatsRemaining} left`;
-            const badgeVariant = cohort.status === 'soldout' || isFull ? 'default' : 'secondary';
+            const statusLabel = isFull ? 'Full' : `${seatsRemaining} left`;
+            const badgeVariant = (cohort.status === 'soldout' || isFull) ? 'default' : 'secondary';
             const cohortStatusLabel = cohort.status.charAt(0).toUpperCase() + cohort.status.slice(1);
 
             return (
