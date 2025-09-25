@@ -183,9 +183,9 @@ export default function EditCohortPage() {
 
              <div className="flex flex-col gap-8">
                 {/* Top Row: Details & Schedule */}
-                <div className="flex flex-col lg:flex-row gap-8 items-start">
+                <div className="flex flex-col lg:flex-row gap-8">
                     <div className="w-full lg:w-1/3">
-                        <Card>
+                        <Card className="h-full">
                             <CardHeader>
                                 <CardTitle>Cohort Details</CardTitle>
                             </CardHeader>
@@ -220,7 +220,7 @@ export default function EditCohortPage() {
                         </Card>
                     </div>
                     <div className="w-full lg:w-2/3">
-                        <Card>
+                        <Card className="h-full">
                             <CardHeader>
                                 <CardTitle>Schedule</CardTitle>
                             </CardHeader>
