@@ -24,13 +24,12 @@ export function MyLists() {
     const [loading, setLoading] = useState(true);
     const [unsubscribing, setUnsubscribing] = useState<string | null>(null);
 
-    const fetchSubscriptions = async (userId: string) => {
+    const fetchSubscriptions = async (email: string) => {
         setLoading(true);
         try {
-            // 1. Get user's subscriptions
-            const subsQuery = query(collection(db, "subscriptions"), where("subscriberId", "==", userId), where("status", "==", "subscribed"));
+            // 1. Get user's subscriptions by email
+            const subsQuery = query(collection(db, "subscriptions"), where("subscriberId", "==", email), where("status", "==", "subscribed"));
             const subsSnap = await getDocs(subsQuery);
-            // A) Include the doc id when reading subscriptions
             const userSubscriptions = subsSnap.docs.map(d => ({
                 id: d.id,
                 ...d.data(),
@@ -44,8 +43,12 @@ export function MyLists() {
             }
 
             // 2. Get list details for those subscriptions
-            // B) Fetch lists by documentId() and include isPublic to satisfy rules
             const listIds = userSubscriptions.map(s => s.listId);
+            if (listIds.length === 0) {
+                setSubscriptions([]);
+                setLoading(false);
+                return;
+            }
             const chunks: string[][] = [];
             for (let i = 0; i < listIds.length; i += 10) {
               chunks.push(listIds.slice(i, i + 10));
@@ -56,10 +59,15 @@ export function MyLists() {
                  const listsQuery = query(
                     collection(db, "lists"), 
                     where(documentId(), "in", chunk),
-                    where("isPublic", "==", true) // Required by security rules for non-admin reads
                  );
                  const listsSnap = await getDocs(listsQuery);
-                 listsSnap.docs.forEach(d => listsMap.set(d.id, d.data() as ListType));
+                 listsSnap.docs.forEach(d => {
+                     // Security rules allow reads on public lists, so we manually check here
+                     const listData = d.data() as ListType;
+                     if(listData.isPublic) {
+                        listsMap.set(d.id, listData);
+                     }
+                 });
             }
 
             // 3. Enrich subscriptions with list names
@@ -68,7 +76,7 @@ export function MyLists() {
                     ...sub,
                     listName: listsMap.get(sub.listId)?.name || 'Unknown List'
                 }))
-                .filter(sub => listsMap.has(sub.listId)); // Only show subscriptions to public lists the user can see
+                .filter(sub => listsMap.has(sub.listId)); 
 
             setSubscriptions(enriched);
 
@@ -85,8 +93,8 @@ export function MyLists() {
     };
     
     useEffect(() => {
-        if (user?.uid) {
-           fetchSubscriptions(user.uid);
+        if (user?.email) {
+           fetchSubscriptions(user.email);
         } else if (user === null) { // user object is loaded, but is null
             setLoading(false);
         }
@@ -99,7 +107,6 @@ export function MyLists() {
             const batch = writeBatch(db);
             
             const subRef = doc(db, "subscriptions", subscriptionId);
-             // C) Use serverTimestamp() for time fields on unsubscribe
             batch.update(subRef, {
                 status: "unsubscribed",
                 unsubscribedAt: serverTimestamp(),
@@ -114,7 +121,6 @@ export function MyLists() {
                 description: "You have been successfully removed from the list.",
             });
             
-            // D) After commit, remove from UI by id
             setSubscriptions(prev => prev.filter(s => s.id !== subscriptionId));
 
         } catch (error) {
