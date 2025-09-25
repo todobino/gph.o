@@ -69,6 +69,7 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
                 const courseSnapshot = await getDocs(courseQuery);
                 
                 if (courseSnapshot.empty) {
+                    console.warn(`No course found with slug: ${courseSlug}`);
                     setCohorts([]);
                     setLoading(false);
                     return;
@@ -78,16 +79,14 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
                 // Then, query for cohorts within that specific course
                 cohortsQuery = query(
                     collection(db, 'courses', courseId, 'cohorts'), 
-                    where('status', 'in', ['published', 'waitlist', 'soldout']),
-                    orderBy('number', 'asc') // Order by cohort number
+                    where('status', 'in', ['published', 'waitlist', 'soldout'])
                 );
 
             } else {
                 // If no slug, fetch from the collection group as before
                 cohortsQuery = query(
                     collectionGroup(db, 'cohorts'), 
-                    where('status', 'in', ['published', 'waitlist', 'soldout']),
-                    orderBy('number', 'asc') // Order by cohort number
+                    where('status', 'in', ['published', 'waitlist', 'soldout'])
                 );
             }
             
@@ -148,7 +147,7 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
             const seatsRemaining = cohort.seatsTotal - cohort.seatsConfirmed;
             const isFull = seatsRemaining <= 0;
             const statusLabel = isFull ? 'Full' : `${seatsRemaining} left`;
-            const badgeVariant = (cohort.status === 'soldout' || isFull) ? 'default' : 'secondary';
+            const badgeVariant = (isFull) ? 'default' : 'secondary';
             const cohortStatusLabel = cohort.status.charAt(0).toUpperCase() + cohort.status.slice(1);
 
             return (

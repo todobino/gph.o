@@ -10,7 +10,7 @@ import { CourseStats } from '@/components/courses/course-stats';
 
 const ltcBodyText = `How can we help our software teams get stronger? Faster? Smarter? Happier? More positive and more productive?
 
-There are lots of ideas about what changes we might desire to make, ranging from process to policy to procedure to skillset. There’s no problem in findin_g proposed changes. No, the problem is in helping your team to actually make any given change.
+There are lots of ideas about what changes we might desire to make, ranging from process to policy to procedure to skillset. There’s no problem in finding proposed changes. No, the problem is in helping your team to actually make any given change.
 
 Leading Technical Change (LTC), is a course designed to focus on how to make change, not which change to make.
 
