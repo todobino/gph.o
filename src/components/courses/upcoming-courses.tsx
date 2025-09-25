@@ -5,10 +5,10 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WaitlistDialog } from "./waitlist-dialog";
-import { Clock, Users, CalendarClock, Video, Loader2 } from 'lucide-react';
-import { collectionGroup, query, where, orderBy, getDocs, Timestamp } from 'firebase/firestore';
+import { Clock, Users, CalendarClock, Video } from 'lucide-react';
+import { collection, query, where, orderBy, getDocs, Timestamp, collectionGroup, Query, DocumentData } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
-import type { Cohort } from '@/types/course';
+import type { Cohort, Course } from '@/types/course';
 import { format } from 'date-fns';
 import { Skeleton } from '../ui/skeleton';
 
@@ -51,7 +51,7 @@ function CohortSkeleton() {
 }
 
 
-export function UpcomingCourses() {
+export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [cohorts, setCohorts] = useState<Cohort[]>([]);
@@ -61,11 +61,36 @@ export function UpcomingCourses() {
     const fetchCohorts = async () => {
         setLoading(true);
         try {
-            const cohortsQuery = query(
-                collectionGroup(db, 'cohorts'), 
-                where('status', 'in', ['published', 'waitlist', 'soldout']),
-                orderBy('sessions.0.startAt', 'asc')
-            );
+            let cohortsQuery: Query<DocumentData>;
+
+            if (courseSlug) {
+                // First, get the course ID from the slug
+                const courseQuery = query(collection(db, 'courses'), where('slug', '==', courseSlug));
+                const courseSnapshot = await getDocs(courseQuery);
+                
+                if (courseSnapshot.empty) {
+                    setCohorts([]);
+                    setLoading(false);
+                    return;
+                }
+                const courseId = courseSnapshot.docs[0].id;
+                
+                // Then, query for cohorts within that specific course
+                cohortsQuery = query(
+                    collection(db, 'courses', courseId, 'cohorts'), 
+                    where('status', 'in', ['published', 'waitlist', 'soldout']),
+                    orderBy('sessions.0.startAt', 'asc')
+                );
+
+            } else {
+                // If no slug, fetch from the collection group as before
+                cohortsQuery = query(
+                    collectionGroup(db, 'cohorts'), 
+                    where('status', 'in', ['published', 'waitlist', 'soldout']),
+                    orderBy('sessions.0.startAt', 'asc')
+                );
+            }
+            
             const querySnapshot = await getDocs(cohortsQuery);
             const fetchedCohorts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Cohort));
             setCohorts(fetchedCohorts);
@@ -76,7 +101,7 @@ export function UpcomingCourses() {
         }
     };
     fetchCohorts();
-  }, []);
+  }, [courseSlug]);
 
   const handleWaitlistClick = (courseId: string) => {
     setSelectedCourse(courseId);
@@ -114,7 +139,7 @@ export function UpcomingCourses() {
           {!loading && cohorts.map((cohort) => {
             const seatsRemaining = cohort.seatsTotal - cohort.seatsConfirmed;
             const isFull = seatsRemaining <= 0;
-            const statusLabel = isFull ? 'Full' : `${seatsRemaining} left`;
+             const statusLabel = isFull ? 'Full' : `${seatsRemaining} left`;
             const badgeVariant = cohort.status === 'soldout' || isFull ? 'default' : 'secondary';
             const cohortStatusLabel = cohort.status.charAt(0).toUpperCase() + cohort.status.slice(1);
 

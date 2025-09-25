@@ -89,7 +89,7 @@ export default function LeadingTechnicalChangePage() {
         <div className="lg:col-span-2 space-y-16">
             
             {/* Upcoming Courses Section */}
-            <UpcomingCourses />
+            <UpcomingCourses courseSlug="leading-technical-change" />
 
             {/* Section 1: What is LTC? */}
             <section className="space-y-6">
