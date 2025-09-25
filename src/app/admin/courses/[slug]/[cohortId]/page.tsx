@@ -159,7 +159,7 @@ export default function EditCohortPage() {
                 cohortId={cohort.id}
                 onAttendeeAdded={() => fetchCohortDetails(course.id)}
             />
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="secondary" size="sm" asChild>
                 <Link href={`/admin/courses/${slug}`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to {course.title}
