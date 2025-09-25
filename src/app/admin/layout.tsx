@@ -33,6 +33,7 @@ function AdminNav() {
          <aside className="w-full md:w-1/4 lg:w-1/5">
             <div className="sticky top-24">
                 <nav className="flex flex-col space-y-1 p-4 border rounded-lg shadow-md bg-card">
+                    <h3 className="px-3 pb-2 text-lg font-semibold font-heading">Admin Nav</h3>
                     {navSections.map((section, sectionIndex) => (
                         <div key={sectionIndex} className="space-y-1">
                            {section.items.map((item) => (
