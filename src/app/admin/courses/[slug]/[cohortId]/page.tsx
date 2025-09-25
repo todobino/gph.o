@@ -131,7 +131,7 @@ export default function EditCohortPage() {
 
     const formatSessionDate = (timestamp: Timestamp) => {
         if (!timestamp) return 'N/A';
-        return format(timestamp.toDate(), 'EEEE, MMMM d, yyyy');
+        return format(timestamp.toDate(), 'E, MMM d');
     };
 
     if (loading || isAdmin === undefined) {
@@ -184,7 +184,7 @@ export default function EditCohortPage() {
              <div className="flex flex-col gap-8">
                 {/* Top Row: Details & Schedule */}
                 <div className="flex flex-col lg:flex-row gap-8 items-start">
-                    <div className="w-full lg:w-2/5">
+                    <div className="w-full lg:w-1/3">
                         <Card>
                             <CardHeader>
                                 <CardTitle>Cohort Details</CardTitle>
@@ -209,26 +209,25 @@ export default function EditCohortPage() {
                             </CardContent>
                         </Card>
                     </div>
-                    <div className="w-full lg:w-3/5">
+                    <div className="w-full lg:w-2/3">
                         <Card>
                             <CardHeader>
                                 <CardTitle>Schedule</CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-4">
+                            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {cohort.sessions.map((session, index) => (
-                                    <div key={index}>
-                                        <p className="font-semibold">{session.label || `Session ${index + 1}`}</p>
-                                        <div className="text-sm text-muted-foreground flex flex-col gap-1 mt-1">
-                                            <div className="flex items-center gap-2">
-                                                <Calendar className="h-4 w-4" />
+                                    <div key={index} className="flex items-center gap-4 rounded-lg border p-3">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted font-bold text-lg">
+                                            {index + 1}
+                                        </div>
+                                        <div className="flex-1">
+                                            <p className="font-semibold text-sm">{session.label || `Session ${index + 1}`}</p>
+                                            <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
                                                 <span>{formatSessionDate(session.startAt)}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <Clock className="h-4 w-4" />
+                                                <span>&bull;</span>
                                                 <span>{formatSessionTime(session.startAt)} - {formatSessionTime(session.endAt)}</span>
                                             </div>
                                         </div>
-                                        {index < cohort.sessions.length -1 && <Separator className="mt-4" />}
                                     </div>
                                 ))}
                             </CardContent>
