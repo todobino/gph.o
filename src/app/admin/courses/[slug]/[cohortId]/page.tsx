@@ -181,60 +181,64 @@ export default function EditCohortPage() {
                 </div>
             </div>
 
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-                {/* Left Sidebar */}
-                <aside className="md:col-span-1 space-y-6 sticky top-24">
-                     <Card>
-                        <CardHeader>
-                            <CardTitle>Cohort Details</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3 text-sm">
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Status</span>
-                                <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Confirmed</span>
-                                <span>{cohort.seatsConfirmed} / {cohort.seatsTotal}</span>
-                            </div>
-                             <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Held</span>
-                                <span>{cohort.seatsHeld}</span>
-                            </div>
-                             <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Remaining</span>
-                                <span>{cohort.seatsRemaining}</span>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Schedule</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            {cohort.sessions.map((session, index) => (
-                                <div key={index}>
-                                    <p className="font-semibold">{session.label || `Session ${index + 1}`}</p>
-                                    <div className="text-sm text-muted-foreground flex flex-col gap-1 mt-1">
-                                        <div className="flex items-center gap-2">
-                                            <Calendar className="h-4 w-4" />
-                                            <span>{formatSessionDate(session.startAt)}</span>
-                                        </div>
-                                         <div className="flex items-center gap-2">
-                                            <Clock className="h-4 w-4" />
-                                            <span>{formatSessionTime(session.startAt)} - {formatSessionTime(session.endAt)}</span>
-                                        </div>
-                                    </div>
-                                    {index < cohort.sessions.length -1 && <Separator className="mt-4" />}
+             <div className="flex flex-col gap-8">
+                {/* Top Row: Details & Schedule */}
+                <div className="flex flex-col lg:flex-row gap-8 items-start">
+                    <div className="w-full lg:w-2/5">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Cohort Details</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-3 text-sm">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Status</span>
+                                    <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
                                 </div>
-                            ))}
-                        </CardContent>
-                    </Card>
-                </aside>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Confirmed</span>
+                                    <span>{cohort.seatsConfirmed} / {cohort.seatsTotal}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Held</span>
+                                    <span>{cohort.seatsHeld}</span>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-muted-foreground">Remaining</span>
+                                    <span>{cohort.seatsRemaining}</span>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                    <div className="w-full lg:w-3/5">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Schedule</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                {cohort.sessions.map((session, index) => (
+                                    <div key={index}>
+                                        <p className="font-semibold">{session.label || `Session ${index + 1}`}</p>
+                                        <div className="text-sm text-muted-foreground flex flex-col gap-1 mt-1">
+                                            <div className="flex items-center gap-2">
+                                                <Calendar className="h-4 w-4" />
+                                                <span>{formatSessionDate(session.startAt)}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Clock className="h-4 w-4" />
+                                                <span>{formatSessionTime(session.startAt)} - {formatSessionTime(session.endAt)}</span>
+                                            </div>
+                                        </div>
+                                        {index < cohort.sessions.length -1 && <Separator className="mt-4" />}
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
 
-                {/* Main Content */}
-                <main className="md:col-span-2 space-y-6">
-                    <Card>
+                {/* Bottom Row: Attendees */}
+                <div className="w-full">
+                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between py-4">
                             <div className="flex items-center gap-3">
                                 <Users className="h-5 w-5" />
@@ -252,7 +256,7 @@ export default function EditCohortPage() {
                            )}
                         </CardContent>
                     </Card>
-                </main>
+                </div>
             </div>
 
         </div>
