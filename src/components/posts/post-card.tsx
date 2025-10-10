@@ -35,7 +35,7 @@ export function PostCard({ post, className }: PostCardProps) {
                 <CardTitle className="group-hover:text-primary transition-colors">
                     {post.title}
                 </CardTitle>
-                <CardDescription className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-xs text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-xs text-muted-foreground">
                     <div className="flex items-center gap-2">
                         <Calendar className="h-3 w-3" />
                         <span>{new Date(post.date).toLocaleDateString('en-US', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</span>
@@ -57,7 +57,7 @@ export function PostCard({ post, className }: PostCardProps) {
                             </div>
                         </div>
                     )}
-                </CardDescription>
+                </div>
             </CardHeader>
             <CardContent>
                 <div className="text-sm text-muted-foreground line-clamp-3">
