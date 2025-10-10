@@ -117,14 +117,14 @@ export default async function Home() {
       </section>
 
       {/* Recent Posts Section */}
-      <section className="py-16 md:py-24 bg-secondary">
+      <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 font-heading">
             Latest Posts
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {recentPosts.map((post) => (
-              <PostCard key={post.slug} post={post} className="bg-white" />
+              <PostCard key={post.slug} post={post} />
             ))}
           </div>
           <div className="text-center mt-12">
@@ -154,14 +154,14 @@ export default async function Home() {
 
       {/* Latest Videos Section */}
       {recentVideos.length > 0 && (
-        <section className="py-16 md:py-24 bg-secondary">
+        <section className="py-16 md:py-24">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 font-heading">
               Latest Videos
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               {recentVideos.map((post) => (
-                <PostCard key={post.slug} post={post} className="bg-white" />
+                <PostCard key={post.slug} post={post} />
               ))}
             </div>
             <div className="text-center mt-12">
