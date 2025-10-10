@@ -11,7 +11,9 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
           <div className="container mx-auto px-4 flex items-center justify-between h-14">
             <div className="flex items-center gap-6">
                 <Link href="/learn" className="flex items-center gap-2 font-semibold">
-                    <GraduationCap className="h-6 w-6 text-primary"/>
+                    <div className="bg-primary/10 p-2 rounded-full">
+                      <GraduationCap className="h-5 w-5 text-primary"/>
+                    </div>
                     <span>Learn</span>
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
