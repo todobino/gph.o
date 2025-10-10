@@ -1,104 +1,64 @@
-
 rules_version = '2';
+
 service cloud.firestore {
-  match /databases/{db}/documents {
-    function isSignedIn() { return request.auth != null; }
-    function isSelf(uid) { return isSignedIn() && request.auth.uid == uid; }
+  match /databases/{database}/documents {
+    
     function isAdmin() {
-      return isSignedIn() &&
-        get(/databases/$(db)/documents/users/$(request.auth.uid)).data.userType == "admin";
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
     }
 
-    // USERS
-    match /users/{uid} {
-      allow read: if isSelf(uid) || isAdmin();
-      allow create: if isSelf(uid);
-      allow update: if isSelf(uid) || isAdmin();
+    function isSignedIn() {
+      return request.auth != null;
     }
     
-    // COURSES
-    match /courses/{courseId} {
-      allow read: if resource.data.active == true || isAdmin();
-      allow create, update, delete: if isAdmin();
-
-      match /cohorts/{cohortId} {
-        allow read: if get(/databases/$(db)/documents/courses/$(courseId)).data.active == true
-                     && (resource.data.status in ["published","waitlist","soldout","completed"])
-                     || isAdmin();
-        allow create, update, delete: if isAdmin();
-
-        match /waitlist/{waitId} {
-          allow create: if true;
-          allow read: if isAdmin();
-          allow delete, update: if isAdmin();
-        }
-
-        match /enrollments/{enrollmentId} {
-          allow read, write: if isAdmin();
-        }
-      }
-
-      // Self-paced subcollections
-      match /modules/{moduleId} {
-        allow read: if resource.data != null && get(/databases/$(db)/documents/courses/$(courseId)).data.active == true || isAdmin();
-        allow write: if isAdmin();
-
-        match /lessons/{lessonId} {
-          allow read: if true || isAdmin();
-          allow write: if isAdmin();
-        }
-      }
-
-      match /quizzes/{quizId} {
-        allow read, write: if isAdmin();
-        match /questions/{questionId} {
-          allow read, write: if isAdmin();
-        }
-      }
+    match /{document=**} {
+      allow read, write: if isAdmin();
     }
 
-    // FORMS
-    match /forms/{id} {
-      allow read: if resource.data.isPublic == true || isAdmin();
-      allow create, update, delete: if isAdmin();
-    }
-    
-    match /formSubmissions/{sid} {
+    match /users/{userId} {
+      allow read, update: if request.auth.uid == userId;
       allow create: if isSignedIn();
-      allow read: if isAdmin();
-      allow update, delete: if false;
+    }
+    
+    match /courses/{courseId} {
+      allow read: if resource.data.active == true;
+    }
+    
+    match /courses/{courseId}/cohorts/{cohortId} {
+       allow read: if get(/databases/$(database)/documents/courses/$(courseId)).data.active == true;
+    }
+    
+    match /courses/{courseId}/cohorts/{cohortId}/attendees/{attendeeId} {
+      allow read, create, update: if isSignedIn();
     }
 
-    // LISTS
-    match /lists/{id} {
-      allow read: if resource.data.isPublic == true || isAdmin();
-      allow create, update, delete: if isAdmin();
+    match /lists/{listId} {
+        allow read: if resource.data.isPublic == true;
     }
 
-    // SUBSCRIBERS
-    match /subscribers/{uid} {
-      allow read: if isSelf(uid) || isAdmin();
-      allow create: if isSelf(uid);
-      allow update: if isSelf(uid)
-        && request.resource.data.keys().hasOnly([
-            'email','displayName','listIds','createdAt','updatedAt','firstSubscribedAt','sources'
-           ])
-        && request.resource.data.listIds is list
-        && (
-          (resource.data.firstSubscribedAt == null && request.resource.data.firstSubscribedAt is timestamp)
-          || (request.resource.data.firstSubscribedAt == resource.data.firstSubscribedAt)
-        )
-        && request.resource.data.listIds.all(id =>
-             exists(/databases/$(db)/documents/lists/$(id)) &&
-             get(/databases/$(db)/documents/lists/$(id)).data.isPublic == true
-           );
-      allow delete: if isAdmin();
+    match /subscriptions/{subscriptionId} {
+        allow read, create, update: if isSignedIn() && request.auth.token.email == resource.data.subscriberId;
+    }
+    
+    // Self-paced learning rules
+    match /enrollments/{enrollmentId} {
+      allow read, create, update, delete: if isSignedIn() && request.auth.uid == resource.data.userId;
     }
 
-    // POSTS
-    match /posts/{id} {
-      allow read: if resource.data.status == "published" || isAdmin();
-      allow create, update, delete: if isAdmin();
+    match /progress/{progressId} {
+      allow read, create, update, delete: if isSignedIn() && request.auth.uid == resource.data.userId;
+    }
+
+    match /quizAttempts/{attemptId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && request.auth.uid == resource.data.userId;
+      // updates/deletes: admin only via global override
+    }
+
+    match /certificates/{certificateId} {
+      allow read: if true; // Publicly verifiable
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      // updates/deletes: admin only via global override
     }
   }
 }

@@ -62,13 +62,20 @@ function AccountInner() {
       <div className="space-y-8">
         <div className="flex justify-between items-center">
             <h1 className="text-4xl font-bold font-heading">Your Account</h1>
-            {isAdmin && (
-            <Button asChild>
-                <Link href="/admin">
-                Admin Panel
-                </Link>
-            </Button>
-            )}
+            <div className="flex gap-2">
+                <Button asChild variant="outline">
+                    <Link href="/learn">
+                        My Learning
+                    </Link>
+                </Button>
+                {isAdmin && (
+                <Button asChild>
+                    <Link href="/admin">
+                    Admin Panel
+                    </Link>
+                </Button>
+                )}
+            </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
