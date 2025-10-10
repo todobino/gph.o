@@ -1,6 +1,7 @@
+
 import { ReactNode } from "react";
 import Link from "next/link";
-import { BookOpen, GraduationCap, Home, User } from "lucide-react";
+import { BookOpen, GraduationCap, Home, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function LearnLayout({ children }: { children: ReactNode }) {
@@ -23,7 +24,10 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
                     <Link href="/account"><User className="h-5 w-5" /></Link>
                  </Button>
                  <Button asChild>
-                    <Link href="/">Back to Main Site</Link>
+                    <Link href="/">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Main Site
+                    </Link>
                  </Button>
              </div>
           </div>
