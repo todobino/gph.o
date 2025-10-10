@@ -35,30 +35,34 @@ export function PostCard({ post, className }: PostCardProps) {
                 <CardTitle className="group-hover:text-primary transition-colors">
                     {post.title}
                 </CardTitle>
-                <CardDescription className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
-                    <Calendar className="h-3 w-3" />
-                    <span>{new Date(post.date).toLocaleDateString('en-US', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                <CardDescription className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                        <Calendar className="h-3 w-3" />
+                        <span>{new Date(post.date).toLocaleDateString('en-US', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    </div>
+                     {post.tags && post.tags.length > 0 && (
+                        <div className="flex items-center gap-2">
+                            <Tag className="h-3 w-3" />
+                            <div className="flex flex-wrap gap-1">
+                            {post.tags.slice(0, 3).map((tag) => (
+                                <Badge
+                                    key={tag}
+                                    variant="secondary"
+                                    onClick={(e) => handleTagClick(e, tag)}
+                                    className="cursor-pointer hover:bg-primary/20"
+                                >
+                                    {tag}
+                                </Badge>
+                            ))}
+                            </div>
+                        </div>
+                    )}
                 </CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow flex flex-col justify-between">
-                <div className="text-sm text-muted-foreground mb-4 line-clamp-3">
-                {post.content.substring(0, 150)}...
+            <CardContent>
+                <div className="text-sm text-muted-foreground line-clamp-3">
+                    {post.content.substring(0, 150)}...
                 </div>
-                {post.tags && post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 items-center text-xs">
-                    <Tag className="h-3 w-3 text-muted-foreground" />
-                    {post.tags.slice(0, 3).map((tag) => (
-                    <Badge
-                        key={tag}
-                        variant="secondary"
-                        onClick={(e) => handleTagClick(e, tag)}
-                        className="cursor-pointer hover:bg-primary/20"
-                    >
-                        {tag}
-                    </Badge>
-                    ))}
-                </div>
-                )}
             </CardContent>
         </Card>
     </Link>
