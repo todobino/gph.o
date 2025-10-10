@@ -20,14 +20,8 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
                 </nav>
             </div>
              <div className="flex items-center gap-2">
-                 <Button variant="ghost" size="icon" asChild>
-                    <Link href="/account"><User className="h-5 w-5" /></Link>
-                 </Button>
                  <Button asChild>
-                    <Link href="/">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Main Site
-                    </Link>
+                    <Link href="/account"><User className="mr-2 h-4 w-4" />Account</Link>
                  </Button>
              </div>
           </div>
