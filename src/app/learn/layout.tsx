@@ -1,10 +1,17 @@
 
+'use client';
+
 import { ReactNode } from "react";
 import Link from "next/link";
 import { BookOpen, GraduationCap, Home, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+
 
 export default function LearnLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
   return (
       <div className="min-h-screen flex flex-col">
         <header className="border-b sticky top-14 bg-background/95 backdrop-blur-sm z-10">
@@ -17,10 +24,10 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
                     <span className="font-extrabold">Learn</span>
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
-                  <Button asChild variant="ghost">
+                  <Button asChild variant={pathname.startsWith('/learn/browse') ? 'secondary' : 'ghost'}>
                     <Link href="/learn/browse">Browse</Link>
                   </Button>
-                  <Button asChild variant="ghost">
+                  <Button asChild variant={pathname.startsWith('/learn/progress') ? 'secondary' : 'ghost'}>
                     <Link href="/learn/progress">My Progress</Link>
                   </Button>
                 </nav>
