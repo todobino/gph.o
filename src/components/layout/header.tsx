@@ -53,14 +53,14 @@ export function Header() {
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
 
   const allCourses = React.useMemo(() => [
-      { title: 'Leading Technical Change', slug: '/courses/leading-technical-change' },
+      { title: 'Leading Technical Change', slug: '/learn/courses/leading-technical-change' },
   ], []);
   const allPages = React.useMemo(() => [
       { title: 'About', slug: '/about' },
       { title: 'Contact', slug: '/contact' },
       { title: 'Booking', slug: '/booking' },
       { title: 'Subscribe', slug: '/subscribe' },
-      { title: 'All Courses', slug: '/courses' },
+      { title: 'All Courses', slug: '/learn/browse' },
   ], []);
 
   const [courseResults, setCourseResults] = useState<{title: string, slug: string}[]>([]);
@@ -123,7 +123,7 @@ export function Header() {
     {
       label: 'Courses',
       dropdown: [
-        { href: '/courses/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/learn/courses/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
       ],
     },
     {
@@ -292,7 +292,7 @@ export function Header() {
                     <DropdownMenuContent align="start">
                        { (navItem.label === 'Posts' || navItem.label === 'Courses') &&
                           <DropdownMenuItem asChild>
-                            <Link href={navItem.label === 'Posts' ? '/posts' : '/courses'}>
+                            <Link href={navItem.label === 'Posts' ? '/posts' : '/learn/browse'}>
                               All {navItem.label}
                             </Link>
                           </DropdownMenuItem>

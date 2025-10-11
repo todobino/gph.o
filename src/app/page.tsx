@@ -46,7 +46,7 @@ export default async function Home() {
         </Link>
       </Button>
       <Button asChild size="lg" variant="secondary">
-        <Link href="/courses">View Courses</Link>
+        <Link href="/learn/browse">View Courses</Link>
       </Button>
     </div>
   </div>
@@ -95,7 +95,7 @@ export default async function Home() {
                 </p>
               </div>
               <Button asChild size="sm" className="mt-auto bg-blue-600 hover:bg-blue-700 text-white">
-                <Link href="/courses">See More</Link>
+                <Link href="/learn/browse">See More</Link>
               </Button>
             </div>
              <div className="flex flex-col items-center justify-between p-6 rounded-lg bg-background dark:bg-background/90 text-foreground border-2 border-blue-600">
