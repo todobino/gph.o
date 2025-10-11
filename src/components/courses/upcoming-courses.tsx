@@ -208,9 +208,6 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
                             <Video className="h-4 w-4" />
                             <span>Remote</span>
                         </div>
-                         {cohort.status !== 'soldout' && !isFull && (
-                            <Badge variant={statusVariantMap[cohort.status] || statusVariantMap.default} className="capitalize">{cohortStatusLabel}</Badge>
-                         )}
                     </div>
                   </div>
                   <div>
