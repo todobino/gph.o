@@ -1,4 +1,3 @@
-
 'use client';
 
 import { ReactNode } from "react";
@@ -23,10 +22,10 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
                   <Button asChild size="sm" variant={pathname.startsWith('/learn/browse') ? 'secondary' : 'ghost'}>
-                    <Link href="/learn/browse" className="font-bold">Browse</Link>
+                    <Link href="/learn/browse" className="font-semibold">Browse</Link>
                   </Button>
                   <Button asChild size="sm" variant={pathname.startsWith('/learn/progress') ? 'secondary' : 'ghost'}>
-                    <Link href="/learn/progress" className="font-bold">My Progress</Link>
+                    <Link href="/learn/progress" className="font-semibold">My Progress</Link>
                   </Button>
                 </nav>
             </div>
