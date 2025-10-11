@@ -14,7 +14,7 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
                     <div className="bg-primary/10 p-2 rounded-lg">
                       <GraduationCap className="h-5 w-5 text-primary"/>
                     </div>
-                    <span>Learn</span>
+                    <span className="font-extrabold">Learn</span>
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
                   <Button asChild variant="ghost">
