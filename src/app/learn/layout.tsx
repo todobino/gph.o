@@ -15,7 +15,7 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
   return (
       <div className="min-h-screen flex flex-col">
         <header className="border-b sticky top-14 bg-background/95 backdrop-blur-sm z-10">
-          <div className="container mx-auto px-4 flex items-center justify-between h-14">
+          <div className="container mx-auto px-4 flex items-center justify-between h-12">
             <div className="flex items-center gap-6">
                 <Link href="/learn" className="flex items-center gap-2 font-semibold">
                     <GraduationCap className="h-6 w-6 text-primary"/>
