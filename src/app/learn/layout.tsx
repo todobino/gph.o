@@ -18,7 +18,7 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
                   <Button asChild variant="ghost">
-                    <Link href="/learn/catalog">Catalog</Link>
+                    <Link href="/learn/browse">Browse</Link>
                   </Button>
                   <Button asChild variant="ghost">
                     <Link href="/learn/progress">My Progress</Link>

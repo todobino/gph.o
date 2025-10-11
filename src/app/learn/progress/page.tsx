@@ -17,7 +17,7 @@ export default function ProgressPage() {
           Start a course to see your progress here.
         </p>
          <Button asChild>
-            <Link href="/learn/catalog">
+            <Link href="/learn/browse">
                 Browse Catalog
             </Link>
         </Button>

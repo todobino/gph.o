@@ -19,7 +19,7 @@ export default function MyLearningPage() {
             You are not enrolled in any courses. Browse the catalog to get started.
         </p>
         <Button asChild>
-            <Link href="/learn/catalog">
+            <Link href="/learn/browse">
                 Browse Catalog
             </Link>
         </Button>
