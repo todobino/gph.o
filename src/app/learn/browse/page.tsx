@@ -105,10 +105,10 @@ export default function CoursesPage() {
                         <Users className="h-6 w-6 text-primary" />
                         Upcoming Live Classes
                     </h2>
-                    <ScrollArea>
+                    <ScrollArea className="w-full whitespace-nowrap">
                         <div className="flex space-x-4 pb-4">
                             {upcomingCohorts.map((cohort) => (
-                            <Link key={cohort.slug} href="#" className="block">
+                            <Link key={cohort.slug} href="#" className="inline-block">
                                 <Card className="w-40 h-40 flex flex-col items-center justify-center text-center p-4 hover:bg-accent transition-colors shrink-0">
                                     <CardContent className="p-0 flex flex-col items-center justify-center gap-2">
                                         <h3 className="text-xl font-bold font-heading">{cohort.name}</h3>
