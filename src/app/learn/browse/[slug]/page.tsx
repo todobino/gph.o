@@ -2,6 +2,7 @@
 import { UpcomingCourses } from "@/components/courses/upcoming-courses";
 import { CourseStats } from "@/components/courses/course-stats";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 // This data would typically be fetched based on the slug
 const courseData = {
@@ -31,14 +32,23 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
           
           <Separator />
           
-          <section>
+           <section>
             <UpcomingCourses courseSlug={params.slug} />
           </section>
 
           <Separator />
 
           <section>
-            <h2 className="text-2xl font-bold font-heading mb-4">What You'll Learn</h2>
+            <h2 className="text-2xl font-bold font-heading mb-4">What is LTC? - “Better.”</h2>
+            <div className="relative aspect-video mb-6">
+                <Image
+                    src="https://picsum.photos/seed/ltc-better/800/450"
+                    alt="A group of people collaborating"
+                    fill
+                    className="object-cover rounded-lg"
+                    data-ai-hint="collaboration team meeting"
+                />
+            </div>
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p>This is a placeholder for the main course content. You can use markdown here to describe the course in detail.</p>
               <ul>
