@@ -5,7 +5,7 @@
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Pencil } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { collection, getDocs, query } from 'firebase/firestore';
@@ -46,18 +46,6 @@ export default function AdminCoursesPage() {
       accessorKey: 'tags',
       header: 'Tags',
     },
-    {
-        id: 'actions',
-        header: 'Actions',
-        cell: ({ row }: { row: any }) => (
-            <Button asChild variant="outline" size="sm" onClick={(e) => e.stopPropagation()}>
-                <Link href={`/admin/courses/${row.original.slug}`}>
-                    <Pencil className="mr-2 h-3 w-3" />
-                    Edit
-                </Link>
-            </Button>
-        ),
-    }
   ];
 
   useEffect(() => {
