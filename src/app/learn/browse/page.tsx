@@ -120,7 +120,7 @@ export default function CoursesPage() {
             <div className="flex w-max space-x-4 pb-4">
               {upcomingCohorts.map((cohort) => (
                 <Link key={cohort.slug} href={`/learn/cohorts/${cohort.slug}`} className="inline-block">
-                    <Card className="w-64 h-full flex flex-col hover:bg-accent transition-colors shrink-0">
+                    <Card className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary transition-all duration-150 ease-in-out shrink-0">
                         <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50">
                             <CalendarDays className="h-6 w-6 text-primary" />
                             <div className="font-semibold">{cohort.date.split(',')[0]}</div>
@@ -211,5 +211,3 @@ export default function CoursesPage() {
     </div>
   );
 }
-
-    
