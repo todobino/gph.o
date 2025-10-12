@@ -87,6 +87,18 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
             </div>
           </section>
 
+          <Separator />
+
+          <section>
+            <h2 className="text-2xl font-bold font-heading mb-4">Theory of Change</h2>
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+                <p>Many people, conceiving of some change they want to make, focus all of their attention only on the “what” of that particular change. But successful change, <em>any</em> successful change, depends at least as much on the “how” as on the “what”.</p>
+                <p>The theory of change we’ll be working with in the course is based around research on “cognitive frames”, the short-hand pre-assembled bits and pieces that actually underlie most day-to-day action. We can’t eliminate frames (and we wouldn’t want to), we can only change their shape.</p>
+                <p>Doing that involves three abstract strategies:</p>
+                <p>Take many more much smaller steps (MMMSS). Optimize for the humans (OFTH). Make Change Normal (MCN). From these three broad strategies, we can develop specific, powerful tactics to increase the likelihood that our changes will really work, and really stick.</p>
+            </div>
+          </section>
+
         </main>
         <aside className="md:col-span-1 sticky top-24">
           <CourseStats 
