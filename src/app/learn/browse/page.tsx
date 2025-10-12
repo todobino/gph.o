@@ -144,7 +144,7 @@ export default function CoursesPage() {
         cohort={selectedCohort}
       />
       {/* Upcoming Live Classes - Full Width */}
-      <section className="bg-secondary p-8 rounded-lg">
+      <section className="bg-accent p-8 rounded-lg">
         <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
           <Users className="h-6 w-6 text-primary" />
           Upcoming Live Classes
