@@ -153,7 +153,7 @@ export default function EditCoursePage() {
                    {course.title}
                 </h1>
                 <Button variant="outline" asChild>
-                    <Link href={`/courses/${course.slug}`} target="_blank">
+                    <Link href={`/learn/browse/${course.slug}`} target="_blank">
                         Go to public page <ArrowUpRight className="ml-2 h-4 w-4" />
                     </Link>
                 </Button>
