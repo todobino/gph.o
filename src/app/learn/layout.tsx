@@ -22,10 +22,10 @@ export default function LearnLayout({ children }: { children: ReactNode }) {
                     <span className="font-extrabold">Learn</span>
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
-                  <Button asChild size="sm" variant={pathname.startsWith('/learn/browse') ? 'secondary' : 'ghost'}>
+                  <Button asChild size="sm" variant={pathname.startsWith('/learn/browse') ? 'secondary' : 'ghost'} className="transition-none">
                     <Link href="/learn/browse" className="font-semibold">Browse</Link>
                   </Button>
-                  <Button asChild size="sm" variant={pathname.startsWith('/learn/progress') ? 'secondary' : 'ghost'}>
+                  <Button asChild size="sm" variant={pathname.startsWith('/learn/progress') ? 'secondary' : 'ghost'} className="transition-none">
                     <Link href="/learn/progress" className="font-semibold">My Progress</Link>
                   </Button>
                 </nav>
