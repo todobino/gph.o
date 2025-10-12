@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { format } from 'date-fns';
 import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
+import { EditAttendeeDrawer } from '@/components/admin/edit-attendee-drawer';
 
 function CohortSkeleton() {
     return (
@@ -63,15 +64,6 @@ const attendeeColumns = [
             <Badge variant={row.original.paymentStatus === 'paid' ? 'default' : 'destructive'} className="capitalize">{row.original.paymentStatus}</Badge>
         )
     },
-    {
-        id: 'actions',
-        cell: ({ row }: { row: any }) => (
-            <Button variant="outline" size="sm" disabled>
-                <Edit className="mr-2 h-3 w-3" />
-                Manage
-            </Button>
-        ),
-    }
 ];
 
 export default function EditCohortPage() {
@@ -86,6 +78,9 @@ export default function EditCohortPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isAddAttendeeDialogOpen, setIsAddAttendeeDialogOpen] = useState(false);
+    const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(null);
+    const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
+
 
     const fetchCohortDetails = async (courseIdParam?: string) => {
         setLoading(true);
@@ -123,6 +118,17 @@ export default function EditCohortPage() {
             fetchCohortDetails(course?.id);
         }
     }, [isAdmin, slug, cohortId]);
+    
+    useEffect(() => {
+        if (!isEditDrawerOpen) {
+            setSelectedAttendee(null);
+        }
+    }, [isEditDrawerOpen]);
+
+    const handleRowClick = (row: any) => {
+        setSelectedAttendee(row.original as Attendee);
+        setIsEditDrawerOpen(true);
+    };
 
     const formatSessionTime = (timestamp: Timestamp) => {
         if (!timestamp) return 'N/A';
@@ -159,6 +165,16 @@ export default function EditCohortPage() {
                 cohortId={cohort.id}
                 onAttendeeAdded={() => fetchCohortDetails(course.id)}
             />
+             {selectedAttendee && (
+                <EditAttendeeDrawer
+                    isOpen={isEditDrawerOpen}
+                    onOpenChange={setIsEditDrawerOpen}
+                    attendee={selectedAttendee}
+                    courseId={course.id}
+                    cohortId={cohort.id}
+                    onAttendeeUpdated={() => fetchCohortDetails(course.id)}
+                />
+            )}
             <Button variant="secondary" size="sm" asChild>
                 <Link href={`/admin/courses/${slug}`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -259,7 +275,13 @@ export default function EditCohortPage() {
                             </Button>
                         </CardHeader>
                         <CardContent>
-                           <PostsDataTable columns={attendeeColumns} data={attendees} searchColumnId="email" searchPlaceholder="Search by email..."/>
+                           <PostsDataTable 
+                                columns={attendeeColumns} 
+                                data={attendees} 
+                                searchColumnId="email" 
+                                searchPlaceholder="Search by email..."
+                                onRowClick={handleRowClick}
+                            />
                            {attendees.length === 0 && (
                              <p className="text-center text-muted-foreground py-8">No attendees enrolled yet.</p>
                            )}
@@ -271,3 +293,5 @@ export default function EditCohortPage() {
         </div>
     )
 }
+
+    
