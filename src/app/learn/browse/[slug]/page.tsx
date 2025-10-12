@@ -1,5 +1,6 @@
 
 
+
 import { UpcomingCourses } from "@/components/courses/upcoming-courses";
 import { CourseStats } from "@/components/courses/course-stats";
 import { Separator } from "@/components/ui/separator";
@@ -91,6 +92,15 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
 
           <section>
             <h2 className="text-2xl font-bold font-heading mb-4">Theory of Change</h2>
+            <div className="relative aspect-video mb-6">
+              <Image
+                src="https://picsum.photos/seed/theory-change/800/450"
+                alt="Abstract image representing theory of change"
+                fill
+                className="object-cover rounded-lg"
+                data-ai-hint="abstract theory"
+              />
+            </div>
             <div className="prose prose-lg dark:prose-invert max-w-none">
                 <p>Many people, conceiving of some change they want to make, focus all of their attention only on the “what” of that particular change. But successful change, <em>any</em> successful change, depends at least as much on the “how” as on the “what”.</p>
                 <p>The theory of change we’ll be working with in the course is based around research on “cognitive frames”, the short-hand pre-assembled bits and pieces that actually underlie most day-to-day action. We can’t eliminate frames (and we wouldn’t want to), we can only change their shape.</p>
@@ -103,6 +113,15 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
 
           <section>
             <h2 className="text-2xl font-bold font-heading mb-4">Technique of Change</h2>
+             <div className="relative aspect-video mb-6">
+              <Image
+                src="https://picsum.photos/seed/technique-change/800/450"
+                alt="Image representing different techniques"
+                fill
+                className="object-cover rounded-lg"
+                data-ai-hint="tools techniques"
+              />
+            </div>
             <div className="prose prose-lg dark:prose-invert max-w-none">
                 <p>The course comes with what we call the Techniques Bundle. This is a collection of actual practical tips and tricks. Some of these will be familiar, some new, but all will make more sense when interpreted within the theory above. Each technique is a headline and a one-page description. Here are five of the headlines, chosen at random.</p>
                 
@@ -124,6 +143,15 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
 
           <section>
             <h2 className="text-2xl font-bold font-heading mb-4">Practice of Change</h2>
+             <div className="relative aspect-video mb-6">
+              <Image
+                src="https://picsum.photos/seed/practice-change/800/450"
+                alt="People putting theory into practice"
+                fill
+                className="object-cover rounded-lg"
+                data-ai-hint="team practice"
+              />
+            </div>
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p>Just as all of us are simultaneously alike in some ways and different in others, so, too, with change problems: They’re all alike. And they’re all different.</p>
               <p>The course is restricted to just six attendees for each offering, and there’s a reason for that: it gives us the chance to work not just with theory or memorizing a catalog of practices, but with applying what we’ve learned to the actual change situations that are confronting us right now.</p>
