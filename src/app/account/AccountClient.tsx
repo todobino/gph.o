@@ -72,7 +72,7 @@ function AccountInner() {
                 </Button>
                 {isAdmin && (
                 <Button asChild>
-                    <Link href="/admin">
+                    <Link href="/admin/overview">
                     <LockKeyhole />
                     Admin Panel
                     </Link>

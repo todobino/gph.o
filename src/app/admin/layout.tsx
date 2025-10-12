@@ -14,7 +14,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
-    { href: '/admin', label: 'Overview', icon: <Home className="h-4 w-4" /> },
+    { href: '/admin/overview', label: 'Overview', icon: <Home className="h-4 w-4" /> },
     { href: '/admin/posts', label: 'Posts', icon: <Newspaper className="h-4 w-4" /> },
     { href: '/admin/courses', label: 'Courses', icon: <GraduationCap className="h-4 w-4" /> },
     { href: '/admin/audience/subscribers', label: 'Audience', icon: <Users className="h-4 w-4" /> },
@@ -27,7 +27,7 @@ function AdminHeader() {
         <header className="border-b sticky top-14 bg-secondary z-10">
           <div className="container mx-auto px-4 flex items-center justify-between h-14">
             <div className="flex items-center gap-6">
-                <Link href="/admin" className="flex items-center gap-2 font-semibold">
+                <Link href="/admin/overview" className="flex items-center gap-2 font-semibold">
                     <LockKeyhole className="h-6 w-6 text-primary" />
                     <span className="font-extrabold">Admin</span>
                 </Link>
