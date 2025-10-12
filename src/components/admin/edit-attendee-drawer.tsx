@@ -118,7 +118,7 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-xl w-full p-0">
+      <SheetContent className="sm:max-w-xl w-full p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col h-full">
                 <SheetHeader className="px-6 pt-6 pb-4 border-b">
@@ -276,5 +276,3 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
     </Sheet>
   );
 }
-
-    
