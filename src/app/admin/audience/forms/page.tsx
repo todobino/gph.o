@@ -81,7 +81,7 @@ export default function AdminFormsPage() {
                     <Button asChild>
                       <Link href="/admin/audience/forms/new">
                         <Plus className="mr-2 h-4 w-4" />
-                        Add New
+                        Add Form
                       </Link>
                     </Button>
                 </div>

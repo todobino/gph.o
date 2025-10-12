@@ -66,9 +66,9 @@ export default function AdminSubscribersPage() {
                 <div className="flex justify-between items-center">
                     <CardTitle>All Subscribers</CardTitle>
                     <Button asChild>
-                      <Link href="/admin/audience/lists/new">
+                      <Link href="/admin/audience/subscribers/new">
                         <Plus className="mr-2 h-4 w-4" />
-                        New List
+                        Add Subscriber
                       </Link>
                     </Button>
                 </div>

@@ -18,7 +18,7 @@ const listColumns = [
     header: 'Name',
   },
   {
-    accessorKey: 'subscribed',
+    accessorKey: 'subscriberCount',
     header: 'Subscribed',
     cell: ({ row }: { row: any }) => <div className="text-right pr-4">{row.original.subscriberCount}</div>,
   },
@@ -80,7 +80,7 @@ export default function AdminListsPage() {
                     <Button asChild>
                       <Link href="/admin/audience/lists/new">
                         <Plus className="mr-2 h-4 w-4" />
-                        Add New
+                        Add List
                       </Link>
                     </Button>
                 </div>
