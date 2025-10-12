@@ -130,6 +130,20 @@ function FilterSidebar({
   );
 }
 
+const getOrdinal = (n: number) => {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return s[(v - 20) % 10] || s[v] || s[0];
+};
+
+const formatCohortDate = (date: Date): string => {
+  const day = date.getDate();
+  const month = date.toLocaleDateString('en-US', { month: 'long' });
+  const ordinal = getOrdinal(day);
+  return `${month} ${day}${ordinal}`;
+};
+
+
 export default function CoursesPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
@@ -267,7 +281,7 @@ export default function CoursesPage() {
                       <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50 border-b">
                           <CalendarDays className="h-6 w-6 text-primary" />
                           <div className="font-semibold">
-                            {cohort.sessions[0]?.startAt ? new Date((cohort.sessions[0].startAt as any).toDate()).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'TBA'}
+                            {cohort.sessions[0]?.startAt ? formatCohortDate(new Date((cohort.sessions[0].startAt as any).toDate())) : 'TBA'}
                           </div>
                       </CardHeader>
                       <CardContent className="p-4 flex-grow space-y-2">
