@@ -155,7 +155,7 @@ export default function CoursesPage() {
             {upcomingCohorts.map((cohort) => (
                <Card 
                   key={cohort.slug} 
-                  className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary transition-all duration-150 ease-in-out shrink-0 cursor-pointer"
+                  className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer"
                   onClick={() => handleCohortClick(cohort)}
                 >
                   <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50">
