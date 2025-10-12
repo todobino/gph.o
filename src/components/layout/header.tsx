@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -93,7 +92,7 @@ export function Header() {
   const desktopSearchInputRef = useRef<HTMLInputElement>(null);
 
   const allCourses = React.useMemo(() => [
-      { title: 'Leading Technical Change', slug: '/learn/courses/leading-technical-change' },
+      { title: 'Leading Technical Change', slug: '/learn/browse/leading-technical-change' },
   ], []);
   const allPages = React.useMemo(() => [
       { title: 'About', slug: '/about' },
@@ -163,7 +162,7 @@ export function Header() {
     {
       label: 'Courses',
       dropdown: [
-        { href: '/learn/courses/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
+        { href: '/learn/browse/leading-technical-change', label: 'Leading Technical Change', icon: <GraduationCap className="h-4 w-4" /> },
       ],
     },
     {
@@ -509,5 +508,3 @@ export function Header() {
     </header>
   );
 }
-
-    

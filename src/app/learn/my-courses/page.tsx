@@ -2,21 +2,23 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default function ProgressPage() {
+export default function MyLearningPage() {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold font-heading">My Progress</h1>
+        <h1 className="text-4xl font-bold font-heading">My Courses</h1>
         <p className="text-muted-foreground mt-2">
-          Track your progress across all your courses.
+          Your central hub for all enrolled courses and progress.
         </p>
       </div>
+
+      {/* This will later be a list of enrolled courses */}
       <div className="p-8 border-2 border-dashed rounded-lg text-center">
-        <h2 className="text-xl font-semibold">No Progress to Show</h2>
+        <h2 className="text-xl font-semibold">No Courses Yet</h2>
         <p className="text-muted-foreground mt-2 mb-4">
-          Start a course to see your progress here.
+            You are not enrolled in any courses. Browse the catalog to get started.
         </p>
-         <Button asChild>
+        <Button asChild>
             <Link href="/learn/browse">
                 Browse Catalog
             </Link>

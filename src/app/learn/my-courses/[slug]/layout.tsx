@@ -1,4 +1,3 @@
-
 'use client';
 import { getCourseBySlug } from "@/services/lms";
 import { type Course } from "@/types/course";
@@ -62,7 +61,7 @@ export default function CourseLayout({ children }: { children: ReactNode }) {
                                 <h3 className="font-medium text-sm text-muted-foreground px-4 mb-2">{module.title}</h3>
                                 <ul className="space-y-1">
                                     {module.lessons.map(lesson => {
-                                        const lessonPath = `/learn/courses/${slug}/lessons/${lesson.id}`;
+                                        const lessonPath = `/learn/my-courses/${slug}/lessons/${lesson.id}`;
                                         const isActive = pathname === lessonPath;
                                         return (
                                             <li key={lesson.id}>

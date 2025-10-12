@@ -209,7 +209,7 @@ export default function CoursesPage() {
                     className="flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-xl"
                   >
                     <CardHeader className="p-0">
-                      <Link href={`/learn/courses/${course.slug}`} className="block group">
+                      <Link href={`/learn/browse/${course.slug}`} className="block group">
                         <div className="relative aspect-video overflow-hidden">
                           <Image
                             src={course.heroImageUrl!}
@@ -226,7 +226,7 @@ export default function CoursesPage() {
 
                     <CardContent className="p-6 flex-grow">
                       <CardTitle className="mb-2">
-                        <Link href={`/learn/courses/${course.slug}`} className="hover:text-primary">
+                        <Link href={`/learn/browse/${course.slug}`} className="hover:text-primary">
                           {course.title}
                         </Link>
                       </CardTitle>
@@ -237,7 +237,7 @@ export default function CoursesPage() {
 
                     <CardFooter className="p-6 pt-0">
                       <Button asChild className="w-full">
-                        <Link href={`/learn/courses/${course.slug}`}>
+                        <Link href={`/learn/browse/${course.slug}`}>
                           View Course Details <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       </Button>

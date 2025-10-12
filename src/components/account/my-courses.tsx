@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +8,7 @@ import { Badge } from "../ui/badge";
 
 // Placeholder data - replace with actual user course data from Firestore
 const enrolledCourses = [
-    { name: "Leading Technical Change (Cohort 13)", href: "/learn/courses/leading-technical-change" },
+    { name: "Leading Technical Change (Cohort 13)", href: "/learn/my-courses/leading-technical-change" },
 ];
 
 const completedCourses = [

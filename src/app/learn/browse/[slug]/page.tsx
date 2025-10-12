@@ -30,7 +30,7 @@ export default function CourseOverviewPage() {
 
     const handleEnroll = async () => {
         if (!user) {
-            router.push(`/login?next=/learn/courses/${slug}`);
+            router.push(`/login?next=/learn/browse/${slug}`);
             return;
         }
         if (!course) return;
@@ -44,7 +44,7 @@ export default function CourseOverviewPage() {
                     description: `You have successfully enrolled in ${course.title}.`,
                 });
                 // Potentially redirect to the first lesson
-                 router.push(`/learn/courses/${slug}/lessons/l1`);
+                 router.push(`/learn/my-courses/${slug}/lessons/l1`);
             } else {
                  throw new Error("Enrollment failed");
             }
