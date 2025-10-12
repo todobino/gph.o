@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { MyLists } from '@/components/account/my-lists';
 import { MyCourses } from '@/components/account/my-courses';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, LockKeyhole } from 'lucide-react';
 
 
 export default function AccountClient() {
@@ -73,6 +73,7 @@ function AccountInner() {
                 {isAdmin && (
                 <Button asChild>
                     <Link href="/admin">
+                    <LockKeyhole />
                     Admin Panel
                     </Link>
                 </Button>
