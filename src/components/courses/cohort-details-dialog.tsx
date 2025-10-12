@@ -54,17 +54,12 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
                     Part of the <span className="font-semibold text-primary">{course.title}</span> course.
                 </DialogDescription>
              </div>
-             <div className="flex items-center gap-2">
-                 <Badge variant={isFull ? "destructive" : "secondary"} className="text-base px-4 py-2">
-                    {isFull ? "Sold Out" : `${seatsRemaining} Seats Left`}
-                 </Badge>
-                 <DialogClose asChild>
-                    <Button variant="destructive" size="icon" className="h-9 w-9">
-                        <X className="h-5 w-5" />
-                        <span className="sr-only">Close</span>
-                    </Button>
-                </DialogClose>
-             </div>
+             <DialogClose asChild>
+                <Button variant="destructive" size="icon" className="h-9 w-9 flex-shrink-0">
+                    <X className="h-5 w-5" />
+                    <span className="sr-only">Close</span>
+                </Button>
+            </DialogClose>
           </div>
         </DialogHeader>
         
@@ -118,21 +113,29 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
             </div>
         </div>
 
-        <DialogFooter className="flex-col sm:flex-row sm:justify-between sm:items-center gap-2 pt-4">
-             <Button asChild variant="outline">
-                <Link href={`/learn/courses/${course.slug}`}>
-                    View Full Course Page
-                </Link>
-            </Button>
-            {isFull ? (
-                 <Button disabled>Join Waitlist (Coming Soon)</Button>
-            ) : (
-                <Button asChild>
-                    <Link href={cohort.checkoutLink || '#'}>
-                        Grab a Seat <ArrowRight className="ml-2 h-4 w-4" />
+        <DialogFooter className="flex-col sm:flex-row sm:justify-between sm:items-center gap-4 pt-4">
+             <DialogClose asChild>
+                <Button asChild variant="outline">
+                    <Link href={`/learn/courses/${course.slug}`}>
+                        View Full Course Page
                     </Link>
                 </Button>
-            )}
+            </DialogClose>
+            
+            <div className="flex items-center gap-3">
+                <Badge variant={isFull ? "destructive" : "secondary"} className="text-base px-4 py-2">
+                    {isFull ? "Sold Out" : `${seatsRemaining} Seats Left`}
+                </Badge>
+                {isFull ? (
+                    <Button disabled>Join Waitlist (Coming Soon)</Button>
+                ) : (
+                    <Button asChild>
+                        <Link href={cohort.checkoutLink || '#'}>
+                            Grab a Seat <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                    </Button>
+                )}
+            </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
