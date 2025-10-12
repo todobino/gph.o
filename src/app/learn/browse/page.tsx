@@ -19,6 +19,14 @@ const selfPacedCourses = [
     heroImageUrl: "https://picsum.photos/seed/courses-ltc/600/400",
     imageHint: "team brainstorming session",
   },
+  {
+    title: "Test-Driven Development",
+    shortDescription:
+        "Master the art of TDD. Write clean, robust, and maintainable code by writing your tests first. A hands-on workshop for serious programmers.",
+    slug: "test-driven-development",
+    heroImageUrl: "https://picsum.photos/seed/courses-tdd/600/400",
+    imageHint: "code on screen",
+    },
 ];
 
 const upcomingCohorts = [
@@ -104,11 +112,10 @@ function FilterSidebar() {
 
 export default function CoursesPage() {
   return (
-    // Prevent any accidental horizontal page overflow
-    <div className="container mx-auto px-4 py-8 overflow-x-hidden">
+    <div className="container mx-auto px-4 py-8">
       <div className="grid md:grid-cols-[280px_1fr] gap-8">
         <FilterSidebar />
-        <main className="space-y-12">
+        <main className="space-y-12 min-w-0">
           {/* Upcoming Live Classes */}
           <section>
             <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
@@ -116,13 +123,8 @@ export default function CoursesPage() {
               Upcoming Live Classes
             </h2>
 
-            {/* The key to horizontal-only scroll:
-                - ScrollArea gets a normal width
-                - Inner track is w-max so it can grow beyond the viewport
-                - Each card is shrink-0 so it won’t collapse
-                - No `whitespace-nowrap` on the container to avoid page overflow */}
             <ScrollArea className="w-full">
-              <div className="flex w-max gap-4 pb-2 pr-4">
+              <div className="flex w-max space-x-4 pb-4">
                 {upcomingCohorts.map((cohort) => (
                   <Link key={cohort.slug} href={`/learn/cohorts/${cohort.slug}`} className="inline-block">
                     <Card className="w-44 h-44 flex flex-col items-center justify-center text-center p-4 hover:bg-accent transition-colors shrink-0">
@@ -161,7 +163,7 @@ export default function CoursesPage() {
                             fill
                             className="object-cover transition-transform duration-200 group-hover:scale-105"
                             data-ai-hint={course.imageHint}
-                            sizes="(min-width: 768px) 50vw, 100vw"
+                            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                             priority={false}
                           />
                         </div>
