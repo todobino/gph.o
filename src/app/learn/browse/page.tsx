@@ -28,6 +28,10 @@ const upcomingCohorts = [
     { name: "TDD #5", date: "Dec 2nd, 2024", slug: "tdd-5" },
     { name: "LTC #15", date: "Jan 6th, 2025", slug: "ltc-15" },
     { name: "LTC #16", date: "Feb 3rd, 2025", slug: "ltc-16" },
+    { name: "TDD #6", date: "Mar 3rd, 2025", slug: "tdd-6" },
+    { name: "LTC #17", date: "Apr 7th, 2025", slug: "ltc-17" },
+    { name: "Agile #1", date: "May 5th, 2025", slug: "agile-1" },
+    { name: "LTC #18", date: "Jun 2nd, 2025", slug: "ltc-18" },
 ];
 
 
