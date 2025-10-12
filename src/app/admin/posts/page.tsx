@@ -25,6 +25,11 @@ const columns = [
     accessorKey: 'tags',
     header: 'Tags',
   },
+  {
+    accessorKey: 'views',
+    header: 'Views',
+    cell: () => <div className="text-right pr-4">0</div>,
+  },
 ];
 
 export default function AdminPostsPage() {
