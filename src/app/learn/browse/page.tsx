@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Clock, Filter, Search, Users } from "lucide-react";
+import { ArrowRight, Clock, Filter, Search, Users, CalendarDays, BarChart, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -30,15 +30,15 @@ const selfPacedCourses = [
 ];
 
 const upcomingCohorts = [
-  { name: "LTC #13", date: "Oct 7th, 2024", slug: "ltc-13" },
-  { name: "LTC #14", date: "Nov 4th, 2024", slug: "ltc-14" },
-  { name: "TDD #5", date: "Dec 2nd, 2024", slug: "tdd-5" },
-  { name: "LTC #15", date: "Jan 6th, 2025", slug: "ltc-15" },
-  { name: "LTC #16", date: "Feb 3rd, 2025", slug: "ltc-16" },
-  { name: "TDD #6", date: "Mar 3rd, 2025", slug: "tdd-6" },
-  { name: "LTC #17", date: "Apr 7th, 2025", slug: "ltc-17" },
-  { name: "Agile #1", date: "May 5th, 2025", slug: "agile-1" },
-  { name: "LTC #18", date: "Jun 2nd, 2025", slug: "ltc-18" },
+  { name: "LTC #13", date: "Oct 7th, 2024", slug: "ltc-13", description: "Learn to lead change effectively.", sessions: 5, seatsLeft: 3 },
+  { name: "LTC #14", date: "Nov 4th, 2024", slug: "ltc-14", description: "The premier change leadership course.", sessions: 5, seatsLeft: 8 },
+  { name: "TDD #5", date: "Dec 2nd, 2024", slug: "tdd-5", description: "Master Test-Driven Development.", sessions: 4, seatsLeft: 5 },
+  { name: "LTC #15", date: "Jan 6th, 2025", slug: "ltc-15", description: "New year, new skills.", sessions: 5, seatsLeft: 12 },
+  { name: "LTC #16", date: "Feb 3rd, 2025", slug: "ltc-16", description: "Become a change agent.", sessions: 5, seatsLeft: 12 },
+  { name: "TDD #6", date: "Mar 3rd, 2025", slug: "tdd-6", description: "Write better code, faster.", sessions: 4, seatsLeft: 10 },
+  { name: "LTC #17", date: "Apr 7th, 2025", slug: "ltc-17", description: "Lead your team to success.", sessions: 5, seatsLeft: 15 },
+  { name: "Agile #1", date: "May 5th, 2025", slug: "agile-1", description: "An intro to agile practices.", sessions: 3, seatsLeft: 20 },
+  { name: "LTC #18", date: "Jun 2nd, 2025", slug: "ltc-18", description: "The classic course, updated.", sessions: 5, seatsLeft: 15 },
 ];
 
 function FilterSidebar() {
@@ -120,12 +120,26 @@ export default function CoursesPage() {
             <div className="flex w-max space-x-4 pb-4">
               {upcomingCohorts.map((cohort) => (
                 <Link key={cohort.slug} href={`/learn/cohorts/${cohort.slug}`} className="inline-block">
-                  <Card className="w-44 h-44 flex flex-col items-center justify-center text-center p-4 hover:bg-accent transition-colors shrink-0">
-                    <CardContent className="p-0 flex flex-col items-center justify-center gap-2">
-                      <h3 className="text-xl font-bold font-heading">{cohort.name}</h3>
-                      <p className="text-sm text-muted-foreground">{cohort.date}</p>
-                    </CardContent>
-                  </Card>
+                    <Card className="w-64 h-full flex flex-col p-4 hover:bg-accent transition-colors shrink-0">
+                        <CardHeader className="p-2">
+                            <CardTitle className="text-lg">{cohort.name}</CardTitle>
+                            <CardDescription>{cohort.date}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="p-2 flex-grow space-y-3 text-sm">
+                            <div className="flex items-start gap-2 text-muted-foreground">
+                                <FileText className="h-4 w-4 mt-0.5 shrink-0" />
+                                <span>{cohort.description}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <CalendarDays className="h-4 w-4 shrink-0" />
+                                <span>{cohort.sessions} sessions</span>
+                            </div>
+                             <div className="flex items-center gap-2 text-muted-foreground">
+                                <BarChart className="h-4 w-4 shrink-0" />
+                                <span>{cohort.seatsLeft} seats left</span>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </Link>
               ))}
             </div>
