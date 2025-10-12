@@ -5,14 +5,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, Clock, Filter, Search, Users, CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, Search, ChevronLeft, ChevronRight, CalendarDays, Clock, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import React, { useMemo, useState } from "react";
 import { CohortDetailsDialog } from "@/components/courses/cohort-details-dialog";
 import type { Course, Cohort } from "@/types/course";
+import { cn } from "@/lib/utils";
 
 // In a real app, this data would likely come from a CMS or a database
 const selfPacedCourses: Course[] = [
@@ -184,7 +184,7 @@ export default function CoursesPage() {
             {visibleCohorts.map((cohort) => (
                <Card 
                   key={cohort.slug} 
-                  className="w-full h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer bg-card"
+                  className="w-full h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer bg-card overflow-hidden"
                   onClick={() => handleCohortClick(cohort)}
                 >
                   <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50 border-b">
