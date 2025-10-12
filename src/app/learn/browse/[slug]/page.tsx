@@ -119,6 +119,18 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
                 <p>There are currently more than 30 techniques in the bundle, and we add new ones all the time, based partly on what comes from the final element of our structure, the advice.</p>
             </div>
           </section>
+          
+          <Separator />
+
+          <section>
+            <h2 className="text-2xl font-bold font-heading mb-4">Practice of Change</h2>
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              <p>Just as all of us are simultaneously alike in some ways and different in others, so, too, with change problems: They’re all alike. And they’re all different.</p>
+              <p>The course is restricted to just six attendees for each offering, and there’s a reason for that: it gives us the chance to work not just with theory or memorizing a catalog of practices, but with applying what we’ve learned to the actual change situations that are confronting us right now.</p>
+              <p>Over the four days, each of the six attendees will lay out their change case for us. What they want, what they’ve tried, what they’re thinking of trying. We’ll pitch in, a team of seven, to help add to and elaborate on the next few steps towards that change.</p>
+              <p>Many of the former students have said this was the most valuable part of the experience: actual interaction with others, to lend ideas, support, and energy to go back to work newly excited and invigorated.</p>
+            </div>
+          </section>
 
 
         </main>
