@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -8,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import React, { useMemo, useState } from "react";
 
 // In a real app, this data would likely come from a CMS or a database
 const selfPacedCourses = [
@@ -18,6 +21,7 @@ const selfPacedCourses = [
     slug: "leading-technical-change",
     heroImageUrl: "https://picsum.photos/seed/courses-ltc/600/400",
     imageHint: "team brainstorming session",
+    topics: ["Technical Change", "Agile"],
   },
   {
     title: "Test-Driven Development",
@@ -26,6 +30,7 @@ const selfPacedCourses = [
     slug: "test-driven-development",
     heroImageUrl: "https://picsum.photos/seed/courses-tdd/600/400",
     imageHint: "code on screen",
+    topics: ["TDD"],
     },
 ];
 
@@ -41,61 +46,58 @@ const upcomingCohorts = [
   { name: "LTC #18", date: "Jun 2nd, 2025", slug: "ltc-18", description: "The classic course, updated.", sessions: 5, seatsLeft: 15 },
 ];
 
-function FilterSidebar() {
+const allTopics = Array.from(new Set(selfPacedCourses.flatMap(c => c.topics)));
+
+interface FilterSidebarProps {
+    searchQuery: string;
+    onSearchQueryChange: (query: string) => void;
+    selectedTopics: string[];
+    onSelectedTopicsChange: (topics: string[]) => void;
+}
+
+function FilterSidebar({
+    searchQuery,
+    onSearchQueryChange,
+    selectedTopics,
+    onSelectedTopicsChange,
+}: FilterSidebarProps) {
+
+  const handleTopicChange = (topic: string, checked: boolean) => {
+    const newTopics = checked
+      ? [...selectedTopics, topic]
+      : selectedTopics.filter(t => t !== topic);
+    onSelectedTopicsChange(newTopics);
+  };
+  
   return (
     <aside className="w-full md:w-[280px] md:sticky top-[116px] h-fit">
       <Card>
         <CardContent className="space-y-6 pt-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search courses..." className="pl-10" />
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="font-semibold text-sm">Format</h3>
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="format-live" />
-                <Label htmlFor="format-live" className="font-normal">
-                  Live Cohort
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="format-self-paced" />
-                <Label htmlFor="format-self-paced" className="font-normal">
-                  Self-Paced
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="format-in-person" />
-                <Label htmlFor="format-in-person" className="font-normal">
-                  In-Person
-                </Label>
-              </div>
-            </div>
+            <Input 
+                placeholder="Search courses..." 
+                className="pl-10" 
+                value={searchQuery}
+                onChange={(e) => onSearchQueryChange(e.target.value)}
+            />
           </div>
 
           <div className="space-y-4">
             <h3 className="font-semibold text-sm">Topic</h3>
             <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="topic-change" />
-                <Label htmlFor="topic-change" className="font-normal">
-                  Technical Change
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="topic-tdd" />
-                <Label htmlFor="topic-tdd" className="font-normal">
-                  TDD
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="topic-agile" />
-                <Label htmlFor="topic-agile" className="font-normal">
-                  Agile
-                </Label>
-              </div>
+              {allTopics.map(topic => (
+                <div key={topic} className="flex items-center space-x-2">
+                    <Checkbox 
+                        id={`topic-${topic}`}
+                        checked={selectedTopics.includes(topic)}
+                        onCheckedChange={(checked) => handleTopicChange(topic, !!checked)}
+                    />
+                    <Label htmlFor={`topic-${topic}`} className="font-normal">
+                    {topic}
+                    </Label>
+                </div>
+              ))}
             </div>
           </div>
         </CardContent>
@@ -105,6 +107,18 @@ function FilterSidebar() {
 }
 
 export default function CoursesPage() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+
+    const filteredCourses = useMemo(() => {
+        return selfPacedCourses.filter(course => {
+            const matchesQuery = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                course.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesTopics = selectedTopics.length === 0 || selectedTopics.every(topic => course.topics.includes(topic));
+            return matchesQuery && matchesTopics;
+        });
+    }, [searchQuery, selectedTopics]);
+
   return (
     <div className="space-y-12">
       {/* Upcoming Live Classes - Full Width */}
@@ -147,7 +161,12 @@ export default function CoursesPage() {
 
       {/* Main content with sidebar */}
       <div className="grid md:grid-cols-[280px_1fr] gap-8">
-        <FilterSidebar />
+        <FilterSidebar 
+            searchQuery={searchQuery}
+            onSearchQueryChange={setSearchQuery}
+            selectedTopics={selectedTopics}
+            onSelectedTopicsChange={setSelectedTopics}
+        />
         <main className="min-w-0">
           {/* Self-Paced Courses */}
           <section>
@@ -156,9 +175,9 @@ export default function CoursesPage() {
               Self-Paced Courses
             </h2>
 
-            {selfPacedCourses.length > 0 ? (
+            {filteredCourses.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {selfPacedCourses.map((course) => (
+                {filteredCourses.map((course) => (
                   <Card
                     key={course.title}
                     className="flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-xl"
@@ -202,9 +221,9 @@ export default function CoursesPage() {
               </div>
             ) : (
               <div className="text-center py-16 border-dashed border-2 rounded-lg">
-                <h2 className="text-2xl font-semibold font-heading">More Courses Coming Soon</h2>
+                <h2 className="text-2xl font-semibold font-heading">No Courses Found</h2>
                 <p className="mt-2 text-muted-foreground">
-                  We're busy developing new content. Check back later for more courses!
+                  Try adjusting your search or filter criteria.
                 </p>
               </div>
             )}
