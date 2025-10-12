@@ -146,6 +146,25 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
           />
         </aside>
       </div>
+
+       <section className="mt-12 rounded-lg bg-primary-dark text-primary-dark-foreground py-16">
+        <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">Ready to Convince Your Team?</h2>
+            <p className="text-lg md:text-xl max-w-2xl mx-auto text-primary-dark-foreground/80 mb-8">
+              Download the complete overview of the Leading Technical Change course to share with your manager or team lead.
+            </p>
+            <Link 
+              href={courseOutlineUrl}
+              download 
+              target="_blank" 
+              className={cn(buttonVariants({ size: "lg", variant: "secondary" }))}
+            >
+              <DownloadCloud className="mr-2 h-5 w-5" />
+              Download Course Outline
+            </Link>
+        </div>
+      </section>
+
     </div>
   );
 }
