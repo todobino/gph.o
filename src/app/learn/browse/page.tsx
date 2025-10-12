@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Search, ChevronLeft, ChevronRight, CalendarDays, Clock, Users } from "lucide-react";
+import { ArrowRight, Search, ChevronLeft, ChevronRight, CalendarDays, Clock, Users, Radio } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -229,7 +229,7 @@ export default function CoursesPage() {
       <section className="bg-accent p-8 rounded-lg">
         <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold font-heading flex items-center gap-2">
-              <Users className="h-6 w-6 text-primary" />
+              <Radio className="h-6 w-6 text-primary" />
               Upcoming Live Classes
             </h2>
             <div className="flex items-center gap-2">
