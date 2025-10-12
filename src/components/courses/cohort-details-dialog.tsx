@@ -123,7 +123,7 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
             </DialogClose>
             
             <div className="flex items-center gap-3">
-                <Badge variant={isFull ? "destructive" : "secondary"} className="px-4 py-2">
+                <Badge variant={isFull ? "destructive" : "secondary"} className="px-4 py-2 text-sm">
                     {isFull ? "Sold Out" : `${seatsRemaining} Seats Left`}
                 </Badge>
                 {isFull ? (
