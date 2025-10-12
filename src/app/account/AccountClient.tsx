@@ -65,9 +65,9 @@ function AccountInner() {
             <h1 className="text-4xl font-bold font-heading">Your Account</h1>
             <div className="flex gap-2">
                 <Button asChild variant="secondary">
-                    <Link href="/learn">
+                    <Link href="/learn/my-courses">
                         <GraduationCap />
-                        My Learning
+                        My Courses
                     </Link>
                 </Button>
                 {isAdmin && (
