@@ -158,7 +158,7 @@ export default function CoursesPage() {
                   className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer"
                   onClick={() => handleCohortClick(cohort)}
                 >
-                  <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50">
+                  <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50 border-b">
                       <CalendarDays className="h-6 w-6 text-primary" />
                       <div className="font-semibold">
                         {cohort.sessions[0]?.startAt ? new Date(cohort.sessions[0].startAt as any).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'TBA'}
