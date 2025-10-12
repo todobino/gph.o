@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { MyLists } from '@/components/account/my-lists';
 import { MyCourses } from '@/components/account/my-courses';
+import { GraduationCap } from 'lucide-react';
 
 
 export default function AccountClient() {
@@ -63,8 +64,9 @@ function AccountInner() {
         <div className="flex justify-between items-center">
             <h1 className="text-4xl font-bold font-heading">Your Account</h1>
             <div className="flex gap-2">
-                <Button asChild variant="outline">
+                <Button asChild variant="secondary">
                     <Link href="/learn">
+                        <GraduationCap />
                         My Learning
                     </Link>
                 </Button>
