@@ -3,7 +3,7 @@
 
 import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Book, Box, GraduationCap, Home, List, Newspaper, Users, ClipboardType } from 'lucide-react';
+import { Home, Newspaper, GraduationCap, Users, List, ClipboardType } from 'lucide-react';
 import Link from 'next/link';
 
 import AuthGate from '@/components/auth-gate';
@@ -13,52 +13,37 @@ import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
-const navSections = [
-    {
-        items: [
-            { href: '/admin', label: 'Overview', icon: <Home className="h-4 w-4" /> },
-            { href: '/admin/posts', label: 'Posts', icon: <Newspaper className="h-4 w-4" /> },
-            { href: '/admin/courses', label: 'Courses', icon: <GraduationCap className="h-4 w-4" /> },
-            { href: '/admin/subscribers', label: 'Subscribers', icon: <Users className="h-4 w-4" /> },
-            { href: '/admin/lists', label: 'Lists', icon: <List className="h-4 w-4" /> },
-            { href: '/admin/forms', label: 'Forms', icon: <ClipboardType className="h-4 w-4" /> },
-        ]
-    }
-]
+const navItems = [
+    { href: '/admin', label: 'Overview', icon: <Home className="h-4 w-4" /> },
+    { href: '/admin/posts', label: 'Posts', icon: <Newspaper className="h-4 w-4" /> },
+    { href: '/admin/courses', label: 'Courses', icon: <GraduationCap className="h-4 w-4" /> },
+    { href: '/admin/subscribers', label: 'Subscribers', icon: <Users className="h-4 w-4" /> },
+    { href: '/admin/lists', label: 'Lists', icon: <List className="h-4 w-4" /> },
+    { href: '/admin/forms', label: 'Forms', icon: <ClipboardType className="h-4 w-4" /> },
+];
 
-function AdminNav() {
+function AdminHeader() {
     const pathname = usePathname();
     
     return (
-         <aside className="w-full md:w-1/4 lg:w-1/5">
-            <div className="sticky top-24">
-                <nav className="flex flex-col space-y-1 p-4 border rounded-lg shadow-md bg-card">
-                    <h3 className="px-3 pb-2 text-lg font-semibold font-heading">Admin Nav</h3>
-                    {navSections.map((section, sectionIndex) => (
-                        <div key={sectionIndex} className="space-y-1">
-                           {section.items.map((item) => (
-                                <Link
-                                key={item.href}
-                                href={item.href}
-                                className={cn(
-                                    'flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                                    pathname === item.href
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                                )}
-                                >
-                                {item.icon}
-                                <span>{item.label}</span>
-                                </Link>
-                           ))}
-                        </div>
+        <header className="border-b sticky top-14 bg-background/95 backdrop-blur-sm z-10">
+          <div className="container mx-auto px-4 flex items-center justify-between h-14">
+            <div className="flex items-center gap-6">
+                <Link href="/admin" className="flex items-center gap-2 font-semibold">
+                    <span className="font-extrabold">Admin</span>
+                </Link>
+                <nav className="hidden md:flex items-center gap-1">
+                    {navItems.map(item => (
+                         <Button asChild size="sm" variant={pathname === item.href ? 'secondary' : 'ghost'} className="transition-none" key={item.href}>
+                            <Link href={item.href} className="font-semibold">{item.label}</Link>
+                        </Button>
                     ))}
                 </nav>
             </div>
-        </aside>
+          </div>
+        </header>
     );
 }
-
 
 function AdminAuth({ children }: { children: React.ReactNode }) {
   const isAdmin = useIsAdmin();
@@ -91,14 +76,14 @@ function AdminAuth({ children }: { children: React.ReactNode }) {
   // If the user is an admin, render the admin layout.
   if (isAdmin) {
     return (
-        <div className="container mx-auto px-4 py-12">
-            <div className="flex flex-col md:flex-row gap-8">
-                <AdminNav />
-                <main className="w-full md:w-3/4 lg:w-4/5">
+        <>
+            <AdminHeader />
+            <div className="container mx-auto px-4 py-12">
+                <main>
                     {children}
                 </main>
             </div>
-        </div>
+        </>
     );
   }
 
