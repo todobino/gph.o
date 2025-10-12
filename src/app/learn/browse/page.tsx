@@ -9,10 +9,14 @@ import { ArrowRight, Search, ChevronLeft, ChevronRight, CalendarDays, Clock, Use
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { CohortDetailsDialog } from "@/components/courses/cohort-details-dialog";
 import type { Course, Cohort } from "@/types/course";
 import { cn } from "@/lib/utils";
+import { collection, query, where, getDocs, orderBy, collectionGroup } from "firebase/firestore";
+import { db } from "@/lib/firestore";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 // In a real app, this data would likely come from a CMS or a database
 const selfPacedCourses: Course[] = [
@@ -44,17 +48,7 @@ const selfPacedCourses: Course[] = [
     },
 ];
 
-const upcomingCohorts: (Cohort & { course: Course })[] = [
-  { name: "LTC #13", slug: "ltc-13", description: "Learn to lead change effectively.", sessions: [{startAt: new Date('2024-10-07T13:00:00') as any, endAt: new Date('2024-10-07T15:00:00') as any, label:''}], seatsTotal: 15, seatsConfirmed: 12, course: selfPacedCourses[0] } as any,
-  { name: "LTC #14", slug: "ltc-14", description: "The premier change leadership course.", sessions: [{startAt: new Date('2024-11-04T13:00:00') as any, endAt: new Date('2024-11-04T15:00:00') as any, label:''}], seatsTotal: 15, seatsConfirmed: 7, course: selfPacedCourses[0] } as any,
-  { name: "TDD #5", slug: "tdd-5", description: "Master Test-Driven Development.", sessions: [{startAt: new Date('2024-12-02T13:00:00') as any, endAt: new Date('2024-12-02T15:00:00') as any, label:''}], seatsTotal: 12, seatsConfirmed: 7, course: selfPacedCourses[1] } as any,
-  { name: "LTC #15", slug: "ltc-15", description: "New year, new skills.", sessions: [{startAt: new Date('2025-01-06T13:00:00') as any, endAt: new Date('2025-01-06T15:00:00') as any, label:''}], seatsTotal: 15, seatsConfirmed: 3, course: selfPacedCourses[0] } as any,
-  { name: "LTC #16", slug: "ltc-16", description: "Become a change agent.", sessions: [{startAt: new Date('2025-02-03T13:00:00') as any, endAt: new Date('2025-02-03T15:00:00') as any, label:''}], seatsTotal: 15, seatsConfirmed: 3, course: selfPacedCourses[0] } as any,
-  { name: "TDD #6", slug: "tdd-6", description: "Write better code, faster.", sessions: [{startAt: new Date('2025-03-03T13:00:00') as any, endAt: new Date('2025-03-03T15:00:00') as any, label:''}], seatsTotal: 12, seatsConfirmed: 2, course: selfPacedCourses[1] } as any,
-  { name: "LTC #17", slug: "ltc-17", description: "Lead your team to success.", sessions: [{startAt: new Date('2025-04-07T13:00:00') as any, endAt: new Date('2025-04-07T15:00:00') as any, label:''}], seatsTotal: 20, seatsConfirmed: 5, course: selfPacedCourses[0] } as any,
-  { name: "Agile #1", slug: "agile-1", description: "An intro to agile practices.", sessions: [{startAt: new Date('2025-05-05T13:00:00') as any, endAt: new Date('2025-05-05T15:00:00') as any, label:''}], seatsTotal: 20, seatsConfirmed: 0, course: selfPacedCourses[0] } as any,
-  { name: "LTC #18", slug: "ltc-18", description: "The classic course, updated.", sessions: [{startAt: new Date('2025-06-02T13:00:00') as any, endAt: new Date('2025-06-02T15:00:00') as any, label:''}], seatsTotal: 20, seatsConfirmed: 0, course: selfPacedCourses[0] } as any,
-];
+type EnrichedCohort = Cohort & { course: Course };
 
 const allTopics = Array.from(new Set(selfPacedCourses.flatMap(c => c.tags || [])));
 
@@ -63,6 +57,26 @@ interface FilterSidebarProps {
     onSearchQueryChange: (query: string) => void;
     selectedTopics: string[];
     onSelectedTopicsChange: (topics: string[]) => void;
+}
+
+function CohortCardSkeleton() {
+    return (
+        <Card className="w-full h-full flex flex-col shrink-0 bg-card overflow-hidden">
+            <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50 border-b">
+                <Skeleton className="h-6 w-6 rounded-md" />
+                <Skeleton className="h-5 w-20" />
+            </CardHeader>
+            <CardContent className="p-4 flex-grow space-y-2">
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+            </CardContent>
+            <CardFooter className="p-4 pt-0 flex justify-between">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-12" />
+            </CardFooter>
+        </Card>
+    );
 }
 
 function FilterSidebar({
@@ -120,8 +134,68 @@ export default function CoursesPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedCohort, setSelectedCohort] = useState<(Cohort & { course: Course }) | null>(null);
+    const [selectedCohort, setSelectedCohort] = useState<EnrichedCohort | null>(null);
     const [cohortPage, setCohortPage] = useState(0);
+    const [upcomingCohorts, setUpcomingCohorts] = useState<EnrichedCohort[]>([]);
+    const [loadingCohorts, setLoadingCohorts] = useState(true);
+
+    useEffect(() => {
+        const fetchLiveCohorts = async () => {
+            setLoadingCohorts(true);
+            try {
+                // 1. Fetch all active live courses
+                const coursesQuery = query(
+                    collection(db, 'courses'),
+                    where('type', '==', 'live'),
+                    where('active', '==', true)
+                );
+                const coursesSnapshot = await getDocs(coursesQuery);
+                const liveCourses = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
+                const courseMap = new Map(liveCourses.map(c => [c.id, c]));
+
+                if (liveCourses.length === 0) {
+                    setUpcomingCohorts([]);
+                    setLoadingCohorts(false);
+                    return;
+                }
+
+                // 2. Fetch all published/waitlisted cohorts from the collection group
+                const cohortsQuery = query(
+                    collectionGroup(db, 'cohorts'),
+                    where('status', 'in', ['published', 'waitlist'])
+                );
+                const cohortsSnapshot = await getDocs(cohortsQuery);
+
+                // 3. Filter and enrich cohorts
+                const fetchedCohorts: EnrichedCohort[] = [];
+                cohortsSnapshot.forEach(doc => {
+                    const cohort = { id: doc.id, ...doc.data() } as Cohort;
+                    const courseId = doc.ref.parent.parent?.id;
+                    if (courseId && courseMap.has(courseId)) {
+                        fetchedCohorts.push({
+                            ...cohort,
+                            course: courseMap.get(courseId)!
+                        });
+                    }
+                });
+
+                // 4. Sort by the start date of the first session
+                fetchedCohorts.sort((a, b) => {
+                    const aStart = a.sessions?.[0]?.startAt?.toDate()?.getTime() || 0;
+                    const bStart = b.sessions?.[0]?.startAt?.toDate()?.getTime() || 0;
+                    return aStart - bStart;
+                });
+                
+                setUpcomingCohorts(fetchedCohorts);
+            } catch (error) {
+                console.error("Error fetching live cohorts:", error);
+            } finally {
+                setLoadingCohorts(false);
+            }
+        };
+
+        fetchLiveCohorts();
+    }, []);
 
     const filteredCourses = useMemo(() => {
         return selfPacedCourses.filter(course => {
@@ -132,7 +206,7 @@ export default function CoursesPage() {
         });
     }, [searchQuery, selectedTopics]);
 
-    const handleCohortClick = (cohort: Cohort & { course: Course }) => {
+    const handleCohortClick = (cohort: EnrichedCohort) => {
         setSelectedCohort(cohort);
         setIsDialogOpen(true);
     };
@@ -172,7 +246,7 @@ export default function CoursesPage() {
                     variant="outline" 
                     size="icon" 
                     onClick={() => setCohortPage(p => Math.min(totalCohortPages - 1, p + 1))}
-                    disabled={cohortPage === totalCohortPages - 1}
+                    disabled={cohortPage >= totalCohortPages - 1}
                     aria-label="Next cohorts"
                  >
                     <ChevronRight className="h-4 w-4" />
@@ -181,34 +255,43 @@ export default function CoursesPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {visibleCohorts.map((cohort) => (
-               <Card 
-                  key={cohort.slug} 
-                  className="w-full h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer bg-card overflow-hidden"
-                  onClick={() => handleCohortClick(cohort)}
-                >
-                  <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50 border-b">
-                      <CalendarDays className="h-6 w-6 text-primary" />
-                      <div className="font-semibold">
-                        {cohort.sessions[0]?.startAt ? new Date(cohort.sessions[0].startAt as any).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'TBA'}
-                      </div>
-                  </CardHeader>
-                  <CardContent className="p-4 flex-grow space-y-2">
-                      <CardTitle className="text-lg">{cohort.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{cohort.description}</p>
-                  </CardContent>
-                  <CardFooter className="p-4 pt-0 text-sm text-muted-foreground flex justify-between">
-                       <div className="flex items-center gap-1.5">
-                          <Clock className="h-4 w-4" />
-                          <span>{cohort.sessions.length} sessions</span>
-                      </div>
-                       <div className="flex items-center gap-1.5">
-                          <Users className="h-4 w-4" />
-                          <span>{cohort.seatsTotal - cohort.seatsConfirmed} left</span>
-                      </div>
-                  </CardFooter>
-              </Card>
-            ))}
+            {loadingCohorts ? (
+                 Array.from({ length: 4 }).map((_, i) => <CohortCardSkeleton key={i} />)
+            ) : visibleCohorts.length > 0 ? (
+                visibleCohorts.map((cohort) => (
+                   <Card 
+                      key={cohort.id} 
+                      className="w-full h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer bg-card overflow-hidden"
+                      onClick={() => handleCohortClick(cohort)}
+                    >
+                      <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50 border-b">
+                          <CalendarDays className="h-6 w-6 text-primary" />
+                          <div className="font-semibold">
+                            {cohort.sessions[0]?.startAt ? new Date((cohort.sessions[0].startAt as any).toDate()).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'TBA'}
+                          </div>
+                      </CardHeader>
+                      <CardContent className="p-4 flex-grow space-y-2">
+                          <CardTitle className="text-lg">{cohort.name}</CardTitle>
+                          <p className="text-sm text-muted-foreground line-clamp-2">{cohort.course.title}</p>
+                      </CardContent>
+                      <CardFooter className="p-4 pt-0 text-sm text-muted-foreground flex justify-between">
+                           <div className="flex items-center gap-1.5">
+                              <Clock className="h-4 w-4" />
+                              <span>{cohort.sessions.length} sessions</span>
+                          </div>
+                           <div className="flex items-center gap-1.5">
+                              <Users className="h-4 w-4" />
+                              <span>{cohort.seatsTotal - cohort.seatsConfirmed} left</span>
+                          </div>
+                      </CardFooter>
+                  </Card>
+                ))
+            ) : (
+                <div className="col-span-full text-center py-10 bg-background/50 rounded-lg">
+                    <h3 className="font-semibold">No Upcoming Classes</h3>
+                    <p className="text-muted-foreground text-sm">Check back soon for new schedules.</p>
+                </div>
+            )}
         </div>
       </section>
 
