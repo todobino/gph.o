@@ -65,6 +65,28 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
                 </Link>
             </div>
           </section>
+
+          <Separator />
+
+          <section>
+            <h2 className="text-2xl font-bold font-heading mb-4">The Course Leader</h2>
+            <div className="relative aspect-video mb-6">
+                <Image
+                    src="https://picsum.photos/seed/course-leader/800/450"
+                    alt="GeePaw Hill"
+                    fill
+                    className="object-cover rounded-lg"
+                    data-ai-hint="portrait professional"
+                />
+            </div>
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              <p>My name is GeePaw Hill, and I have been helping software development teams to find the path to “better” for just over 25 years. I have worked with over a hundred different teams, in every flavor of software development.</p>
+              <p>I have helped dozens of teams adopt – and adapt – new ideas to their particular custom circumstances. And there are always custom circumstances. Now, I am wanting to share what I have learned, in a short, intimate, live, remote course, called “Leading Technical Change” (LTC).</p>
+              <p>LTC is composed of 4 2-hour sessions, distributed across a single week. Each offering of the course is limited to just 6 attendees.</p>
+              <p>In those 8 hours, LTC develops the theory of change, then offers a variety of hardcore techniques, and finally, case-by-case analysis and advice about the real change-problems facing each attendee.</p>
+            </div>
+          </section>
+
         </main>
         <aside className="md:col-span-1 sticky top-24">
           <CourseStats 
