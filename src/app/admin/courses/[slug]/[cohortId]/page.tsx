@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -179,7 +180,7 @@ export default function EditCohortPage() {
 
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div className="flex items-center gap-4">
-                    <Button variant="secondary" size="icon" onClick={() => router.back()}>
+                    <Button variant="outline" size="icon" onClick={() => router.back()}>
                         <ArrowLeft className="h-4 w-4" />
                         <span className="sr-only">Back</span>
                     </Button>
@@ -203,9 +204,9 @@ export default function EditCohortPage() {
                 {/* Left Column */}
                 <div className="space-y-8">
                     <Card>
-                        <CardHeader className="flex flex-row items-center justify-between">
-                             <div className="flex items-center gap-4">
-                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-lg">
+                        <CardHeader className="flex flex-row items-center justify-between py-4">
+                             <div className="flex items-center gap-3">
+                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-2 rounded-lg">
                                     <Info className="h-5 w-5 text-blue-600 dark:text-blue-300" />
                                 </div>
                                 <CardTitle>Details</CardTitle>
@@ -234,7 +235,7 @@ export default function EditCohortPage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex justify-between items-center pt-2">
+                             <div className="flex justify-between items-center pt-2">
                                 <span className="text-muted-foreground">Status</span>
                                 <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
                             </div>
@@ -253,9 +254,9 @@ export default function EditCohortPage() {
                     </Card>
 
                     <Card>
-                        <CardHeader className="flex-row items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-lg">
+                        <CardHeader className="flex-row items-center justify-between py-4">
+                            <div className="flex items-center gap-3">
+                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-2 rounded-lg">
                                     <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-300" />
                                 </div>
                                 <CardTitle>Schedule</CardTitle>
@@ -290,7 +291,9 @@ export default function EditCohortPage() {
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between py-4">
                             <div className="flex items-center gap-3">
-                                <Users className="h-5 w-5" />
+                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-2 rounded-lg">
+                                    <Users className="h-5 w-5 text-blue-600 dark:text-blue-300" />
+                                </div>
                                 <CardTitle>Attendees</CardTitle>
                             </div>
                             <Button size="sm" onClick={() => setIsAddAttendeeDialogOpen(true)}>
