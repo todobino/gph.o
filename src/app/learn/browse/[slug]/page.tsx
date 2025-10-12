@@ -50,14 +50,10 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
                 />
             </div>
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p>This is a placeholder for the main course content. You can use markdown here to describe the course in detail.</p>
-              <ul>
-                <li>How to identify and articulate the need for change.</li>
-                <li>Techniques for getting buy-in from your team and stakeholders.</li>
-                <li>Strategies for overcoming resistance and navigating organizational politics.</li>
-                <li>Practical tools for planning, executing, and measuring the impact of change.</li>
-              </ul>
-              <p>The course combines theory with hands-on practice, ensuring you walk away with actionable skills you can apply immediately.</p>
+              <p>How can we help our software teams get stronger? Faster? Smarter? Happier? More positive and more productive?</p>
+              <p>There are lots of ideas about what changes we might desire to make, ranging from process to policy to procedure to skillset. There’s no problem in finding proposed changes. No, the problem is in helping your team to actually make any given change.</p>
+              <p>Leading Technical Change (LTC), is a course designed to focus on how to make change, not which change to make.</p>
+              <p>Download the LTC Overview for your team lead or department head today! 👇</p>
             </div>
           </section>
         </main>
