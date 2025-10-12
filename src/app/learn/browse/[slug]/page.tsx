@@ -1,113 +1,64 @@
-'use client';
-import { getCourseBySlug, enroll } from '@/services/lms';
-import { useUser } from '@/hooks/useUser';
-import type { Course } from '@/types/course';
-import { Button } from '@/components/ui/button';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { toast } from '@/hooks/use-toast';
-import { GraduationCap, Info } from 'lucide-react';
-import Image from 'next/image';
 
-export default function CourseOverviewPage() {
-    const params = useParams();
-    const router = useRouter();
-    const user = useUser();
-    const slug = params.slug as string;
-    const [course, setCourse] = useState<Course | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [isEnrolling, setIsEnrolling] = useState(false);
+import { CourseHeader } from "@/components/courses/course-header";
+import { UpcomingCourses } from "@/components/courses/upcoming-courses";
+import { CourseStats } from "@/components/courses/course-stats";
+import { Separator } from "@/components/ui/separator";
 
-    useEffect(() => {
-        if (slug) {
-            getCourseBySlug(slug).then(courseData => {
-                setCourse(courseData);
-                setLoading(false);
-            });
-        }
-    }, [slug]);
-
-    const handleEnroll = async () => {
-        if (!user) {
-            router.push(`/login?next=/learn/browse/${slug}`);
-            return;
-        }
-        if (!course) return;
-
-        setIsEnrolling(true);
-        try {
-            const result = await enroll({ courseId: course.id });
-            if (result.ok) {
-                toast({
-                    title: "Enrolled!",
-                    description: `You have successfully enrolled in ${course.title}.`,
-                });
-                // Potentially redirect to the first lesson
-                 router.push(`/learn/my-courses/${slug}/lessons/l1`);
-            } else {
-                 throw new Error("Enrollment failed");
-            }
-        } catch (error) {
-            console.error(error);
-            toast({
-                title: "Error",
-                description: "Failed to enroll in the course. Please try again.",
-                variant: "destructive",
-            });
-        } finally {
-            setIsEnrolling(false);
-        }
+// This data would typically be fetched based on the slug
+const courseData = {
+    title: "Leading Technical Change",
+    description: "A course designed to focus on how to make change, not which change to make. Learn to lead your team to stronger, faster, smarter, and happier outcomes.",
+    stats: {
+        imageUrl: "https://picsum.photos/seed/ltc-course/800/450",
+        imageHint: "team working together on a whiteboard",
+        seats: 20,
+        duration: "5 weeks",
+        format: "Remote/Online"
     }
+};
 
-    if (loading) {
-        return (
-             <div className="space-y-6">
-                <Skeleton className="w-full h-48" />
-                <div className="space-y-2">
-                    <Skeleton className="h-8 w-3/4" />
-                    <Skeleton className="h-5 w-1/2" />
-                </div>
-                <Skeleton className="h-10 w-32" />
-            </div>
-        )
-    }
+export default function CourseBrowsePage({ params }: { params: { slug: string } }) {
+  // In a real app, you would fetch course data based on params.slug
+  const { title, description, stats } = courseData;
 
-    if (!course) {
-        return <div>Course not found.</div>
-    }
-
-    return (
-        <div className="space-y-8">
-            {course.heroImageUrl && (
-                 <div className="relative aspect-video rounded-lg overflow-hidden">
-                    <Image src={course.heroImageUrl} alt={course.title} fill className="object-cover" />
-                 </div>
-            )}
-            <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                    <div className="bg-primary p-2 rounded-md">
-                        <GraduationCap className="h-6 w-6 text-primary-foreground" />
+  return (
+    <div className="space-y-12">
+        <CourseHeader title={title} description={description} />
+        
+        <div className="grid md:grid-cols-3 gap-12 items-start">
+            <main className="md:col-span-2 space-y-8">
+                 <section>
+                    <h2 className="text-2xl font-bold font-heading mb-4">What You'll Learn</h2>
+                    <div className="prose prose-lg dark:prose-invert max-w-none">
+                        <p>This is a placeholder for the main course content. You can use markdown here to describe the course in detail.</p>
+                        <ul>
+                            <li>How to identify and articulate the need for change.</li>
+                            <li>Techniques for getting buy-in from your team and stakeholders.</li>
+                            <li>Strategies for overcoming resistance and navigating organizational politics.</li>
+                            <li>Practical tools for planning, executing, and measuring the impact of change.</li>
+                        </ul>
+                        <p>The course combines theory with hands-on practice, ensuring you walk away with actionable skills you can apply immediately.</p>
                     </div>
-                    <h1 className="text-3xl font-bold font-heading">{course.title}</h1>
-                </div>
-                <p className="text-lg text-muted-foreground">{course.shortDescription}</p>
-            </div>
-            
-            <Button onClick={handleEnroll} disabled={isEnrolling} size="lg">
-                {isEnrolling ? 'Enrolling...' : 'Enroll Now'}
-            </Button>
+                </section>
 
-             <div className="prose dark:prose-invert max-w-none">
-                <h2 id="about">About this course</h2>
-                <p>This is placeholder content for the course description. You can use markdown to structure this content.</p>
-                <ul>
-                    <li>Learn key concepts.</li>
-                    <li>Apply them in practical exercises.</li>
-                    <li>Master the topic.</li>
-                </ul>
-            </div>
+                <Separator />
 
+                 <section>
+                     <UpcomingCourses courseSlug={params.slug} />
+                </section>
+            </main>
+            <aside className="md:col-span-1 sticky top-24">
+                <CourseStats 
+                    title={title}
+                    description={description}
+                    imageUrl={stats.imageUrl}
+                    imageHint={stats.imageHint}
+                    seats={stats.seats}
+                    duration={stats.duration}
+                    format={stats.format}
+                />
+            </aside>
         </div>
-    )
+    </div>
+  );
 }
