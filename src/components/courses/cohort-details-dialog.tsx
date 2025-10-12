@@ -54,9 +54,17 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
                     Part of the <span className="font-semibold text-primary">{course.title}</span> course.
                 </DialogDescription>
              </div>
-             <Badge variant={isFull ? "destructive" : "secondary"} className="text-base px-4 py-2">
-                {isFull ? "Sold Out" : `${seatsRemaining} Seats Left`}
-             </Badge>
+             <div className="flex items-center gap-2">
+                 <Badge variant={isFull ? "destructive" : "secondary"} className="text-base px-4 py-2">
+                    {isFull ? "Sold Out" : `${seatsRemaining} Seats Left`}
+                 </Badge>
+                 <DialogClose asChild>
+                    <Button variant="destructive" size="icon" className="h-9 w-9">
+                        <X className="h-5 w-5" />
+                        <span className="sr-only">Close</span>
+                    </Button>
+                </DialogClose>
+             </div>
           </div>
         </DialogHeader>
         
@@ -111,13 +119,11 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
         </div>
 
         <DialogFooter className="flex-col sm:flex-row sm:justify-between sm:items-center gap-2 pt-4">
-             <DialogClose asChild>
-                <Button asChild variant="outline">
-                    <Link href={`/learn/courses/${course.slug}`}>
-                        View Full Course Page
-                    </Link>
-                </Button>
-            </DialogClose>
+             <Button asChild variant="outline">
+                <Link href={`/learn/courses/${course.slug}`}>
+                    View Full Course Page
+                </Link>
+            </Button>
             {isFull ? (
                  <Button disabled>Join Waitlist (Coming Soon)</Button>
             ) : (
