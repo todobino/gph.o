@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -53,7 +54,7 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
                     Part of the <span className="font-semibold text-primary">{course.title}</span> course.
                 </DialogDescription>
              </div>
-             <Badge variant={isFull ? "destructive" : "secondary"}>
+             <Badge variant={isFull ? "destructive" : "secondary"} className="text-base px-4 py-2">
                 {isFull ? "Sold Out" : `${seatsRemaining} Seats Left`}
              </Badge>
           </div>
@@ -110,11 +111,13 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
         </div>
 
         <DialogFooter className="flex-col sm:flex-row sm:justify-between sm:items-center gap-2 pt-4">
-             <Button asChild variant="outline">
-                <Link href={`/learn/courses/${course.slug}`}>
-                    View Full Course Page
-                </Link>
-            </Button>
+             <DialogClose asChild>
+                <Button asChild variant="outline">
+                    <Link href={`/learn/courses/${course.slug}`}>
+                        View Full Course Page
+                    </Link>
+                </Button>
+            </DialogClose>
             {isFull ? (
                  <Button disabled>Join Waitlist (Coming Soon)</Button>
             ) : (
