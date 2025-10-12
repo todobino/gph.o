@@ -121,9 +121,11 @@ export default function CoursesPage() {
               {upcomingCohorts.map((cohort) => (
                 <Link key={cohort.slug} href={`/learn/cohorts/${cohort.slug}`} className="inline-block">
                     <Card className="w-64 h-full flex flex-col p-4 hover:bg-accent transition-colors shrink-0">
-                        <CardHeader className="p-2">
-                            <CardTitle className="text-lg">{cohort.name}</CardTitle>
-                            <CardDescription>{cohort.date}</CardDescription>
+                        <CardHeader className="p-2 space-y-3">
+                            <div className="bg-accent text-accent-foreground rounded-md px-3 py-2 w-fit">
+                                <p className="font-bold text-lg">{cohort.date.split(',')[0]}</p>
+                            </div>
+                            <CardTitle className="text-lg pt-1">{cohort.name}</CardTitle>
                         </CardHeader>
                         <CardContent className="p-2 flex-grow space-y-3 text-sm">
                             <div className="flex items-start gap-2 text-muted-foreground">
