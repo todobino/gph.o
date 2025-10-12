@@ -17,9 +17,7 @@ const navItems = [
     { href: '/admin', label: 'Overview', icon: <Home className="h-4 w-4" /> },
     { href: '/admin/posts', label: 'Posts', icon: <Newspaper className="h-4 w-4" /> },
     { href: '/admin/courses', label: 'Courses', icon: <GraduationCap className="h-4 w-4" /> },
-    { href: '/admin/subscribers', label: 'Subscribers', icon: <Users className="h-4 w-4" /> },
-    { href: '/admin/lists', label: 'Lists', icon: <List className="h-4 w-4" /> },
-    { href: '/admin/forms', label: 'Forms', icon: <ClipboardType className="h-4 w-4" /> },
+    { href: '/admin/audience/subscribers', label: 'Audience', icon: <Users className="h-4 w-4" /> },
 ];
 
 function AdminHeader() {
@@ -35,7 +33,7 @@ function AdminHeader() {
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
                     {navItems.map(item => (
-                         <Button asChild size="sm" variant={pathname === item.href ? 'secondary' : 'ghost'} className="transition-none" key={item.href}>
+                         <Button asChild size="sm" variant={pathname.startsWith(item.href) ? 'secondary' : 'ghost'} className="transition-none" key={item.href}>
                             <Link href={item.href} className="font-semibold">{item.label}</Link>
                         </Button>
                     ))}
