@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowUpRight, FileText, Plus, Users, BadgeDollarSign, Tv, CheckCircle, Pencil, GraduationCap } from 'lucide-react';
+import { ArrowUpRight, FileText, Plus, Users, BadgeDollarSign, Tv, CheckCircle, Pencil, GraduationCap, Radio, Clock } from 'lucide-react';
 import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -142,6 +142,8 @@ export default function EditCoursePage() {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: course.currency || 'USD' }).format(cents / 100);
     }
 
+    const CourseTypeIcon = course.type === 'live' ? Radio : Clock;
+
     return (
         <div className="space-y-6">
              {course && <EditCourseDetailsDialog isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} course={course} onCourseUpdated={fetchCourseAndCohorts} />}
@@ -179,7 +181,7 @@ export default function EditCoursePage() {
                                     data-ai-hint="course image"
                                 />
                                 <div className="absolute top-4 left-4 bg-primary p-3 rounded-lg">
-                                    <GraduationCap className="h-6 w-6 text-primary-foreground" />
+                                    <CourseTypeIcon className="h-6 w-6 text-primary-foreground" />
                                 </div>
                             </div>
                         </CardHeader>
