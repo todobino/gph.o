@@ -203,9 +203,11 @@ export default function EditCohortPage() {
                 {/* Left Column */}
                 <div className="space-y-8">
                     <Card>
-                        <CardHeader className="flex-row items-center justify-between">
-                             <div className="flex items-center gap-3">
-                                <Info className="h-5 w-5" />
+                        <CardHeader className="flex flex-row items-center justify-between">
+                             <div className="flex items-center gap-4">
+                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-lg">
+                                    <Info className="h-5 w-5 text-blue-600 dark:text-blue-300" />
+                                </div>
                                 <CardTitle>Details</CardTitle>
                             </div>
                             <Button variant="outline" size="sm" onClick={() => setIsEditDetailsDrawerOpen(true)}>
@@ -232,8 +234,7 @@ export default function EditCohortPage() {
                                     </div>
                                 </div>
                             </div>
-
-                             <div className="flex justify-between items-center pt-2">
+                            <div className="flex justify-between items-center pt-2">
                                 <span className="text-muted-foreground">Status</span>
                                 <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
                             </div>
@@ -253,8 +254,10 @@ export default function EditCohortPage() {
 
                     <Card>
                         <CardHeader className="flex-row items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <Calendar className="h-5 w-5" />
+                            <div className="flex items-center gap-4">
+                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-3 rounded-lg">
+                                    <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-300" />
+                                </div>
                                 <CardTitle>Schedule</CardTitle>
                             </div>
                             <Button variant="outline" size="sm" onClick={() => setIsEditScheduleDrawerOpen(true)}>
@@ -321,5 +324,4 @@ export default function EditCohortPage() {
             </div>
         </div>
     );
-
-    
+}
