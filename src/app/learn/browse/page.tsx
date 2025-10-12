@@ -106,96 +106,94 @@ function FilterSidebar() {
 
 export default function CoursesPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid md:grid-cols-[280px_1fr] gap-8">
-        <FilterSidebar />
-        <main className="space-y-12 min-w-0">
-          {/* Upcoming Live Classes */}
-          <section>
-            <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
-              <Users className="h-6 w-6 text-primary" />
-              Upcoming Live Classes
-            </h2>
+    <div className="grid md:grid-cols-[280px_1fr] gap-8">
+      <FilterSidebar />
+      <main className="space-y-12 min-w-0">
+        {/* Upcoming Live Classes */}
+        <section>
+          <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
+            <Users className="h-6 w-6 text-primary" />
+            Upcoming Live Classes
+          </h2>
 
-            <ScrollArea className="w-full">
-              <div className="flex w-max space-x-4 pb-4">
-                {upcomingCohorts.map((cohort) => (
-                  <Link key={cohort.slug} href={`/learn/cohorts/${cohort.slug}`} className="inline-block">
-                    <Card className="w-44 h-44 flex flex-col items-center justify-center text-center p-4 hover:bg-accent transition-colors shrink-0">
-                      <CardContent className="p-0 flex flex-col items-center justify-center gap-2">
-                        <h3 className="text-xl font-bold font-heading">{cohort.name}</h3>
-                        <p className="text-sm text-muted-foreground">{cohort.date}</p>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </section>
-
-          {/* Self-Paced Courses */}
-          <section>
-            <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
-              <Clock className="h-6 w-6 text-primary" />
-              Self-Paced Courses
-            </h2>
-
-            {selfPacedCourses.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {selfPacedCourses.map((course) => (
-                  <Card
-                    key={course.title}
-                    className="flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-xl"
-                  >
-                    <CardHeader className="p-0">
-                      <Link href={`/learn/courses/${course.slug}`} className="block group">
-                        <div className="relative aspect-video overflow-hidden">
-                          <Image
-                            src={course.heroImageUrl}
-                            alt={`Image for ${course.title}`}
-                            fill
-                            className="object-cover transition-transform duration-200 group-hover:scale-105"
-                            data-ai-hint={course.imageHint}
-                            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                            priority={false}
-                          />
-                        </div>
-                      </Link>
-                    </CardHeader>
-
-                    <CardContent className="p-6 flex-grow">
-                      <CardTitle className="mb-2">
-                        <Link href={`/learn/courses/${course.slug}`} className="hover:text-primary">
-                          {course.title}
-                        </Link>
-                      </CardTitle>
-                      <CardDescription className="break-words">
-                        {course.shortDescription}
-                      </CardDescription>
+          <ScrollArea className="w-full">
+            <div className="flex w-max space-x-4 pb-4">
+              {upcomingCohorts.map((cohort) => (
+                <Link key={cohort.slug} href={`/learn/cohorts/${cohort.slug}`} className="inline-block">
+                  <Card className="w-44 h-44 flex flex-col items-center justify-center text-center p-4 hover:bg-accent transition-colors shrink-0">
+                    <CardContent className="p-0 flex flex-col items-center justify-center gap-2">
+                      <h3 className="text-xl font-bold font-heading">{cohort.name}</h3>
+                      <p className="text-sm text-muted-foreground">{cohort.date}</p>
                     </CardContent>
-
-                    <CardFooter className="p-6 pt-0">
-                      <Button asChild className="w-full">
-                        <Link href={`/learn/courses/${course.slug}`}>
-                          View Course Details <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </CardFooter>
                   </Card>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16 border-dashed border-2 rounded-lg">
-                <h2 className="text-2xl font-semibold font-heading">More Courses Coming Soon</h2>
-                <p className="mt-2 text-muted-foreground">
-                  We're busy developing new content. Check back later for more courses!
-                </p>
-              </div>
-            )}
-          </section>
-        </main>
-      </div>
+                </Link>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </section>
+
+        {/* Self-Paced Courses */}
+        <section>
+          <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
+            <Clock className="h-6 w-6 text-primary" />
+            Self-Paced Courses
+          </h2>
+
+          {selfPacedCourses.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {selfPacedCourses.map((course) => (
+                <Card
+                  key={course.title}
+                  className="flex flex-col overflow-hidden transition-shadow duration-200 hover:shadow-xl"
+                >
+                  <CardHeader className="p-0">
+                    <Link href={`/learn/courses/${course.slug}`} className="block group">
+                      <div className="relative aspect-video overflow-hidden">
+                        <Image
+                          src={course.heroImageUrl}
+                          alt={`Image for ${course.title}`}
+                          fill
+                          className="object-cover transition-transform duration-200 group-hover:scale-105"
+                          data-ai-hint={course.imageHint}
+                          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                          priority={false}
+                        />
+                      </div>
+                    </Link>
+                  </CardHeader>
+
+                  <CardContent className="p-6 flex-grow">
+                    <CardTitle className="mb-2">
+                      <Link href={`/learn/courses/${course.slug}`} className="hover:text-primary">
+                        {course.title}
+                      </Link>
+                    </CardTitle>
+                    <CardDescription className="break-words">
+                      {course.shortDescription}
+                    </CardDescription>
+                  </CardContent>
+
+                  <CardFooter className="p-6 pt-0">
+                    <Button asChild className="w-full">
+                      <Link href={`/learn/courses/${course.slug}`}>
+                        View Course Details <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 border-dashed border-2 rounded-lg">
+              <h2 className="text-2xl font-semibold font-heading">More Courses Coming Soon</h2>
+              <p className="mt-2 text-muted-foreground">
+                We're busy developing new content. Check back later for more courses!
+              </p>
+            </div>
+          )}
+        </section>
+      </main>
     </div>
   );
 }
