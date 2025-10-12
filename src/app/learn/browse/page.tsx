@@ -43,15 +43,9 @@ const upcomingCohorts = [
 
 function FilterSidebar() {
   return (
-    <aside className="w-full md:w-[280px] md:sticky top-24 h-fit">
+    <aside className="w-full md:w-[280px] md:sticky top-[116px] h-fit">
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-heading">
-            <Filter className="h-5 w-5" />
-            Filter & Search
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 pt-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input placeholder="Search courses..." className="pl-10" />
