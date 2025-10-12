@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
@@ -204,18 +204,16 @@ export default function EditCohortPage() {
                 <div className="space-y-8">
                     <Card>
                         <CardHeader className="flex-row items-center justify-between">
-                            <CardTitle>Cohort Details</CardTitle>
+                             <div className="flex items-center gap-3">
+                                <Info className="h-5 w-5" />
+                                <CardTitle>Details</CardTitle>
+                            </div>
                             <Button variant="outline" size="sm" onClick={() => setIsEditDetailsDrawerOpen(true)}>
                                 <Pencil className="mr-2 h-4 w-4" />
                                 Edit
                             </Button>
                         </CardHeader>
                         <CardContent className="space-y-4 text-sm">
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Status</span>
-                                <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
-                            </div>
-                            
                             <div className="space-y-2">
                                 <div className="flex justify-around items-center text-center p-3 bg-muted rounded-md">
                                     <div>
@@ -234,9 +232,14 @@ export default function EditCohortPage() {
                                     </div>
                                 </div>
                             </div>
+
+                             <div className="flex justify-between items-center pt-2">
+                                <span className="text-muted-foreground">Status</span>
+                                <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
+                            </div>
                             
                             {cohort.checkoutLink && (
-                                <div className="flex justify-between items-center pt-2">
+                                <div className="flex justify-between items-center">
                                     <span className="text-muted-foreground">Checkout Link</span>
                                     <Button asChild variant="outline" size="sm">
                                         <Link href={cohort.checkoutLink} target="_blank">
@@ -250,7 +253,10 @@ export default function EditCohortPage() {
 
                     <Card>
                         <CardHeader className="flex-row items-center justify-between">
-                            <CardTitle>Schedule</CardTitle>
+                            <div className="flex items-center gap-3">
+                                <Calendar className="h-5 w-5" />
+                                <CardTitle>Schedule</CardTitle>
+                            </div>
                             <Button variant="outline" size="sm" onClick={() => setIsEditScheduleDrawerOpen(true)}>
                                 <Pencil className="mr-2 h-4 w-4" />
                                 Edit
@@ -315,4 +321,5 @@ export default function EditCohortPage() {
             </div>
         </div>
     );
-}
+
+    
