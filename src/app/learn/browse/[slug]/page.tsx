@@ -4,9 +4,10 @@ import { UpcomingCourses } from "@/components/courses/upcoming-courses";
 import { CourseStats } from "@/components/courses/course-stats";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { DownloadCloud } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // This data would typically be fetched based on the slug
 const courseData = {
@@ -53,12 +54,15 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
               <p>There are lots of ideas about what changes we might desire to make, ranging from process to policy to procedure to skillset. There’s no problem in finding proposed changes. No, the problem is in helping your team to actually make any given change.</p>
               <p>Leading Technical Change (LTC), is a course designed to focus on how to make change, not which change to make.</p>
               <p>Download the LTC Overview for your team lead or department head today! 👇</p>
-               <Button asChild size="lg">
-                    <Link href={courseOutlineUrl} download target="_blank">
-                        <DownloadCloud className="mr-2 h-5 w-5" />
-                        Download Course Outline
-                    </Link>
-                </Button>
+               <Link 
+                  href={courseOutlineUrl}
+                  download 
+                  target="_blank" 
+                  className={cn(buttonVariants({ size: "lg" }), "no-underline")}
+                >
+                  <DownloadCloud className="mr-2 h-5 w-5" />
+                  Download Course Outline
+                </Link>
             </div>
           </section>
         </main>
