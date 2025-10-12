@@ -26,7 +26,7 @@ function AdminHeader() {
     const pathname = usePathname();
     
     return (
-        <header className="border-b sticky top-14 bg-background/95 backdrop-blur-sm z-10">
+        <header className="border-b sticky top-14 bg-secondary z-10">
           <div className="container mx-auto px-4 flex items-center justify-between h-14">
             <div className="flex items-center gap-6">
                 <Link href="/admin" className="flex items-center gap-2 font-semibold">
