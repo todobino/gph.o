@@ -99,6 +99,28 @@ export default function CourseBrowsePage({ params }: { params: { slug: string } 
             </div>
           </section>
 
+          <Separator />
+
+          <section>
+            <h2 className="text-2xl font-bold font-heading mb-4">Technique of Change</h2>
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+                <p>The course comes with what we call the Techniques Bundle. This is a collection of actual practical tips and tricks. Some of these will be familiar, some new, but all will make more sense when interpreted within the theory above. Each technique is a headline and a one-page description. Here are five of the headlines, chosen at random.</p>
+                
+                <p><strong>Easiest Nearest Owwie First:</strong> There are small problems and there are big ones. Fix the small ones before you approach the big ones.</p>
+
+                <p><strong>Create Experiences, Not Arguments:</strong> Actual lived experience is the most powerful persuasive force there is.</p>
+
+                <p><strong>Use Locally Grounded Lightning Talks:</strong> Short high-speed talks, 15 minutes at a time, based in the real day-job situations, stir conversation, spread experience, and build both community & consensus.</p>
+
+                <p><strong>Dot Votes Are Data:</strong> You can gather and objectify real information for your team using even very simple and lightweight approaches. It’s cheaper, faster, and every bit as objective.</p>
+
+                <p><strong>Get A Heavyweight To Bless An Activity:</strong> Everyone in the c-suite knows what it is to “bless” an experiment, or a learning session. Ask them to spend 5 minutes telling the team they approve of yours.</p>
+
+                <p>There are currently more than 30 techniques in the bundle, and we add new ones all the time, based partly on what comes from the final element of our structure, the advice.</p>
+            </div>
+          </section>
+
+
         </main>
         <aside className="md:col-span-1 sticky top-24">
           <CourseStats 
