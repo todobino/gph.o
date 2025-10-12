@@ -12,12 +12,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
 import { EditAttendeeDrawer } from '@/components/admin/edit-attendee-drawer';
 import { cn } from '@/lib/utils';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 
 function CohortSkeleton() {
     return (
@@ -54,6 +55,8 @@ export default function EditCohortPage() {
     const [isAddAttendeeDialogOpen, setIsAddAttendeeDialogOpen] = useState(false);
     const [selectedAttendee, setSelectedAttendee] = useState<Attendee | null>(null);
     const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
+    const [isEditDetailsDrawerOpen, setIsEditDetailsDrawerOpen] = useState(false);
+    const [isEditScheduleDrawerOpen, setIsEditScheduleDrawerOpen] = useState(false);
 
 
     const fetchCohortDetails = async (courseIdParam?: string) => {
@@ -149,6 +152,28 @@ export default function EditCohortPage() {
                     onAttendeeUpdated={() => fetchCohortDetails(course.id)}
                 />
             )}
+             <Sheet open={isEditDetailsDrawerOpen} onOpenChange={setIsEditDetailsDrawerOpen}>
+                <SheetContent>
+                    <SheetHeader>
+                        <SheetTitle>Edit Cohort Details</SheetTitle>
+                        <SheetDescription>
+                            Make changes to the cohort details here. Click save when you're done.
+                        </SheetDescription>
+                    </SheetHeader>
+                    {/* Form to edit details will go here */}
+                </SheetContent>
+            </Sheet>
+            <Sheet open={isEditScheduleDrawerOpen} onOpenChange={setIsEditScheduleDrawerOpen}>
+                <SheetContent>
+                    <SheetHeader>
+                        <SheetTitle>Edit Cohort Schedule</SheetTitle>
+                        <SheetDescription>
+                            Adjust the session dates and times for this cohort.
+                        </SheetDescription>
+                    </SheetHeader>
+                    {/* Form to edit schedule will go here */}
+                </SheetContent>
+            </Sheet>
             <Button variant="secondary" size="sm" asChild>
                 <Link href={`/admin/courses/${slug}`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
@@ -175,8 +200,11 @@ export default function EditCohortPage() {
                 {/* Left Column */}
                 <div className="space-y-8">
                     <Card>
-                        <CardHeader>
+                        <CardHeader className="flex-row items-center justify-between">
                             <CardTitle>Cohort Details</CardTitle>
+                            <Button variant="outline" size="icon" onClick={() => setIsEditDetailsDrawerOpen(true)}>
+                                <Pencil className="h-4 w-4" />
+                            </Button>
                         </CardHeader>
                         <CardContent className="space-y-3 text-sm">
                             <div className="flex justify-between items-center">
@@ -209,8 +237,11 @@ export default function EditCohortPage() {
                     </Card>
 
                     <Card>
-                        <CardHeader>
+                        <CardHeader className="flex-row items-center justify-between">
                             <CardTitle>Schedule</CardTitle>
+                            <Button variant="outline" size="icon" onClick={() => setIsEditScheduleDrawerOpen(true)}>
+                                <Pencil className="h-4 w-4" />
+                            </Button>
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 gap-3">
                             {cohort.sessions.map((session, index) => (
