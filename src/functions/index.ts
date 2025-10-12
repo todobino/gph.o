@@ -28,15 +28,24 @@ exports.updateCohortSeats = onDocumentWritten("courses/{courseId}/cohorts/{cohor
             }
 
             const attendeesCollectionRef = cohortDocRef.collection('attendees');
+            
+            // Query for confirmed and pending attendees separately
             const confirmedAttendeesQuery = attendeesCollectionRef.where('status', '==', 'confirmed');
-            const confirmedSnapshot = await transaction.get(confirmedAttendeesQuery);
+            const pendingAttendeesQuery = attendeesCollectionRef.where('status', '==', 'pending');
+
+            const [confirmedSnapshot, pendingSnapshot] = await Promise.all([
+                transaction.get(confirmedAttendeesQuery),
+                transaction.get(pendingAttendeesQuery)
+            ]);
             
             const seatsConfirmed = confirmedSnapshot.size;
+            const seatsHeld = pendingSnapshot.size;
             const seatsTotal = cohortData.seatsTotal || 0;
-            const seatsRemaining = seatsTotal - seatsConfirmed;
+            const seatsRemaining = seatsTotal - seatsConfirmed - seatsHeld;
 
             transaction.update(cohortDocRef, { 
                 seatsConfirmed: seatsConfirmed,
+                seatsHeld: seatsHeld,
                 seatsRemaining: seatsRemaining,
                 updatedAt: FieldValue.serverTimestamp()
             });
