@@ -38,6 +38,46 @@ interface DropdownItem {
   icon?: React.ReactNode;
 }
 
+function AccountButton() {
+  const router = useRouter();
+  const user = useUser();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleAccountClick = (event: React.MouseEvent) => {
+     event.preventDefault(); // Prevent default link behavior
+     if (user) {
+       router.push('/account');
+     } else {
+       router.push('/login');
+     }
+   };
+
+  if (!isMounted) {
+    // Render a placeholder or null on the server
+    return (
+      <Button asChild variant="secondary" disabled>
+        <Link href="/login">
+            <UserCircle />
+            Login
+        </Link>
+      </Button>
+    );
+  }
+
+  return (
+    <Button asChild variant="secondary" onClick={handleAccountClick}>
+      <Link href={user ? "/account" : "/login"}>
+          <UserCircle />
+          {user ? "Account" : "Login"}
+      </Link>
+    </Button>
+  );
+}
+
 
 export function Header() {
   const router = useRouter();
@@ -176,15 +216,6 @@ export function Header() {
      if (post.tags.includes('audio')) return <Headphones className="h-4 w-4 text-muted-foreground" />;
      return <FileText className="h-4 w-4 text-muted-foreground" />;
    }
-
-   const handleAccountClick = (event: React.MouseEvent) => {
-     event.preventDefault(); // Prevent default link behavior
-     if (user) {
-       router.push('/account');
-     } else {
-       router.push('/login');
-     }
-   };
    
    const searchResultsContent = (
     <ScrollArea className="mt-2 h-fit max-h-[400px] rounded-md border sm:max-h-[500px]">
@@ -360,12 +391,7 @@ export function Header() {
                     Book Now
                 </Link>
             </Button>
-             <Button asChild variant="secondary" onClick={handleAccountClick}>
-              <Link href={user ? "/account" : "/login"}>
-                  <UserCircle />
-                  {user ? "Account" : "Login"}
-              </Link>
-            </Button>
+             <AccountButton />
         </div>
 
         {/* Mobile View (up to md) */}
@@ -483,3 +509,5 @@ export function Header() {
     </header>
   );
 }
+
+    
