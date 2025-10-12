@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Clock, Filter, Search, Users, CalendarDays } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, Filter, Search, Users, CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -121,6 +121,7 @@ export default function CoursesPage() {
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedCohort, setSelectedCohort] = useState<(Cohort & { course: Course }) | null>(null);
+    const [cohortPage, setCohortPage] = useState(0);
 
     const filteredCourses = useMemo(() => {
         return selfPacedCourses.filter(course => {
@@ -136,6 +137,13 @@ export default function CoursesPage() {
         setIsDialogOpen(true);
     };
 
+    const cohortsPerPage = 4;
+    const totalCohortPages = Math.ceil(upcomingCohorts.length / cohortsPerPage);
+    const visibleCohorts = upcomingCohorts.slice(
+        cohortPage * cohortsPerPage,
+        (cohortPage + 1) * cohortsPerPage
+    );
+
   return (
     <div className="space-y-12">
       <CohortDetailsDialog 
@@ -145,17 +153,38 @@ export default function CoursesPage() {
       />
       {/* Upcoming Live Classes - Full Width */}
       <section className="bg-accent p-8 rounded-lg">
-        <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
-          <Users className="h-6 w-6 text-primary" />
-          Upcoming Live Classes
-        </h2>
+        <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold font-heading flex items-center gap-2">
+              <Users className="h-6 w-6 text-primary" />
+              Upcoming Live Classes
+            </h2>
+            <div className="flex items-center gap-2">
+                 <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => setCohortPage(p => Math.max(0, p - 1))}
+                    disabled={cohortPage === 0}
+                    aria-label="Previous cohorts"
+                 >
+                    <ChevronLeft className="h-4 w-4" />
+                </Button>
+                 <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => setCohortPage(p => Math.min(totalCohortPages - 1, p + 1))}
+                    disabled={cohortPage === totalCohortPages - 1}
+                    aria-label="Next cohorts"
+                 >
+                    <ChevronRight className="h-4 w-4" />
+                </Button>
+            </div>
+        </div>
 
-        <ScrollArea className="w-full">
-          <div className="flex w-max space-x-4 pb-4">
-            {upcomingCohorts.map((cohort) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {visibleCohorts.map((cohort) => (
                <Card 
                   key={cohort.slug} 
-                  className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer bg-card"
+                  className="w-full h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer bg-card"
                   onClick={() => handleCohortClick(cohort)}
                 >
                   <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50 border-b">
@@ -180,9 +209,7 @@ export default function CoursesPage() {
                   </CardFooter>
               </Card>
             ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        </div>
       </section>
 
       {/* Main content with sidebar */}
