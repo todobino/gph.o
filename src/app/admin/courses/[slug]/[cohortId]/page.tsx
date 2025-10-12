@@ -27,12 +27,12 @@ function CohortSkeleton() {
                 <Skeleton className="h-10 w-1/2" />
                 <Skeleton className="h-9 w-32" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="md:col-span-2 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-6">
                     <Skeleton className="h-48 w-full" />
                      <Skeleton className="h-64 w-full" />
                 </div>
-                <div className="md:col-span-1">
+                <div>
                     <Skeleton className="h-96 w-full" />
                 </div>
             </div>
@@ -171,9 +171,9 @@ export default function EditCohortPage() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 {/* Left Column */}
-                <div className="lg:col-span-2 space-y-8">
+                <div className="space-y-8">
                     <Card>
                         <CardHeader>
                             <CardTitle>Cohort Details</CardTitle>
@@ -212,7 +212,7 @@ export default function EditCohortPage() {
                         <CardHeader>
                             <CardTitle>Schedule</CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <CardContent className="grid grid-cols-1 gap-3">
                             {cohort.sessions.map((session, index) => (
                                 <div key={index} className="flex items-center gap-4 rounded-lg border p-3">
                                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted font-bold text-lg">
@@ -233,7 +233,7 @@ export default function EditCohortPage() {
                 </div>
                 
                 {/* Right Column */}
-                <div className="lg:col-span-1">
+                <div>
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between py-4">
                             <div className="flex items-center gap-3">
