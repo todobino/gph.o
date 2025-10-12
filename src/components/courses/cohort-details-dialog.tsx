@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Calendar, Clock, Tv, Users, X } from "lucide-react";
+import { ArrowRight, Calendar, Clock, GraduationCap, Tv, Users, X } from "lucide-react";
 import type { Course, Cohort } from "@/types/course";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -48,11 +48,16 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <div className="flex justify-between items-start gap-4">
-             <div>
-                <DialogTitle className="text-2xl font-bold font-heading mb-1">{cohort.name}</DialogTitle>
-                <DialogDescription>
-                    Part of the <span className="font-semibold text-primary">{course.title}</span> course.
-                </DialogDescription>
+             <div className="flex items-start gap-4">
+                <div className="bg-accent p-3 rounded-lg mt-1">
+                    <GraduationCap className="h-6 w-6 text-accent-foreground" />
+                </div>
+                <div>
+                    <DialogTitle className="text-2xl font-bold font-heading mb-1">{cohort.name}</DialogTitle>
+                    <DialogDescription>
+                        Part of the <span className="font-semibold text-primary">{course.title}</span> course.
+                    </DialogDescription>
+                </div>
              </div>
              <DialogClose asChild>
                 <Button variant="ghost" size="icon" className="h-9 w-9 flex-shrink-0 bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground">
