@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useIsAdmin } from '@/hooks/useUser';
 import { getDoc, doc, collection, query, where, getDocs, orderBy, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
@@ -43,6 +43,7 @@ function CohortSkeleton() {
 
 export default function EditCohortPage() {
     const params = useParams();
+    const router = useRouter();
     const slug = params.slug as string;
     const cohortId = params.cohortId as string;
     const isAdmin = useIsAdmin();
@@ -174,16 +175,17 @@ export default function EditCohortPage() {
                     {/* Form to edit schedule will go here */}
                 </SheetContent>
             </Sheet>
-            <Button variant="secondary" size="sm" asChild>
-                <Link href={`/admin/courses/${slug}`}>
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to {course.title}
-                </Link>
-            </Button>
+
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                <h1 className="text-3xl md:text-4xl font-bold font-heading break-words">
-                   {cohort.name}
-                </h1>
+                <div className="flex items-center gap-4">
+                    <Button variant="secondary" size="icon" onClick={() => router.back()}>
+                        <ArrowLeft className="h-4 w-4" />
+                        <span className="sr-only">Back</span>
+                    </Button>
+                    <h1 className="text-3xl md:text-4xl font-bold font-heading break-words">
+                       {cohort.name}
+                    </h1>
+                </div>
                 <div className="flex gap-2">
                     <Button variant="outline" disabled>
                         <Mail className="mr-2 h-4 w-4" />
@@ -264,7 +266,7 @@ export default function EditCohortPage() {
                 </div>
                 
                 {/* Right Column */}
-                <div>
+                <div className="space-y-8">
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between py-4">
                             <div className="flex items-center gap-3">
