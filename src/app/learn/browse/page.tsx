@@ -144,7 +144,7 @@ export default function CoursesPage() {
         cohort={selectedCohort}
       />
       {/* Upcoming Live Classes - Full Width */}
-      <section>
+      <section className="bg-secondary p-8 rounded-lg">
         <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
           <Users className="h-6 w-6 text-primary" />
           Upcoming Live Classes
@@ -155,7 +155,7 @@ export default function CoursesPage() {
             {upcomingCohorts.map((cohort) => (
                <Card 
                   key={cohort.slug} 
-                  className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer"
+                  className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary shrink-0 cursor-pointer bg-card"
                   onClick={() => handleCohortClick(cohort)}
                 >
                   <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50 border-b">
