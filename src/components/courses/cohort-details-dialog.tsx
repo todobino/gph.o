@@ -54,6 +54,12 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
                     Part of the <span className="font-semibold text-primary">{course.title}</span> course.
                 </DialogDescription>
              </div>
+             <DialogClose asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9 flex-shrink-0">
+                    <X className="h-5 w-5" />
+                    <span className="sr-only">Close</span>
+                </Button>
+            </DialogClose>
           </div>
         </DialogHeader>
         
@@ -129,12 +135,6 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
                         </Link>
                     </Button>
                 )}
-                 <DialogClose asChild>
-                    <Button variant="destructive" size="icon" className="h-9 w-9 flex-shrink-0">
-                        <X className="h-5 w-5" />
-                        <span className="sr-only">Close</span>
-                    </Button>
-                </DialogClose>
             </div>
         </DialogFooter>
       </DialogContent>
