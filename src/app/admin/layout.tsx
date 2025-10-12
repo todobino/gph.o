@@ -3,7 +3,7 @@
 
 import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Home, Newspaper, GraduationCap, Users, List, ClipboardType } from 'lucide-react';
+import { Home, Newspaper, GraduationCap, Users, List, ClipboardType, LockKeyhole } from 'lucide-react';
 import Link from 'next/link';
 
 import AuthGate from '@/components/auth-gate';
@@ -30,6 +30,7 @@ function AdminHeader() {
           <div className="container mx-auto px-4 flex items-center justify-between h-14">
             <div className="flex items-center gap-6">
                 <Link href="/admin" className="flex items-center gap-2 font-semibold">
+                    <LockKeyhole className="h-6 w-6 text-primary" />
                     <span className="font-extrabold">Admin</span>
                 </Link>
                 <nav className="hidden md:flex items-center gap-1">
