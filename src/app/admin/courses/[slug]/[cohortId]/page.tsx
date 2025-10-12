@@ -19,6 +19,7 @@ import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
 import { EditAttendeeDrawer } from '@/components/admin/edit-attendee-drawer';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
+import { Separator } from '@/components/ui/separator';
 
 function CohortSkeleton() {
     return (
@@ -209,23 +210,31 @@ export default function EditCohortPage() {
                                 Edit
                             </Button>
                         </CardHeader>
-                        <CardContent className="space-y-3 text-sm">
+                        <CardContent className="space-y-4 text-sm">
                             <div className="flex justify-between items-center">
                                 <span className="text-muted-foreground">Status</span>
                                 <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Confirmed</span>
-                                <span>{cohort.seatsConfirmed} / {cohort.seatsTotal}</span>
+                            
+                            <div className="space-y-2">
+                                <div className="flex justify-around items-center text-center p-3 bg-muted rounded-md">
+                                    <div>
+                                        <div className="font-bold text-lg">{cohort.seatsConfirmed}/{cohort.seatsTotal}</div>
+                                        <div className="text-xs text-muted-foreground">Confirmed</div>
+                                    </div>
+                                    <Separator orientation="vertical" className="h-8" />
+                                    <div>
+                                        <div className="font-bold text-lg">{cohort.seatsHeld}</div>
+                                        <div className="text-xs text-muted-foreground">Held</div>
+                                    </div>
+                                    <Separator orientation="vertical" className="h-8" />
+                                    <div>
+                                        <div className="font-bold text-lg">{cohort.seatsRemaining}</div>
+                                        <div className="text-xs text-muted-foreground">Remaining</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Held</span>
-                                <span>{cohort.seatsHeld}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Remaining</span>
-                                <span>{cohort.seatsRemaining}</span>
-                            </div>
+                            
                             {cohort.checkoutLink && (
                                 <div className="flex justify-between items-center pt-2">
                                     <span className="text-muted-foreground">Checkout Link</span>
