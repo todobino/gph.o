@@ -59,12 +59,6 @@ export function CohortDetailsDialog({ isOpen, onOpenChange, cohort }: CohortDeta
                     </DialogDescription>
                 </div>
              </div>
-             <DialogClose asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9 flex-shrink-0 bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground">
-                    <X className="h-5 w-5" />
-                    <span className="sr-only">Close</span>
-                </Button>
-            </DialogClose>
           </div>
         </DialogHeader>
         
