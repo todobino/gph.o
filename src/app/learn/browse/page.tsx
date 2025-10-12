@@ -120,27 +120,25 @@ export default function CoursesPage() {
             <div className="flex w-max space-x-4 pb-4">
               {upcomingCohorts.map((cohort) => (
                 <Link key={cohort.slug} href={`/learn/cohorts/${cohort.slug}`} className="inline-block">
-                    <Card className="w-64 h-full flex flex-col p-4 hover:bg-accent transition-colors shrink-0">
-                        <CardHeader className="p-2 space-y-3">
-                            <div className="bg-accent text-accent-foreground rounded-md px-3 py-2 w-fit">
-                                <p className="font-bold text-lg">{cohort.date.split(',')[0]}</p>
-                            </div>
-                            <CardTitle className="text-lg pt-1">{cohort.name}</CardTitle>
+                    <Card className="w-64 h-full flex flex-col hover:bg-accent transition-colors shrink-0">
+                        <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50">
+                            <CalendarDays className="h-6 w-6 text-primary" />
+                            <div className="font-semibold">{cohort.date.split(',')[0]}</div>
                         </CardHeader>
-                        <CardContent className="p-2 flex-grow space-y-3 text-sm">
-                            <div className="flex items-start gap-2 text-muted-foreground">
-                                <FileText className="h-4 w-4 mt-0.5 shrink-0" />
-                                <span>{cohort.description}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                                <CalendarDays className="h-4 w-4 shrink-0" />
+                        <CardContent className="p-4 flex-grow space-y-2">
+                            <CardTitle className="text-lg">{cohort.name}</CardTitle>
+                            <p className="text-sm text-muted-foreground line-clamp-2">{cohort.description}</p>
+                        </CardContent>
+                        <CardFooter className="p-4 pt-0 text-sm text-muted-foreground flex justify-between">
+                             <div className="flex items-center gap-1.5">
+                                <Clock className="h-4 w-4" />
                                 <span>{cohort.sessions} sessions</span>
                             </div>
-                             <div className="flex items-center gap-2 text-muted-foreground">
-                                <BarChart className="h-4 w-4 shrink-0" />
-                                <span>{cohort.seatsLeft} seats left</span>
+                             <div className="flex items-center gap-1.5">
+                                <Users className="h-4 w-4" />
+                                <span>{cohort.seatsLeft} left</span>
                             </div>
-                        </CardContent>
+                        </CardFooter>
                     </Card>
                 </Link>
               ))}
@@ -213,3 +211,5 @@ export default function CoursesPage() {
     </div>
   );
 }
+
+    
