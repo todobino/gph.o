@@ -13,12 +13,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink } from 'lucide-react';
-import { PostsDataTable } from '@/components/admin/posts-data-table';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { format } from 'date-fns';
 import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
 import { EditAttendeeDrawer } from '@/components/admin/edit-attendee-drawer';
+import { cn } from '@/lib/utils';
 
 function CohortSkeleton() {
     return (
@@ -29,42 +28,17 @@ function CohortSkeleton() {
                 <Skeleton className="h-9 w-32" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="md:col-span-1 space-y-6">
+                <div className="md:col-span-2 space-y-6">
                     <Skeleton className="h-48 w-full" />
+                     <Skeleton className="h-64 w-full" />
                 </div>
-                <div className="md:col-span-2">
-                    <Skeleton className="h-64 w-full" />
+                <div className="md:col-span-1">
+                    <Skeleton className="h-96 w-full" />
                 </div>
             </div>
         </div>
     );
 }
-
-const attendeeColumns = [
-    {
-        accessorKey: 'name',
-        header: 'Name',
-        cell: ({ row }: { row: any }) => `${row.original.firstName} ${row.original.lastName}`
-    },
-    {
-        accessorKey: 'email',
-        header: 'Email',
-    },
-    {
-        accessorKey: 'status',
-        header: 'Status',
-        cell: ({ row }: { row: any }) => (
-            <Badge variant={row.original.status === 'confirmed' ? 'default' : 'secondary'} className="capitalize">{row.original.status}</Badge>
-        )
-    },
-     {
-        accessorKey: 'paymentStatus',
-        header: 'Payment',
-        cell: ({ row }: { row: any }) => (
-            <Badge variant={row.original.paymentStatus === 'paid' ? 'default' : 'destructive'} className="capitalize">{row.original.paymentStatus}</Badge>
-        )
-    },
-];
 
 export default function EditCohortPage() {
     const params = useParams();
@@ -125,8 +99,8 @@ export default function EditCohortPage() {
         }
     }, [isEditDrawerOpen]);
 
-    const handleRowClick = (row: any) => {
-        setSelectedAttendee(row.original as Attendee);
+    const handleRowClick = (attendee: Attendee) => {
+        setSelectedAttendee(attendee);
         setIsEditDrawerOpen(true);
     };
 
@@ -197,72 +171,69 @@ export default function EditCohortPage() {
                 </div>
             </div>
 
-             <div className="flex flex-col gap-8">
-                {/* Top Row: Details & Schedule */}
-                <div className="flex flex-col lg:flex-row gap-8">
-                    <div className="w-full lg:w-1/3">
-                        <Card className="h-full">
-                            <CardHeader>
-                                <CardTitle>Cohort Details</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-3 text-sm">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-muted-foreground">Status</span>
-                                    <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                {/* Left Column */}
+                <div className="lg:col-span-2 space-y-8">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Cohort Details</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3 text-sm">
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Status</span>
+                                <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Confirmed</span>
+                                <span>{cohort.seatsConfirmed} / {cohort.seatsTotal}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Held</span>
+                                <span>{cohort.seatsHeld}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">Remaining</span>
+                                <span>{cohort.seatsRemaining}</span>
+                            </div>
+                            {cohort.checkoutLink && (
+                                <div className="flex justify-between items-center pt-2">
+                                    <span className="text-muted-foreground">Checkout Link</span>
+                                    <Button asChild variant="outline" size="sm">
+                                        <Link href={cohort.checkoutLink} target="_blank">
+                                            View <ExternalLink className="ml-2 h-3 w-3" />
+                                        </Link>
+                                    </Button>
                                 </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-muted-foreground">Confirmed</span>
-                                    <span>{cohort.seatsConfirmed} / {cohort.seatsTotal}</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-muted-foreground">Held</span>
-                                    <span>{cohort.seatsHeld}</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-muted-foreground">Remaining</span>
-                                    <span>{cohort.seatsRemaining}</span>
-                                </div>
-                                {cohort.checkoutLink && (
-                                    <div className="flex justify-between items-center pt-2">
-                                        <span className="text-muted-foreground">Checkout Link</span>
-                                        <Button asChild variant="outline" size="sm">
-                                            <Link href={cohort.checkoutLink} target="_blank">
-                                                View <ExternalLink className="ml-2 h-3 w-3" />
-                                            </Link>
-                                        </Button>
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
-                    </div>
-                    <div className="w-full lg:w-2/3">
-                        <Card className="h-full">
-                            <CardHeader>
-                                <CardTitle>Schedule</CardTitle>
-                            </CardHeader>
-                            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                {cohort.sessions.map((session, index) => (
-                                    <div key={index} className="flex items-center gap-4 rounded-lg border p-3">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted font-bold text-lg">
-                                            {index + 1}
-                                        </div>
-                                        <div className="flex-1">
-                                            <p className="font-semibold text-sm">{session.label || `Session ${index + 1}`}</p>
-                                            <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
-                                                <span>{formatSessionDate(session.startAt)}</span>
-                                                <span>&bull;</span>
-                                                <span>{formatSessionTime(session.startAt)} - {formatSessionTime(session.endAt)}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </CardContent>
-                        </Card>
-                    </div>
-                </div>
+                            )}
+                        </CardContent>
+                    </Card>
 
-                {/* Bottom Row: Attendees */}
-                <div className="w-full">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Schedule</CardTitle>
+                        </CardHeader>
+                        <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {cohort.sessions.map((session, index) => (
+                                <div key={index} className="flex items-center gap-4 rounded-lg border p-3">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted font-bold text-lg">
+                                        {index + 1}
+                                    </div>
+                                    <div className="flex-1">
+                                        <p className="font-semibold text-sm">{session.label || `Session ${index + 1}`}</p>
+                                        <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
+                                            <span>{formatSessionDate(session.startAt)}</span>
+                                            <span>&bull;</span>
+                                            <span>{formatSessionTime(session.startAt)} - {formatSessionTime(session.endAt)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </div>
+                
+                {/* Right Column */}
+                <div className="lg:col-span-1">
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between py-4">
                             <div className="flex items-center gap-3">
@@ -271,27 +242,33 @@ export default function EditCohortPage() {
                             </div>
                             <Button size="sm" onClick={() => setIsAddAttendeeDialogOpen(true)}>
                                 <Plus className="mr-2 h-4 w-4" />
-                                Add Attendee
+                                Add
                             </Button>
                         </CardHeader>
                         <CardContent>
-                           <PostsDataTable 
-                                columns={attendeeColumns} 
-                                data={attendees} 
-                                searchColumnId="email" 
-                                searchPlaceholder="Search by email..."
-                                onRowClick={handleRowClick}
-                            />
-                           {attendees.length === 0 && (
+                           {attendees.length > 0 ? (
+                            <div className="space-y-3">
+                                {attendees.map(attendee => (
+                                    <div 
+                                        key={attendee.id} 
+                                        className="flex items-center p-3 border rounded-lg hover:bg-accent hover:border-primary cursor-pointer transition-colors"
+                                        onClick={() => handleRowClick(attendee)}
+                                    >
+                                        <div className="flex-1">
+                                            <p className="font-semibold text-sm">{attendee.firstName} {attendee.lastName}</p>
+                                            <p className="text-xs text-muted-foreground">{attendee.email}</p>
+                                        </div>
+                                        <Badge variant={attendee.status === 'confirmed' ? 'default' : 'secondary'} className="capitalize">{attendee.status}</Badge>
+                                    </div>
+                                ))}
+                            </div>
+                           ) : (
                              <p className="text-center text-muted-foreground py-8">No attendees enrolled yet.</p>
                            )}
                         </CardContent>
                     </Card>
                 </div>
             </div>
-
         </div>
-    )
+    );
 }
-
-    
