@@ -5,48 +5,58 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Clock, Filter, Search, Users, CalendarDays, BarChart, FileText } from "lucide-react";
+import { ArrowRight, Clock, Filter, Search, Users, CalendarDays } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import React, { useMemo, useState } from "react";
+import { CohortDetailsDialog } from "@/components/courses/cohort-details-dialog";
+import type { Course, Cohort } from "@/types/course";
 
 // In a real app, this data would likely come from a CMS or a database
-const selfPacedCourses = [
+const selfPacedCourses: Course[] = [
   {
+    id: "sp-ltc",
     title: "Leading Technical Change",
+    slug: "leading-technical-change",
     shortDescription:
       "A course designed to focus on how to make change, not which change to make. Learn to lead your team to stronger, faster, smarter, and happier outcomes.",
-    slug: "leading-technical-change",
     heroImageUrl: "https://picsum.photos/seed/courses-ltc/600/400",
-    imageHint: "team brainstorming session",
-    topics: ["Technical Change", "Agile"],
+    tags: ["Technical Change", "Agile"],
+    type: "self-paced",
+    active: true,
+    createdAt: new Date() as any,
+    updatedAt: new Date() as any,
   },
   {
+    id: "sp-tdd",
     title: "Test-Driven Development",
+    slug: "test-driven-development",
     shortDescription:
         "Master the art of TDD. Write clean, robust, and maintainable code by writing your tests first. A hands-on workshop for serious programmers.",
-    slug: "test-driven-development",
     heroImageUrl: "https://picsum.photos/seed/courses-tdd/600/400",
-    imageHint: "code on screen",
-    topics: ["TDD"],
+    tags: ["TDD"],
+    type: "self-paced",
+    active: true,
+    createdAt: new Date() as any,
+    updatedAt: new Date() as any,
     },
 ];
 
-const upcomingCohorts = [
-  { name: "LTC #13", date: "Oct 7th, 2024", slug: "ltc-13", description: "Learn to lead change effectively.", sessions: 5, seatsLeft: 3 },
-  { name: "LTC #14", date: "Nov 4th, 2024", slug: "ltc-14", description: "The premier change leadership course.", sessions: 5, seatsLeft: 8 },
-  { name: "TDD #5", date: "Dec 2nd, 2024", slug: "tdd-5", description: "Master Test-Driven Development.", sessions: 4, seatsLeft: 5 },
-  { name: "LTC #15", date: "Jan 6th, 2025", slug: "ltc-15", description: "New year, new skills.", sessions: 5, seatsLeft: 12 },
-  { name: "LTC #16", date: "Feb 3rd, 2025", slug: "ltc-16", description: "Become a change agent.", sessions: 5, seatsLeft: 12 },
-  { name: "TDD #6", date: "Mar 3rd, 2025", slug: "tdd-6", description: "Write better code, faster.", sessions: 4, seatsLeft: 10 },
-  { name: "LTC #17", date: "Apr 7th, 2025", slug: "ltc-17", description: "Lead your team to success.", sessions: 5, seatsLeft: 15 },
-  { name: "Agile #1", date: "May 5th, 2025", slug: "agile-1", description: "An intro to agile practices.", sessions: 3, seatsLeft: 20 },
-  { name: "LTC #18", date: "Jun 2nd, 2025", slug: "ltc-18", description: "The classic course, updated.", sessions: 5, seatsLeft: 15 },
+const upcomingCohorts: (Cohort & { course: Course })[] = [
+  { name: "LTC #13", slug: "ltc-13", description: "Learn to lead change effectively.", sessions: [{startAt: new Date('2024-10-07T13:00:00') as any, endAt: new Date('2024-10-07T15:00:00') as any, label:''}], seatsTotal: 15, seatsConfirmed: 12, course: selfPacedCourses[0] } as any,
+  { name: "LTC #14", slug: "ltc-14", description: "The premier change leadership course.", sessions: [{startAt: new Date('2024-11-04T13:00:00') as any, endAt: new Date('2024-11-04T15:00:00') as any, label:''}], seatsTotal: 15, seatsConfirmed: 7, course: selfPacedCourses[0] } as any,
+  { name: "TDD #5", slug: "tdd-5", description: "Master Test-Driven Development.", sessions: [{startAt: new Date('2024-12-02T13:00:00') as any, endAt: new Date('2024-12-02T15:00:00') as any, label:''}], seatsTotal: 12, seatsConfirmed: 7, course: selfPacedCourses[1] } as any,
+  { name: "LTC #15", slug: "ltc-15", description: "New year, new skills.", sessions: [{startAt: new Date('2025-01-06T13:00:00') as any, endAt: new Date('2025-01-06T15:00:00') as any, label:''}], seatsTotal: 15, seatsConfirmed: 3, course: selfPacedCourses[0] } as any,
+  { name: "LTC #16", slug: "ltc-16", description: "Become a change agent.", sessions: [{startAt: new Date('2025-02-03T13:00:00') as any, endAt: new Date('2025-02-03T15:00:00') as any, label:''}], seatsTotal: 15, seatsConfirmed: 3, course: selfPacedCourses[0] } as any,
+  { name: "TDD #6", slug: "tdd-6", description: "Write better code, faster.", sessions: [{startAt: new Date('2025-03-03T13:00:00') as any, endAt: new Date('2025-03-03T15:00:00') as any, label:''}], seatsTotal: 12, seatsConfirmed: 2, course: selfPacedCourses[1] } as any,
+  { name: "LTC #17", slug: "ltc-17", description: "Lead your team to success.", sessions: [{startAt: new Date('2025-04-07T13:00:00') as any, endAt: new Date('2025-04-07T15:00:00') as any, label:''}], seatsTotal: 20, seatsConfirmed: 5, course: selfPacedCourses[0] } as any,
+  { name: "Agile #1", slug: "agile-1", description: "An intro to agile practices.", sessions: [{startAt: new Date('2025-05-05T13:00:00') as any, endAt: new Date('2025-05-05T15:00:00') as any, label:''}], seatsTotal: 20, seatsConfirmed: 0, course: selfPacedCourses[0] } as any,
+  { name: "LTC #18", slug: "ltc-18", description: "The classic course, updated.", sessions: [{startAt: new Date('2025-06-02T13:00:00') as any, endAt: new Date('2025-06-02T15:00:00') as any, label:''}], seatsTotal: 20, seatsConfirmed: 0, course: selfPacedCourses[0] } as any,
 ];
 
-const allTopics = Array.from(new Set(selfPacedCourses.flatMap(c => c.topics)));
+const allTopics = Array.from(new Set(selfPacedCourses.flatMap(c => c.tags || [])));
 
 interface FilterSidebarProps {
     searchQuery: string;
@@ -109,18 +119,30 @@ function FilterSidebar({
 export default function CoursesPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedCohort, setSelectedCohort] = useState<(Cohort & { course: Course }) | null>(null);
 
     const filteredCourses = useMemo(() => {
         return selfPacedCourses.filter(course => {
             const matchesQuery = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                                course.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesTopics = selectedTopics.length === 0 || selectedTopics.every(topic => course.topics.includes(topic));
+                                course.shortDescription?.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesTopics = selectedTopics.length === 0 || selectedTopics.every(topic => course.tags?.includes(topic));
             return matchesQuery && matchesTopics;
         });
     }, [searchQuery, selectedTopics]);
 
+    const handleCohortClick = (cohort: Cohort & { course: Course }) => {
+        setSelectedCohort(cohort);
+        setIsDialogOpen(true);
+    };
+
   return (
     <div className="space-y-12">
+      <CohortDetailsDialog 
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        cohort={selectedCohort}
+      />
       {/* Upcoming Live Classes - Full Width */}
       <section>
         <h2 className="text-2xl font-bold font-heading mb-4 flex items-center gap-2">
@@ -131,28 +153,32 @@ export default function CoursesPage() {
         <ScrollArea className="w-full">
           <div className="flex w-max space-x-4 pb-4">
             {upcomingCohorts.map((cohort) => (
-              <Link key={cohort.slug} href={`/learn/cohorts/${cohort.slug}`} className="inline-block">
-                  <Card className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary transition-all duration-150 ease-in-out shrink-0">
-                      <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50">
-                          <CalendarDays className="h-6 w-6 text-primary" />
-                          <div className="font-semibold">{cohort.date.split(',')[0]}</div>
-                      </CardHeader>
-                      <CardContent className="p-4 flex-grow space-y-2">
-                          <CardTitle className="text-lg">{cohort.name}</CardTitle>
-                          <p className="text-sm text-muted-foreground line-clamp-2">{cohort.description}</p>
-                      </CardContent>
-                      <CardFooter className="p-4 pt-0 text-sm text-muted-foreground flex justify-between">
-                           <div className="flex items-center gap-1.5">
-                              <Clock className="h-4 w-4" />
-                              <span>{cohort.sessions} sessions</span>
-                          </div>
-                           <div className="flex items-center gap-1.5">
-                              <Users className="h-4 w-4" />
-                              <span>{cohort.seatsLeft} left</span>
-                          </div>
-                      </CardFooter>
-                  </Card>
-              </Link>
+               <Card 
+                  key={cohort.slug} 
+                  className="w-64 h-full flex flex-col hover:shadow-lg hover:border-primary transition-all duration-150 ease-in-out shrink-0 cursor-pointer"
+                  onClick={() => handleCohortClick(cohort)}
+                >
+                  <CardHeader className="p-4 flex flex-row items-center gap-3 space-y-0 bg-muted/50">
+                      <CalendarDays className="h-6 w-6 text-primary" />
+                      <div className="font-semibold">
+                        {cohort.sessions[0]?.startAt ? new Date(cohort.sessions[0].startAt as any).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'TBA'}
+                      </div>
+                  </CardHeader>
+                  <CardContent className="p-4 flex-grow space-y-2">
+                      <CardTitle className="text-lg">{cohort.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{cohort.description}</p>
+                  </CardContent>
+                  <CardFooter className="p-4 pt-0 text-sm text-muted-foreground flex justify-between">
+                       <div className="flex items-center gap-1.5">
+                          <Clock className="h-4 w-4" />
+                          <span>{cohort.sessions.length} sessions</span>
+                      </div>
+                       <div className="flex items-center gap-1.5">
+                          <Users className="h-4 w-4" />
+                          <span>{cohort.seatsTotal - cohort.seatsConfirmed} left</span>
+                      </div>
+                  </CardFooter>
+              </Card>
             ))}
           </div>
           <ScrollBar orientation="horizontal" />
@@ -186,11 +212,11 @@ export default function CoursesPage() {
                       <Link href={`/learn/courses/${course.slug}`} className="block group">
                         <div className="relative aspect-video overflow-hidden">
                           <Image
-                            src={course.heroImageUrl}
+                            src={course.heroImageUrl!}
                             alt={`Image for ${course.title}`}
                             fill
                             className="object-cover transition-transform duration-200 group-hover:scale-105"
-                            data-ai-hint={course.imageHint}
+                            data-ai-hint={course.title}
                             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                             priority={false}
                           />
