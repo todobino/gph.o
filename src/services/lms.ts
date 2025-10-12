@@ -1,7 +1,8 @@
+
 'use client';
 import { db } from '@/lib/firestore';
 import type { Course } from '@/types/course';
-import { collection, getDocs, query, where, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, query, where, doc, getDoc, setDoc, serverTimestamp, limit } from 'firebase/firestore';
 import { useUser } from '@/hooks/useUser';
 import { getAuth } from 'firebase/auth';
 
