@@ -204,8 +204,9 @@ export default function EditCohortPage() {
                     <Card>
                         <CardHeader className="flex-row items-center justify-between">
                             <CardTitle>Cohort Details</CardTitle>
-                            <Button variant="outline" size="icon" onClick={() => setIsEditDetailsDrawerOpen(true)}>
-                                <Pencil className="h-4 w-4" />
+                            <Button variant="outline" size="sm" onClick={() => setIsEditDetailsDrawerOpen(true)}>
+                                <Pencil className="mr-2 h-4 w-4" />
+                                Edit
                             </Button>
                         </CardHeader>
                         <CardContent className="space-y-3 text-sm">
@@ -241,8 +242,9 @@ export default function EditCohortPage() {
                     <Card>
                         <CardHeader className="flex-row items-center justify-between">
                             <CardTitle>Schedule</CardTitle>
-                            <Button variant="outline" size="icon" onClick={() => setIsEditScheduleDrawerOpen(true)}>
-                                <Pencil className="h-4 w-4" />
+                            <Button variant="outline" size="sm" onClick={() => setIsEditScheduleDrawerOpen(true)}>
+                                <Pencil className="mr-2 h-4 w-4" />
+                                Edit
                             </Button>
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 gap-3">
