@@ -51,7 +51,7 @@ const DialogContent = React.forwardRef<
           <Button
               variant="ghost"
               size="icon"
-              className="absolute right-4 top-4 h-9 w-9 flex-shrink-0 rounded-sm bg-secondary text-secondary-foreground opacity-70 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+              className="absolute right-4 top-4 h-9 w-9 flex-shrink-0 rounded-sm bg-muted text-secondary-foreground opacity-70 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
           >
               <X className="h-5 w-5" />
               <span className="sr-only">Close</span>
