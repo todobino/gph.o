@@ -335,7 +335,7 @@ export default function EditCohortPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-2 mb-4">
-                                <div className="flex justify-around items-center text-center p-3 bg-muted rounded-md">
+                                <div className="flex justify-around items-center text-center p-3 bg-accent rounded-md">
                                     <div>
                                         <div className="font-bold text-lg">{cohort.seatsConfirmed}</div>
                                         <div className="text-xs text-muted-foreground">Confirmed</div>
