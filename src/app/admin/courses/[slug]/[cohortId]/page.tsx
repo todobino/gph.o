@@ -13,9 +13,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info, AlertTriangle, Link as LinkIcon, Check } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info, AlertTriangle, Link as LinkIcon, Check, CalendarIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { format } from 'date-fns';
+import { format, addHours } from 'date-fns';
 import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
 import { EditAttendeeDrawer } from '@/components/admin/edit-attendee-drawer';
 import { cn } from '@/lib/utils';
@@ -27,6 +27,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { EditCohortScheduleDrawer } from '@/components/admin/edit-cohort-schedule-drawer';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
 
 function CohortSkeleton() {
     return (
@@ -45,6 +51,151 @@ function CohortSkeleton() {
                 </div>
             </div>
         </div>
+    );
+}
+
+const sessionEditSchema = z.object({
+  date: z.date({ required_error: "A date is required." }),
+  startTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:mm)'),
+});
+type SessionEditFormValues = z.infer<typeof sessionEditSchema>;
+
+function EditSessionDialog({
+    isOpen,
+    onOpenChange,
+    course,
+    cohort,
+    session,
+    sessionIndex,
+    onSessionUpdated,
+}: {
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
+    course: Course;
+    cohort: Cohort;
+    session: CohortSession;
+    sessionIndex: number;
+    onSessionUpdated: () => void;
+}) {
+    const { toast } = useToast();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const form = useForm<SessionEditFormValues>({
+        resolver: zodResolver(sessionEditSchema),
+    });
+
+    useEffect(() => {
+        if (isOpen && session) {
+            form.reset({
+                date: session.startAt.toDate(),
+                startTime: format(session.startAt.toDate(), "HH:mm"),
+            });
+        }
+    }, [isOpen, session, form]);
+
+    if (!session) return null;
+
+    const handleSubmit = async (values: SessionEditFormValues) => {
+        setIsSubmitting(true);
+        try {
+            const startDateTime = new Date(values.date);
+            const [startHours, startMinutes] = values.startTime.split(":").map(Number);
+            startDateTime.setHours(startHours, startMinutes, 0, 0);
+
+            const endDateTime = addHours(startDateTime, course.hoursPerSession || 2);
+
+            const updatedSession: CohortSession = {
+                label: `Session on ${format(startDateTime, "MMM d")}`,
+                startAt: Timestamp.fromDate(startDateTime),
+                endAt: Timestamp.fromDate(endDateTime),
+            };
+
+            const updatedSessions = [...cohort.sessions];
+            updatedSessions[sessionIndex] = updatedSession;
+
+            const cohortRef = doc(db, 'courses', course.id, 'cohorts', cohort.id);
+            await updateDoc(cohortRef, {
+                sessions: updatedSessions,
+                updatedAt: serverTimestamp(),
+            });
+
+            toast({
+                title: "Session Updated",
+                description: `Session ${sessionIndex + 1} has been successfully updated.`,
+            });
+            onSessionUpdated();
+            onOpenChange(false);
+        } catch (error) {
+            console.error("Error updating session:", error);
+            toast({
+                title: "Error",
+                description: "Failed to update the session. Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Edit Session {sessionIndex + 1}</DialogTitle>
+                    <DialogDescription>Update the date and time for this session.</DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+                        <FormField
+                            control={form.control}
+                            name="date"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                    <FormLabel>Date</FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant={"outline"}
+                                                    className={cn("w-full pl-3 text-left font-normal justify-start", !field.value && "text-muted-foreground")}
+                                                >
+                                                    {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                            <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="startTime"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Start Time</FormLabel>
+                                    <FormControl>
+                                        <Input type="time" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button type="button" variant="outline">Cancel</Button>
+                            </DialogClose>
+                            <Button type="submit" disabled={isSubmitting}>
+                                {isSubmitting ? "Saving..." : "Save Changes"}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
     );
 }
 
@@ -140,6 +291,9 @@ export default function EditCohortPage() {
     const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
     const [isPaymentLinkDialogOpen, setIsPaymentLinkDialogOpen] = useState(false);
 
+    const [selectedSession, setSelectedSession] = useState<{ session: CohortSession; index: number } | null>(null);
+    const [isEditSessionDialogOpen, setIsEditSessionDialogOpen] = useState(false);
+
 
     const fetchCohortDetails = async (courseIdParam?: string) => {
         setLoading(true);
@@ -209,9 +363,14 @@ export default function EditCohortPage() {
         }
     };
 
-    const handleRowClick = (attendee: Attendee) => {
+    const handleAttendeeRowClick = (attendee: Attendee) => {
         setSelectedAttendee(attendee);
         setIsEditDrawerOpen(true);
+    };
+
+    const handleSessionRowClick = (session: CohortSession, index: number) => {
+        setSelectedSession({ session, index });
+        setIsEditSessionDialogOpen(true);
     };
 
     const formatSessionTime = (timestamp: Timestamp) => {
@@ -305,6 +464,18 @@ export default function EditCohortPage() {
                 onCohortUpdated={fetchCohortDetails}
             />
 
+            {selectedSession && (
+                <EditSessionDialog
+                    isOpen={isEditSessionDialogOpen}
+                    onOpenChange={setIsEditSessionDialogOpen}
+                    course={course}
+                    cohort={cohort}
+                    session={selectedSession.session}
+                    sessionIndex={selectedSession.index}
+                    onSessionUpdated={fetchCohortDetails}
+                />
+            )}
+
 
             <AlertDialog open={isPublishDialogOpen} onOpenChange={setIsPublishDialogOpen}>
                 <AlertDialogContent>
@@ -397,7 +568,7 @@ export default function EditCohortPage() {
                                 <div 
                                     key={index}
                                     className="flex items-center gap-4 rounded-lg border p-3 hover:bg-accent hover:border-primary cursor-pointer"
-                                    onClick={() => setIsEditScheduleDrawerOpen(true)}
+                                    onClick={() => handleSessionRowClick(session, index)}
                                 >
                                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted font-bold text-lg">
                                         {index + 1}
@@ -456,7 +627,7 @@ export default function EditCohortPage() {
                                     <div 
                                         key={attendee.id} 
                                         className="flex items-center p-3 border rounded-lg hover:bg-accent hover:border-primary cursor-pointer"
-                                        onClick={() => handleRowClick(attendee)}
+                                        onClick={() => handleAttendeeRowClick(attendee)}
                                     >
                                         <div className="flex-1">
                                             <p className="font-semibold text-sm">{attendee.firstName} {attendee.lastName}</p>
