@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -326,9 +325,9 @@ export default function EditCohortPage() {
 
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div className="flex items-center gap-4">
-                    <Button variant="secondary" onClick={() => router.back()}>
+                    <Button variant="secondary" size="icon" onClick={() => router.back()}>
                         <ArrowLeft className="h-4 w-4" />
-                        Back
+                        <span className="sr-only">Back</span>
                     </Button>
                     <h1 className="text-3xl md:text-4xl font-bold font-heading break-words">
                        {cohort.name}
@@ -460,4 +459,5 @@ export default function EditCohortPage() {
             </div>
         </div>
     );
-}
+
+    
