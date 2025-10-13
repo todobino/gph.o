@@ -14,6 +14,16 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
   Form,
   FormControl,
   FormField,
@@ -33,11 +43,12 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useState, useEffect } from 'react';
-import { doc, updateDoc, serverTimestamp, runTransaction, collection, getDocs, query, where, writeBatch } from 'firebase/firestore';
+import { doc, updateDoc, serverTimestamp, runTransaction, collection, getDocs, query, where, writeBatch, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
 import type { Attendee, AttendeeStatus } from '@/types/attendee';
 import type { Cohort } from '@/types/course';
 import { Separator } from '../ui/separator';
+import { Trash2 } from 'lucide-react';
 
 const editAttendeeSchema = z.object({
   firstName: z.string().min(1, 'First name is required.'),
@@ -65,6 +76,7 @@ interface EditAttendeeDrawerProps {
 export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, cohortId, onAttendeeUpdated }: EditAttendeeDrawerProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   
   const form = useForm<EditAttendeeFormValues>({
     resolver: zodResolver(editAttendeeSchema),
@@ -103,7 +115,7 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
             // --- READS FIRST ---
             const cohortDoc = await transaction.get(cohortRef);
             if (!cohortDoc.exists()) {
-                throw "Cohort document not found!";
+                throw new Error("Cohort document not found!");
             }
             const cohortData = cohortDoc.data() as Cohort;
 
@@ -157,9 +169,64 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
     }
   };
 
+  const handleDeleteAttendee = async () => {
+    setIsSubmitting(true);
+    try {
+        await runTransaction(db, async (transaction) => {
+            const cohortRef = doc(db, 'courses', courseId, 'cohorts', cohortId);
+            const attendeeRef = doc(db, 'courses', courseId, 'cohorts', cohortId, 'attendees', attendee.id);
+
+            const cohortDoc = await transaction.get(cohortRef);
+            if (!cohortDoc.exists()) {
+                throw new Error("Cohort document not found!");
+            }
+            const cohortData = cohortDoc.data() as Cohort;
+            
+            transaction.delete(attendeeRef);
+
+            let seatsConfirmed = cohortData.seatsConfirmed;
+            let seatsHeld = cohortData.seatsHeld;
+
+            if (attendee.status === 'confirmed') {
+                seatsConfirmed--;
+            } else if (attendee.status === 'pending') {
+                seatsHeld--;
+            }
+
+            const seatsRemaining = cohortData.seatsTotal - seatsConfirmed - seatsHeld;
+
+            transaction.update(cohortRef, {
+                seatsConfirmed: Math.max(0, seatsConfirmed),
+                seatsHeld: Math.max(0, seatsHeld),
+                seatsRemaining: Math.max(0, seatsRemaining),
+                updatedAt: serverTimestamp(),
+            });
+        });
+
+        toast({
+            title: 'Attendee Deleted',
+            description: `${attendee.firstName} ${attendee.lastName} has been removed from the cohort.`,
+        });
+
+        onAttendeeUpdated();
+        setIsDeleteDialogOpen(false);
+        onOpenChange(false);
+    } catch (error) {
+        console.error('Error deleting attendee:', error);
+        toast({
+            title: 'Error Deleting Attendee',
+            description: 'Failed to delete the attendee. Please try again.',
+            variant: 'destructive',
+        });
+    } finally {
+        setIsSubmitting(false);
+    }
+};
+
   return (
+    <>
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-xl w-full p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
+      <SheetContent className="sm:max-w-xl w-full p-0 flex flex-col" onOpenAutoFocus={(e) => e.preventDefault()}>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col h-full">
                 <SheetHeader className="px-6 pt-6 pb-4 border-b">
@@ -303,17 +370,49 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
 
                 </div>
 
-                <SheetFooter className="px-6 py-4 border-t bg-background">
-                <SheetClose asChild>
-                    <Button type="button" variant="outline">Cancel</Button>
-                </SheetClose>
-                <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Saving...' : 'Save Changes'}
-                </Button>
+                <SheetFooter className="px-6 py-4 border-t bg-background flex sm:justify-between w-full">
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => setIsDeleteDialogOpen(true)}
+                        disabled={isSubmitting}
+                    >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Delete Attendee
+                    </Button>
+                    <div className="flex gap-2">
+                        <SheetClose asChild>
+                            <Button type="button" variant="outline">Cancel</Button>
+                        </SheetClose>
+                        <Button type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? 'Saving...' : 'Save Changes'}
+                        </Button>
+                    </div>
                 </SheetFooter>
             </form>
         </Form>
       </SheetContent>
     </Sheet>
+    <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the attendee
+                    and remove them from this cohort.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                    onClick={handleDeleteAttendee}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                    {isSubmitting ? 'Deleting...' : 'Delete'}
+                </AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+   </>
   );
 }
