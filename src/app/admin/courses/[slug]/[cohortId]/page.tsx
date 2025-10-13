@@ -396,7 +396,7 @@ export default function EditCohortPage() {
                             {cohort.sessions.map((session, index) => (
                                 <div 
                                     key={index}
-                                    className="flex items-center gap-4 rounded-lg border p-3 hover:bg-accent hover:border-primary cursor-pointer transition-colors"
+                                    className="flex items-center gap-4 rounded-lg border p-3 hover:bg-accent hover:border-primary cursor-pointer"
                                     onClick={() => setIsEditScheduleDrawerOpen(true)}
                                 >
                                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted font-bold text-lg">
@@ -455,7 +455,7 @@ export default function EditCohortPage() {
                                 {attendees.map(attendee => (
                                     <div 
                                         key={attendee.id} 
-                                        className="flex items-center p-3 border rounded-lg hover:bg-accent hover:border-primary cursor-pointer transition-colors"
+                                        className="flex items-center p-3 border rounded-lg hover:bg-accent hover:border-primary cursor-pointer"
                                         onClick={() => handleRowClick(attendee)}
                                     >
                                         <div className="flex-1">
@@ -475,6 +475,8 @@ export default function EditCohortPage() {
             </div>
         </div>
     );
+
+    
 
     
 
