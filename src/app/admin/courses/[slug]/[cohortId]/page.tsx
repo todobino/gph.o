@@ -26,6 +26,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogD
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { EditCohortScheduleDrawer } from '@/components/admin/edit-cohort-schedule-drawer';
 
 function CohortSkeleton() {
     return (
@@ -279,17 +280,14 @@ export default function EditCohortPage() {
                     {/* Form to edit details will go here */}
                 </SheetContent>
             </Sheet>
-            <Sheet open={isEditScheduleDrawerOpen} onOpenChange={setIsEditScheduleDrawerOpen}>
-                <SheetContent>
-                    <SheetHeader>
-                        <SheetTitle>Edit Cohort Schedule</SheetTitle>
-                        <SheetDescription>
-                            Adjust the session dates and times for this cohort.
-                        </SheetDescription>
-                    </SheetHeader>
-                    {/* Form to edit schedule will go here */}
-                </SheetContent>
-            </Sheet>
+            <EditCohortScheduleDrawer
+                isOpen={isEditScheduleDrawerOpen}
+                onOpenChange={setIsEditScheduleDrawerOpen}
+                course={course}
+                cohort={cohort}
+                onCohortUpdated={fetchCohortDetails}
+            />
+
 
             <AlertDialog open={isPublishDialogOpen} onOpenChange={setIsPublishDialogOpen}>
                 <AlertDialogContent>
