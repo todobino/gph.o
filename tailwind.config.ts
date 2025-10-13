@@ -33,6 +33,16 @@ export default {
           '800': '#065F46',
           '900': '#064E3B'
         },
+        yellow: {
+            '100': '#FEF9C3',
+            '200': '#FEF08A',
+            '800': '#854D0E',
+        },
+        red: {
+            '100': '#FEE2E2',
+            '200': '#FECACA',
+            '700': '#B91C1C',
+        },
         orange: {
           '100': '#FFEDD5',
           '200': '#FED7AA',
@@ -182,3 +192,5 @@ export default {
       require('@tailwindcss/typography') // Added typography plugin
     ],
 } satisfies Config;
+
+    
