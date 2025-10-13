@@ -13,7 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info, AlertTriangle, Link as LinkIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
@@ -22,6 +22,9 @@ import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 
 function CohortSkeleton() {
@@ -32,7 +35,7 @@ function CohortSkeleton() {
                 <Skeleton className="h-10 w-1/2" />
                 <Skeleton className="h-9 w-32" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                     <Skeleton className="h-48 w-full" />
                      <Skeleton className="h-64 w-full" />
@@ -42,6 +45,77 @@ function CohortSkeleton() {
                 </div>
             </div>
         </div>
+    );
+}
+
+function EditPaymentLinkDialog({ isOpen, onOpenChange, courseId, cohort, onLinkUpdated }: { isOpen: boolean, onOpenChange: (open: boolean) => void, courseId: string, cohort: Cohort, onLinkUpdated: () => void }) {
+    const { toast } = useToast();
+    const [link, setLink] = useState(cohort.checkoutLink || '');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            setLink(cohort.checkoutLink || '');
+        }
+    }, [isOpen, cohort.checkoutLink]);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            const cohortRef = doc(db, 'courses', courseId, 'cohorts', cohort.id);
+            await updateDoc(cohortRef, {
+                checkoutLink: link,
+                updatedAt: serverTimestamp(),
+            });
+            toast({
+                title: 'Checkout Link Updated',
+                description: 'The link has been successfully saved.',
+            });
+            onLinkUpdated();
+            onOpenChange(false);
+        } catch (error) {
+            console.error('Error updating checkout link:', error);
+            toast({
+                title: 'Error',
+                description: 'Failed to update the link. Please try again.',
+                variant: 'destructive',
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Change Checkout Link</DialogTitle>
+                    <DialogDescription>
+                        Update the payment or registration link for this cohort.
+                    </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleSubmit}>
+                    <div className="py-4">
+                        <Label htmlFor="checkoutLink" className="sr-only">Checkout Link</Label>
+                        <Input
+                            id="checkoutLink"
+                            value={link}
+                            onChange={(e) => setLink(e.target.value)}
+                            placeholder="https://your-payment-provider.com/..."
+                        />
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button type="button" variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? 'Saving...' : 'Save Link'}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 }
 
@@ -64,6 +138,7 @@ export default function EditCohortPage() {
     const [isEditDetailsDrawerOpen, setIsEditDetailsDrawerOpen] = useState(false);
     const [isEditScheduleDrawerOpen, setIsEditScheduleDrawerOpen] = useState(false);
     const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
+    const [isPaymentLinkDialogOpen, setIsPaymentLinkDialogOpen] = useState(false);
 
 
     const fetchCohortDetails = async (courseIdParam?: string) => {
@@ -240,6 +315,14 @@ export default function EditCohortPage() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+            
+            <EditPaymentLinkDialog
+                isOpen={isPaymentLinkDialogOpen}
+                onOpenChange={setIsPaymentLinkDialogOpen}
+                courseId={course.id}
+                cohort={cohort}
+                onLinkUpdated={() => fetchCohortDetails()}
+            />
 
 
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
@@ -252,7 +335,13 @@ export default function EditCohortPage() {
                        {cohort.name}
                     </h1>
                 </div>
-                 {cohortStatusBadge}
+                 <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" onClick={() => setIsPaymentLinkDialogOpen(true)}>
+                        <LinkIcon className="mr-2 h-4 w-4" />
+                        Change Payment Link
+                    </Button>
+                    {cohortStatusBadge}
+                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
