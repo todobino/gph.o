@@ -97,17 +97,19 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
             const cohortRef = doc(db, 'courses', courseId, 'cohorts', cohortId);
             const attendeeRef = doc(db, 'courses', courseId, 'cohorts', cohortId, 'attendees', attendee.id);
 
-            // Update the attendee document
+            // --- READS FIRST ---
+            const cohortDoc = await transaction.get(cohortRef);
+            if (!cohortDoc.exists()) {
+                throw "Cohort document not found!";
+            }
+
+            // --- WRITES SECOND ---
             transaction.update(attendeeRef, {
                 ...values,
                 updatedAt: serverTimestamp(),
             });
 
             if (statusChanged) {
-                 const cohortDoc = await transaction.get(cohortRef);
-                 if (!cohortDoc.exists()) {
-                    throw "Cohort document not found!";
-                 }
                  const cohortData = cohortDoc.data() as Cohort;
 
                  let seatsConfirmed = cohortData.seatsConfirmed;
@@ -319,5 +321,3 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
     </Sheet>
   );
 }
-
-    
