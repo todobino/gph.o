@@ -249,6 +249,8 @@ export default function EditCohortPage() {
             {cohort.status}
         </Badge>
     );
+    
+    const totalHours = (course.hoursPerSession || 0) * cohort.sessions.length;
 
     return (
         <div className="space-y-6">
@@ -358,6 +360,24 @@ export default function EditCohortPage() {
                             </Button>
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 gap-3">
+                             <div className="space-y-2 mb-4">
+                                <div className="flex justify-around items-center text-center p-3 bg-secondary rounded-md">
+                                    <div>
+                                        <div className="font-bold text-lg">{cohort.sessions.length}</div>
+                                        <div className="text-xs text-muted-foreground">Sessions</div>
+                                    </div>
+                                    <Separator orientation="vertical" className="h-8" />
+                                    <div>
+                                        <div className="font-bold text-lg">{course.hoursPerSession || 0}</div>
+                                        <div className="text-xs text-muted-foreground">Hrs Each</div>
+                                    </div>
+                                    <Separator orientation="vertical" className="h-8" />
+                                    <div>
+                                        <div className="font-bold text-lg">{totalHours}</div>
+                                        <div className="text-xs text-muted-foreground">Hrs Total</div>
+                                    </div>
+                                </div>
+                            </div>
                             {cohort.sessions.map((session, index) => (
                                 <div 
                                     key={index}
@@ -386,7 +406,7 @@ export default function EditCohortPage() {
                      <Card>
                         <CardHeader className="flex flex-row items-center justify-between py-4">
                             <div className="flex items-center gap-3">
-                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/ ৫০ p-2 rounded-lg">
+                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-2 rounded-lg">
                                     <Users className="h-5 w-5 text-blue-600 dark:text-blue-300" />
                                 </div>
                                 <CardTitle>Attendees</CardTitle>
