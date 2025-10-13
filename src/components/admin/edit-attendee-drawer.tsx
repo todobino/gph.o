@@ -140,12 +140,6 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
             }
         });
 
-
-      toast({
-        title: 'Attendee Updated',
-        description: `Details for ${values.firstName} ${values.lastName} have been saved.`,
-      });
-
       onAttendeeUpdated();
       onOpenChange(false);
 
