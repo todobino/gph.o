@@ -5,7 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useIsAdmin } from '@/hooks/useUser';
-import { getDoc, doc, collection, query, where, getDocs, orderBy, Timestamp } from 'firebase/firestore';
+import { getDoc, doc, collection, query, where, getDocs, orderBy, Timestamp, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
 import type { Course, Cohort, CohortSession } from '@/types/course';
 import type { Attendee } from '@/types/attendee';
@@ -13,7 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
@@ -21,6 +21,8 @@ import { EditAttendeeDrawer } from '@/components/admin/edit-attendee-drawer';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
 
 function CohortSkeleton() {
     return (
@@ -49,6 +51,7 @@ export default function EditCohortPage() {
     const slug = params.slug as string;
     const cohortId = params.cohortId as string;
     const isAdmin = useIsAdmin();
+    const { toast } = useToast();
 
     const [course, setCourse] = useState<Course | null>(null);
     const [cohort, setCohort] = useState<Cohort | null>(null);
@@ -60,12 +63,13 @@ export default function EditCohortPage() {
     const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
     const [isEditDetailsDrawerOpen, setIsEditDetailsDrawerOpen] = useState(false);
     const [isEditScheduleDrawerOpen, setIsEditScheduleDrawerOpen] = useState(false);
+    const [isPublishDialogOpen, setIsPublishDialogOpen] = useState(false);
 
 
     const fetchCohortDetails = async (courseIdParam?: string) => {
         setLoading(true);
         try {
-            let courseId = courseIdParam;
+            let courseId = courseIdParam || course?.id;
             if (!courseId) {
                 const courseQuery = query(collection(db, "courses"), where("slug", "==", slug));
                 const courseSnapshot = await getDocs(courseQuery);
@@ -95,7 +99,7 @@ export default function EditCohortPage() {
 
     useEffect(() => {
         if (isAdmin && slug && cohortId) {
-            fetchCohortDetails(course?.id);
+            fetchCohortDetails();
         }
     }, [isAdmin, slug, cohortId]);
     
@@ -104,6 +108,31 @@ export default function EditCohortPage() {
             setSelectedAttendee(null);
         }
     }, [isEditDrawerOpen]);
+    
+    const handlePublishCohort = async () => {
+        if (!course || !cohort) return;
+        try {
+            const cohortRef = doc(db, "courses", course.id, "cohorts", cohort.id);
+            await updateDoc(cohortRef, {
+                status: 'published',
+                updatedAt: serverTimestamp(),
+            });
+            toast({
+                title: 'Cohort Published!',
+                description: `${cohort.name} is now live and can accept registrations.`,
+            });
+            fetchCohortDetails(); // Re-fetch to update UI
+        } catch (error) {
+            console.error("Error publishing cohort:", error);
+            toast({
+                title: 'Error',
+                description: 'Failed to publish the cohort. Please try again.',
+                variant: 'destructive',
+            });
+        } finally {
+            setIsPublishDialogOpen(false);
+        }
+    };
 
     const handleRowClick = (attendee: Attendee) => {
         setSelectedAttendee(attendee);
@@ -117,7 +146,7 @@ export default function EditCohortPage() {
 
     const formatSessionDate = (timestamp: Timestamp) => {
         if (!timestamp) return 'N/A';
-        return format(timestamp.toDate(), 'E, MMM d');
+        return format(timestamp.toDate(), 'E, MMM d, yyyy');
     };
 
     if (loading || isAdmin === undefined) {
@@ -136,6 +165,16 @@ export default function EditCohortPage() {
         return <p>Data could not be loaded.</p>;
     }
 
+    const cohortStatusBadge = (
+        <Badge 
+            variant={cohort.status === 'published' ? 'default' : cohort.status === 'draft' ? 'outline' : 'secondary'} 
+            className={cn("capitalize text-lg", cohort.status === 'draft' && "cursor-pointer hover:bg-accent")}
+            onClick={() => cohort.status === 'draft' && setIsPublishDialogOpen(true)}
+        >
+            {cohort.status}
+        </Badge>
+    );
+
     return (
         <div className="space-y-6">
             <AddAttendeeDialog 
@@ -143,7 +182,7 @@ export default function EditCohortPage() {
                 onOpenChange={setIsAddAttendeeDialogOpen}
                 courseId={course.id}
                 cohortId={cohort.id}
-                onAttendeeAdded={() => fetchCohortDetails(course.id)}
+                onAttendeeAdded={() => fetchCohortDetails()}
             />
              {selectedAttendee && (
                 <EditAttendeeDrawer
@@ -152,7 +191,7 @@ export default function EditCohortPage() {
                     attendee={selectedAttendee}
                     courseId={course.id}
                     cohortId={cohort.id}
-                    onAttendeeUpdated={() => fetchCohortDetails(course.id)}
+                    onAttendeeUpdated={() => fetchCohortDetails()}
                 />
             )}
              <Sheet open={isEditDetailsDrawerOpen} onOpenChange={setIsEditDetailsDrawerOpen}>
@@ -178,6 +217,31 @@ export default function EditCohortPage() {
                 </SheetContent>
             </Sheet>
 
+            <AlertDialog open={isPublishDialogOpen} onOpenChange={setIsPublishDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Ready to Publish This Cohort?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                           You are about to make <span className="font-bold">{cohort.name}</span> public. Please review the details before confirming.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="text-sm space-y-2 my-4 p-4 bg-muted rounded-md">
+                        <p><span className="font-semibold">Name:</span> {cohort.name}</p>
+                        <p><span className="font-semibold">Starts:</span> {formatSessionDate(cohort.sessions[0].startAt)}</p>
+                        <p><span className="font-semibold">Ends:</span> {formatSessionDate(cohort.sessions[cohort.sessions.length - 1].startAt)}</p>
+                        <p><span className="font-semibold">Total Seats:</span> {cohort.seatsTotal}</p>
+                    </div>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handlePublishCohort}>
+                            <AlertTriangle className="mr-2 h-4 w-4" />
+                            Confirm & Publish
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div className="flex items-center gap-4">
                     <Button variant="outline" size="icon" onClick={() => router.back()}>
@@ -188,16 +252,7 @@ export default function EditCohortPage() {
                        {cohort.name}
                     </h1>
                 </div>
-                <div className="flex gap-2">
-                    <Button variant="outline" disabled>
-                        <Mail className="mr-2 h-4 w-4" />
-                        Email Attendees
-                    </Button>
-                     <Button variant="outline" disabled>
-                        <Edit className="mr-2 h-4 w-4" />
-                        Edit Cohort
-                    </Button>
-                </div>
+                 {cohortStatusBadge}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -220,7 +275,7 @@ export default function EditCohortPage() {
                             <div className="space-y-2">
                                 <div className="flex justify-around items-center text-center p-3 bg-muted rounded-md">
                                     <div>
-                                        <div className="font-bold text-lg">{cohort.seatsConfirmed}/{cohort.seatsTotal}</div>
+                                        <div className="font-bold text-lg">{cohort.seatsConfirmed}</div>
                                         <div className="text-xs text-muted-foreground">Confirmed</div>
                                     </div>
                                     <Separator orientation="vertical" className="h-8" />
@@ -235,13 +290,9 @@ export default function EditCohortPage() {
                                     </div>
                                 </div>
                             </div>
-                             <div className="flex justify-between items-center pt-2">
-                                <span className="text-muted-foreground">Status</span>
-                                <Badge variant={cohort.status === 'published' ? 'default' : 'secondary'} className="capitalize">{cohort.status}</Badge>
-                            </div>
-                            
+                             
                             {cohort.checkoutLink && (
-                                <div className="flex justify-between items-center">
+                                <div className="flex justify-between items-center pt-2">
                                     <span className="text-muted-foreground">Checkout Link</span>
                                     <Button asChild variant="outline" size="sm">
                                         <Link href={cohort.checkoutLink} target="_blank">
