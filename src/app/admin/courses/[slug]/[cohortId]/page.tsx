@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -12,7 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info, AlertTriangle, Link as LinkIcon } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Edit, Mail, Plus, User, Users, ExternalLink, Pencil, Info, AlertTriangle, Link as LinkIcon, Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { AddAttendeeDialog } from '@/components/admin/add-attendee-dialog';
@@ -259,6 +260,7 @@ export default function EditCohortPage() {
             )}
             onClick={() => cohort.status === 'draft' && setIsPublishDialogOpen(true)}
         >
+            {cohort.status === 'published' && <Check className="mr-1 h-4 w-4" />}
             {cohort.status}
         </Badge>
     );
