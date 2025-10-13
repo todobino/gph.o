@@ -359,7 +359,11 @@ export default function EditCohortPage() {
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 gap-3">
                             {cohort.sessions.map((session, index) => (
-                                <div key={index} className="flex items-center gap-4 rounded-lg border p-3">
+                                <div 
+                                    key={index}
+                                    className="flex items-center gap-4 rounded-lg border p-3 hover:bg-accent hover:border-primary cursor-pointer transition-colors"
+                                    onClick={() => setIsEditScheduleDrawerOpen(true)}
+                                >
                                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted font-bold text-lg">
                                         {index + 1}
                                     </div>
