@@ -33,9 +33,10 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useState, useEffect } from 'react';
-import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, serverTimestamp, runTransaction, collection, getDocs, query, where, writeBatch } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
-import type { Attendee } from '@/types/attendee';
+import type { Attendee, AttendeeStatus } from '@/types/attendee';
+import type { Cohort } from '@/types/course';
 import { Separator } from '../ui/separator';
 
 const editAttendeeSchema = z.object({
@@ -64,6 +65,7 @@ interface EditAttendeeDrawerProps {
 export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, cohortId, onAttendeeUpdated }: EditAttendeeDrawerProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const originalStatus = attendee.status;
 
   const form = useForm<EditAttendeeFormValues>({
     resolver: zodResolver(editAttendeeSchema),
@@ -89,12 +91,53 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
   const handleFormSubmit = async (values: EditAttendeeFormValues) => {
     setIsSubmitting(true);
     try {
-      const attendeeRef = doc(db, 'courses', courseId, 'cohorts', cohortId, 'attendees', attendee.id);
+        const statusChanged = originalStatus !== values.status;
 
-      await updateDoc(attendeeRef, {
-        ...values,
-        updatedAt: serverTimestamp(),
-      });
+        await runTransaction(db, async (transaction) => {
+            const cohortRef = doc(db, 'courses', courseId, 'cohorts', cohortId);
+            const attendeeRef = doc(db, 'courses', courseId, 'cohorts', cohortId, 'attendees', attendee.id);
+
+            // Update the attendee document
+            transaction.update(attendeeRef, {
+                ...values,
+                updatedAt: serverTimestamp(),
+            });
+
+            if (statusChanged) {
+                 const cohortDoc = await transaction.get(cohortRef);
+                 if (!cohortDoc.exists()) {
+                    throw "Cohort document not found!";
+                 }
+                 const cohortData = cohortDoc.data() as Cohort;
+
+                 let seatsConfirmed = cohortData.seatsConfirmed;
+                 let seatsHeld = cohortData.seatsHeld;
+
+                 // Decrement old status count
+                 if (originalStatus === 'confirmed') {
+                     seatsConfirmed--;
+                 } else if (originalStatus === 'pending') {
+                     seatsHeld--;
+                 }
+
+                 // Increment new status count
+                 if (values.status === 'confirmed') {
+                     seatsConfirmed++;
+                 } else if (values.status === 'pending') {
+                     seatsHeld++;
+                 }
+
+                 const seatsRemaining = cohortData.seatsTotal - seatsConfirmed - seatsHeld;
+
+                 transaction.update(cohortRef, {
+                     seatsConfirmed: Math.max(0, seatsConfirmed),
+                     seatsHeld: Math.max(0, seatsHeld),
+                     seatsRemaining,
+                     updatedAt: serverTimestamp(),
+                 });
+            }
+        });
+
 
       toast({
         title: 'Attendee Updated',
@@ -276,3 +319,5 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
     </Sheet>
   );
 }
+
+    
