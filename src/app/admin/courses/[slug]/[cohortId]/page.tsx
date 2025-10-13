@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -218,10 +219,21 @@ export default function EditCohortPage() {
         return format(timestamp.toDate(), 'h:mm a');
     };
 
-    const formatSessionDate = (timestamp: Timestamp) => {
-        if (!timestamp) return 'N/A';
-        return format(timestamp.toDate(), 'E, MMM d, yyyy');
+    const getOrdinal = (n: number) => {
+        const s = ["th", "st", "nd", "rd"];
+        const v = n % 100;
+        return s[(v - 20) % 10] || s[v] || s[0];
     };
+
+    const formatLongDate = (date: Date) => {
+        const day = date.getDate();
+        return format(date, `EEEE, MMMM d'${getOrdinal(day)}'`);
+    };
+
+    const formatShortDate = (date: Date) => {
+        return format(date, 'MM/dd/yyyy');
+    };
+
 
     if (loading || isAdmin === undefined) {
         return <CohortSkeleton />;
@@ -303,8 +315,8 @@ export default function EditCohortPage() {
                     </AlertDialogHeader>
                     <div className="text-sm space-y-2 my-4 p-4 bg-muted rounded-md">
                         <p><span className="font-semibold">Name:</span> {cohort.name}</p>
-                        <p><span className="font-semibold">Starts:</span> {formatSessionDate(cohort.sessions[0].startAt)}</p>
-                        <p><span className="font-semibold">Ends:</span> {formatSessionDate(cohort.sessions[cohort.sessions.length - 1].startAt)}</p>
+                        <p><span className="font-semibold">Starts:</span> {formatLongDate(cohort.sessions[0].startAt.toDate())}</p>
+                        <p><span className="font-semibold">Ends:</span> {formatLongDate(cohort.sessions[cohort.sessions.length - 1].startAt.toDate())}</p>
                         <p><span className="font-semibold">Total Seats:</span> {cohort.seatsTotal}</p>
                     </div>
                     <AlertDialogFooter>
@@ -390,9 +402,9 @@ export default function EditCohortPage() {
                                         {index + 1}
                                     </div>
                                     <div className="flex-1">
-                                        <p className="font-semibold text-sm">{session.label || `Session ${index + 1}`}</p>
+                                        <p className="font-semibold text-sm">{formatLongDate(session.startAt.toDate())}</p>
                                         <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
-                                            <span>{formatSessionDate(session.startAt)}</span>
+                                            <span>{formatShortDate(session.startAt.toDate())}</span>
                                             <span>&bull;</span>
                                             <span>{formatSessionTime(session.startAt)} - {formatSessionTime(session.endAt)}</span>
                                         </div>
@@ -462,6 +474,8 @@ export default function EditCohortPage() {
             </div>
         </div>
     );
+
+    
 
     
 
