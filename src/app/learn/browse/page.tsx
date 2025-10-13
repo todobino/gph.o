@@ -192,15 +192,25 @@ export default function CoursesPage() {
                         });
                     }
                 });
+                
+                // 4. Filter for cohorts that are actually upcoming
+                const now = new Date();
+                const futureCohorts = fetchedCohorts.filter(cohort => {
+                    if (cohort.sessions && cohort.sessions.length > 0) {
+                        const firstSessionStart = cohort.sessions[0].startAt?.toDate();
+                        return firstSessionStart && firstSessionStart > now;
+                    }
+                    return false;
+                });
 
-                // 4. Sort by the start date of the first session
-                fetchedCohorts.sort((a, b) => {
+                // 5. Sort by the start date of the first session
+                futureCohorts.sort((a, b) => {
                     const aStart = a.sessions?.[0]?.startAt?.toDate()?.getTime() || 0;
                     const bStart = b.sessions?.[0]?.startAt?.toDate()?.getTime() || 0;
                     return aStart - bStart;
                 });
                 
-                setUpcomingCohorts(fetchedCohorts);
+                setUpcomingCohorts(futureCohorts);
             } catch (error) {
                 console.error("Error fetching live cohorts:", error);
             } finally {
