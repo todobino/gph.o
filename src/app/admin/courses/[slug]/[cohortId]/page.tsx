@@ -166,9 +166,9 @@ export default function EditCohortPage() {
     }
 
     const cohortStatusBadge = (
-        <Badge 
-            variant={cohort.status === 'published' ? 'default' : cohort.status === 'draft' ? 'outline' : 'secondary'} 
-            className={cn("capitalize", cohort.status === 'draft' && "cursor-pointer hover:bg-accent")}
+        <Badge
+            variant={cohort.status === 'published' ? 'default' : cohort.status === 'draft' ? 'outline' : 'secondary'}
+            className={cn("capitalize px-4 py-1.5", cohort.status === 'draft' && "cursor-pointer hover:bg-accent")}
             onClick={() => cohort.status === 'draft' && setIsPublishDialogOpen(true)}
         >
             {cohort.status}
