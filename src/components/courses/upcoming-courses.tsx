@@ -91,7 +91,17 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
             }
             
             const querySnapshot = await getDocs(cohortsQuery);
-            const fetchedCohorts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Cohort));
+            let fetchedCohorts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Cohort));
+            
+            // Filter for cohorts that are actually upcoming
+            const now = new Date();
+            fetchedCohorts = fetchedCohorts.filter(cohort => {
+                if (cohort.sessions && cohort.sessions.length > 0) {
+                    const firstSessionStart = cohort.sessions[0].startAt?.toDate();
+                    return firstSessionStart && firstSessionStart > now;
+                }
+                return false;
+            });
             
             // Sort by the start date of the first session client-side
             fetchedCohorts.sort((a, b) => {
