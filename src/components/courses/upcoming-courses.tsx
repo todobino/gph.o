@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { WaitlistDialog } from "./waitlist-dialog";
-import { Clock, Users, CalendarClock, Video } from 'lucide-react';
+import { Clock, Users, CalendarClock, Video, ArrowRight } from 'lucide-react';
 import { collection, query, where, orderBy, getDocs, Timestamp, collectionGroup, Query, DocumentData } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
 import type { Cohort, Course } from '@/types/course';
@@ -225,7 +225,10 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
                       <Button onClick={() => handleWaitlistClick(cohort.id)} className="w-full md:w-auto" variant="secondary">Join Waitlist</Button>
                     ) : (
                       <Button asChild className="w-full md:w-auto">
-                        <a href={cohort.checkoutLink || cohort.registrationUrl || '#'} target="_blank" rel="noopener noreferrer">Sign Up</a>
+                        <a href={cohort.checkoutLink || cohort.registrationUrl || '#'} target="_blank" rel="noopener noreferrer">
+                            Sign Up
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                        </a>
                       </Button>
                     )}
                   </div>
