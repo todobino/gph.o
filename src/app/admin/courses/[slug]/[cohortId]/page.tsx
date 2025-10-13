@@ -37,7 +37,6 @@ function CohortSkeleton() {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
-                    <Skeleton className="h-48 w-full" />
                      <Skeleton className="h-64 w-full" />
                 </div>
                 <div>
@@ -347,33 +346,6 @@ export default function EditCohortPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 {/* Left Column */}
                 <div className="space-y-8">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between py-4">
-                             <div className="flex items-center gap-3">
-                                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-2 rounded-lg">
-                                    <Info className="h-5 w-5 text-blue-600 dark:text-blue-300" />
-                                </div>
-                                <CardTitle>Details</CardTitle>
-                            </div>
-                            <Button variant="outline" size="sm" onClick={() => setIsEditDetailsDrawerOpen(true)}>
-                                <Pencil className="mr-2 h-4 w-4" />
-                                Edit
-                            </Button>
-                        </CardHeader>
-                        <CardContent className="space-y-4 text-sm">
-                            {cohort.checkoutLink && (
-                                <div className="flex justify-between items-center pt-2">
-                                    <span className="text-muted-foreground">Checkout Link</span>
-                                    <Button asChild variant="outline" size="sm">
-                                        <Link href={cohort.checkoutLink} target="_blank">
-                                            View <ExternalLink className="ml-2 h-3 w-3" />
-                                        </Link>
-                                    </Button>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-
                     <Card>
                         <CardHeader className="flex-row items-center justify-between py-4">
                             <div className="flex items-center gap-3">
