@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -32,6 +31,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 
 
 function CohortSkeleton() {
@@ -164,7 +164,12 @@ function EditSessionDialog({
                                             </FormControl>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-auto p-0" align="start">
-                                            <Calendar mode="single" selected={field.value} onSelect={field.onChange} initialFocus />
+                                            <CalendarComponent
+                                                mode="single"
+                                                selected={field.value}
+                                                onSelect={field.onChange}
+                                                initialFocus
+                                            />
                                         </PopoverContent>
                                     </Popover>
                                     <FormMessage />
@@ -426,6 +431,21 @@ export default function EditCohortPage() {
     
     const totalHours = (course.hoursPerSession || 0) * cohort.sessions.length;
 
+    const attendeeStatusBadge = (status: Attendee['status']) => {
+    switch (status) {
+        case 'confirmed':
+            return <Badge variant="default" className="capitalize bg-green-600 hover:bg-green-700 text-white">{status}</Badge>;
+        case 'pending':
+            return <Badge variant="secondary" className="capitalize">{status}</Badge>;
+        case 'waitlisted':
+            return <Badge variant="outline" className="capitalize">{status}</Badge>;
+        case 'cancelled':
+            return <Badge variant="destructive" className="capitalize bg-red-100 text-red-700 border-red-200 hover:bg-red-200">{status}</Badge>;
+        default:
+            return <Badge variant="secondary" className="capitalize">{status}</Badge>;
+    }
+};
+
     return (
         <div className="space-y-6">
             <AddAttendeeDialog 
@@ -633,7 +653,7 @@ export default function EditCohortPage() {
                                             <p className="font-semibold text-sm">{attendee.firstName} {attendee.lastName}</p>
                                             <p className="text-xs text-muted-foreground">{attendee.email}</p>
                                         </div>
-                                        <Badge variant={attendee.status === 'confirmed' ? 'default' : 'secondary'} className="capitalize">{attendee.status}</Badge>
+                                        {attendeeStatusBadge(attendee.status)}
                                     </div>
                                 ))}
                             </div>
@@ -646,6 +666,8 @@ export default function EditCohortPage() {
             </div>
         </div>
     );
+
+    
 
     
 
