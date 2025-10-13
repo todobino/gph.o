@@ -168,7 +168,7 @@ export function UpcomingCourses({ courseSlug }: { courseSlug?: string }) {
     <>
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 bg-blue-200 dark:bg-blue-800/50 p-2 rounded-lg">
+            <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-800/50 p-2 rounded-lg">
                 <CalendarClock className="h-6 w-6 text-blue-600 dark:text-blue-300" />
             </div>
             <h2 className="text-2xl font-bold font-heading">
