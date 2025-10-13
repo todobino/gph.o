@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -450,7 +449,7 @@ export default function EditCohortPage() {
                                 </div>
                             </div>
                            {attendees.length > 0 ? (
-                            <div className="space-y-3">
+                            <div className="space-y-3 mt-4">
                                 {attendees.map(attendee => (
                                     <div 
                                         key={attendee.id} 
@@ -474,6 +473,8 @@ export default function EditCohortPage() {
             </div>
         </div>
     );
+
+    
 
     
 
