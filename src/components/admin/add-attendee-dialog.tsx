@@ -33,9 +33,10 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, runTransaction, doc } from 'firebase/firestore';
 import { db } from '@/lib/firestore';
 import type { Attendee, AttendeeStatus, PaymentStatus } from '@/types/attendee';
+import type { Cohort } from '@/types/course';
 
 const addAttendeeSchema = z.object({
   firstName: z.string().min(1, 'First name is required.'),
@@ -79,14 +80,48 @@ export function AddAttendeeDialog({ isOpen, onOpenChange, courseId, cohortId, on
   const handleFormSubmit = async (values: AddAttendeeFormValues) => {
     setIsSubmitting(true);
     try {
-      const attendeesRef = collection(db, 'courses', courseId, 'cohorts', cohortId, 'attendees');
       
-      const newAttendeeData: Omit<Attendee, 'id' | 'addedAt'> = {
-        ...values,
-        addedAt: serverTimestamp() as any, // Let server set the timestamp
-      };
+      await runTransaction(db, async (transaction) => {
+        const cohortRef = doc(db, 'courses', courseId, 'cohorts', cohortId);
+        const attendeesRef = collection(db, 'courses', courseId, 'cohorts', cohortId, 'attendees');
+        const newAttendeeRef = doc(attendeesRef); // Create a new doc ref in the subcollection
 
-      await addDoc(attendeesRef, newAttendeeData);
+        // 1. Read the cohort doc first
+        const cohortDoc = await transaction.get(cohortRef);
+        if (!cohortDoc.exists()) {
+          throw new Error("Cohort document not found!");
+        }
+        const cohortData = cohortDoc.data() as Cohort;
+
+        // 2. Prepare new attendee data
+        const newAttendeeData: Omit<Attendee, 'id' | 'addedAt'> & { addedAt: any } = {
+          ...values,
+          addedAt: serverTimestamp(),
+        };
+        
+        // 3. Set the new attendee document
+        transaction.set(newAttendeeRef, newAttendeeData);
+
+        // 4. Update cohort counts
+        let seatsConfirmed = cohortData.seatsConfirmed;
+        let seatsHeld = cohortData.seatsHeld;
+
+        if (values.status === 'confirmed') {
+          seatsConfirmed++;
+        } else if (values.status === 'pending') {
+          seatsHeld++;
+        }
+        
+        const seatsRemaining = cohortData.seatsTotal - seatsConfirmed - seatsHeld;
+
+        transaction.update(cohortRef, {
+          seatsConfirmed: Math.max(0, seatsConfirmed),
+          seatsHeld: Math.max(0, seatsHeld),
+          seatsRemaining: Math.max(0, seatsRemaining),
+          updatedAt: serverTimestamp(),
+        });
+      });
+
 
       toast({
         title: 'Attendee Added',

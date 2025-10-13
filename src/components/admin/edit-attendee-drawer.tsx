@@ -65,12 +65,14 @@ interface EditAttendeeDrawerProps {
 export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, cohortId, onAttendeeUpdated }: EditAttendeeDrawerProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const originalStatus = attendee.status;
-
+  
   const form = useForm<EditAttendeeFormValues>({
     resolver: zodResolver(editAttendeeSchema),
   });
   
+  // Store original status to compare on submit
+  const [originalStatus, setOriginalStatus] = useState<AttendeeStatus | undefined>();
+
   useEffect(() => {
     if (attendee) {
       form.reset({
@@ -84,8 +86,9 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
         billingAddress: attendee.billingAddress || '',
         notes: attendee.notes || '',
       });
+      setOriginalStatus(attendee.status);
     }
-  }, [attendee, form]);
+  }, [attendee, form, isOpen]);
 
 
   const handleFormSubmit = async (values: EditAttendeeFormValues) => {
@@ -102,6 +105,7 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
             if (!cohortDoc.exists()) {
                 throw "Cohort document not found!";
             }
+            const cohortData = cohortDoc.data() as Cohort;
 
             // --- WRITES SECOND ---
             transaction.update(attendeeRef, {
@@ -110,8 +114,6 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
             });
 
             if (statusChanged) {
-                 const cohortData = cohortDoc.data() as Cohort;
-
                  let seatsConfirmed = cohortData.seatsConfirmed;
                  let seatsHeld = cohortData.seatsHeld;
 
@@ -134,7 +136,7 @@ export function EditAttendeeDrawer({ isOpen, onOpenChange, attendee, courseId, c
                  transaction.update(cohortRef, {
                      seatsConfirmed: Math.max(0, seatsConfirmed),
                      seatsHeld: Math.max(0, seatsHeld),
-                     seatsRemaining,
+                     seatsRemaining: Math.max(0, seatsRemaining),
                      updatedAt: serverTimestamp(),
                  });
             }
