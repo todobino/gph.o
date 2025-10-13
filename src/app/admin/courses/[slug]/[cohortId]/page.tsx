@@ -272,25 +272,6 @@ export default function EditCohortPage() {
                             </Button>
                         </CardHeader>
                         <CardContent className="space-y-4 text-sm">
-                            <div className="space-y-2">
-                                <div className="flex justify-around items-center text-center p-3 bg-muted rounded-md">
-                                    <div>
-                                        <div className="font-bold text-lg">{cohort.seatsConfirmed}</div>
-                                        <div className="text-xs text-muted-foreground">Confirmed</div>
-                                    </div>
-                                    <Separator orientation="vertical" className="h-8" />
-                                    <div>
-                                        <div className="font-bold text-lg">{cohort.seatsHeld}</div>
-                                        <div className="text-xs text-muted-foreground">Held</div>
-                                    </div>
-                                    <Separator orientation="vertical" className="h-8" />
-                                    <div>
-                                        <div className="font-bold text-lg">{cohort.seatsRemaining}</div>
-                                        <div className="text-xs text-muted-foreground">Remaining</div>
-                                    </div>
-                                </div>
-                            </div>
-                             
                             {cohort.checkoutLink && (
                                 <div className="flex justify-between items-center pt-2">
                                     <span className="text-muted-foreground">Checkout Link</span>
@@ -353,6 +334,24 @@ export default function EditCohortPage() {
                             </Button>
                         </CardHeader>
                         <CardContent>
+                            <div className="space-y-2 mb-4">
+                                <div className="flex justify-around items-center text-center p-3 bg-muted rounded-md">
+                                    <div>
+                                        <div className="font-bold text-lg">{cohort.seatsConfirmed}</div>
+                                        <div className="text-xs text-muted-foreground">Confirmed</div>
+                                    </div>
+                                    <Separator orientation="vertical" className="h-8" />
+                                    <div>
+                                        <div className="font-bold text-lg">{cohort.seatsHeld}</div>
+                                        <div className="text-xs text-muted-foreground">Held</div>
+                                    </div>
+                                    <Separator orientation="vertical" className="h-8" />
+                                    <div>
+                                        <div className="font-bold text-lg">{cohort.seatsRemaining}</div>
+                                        <div className="text-xs text-muted-foreground">Remaining</div>
+                                    </div>
+                                </div>
+                            </div>
                            {attendees.length > 0 ? (
                             <div className="space-y-3">
                                 {attendees.map(attendee => (
